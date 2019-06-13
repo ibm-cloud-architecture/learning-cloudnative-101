@@ -33,4 +33,19 @@
 |    3:30 PM | *Lab 7: Deploy the app on Kube using helm* | TBD |
 | **Day 3**  | | | |
 | **Day 4**  | | | |
+|    9:00 AM | *Devops Concepts* | TBD |
+|    9:30 AM | *CI/CD* | TBD |
+|   10.35 AM | 15 minute break |  |
+|   10.50 AM | *Automated Testing* | TBD |
+|   11.20 AM | *Devops Tooling* | TBD |
+|   12.00 PM | Lunch break |  |  
+|    1:00 PM | *Lab 1: Devops* | TBD |
+|    2:00 PM | 15 minute break | TBD |
+|    2:15 PM | *Pipeline and Toolchains* |  |
+|    3:15 PM | Conclusion | TBD |
 | **Day 5**  | | | |
+|    9:00 AM | *Istio/Spill over items* | TBD |
+|   10:00 AM | *Knative/OpenShift/Istio* | TBD |
+|   10.50 AM | *10 minute Break* | TBD |
+|   11.00 AM | *Cloud Paks/Knative/OpenShift/Istio* | TBD |
+|   12.00 PM | *Closing Remarks/Feedback* |  |  
