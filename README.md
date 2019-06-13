@@ -1,1 +1,5 @@
-# cloudnative-bootcamp
+# CloudNative Bootcamp
+
+## Pre-requisites 
+
+## Agenda
