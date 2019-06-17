@@ -20,18 +20,26 @@
 | **Day 2**  | | | |
 |    9:00 AM | *Docker* | TBD |
 |    9:30 AM | *Lab 3: Docker* | TBD |
-|   10:00 AM | *Kubernetes Patterns* | TBD |
-|   10:45 AM | 20 minute break |  |
-|   11:05 AM | *Cloud Platforms & Local Kube clusters* | TBD |
-|   11:30 AM | *Lab 4: Kubernetes patterns* | TBD |
+|   10:10 AM | *Kubernetes Patterns* | TBD |
+|   11:00 AM | 20 minute break |  |
+|   11:20 AM | *Cloud Platforms & Local Kube clusters* | TBD |
 |   12:00 PM | Lunch break |  |  
-|    1:00 PM | *Kubernetes Tooling* | TBD |
-|    1:30 PM | *Lab 5: Kubernetes Tooling* | TBD |
-|    2:00 PM | *Lab 6: Deploy the app on Kube* | TBD |
-|    2:40 PM | 15 minute break |  |
-|    3:00 PM | *Helm* | TBD |
-|    3:30 PM | *Lab 7: Deploy the app on Kube using helm* | TBD |
+|    1:00 PM | *Lab 4: Kubernetes patterns* | TBD |
+|    1:40 PM | *Kubernetes Tooling* | TBD |
+|    2:20 PM | 20 minute break |  |
+|    2:40 PM | *Lab 5: Kubernetes Tooling* | TBD |
+|    3:20 PM | *Lab 6: Deploy the app on Kube* | TBD |
 | **Day 3**  | | | |
+|    9:00 AM | *Helm* | TBD |
+|    9:40 AM | *Lab 7: Deploy the app on Kube using helm* | TBD |
+|   10:20 AM | *Kubernetes for Cloud Foundry users* | TBD |
+|   11:00 AM | 20 minute break | TBD |
+|   11:20 AM | *OpenShift* | TBD |
+|   12:00 PM | Lunch break |  |
+|    1:00 PM | *IKS* | TBD |
+|    1:20 PM | *CF migration tool - OpenShift, IKS* | TBD |
+|    2:10 PM | 20 minute break | TBD |
+|    2:30 PM | *Lab 7: Migrate your app from CF to Kube* | TBD |
 | **Day 4**  | | | |
 |    9:00 AM | *Devops Concepts* | TBD |
 |    9:30 AM | *CI/CD* | TBD |
@@ -39,7 +47,7 @@
 |   10:50 AM | *Automated Testing* | TBD |
 |   11:20 AM | *Devops Tooling* | TBD |
 |   12:00 PM | Lunch break |  |  
-|    1:00 PM | *Lab 1: Devops* | TBD |
+|    1:00 PM | *Lab 8: Devops* | TBD |
 |    2:00 PM | 15 minute break | TBD |
 |    2:15 PM | *Pipeline and Toolchains* |  |
 |    3:15 PM | Conclusion | TBD |
