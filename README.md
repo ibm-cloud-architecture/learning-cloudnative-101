@@ -18,7 +18,7 @@
 |    2:15 PM | 15 minute break |  |
 |    2:30 PM | *Lab 2: Cloud Native App Development* | TBD |
 | **Day 2**  | | | |
-|    9:00 AM | *Docker* | TBD |
+|    9:00 AM | *Containerization* | TBD |
 |    9:30 AM | *Lab 3: Docker* | TBD |
 |   10:10 AM | *Kubernetes Patterns* | TBD |
 |   11:00 AM | 20 minute break |  |
