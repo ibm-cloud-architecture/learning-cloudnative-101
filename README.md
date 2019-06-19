@@ -9,26 +9,26 @@
 
 | Duration | Module | Link | Owner |
 | ---------- | ------ | ---- | ----- |
-|   30 Mins | *Cloudnative Overview* | TBD | TBD |
-|   1 Hr | *Cloudnative Framework & Programming Model* | TBD | TBD |
-|   30 Mins | *Twelve Factor* | TBD | TBD |
-|   30 Mins | *Cloud Native App Development* | TBD | TBD |
-|   1 Hr | *Lab 1: Cloud Native App Development* | TBD | TBD |
+|   30 Mins | *Cloudnative Overview* | TBD | Hema |
+|   1 Hr | *Cloudnative Framework & Programming Model* | TBD | Hema |
+|   30 Mins | *Twelve Factor* | TBD | Hema |
+|   30 Mins | *Cloud Native App Development* | TBD | Hema |
+|   1 Hr | *Lab 1: Cloud Native App Development* | TBD | Hema |
 
  ## Kubernetes Module
 
 | Duration | Module | Link | Owner |
 | ---------- | ------ | ---- | ----- |
-|   30 Mins | *Containerization* | TBD | TBD |
-|   45 Mins | *Lab 2: Docker* | TBD | TBD |
-|   1 Hr | *Kubernetes Patterns* | TBD | TBD |
-|   30 Mins | *Cloud Platforms & Local Kube clusters* | TBD | TBD |
-|   45 Mins | *Lab 3: Kubernetes patterns* | TBD | TBD |
-|   1 Hr | *Kubernetes Tooling* | TBD | TBD |
-|   40 Mins | *Lab 4: Kubernetes Tooling* | TBD | TBD |
-|   45 Mins | *Lab 5: Deploy the app on Kube* | TBD | TBD |
-|   40 Mins | *Helm* | TBD | TBD |
-|   40 Mins | *Lab 6: Deploy the app on Kube using helm* | TBD | TBD |
+|   30 Mins | *Containerization* | TBD | Hema |
+|   45 Mins | *Lab 2: Docker* | TBD | Hema |
+|   1 Hr | *Kubernetes Patterns* | TBD | Bryan |
+|   30 Mins | *Cloud Platforms & Local Kube clusters* | TBD | Bryan |
+|   45 Mins | *Lab 3: Kubernetes patterns* | TBD | Bryan |
+|   1 Hr | *Kubernetes Tooling* | TBD | Bryan |
+|   40 Mins | *Lab 4: Kubernetes Tooling* | TBD | Bryan |
+|   45 Mins | *Lab 5: Deploy the app on Kube* | TBD | Bryan |
+|   40 Mins | *Helm* | TBD | Bryan |
+|   40 Mins | *Lab 6: Deploy the app on Kube using helm* | TBD | Bryan |
 
 ## Cloud Foundry Migration Module
 
