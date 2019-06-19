@@ -3,6 +3,7 @@
 ## Pre-requisites 
 
 - TDD
+- Twelve Factor
 - Kubernetes basics
 
 ## Cloud Native Module 
@@ -11,7 +12,6 @@
 | ---------- | ------ | ---- | ----- |
 |   30 Mins | *Cloudnative Overview* | TBD | Hema |
 |   1 Hr | *Cloudnative Framework & Programming Model* | TBD | Hema |
-|   30 Mins | *Twelve Factor* | TBD | Hema |
 |   30 Mins | *Cloud Native App Development* | TBD | Hema |
 |   1 Hr | *Lab 1: Cloud Native App Development* | TBD | Hema |
 
@@ -42,8 +42,8 @@
 
 | Duration | Module | Link | Owner |
 | ---------- | ------ | ---- | ----- |
-|   30 Mins | *Devops Concepts* | TBD | Hema / Bryan |
-|   1 Hr | *CI/CD* | TBD | Hema / Bryan |
-|   45 Mins | *Devops Tooling* | TBD | Hema / Bryan |
-|   1 Hr | *Lab 8: Devops* | TBD | Hema / Bryan |
+|   30 Mins | *Devops Concepts* | TBD | Hema |
+|   1 Hr | *CI/CD* | TBD | Hema |
+|   45 Mins | *Devops Tooling* | TBD | Hema |
+|   1 Hr | *Lab 8: Devops* | TBD | Hema |
 |   1 Hr | *Pipeline and Toolchains* | TBD | Hema / Bryan |
