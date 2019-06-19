@@ -27,7 +27,7 @@
 |   1 Hr | *Kubernetes Tooling* | TBD | Bryan |
 |   40 Mins | *Lab 4: Kubernetes Tooling* | TBD | Bryan |
 |   45 Mins | *Lab 5: Deploy the app on Kube* | TBD | Bryan |
-|   40 Mins | *Helm* | TBD | Bryan |
+|   40 Mins | *Helm/Operator Patterns* | TBD | Bryan |
 |   40 Mins | *Lab 6: Deploy the app on Kube using helm* | TBD | Bryan |
 
 ## Cloud Foundry Migration Module
