@@ -42,8 +42,8 @@
 
 | Duration | Module | Link | Owner |
 | ---------- | ------ | ---- | ----- |
-|   30 Mins | *Devops Concepts* | TBD | TBD |
-|   1 Hr | *CI/CD* | TBD | TBD |
-|   45 Mins | *Devops Tooling* | TBD | TBD |
-|   1 Hr | *Lab 8: Devops* | TBD | TBD |
+|   30 Mins | *Devops Concepts* | TBD | Hema / Bryan |
+|   1 Hr | *CI/CD* | TBD | Hema / Bryan |
+|   45 Mins | *Devops Tooling* | TBD | Hema / Bryan |
+|   1 Hr | *Lab 8: Devops* | TBD | Hema / Bryan |
 |   1 Hr | *Pipeline and Toolchains* | TBD | TBD |
