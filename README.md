@@ -2,13 +2,14 @@
 
 ## Pre-requisites 
 
+- Twelve Factor Applications
+
 ## Cloud Native Module 
 
 | Duration | Module | Link |
 | ---------- | ------ | ---- |
 |   30 Mins | *Cloudnative Overview* | TBD |
 |   1 Hr | *Cloudnative Framework & Programming Model* | TBD |
-|   30 Mins | *Twelve Factor* | TBD |
 |   45 Mins| *TDD* | TBD |
 |   1 Hr | *Lab 1: TDD* | TBD |
 |   30 Mins | *Cloud Native App Development* | TBD |
