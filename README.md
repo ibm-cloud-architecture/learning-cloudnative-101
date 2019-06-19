@@ -49,4 +49,4 @@
 |   30 Mins | *Automated Testing* | TBD |
 |   45 Mins | *Devops Tooling* | TBD |
 |   1 Hr | *Lab 8: Devops* | TBD |
-|   1 Hr | *Pipeline and Toolchains* |  |
+|   1 Hr | *Pipeline and Toolchains* | TBD |
