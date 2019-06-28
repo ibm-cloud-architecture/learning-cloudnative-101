@@ -1,4 +1,4 @@
-= Lab1
+= Lab 1
 Hemankita Perabathini <Hemankita.Perabathini@ibm.com>
 v1.0, 2019-05-27
 :toc:
@@ -8,9 +8,14 @@ v1.0, 2019-05-27
 
 In this lab, you will learn about how to build a cloud native app, its design methodology and what requirements must be included in your app during development.
 
+== Prerequisites
+
+- https://www.java.com/en/[Java]
+- https://maven.apache.org/[Maven]
+
 == Clone the sample app
 
-In order to view the code for this project, you will need to clone it from github
+In order to view the code for this project, you will need to clone it from github.
 
 ----
 # Clone the sample app
