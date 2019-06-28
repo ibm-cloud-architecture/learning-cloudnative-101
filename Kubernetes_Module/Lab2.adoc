@@ -1,0 +1,623 @@
+= Lab 2
+Hemankita Perabathini <Hemankita.Perabathini@ibm.com>
+v1.0, 2019-05-28
+:toc:
+:imagesdir: images
+
+== Introduction
+
+In this lab, you will learn about how to use docker and how to run applications using docker.
+
+== Prerequisites
+
+- https://www.docker.com/[Docker]
+
+== Working with docker
+
+Before proceeding, make sure docker is properly installed on your system. To verify this, run the below command.
+
+----
+docker -v
+----
+
+If it is installed, you will see a version number something similar to below.
+
+----
+Docker version 19.03.0-beta3, build c55e026
+----
+
+[big maroon]*Running a hello-world container*
+
+Let us start with a `hello-world` container. To run a `hello-world` container, use the below command.
+
+----
+docker run hello-world
+----
+
+If it is successfully run, you will see something like below.
+
+----
+$ docker run hello-world
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+1b930d010525: Pull complete
+Digest: sha256:41a65640635299bab090f783209c1e3a3f11934cf7756b09cb2f1e02147c6ed8
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+----
+
+Since, `hello-world` image is not existing locally, it is pulled from `library/hello-world`. But if it is already existing, docker will not pull it every time but rather use the existing one.
+
+This image is pulled from https://hub.docker.com/_/hello-world. Docker hub is a repository used to store docker images. Similarly, you can use your own registries to store images. For example, IBM Cloud provides you a container registry.
+
+[big maroon]*Verifying the hello-world image*
+
+To verify if an image is existing in your system locally, run the below command.
+
+----
+docker images
+----
+
+You will then see something like below.
+
+----
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+hello-world         latest              fce289e99eb9        5 months ago        1.84kB
+----
+
+== Get the sample application
+
+To get the sample application, you will need to clone it from github.
+
+----
+# Clone the sample app
+git clone https://github.ibm.com/CASE/cloudnative_sample_app.git
+
+# Go to the project's root folder
+cd cloudnative_sample_app/
+----
+
+== Run the application on Docker
+
+=== Build the application
+
+To build the application, use the below command.
+
+----
+mvn install
+----
+
+You will notice something at the end like below once done.
+
+----
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ cloudnativesampleapp ---
+[INFO] Installing /Users/user@ibm.com/cloudnative_sample_app/target/cloudnativesampleapp-1.0-SNAPSHOT.jar to /Users/user@ibm.com/.m2/repository/projects/cloudnativesampleapp/1.0-SNAPSHOT/cloudnativesampleapp-1.0-SNAPSHOT.jar
+[INFO] Installing /Users/user@ibm.com/cloudnative_sample_app/pom.xml to /Users/user@ibm.com/.m2/repository/projects/cloudnativesampleapp/1.0-SNAPSHOT/cloudnativesampleapp-1.0-SNAPSHOT.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  34.714 s
+[INFO] Finished at: 2019-06-28T11:11:06-05:00
+[INFO] ------------------------------------------------------------------------
+----
+
+=== Build the docker image
+
+Let's take look at the docker file before building it.
+
+----
+FROM ibmjava:8-sfj
+LABEL maintainer="IBM Java Engineering at IBM Cloud"
+
+COPY target/cloudnativesampleapp-1.0-SNAPSHOT.jar /app.jar
+
+ENV JAVA_OPTS=""
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
+----
+
+- Using the `FROM` instruction, we provide the name and tag of an image that should be used as our base. This must always be the first instruction in the Dockerfile.
+- `LABEL` instruction helps us to store metadata.
+- Using `COPY` instruction, we copy new contents from the source filesystem to the container filesystem.
+- `ENV` instruction helps us to pass environment variables.
+- `ENTRYPOINT` allows you to configure a container that runs as an executable.
+
+To build the docker image, run the below command.
+
+----
+docker build -t greeting:v1.0.0 .
+----
+
+You will see something like below.
+
+----
+$ docker build -t greeting:v1.0.0 .
+Sending build context to Docker daemon  28.99MB
+Step 1/5 : FROM ibmjava:8-sfj
+8-sfj: Pulling from library/ibmjava
+35b42117c431: Pull complete
+ad9c569a8d98: Pull complete
+293b44f45162: Pull complete
+0c175077525d: Pull complete
+e2b6d4d0dc10: Pull complete
+91f6e1d5f103: Pull complete
+Digest: sha256:aaef6e7d14b3c63b8df9eaea45334d3cc7678ba3878dfcb630be8706719df97e
+Status: Downloaded newer image for ibmjava:8-sfj
+ ---> ab418b419902
+Step 2/5 : LABEL maintainer="IBM Java Engineering at IBM Cloud"
+ ---> Running in 7a8c48bc9650
+Removing intermediate container 7a8c48bc9650
+ ---> d0693367c12c
+Step 3/5 : COPY target/cloudnativesampleapp-1.0-SNAPSHOT.jar /app.jar
+ ---> ad42c72c8e8a
+Step 4/5 : ENV JAVA_OPTS=""
+ ---> Running in 805f2d09b693
+Removing intermediate container 805f2d09b693
+ ---> 3200b25a9898
+Step 5/5 : ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar" ]
+ ---> Running in 55bdf582dbb6
+Removing intermediate container 55bdf582dbb6
+ ---> 3ae7dfc4b794
+Successfully built 3ae7dfc4b794
+Successfully tagged greeting:v1.0.0
+----
+
+To verify if the image is built successfully, run the below command.
+
+----
+docker images
+----
+
+You will have something as follows.
+
+----
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
+greeting            v1.0.0              3ae7dfc4b794        About a minute ago   251MB
+ibmjava             8-sfj               ab418b419902        9 days ago           222MB
+hello-world         latest              fce289e99eb9        5 months ago         1.84kB
+----
+
+=== Run the docker container
+
+- To run the docker container, use the below command.
+
+----
+docker run -p 8080:8080 -d --name greeting greeting:v1.0.0
+----
+
+Once done, you will have something like below.
+
+----
+$ docker run -p 8080:8080 -d --name greeting greeting:v1.0.0
+a74b91789b29af6e7be92b30d0e68eef852bfb24336a44ef1485bb58becbd664
+----
+
+- To list all the running containers, use the below command.
+
+----
+docker ps
+----
+
+You will see something like below.
+
+----
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+a74b91789b29        greeting:v1.0.0     "sh -c 'java $JAVA_O…"   2 minutes ago       Up 2 minutes        0.0.0.0:8080->8080/tcp   greeting
+----
+
+- To know more about the container, you can inspect the container.
+
+Run the below command.
+
+----
+docker inspect <container-name|container-id>
+----
+
+If we consider our container, it is as follows.
+
+----
+$ docker inspect greeting
+----
+
+- To get the logs, you use the below command.
+
+----
+docker logs <container-name|container-id>
+----
+
+If we consider our container, it is as follows.
+
+----
+$ docker logs greeting
+----
+
+=== Access the application
+
+- To access the application, run the below command.
+
+----
+curl http://localhost:8080/greeting?name=John
+----
+
+You will see something like below.
+
+----
+{"id":2,"content":"Welcome to Cloudnative bootcamp !!! Hello, John :)"}
+----
+
+=== Clean Up
+
+- To stop the container, run the below command.
+
+----
+docker stop <container-name|container-id>
+----
+
+For our sample application, it is as follows.
+
+----
+$ docker stop greeting
+greeting
+----
+
+- To remove the container, run the below command.
+
+----
+docker rm <container-name|container-id>
+----
+
+For our sample application, it is as follows.
+
+----
+$ docker rm greeting
+greeting
+----
+
+- To remove the image, run the below command.
+
+----
+docker rmi <image_id>
+----
+
+Get the image_ids and then remove them. Use the below commands to do that.
+
+----
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+greeting            v1.0.0              3ae7dfc4b794        About an hour ago   251MB
+ibmjava             8-sfj               ab418b419902        9 days ago          222MB
+
+$ docker rmi 3ae7dfc4b794 ab418b419902
+Untagged: greeting:v1.0.0
+Deleted: sha256:3ae7dfc4b794bf97684110e0a9392b121f63002ab35a46facf3edf281f47d27a
+Deleted: sha256:3200b25a9898291bdee9e46c9fff1214791858bfc789e5ee9d6f1455fc9d33c6
+Deleted: sha256:ad42c72c8e8a52d8730aeb21e28ca408951302c61a762c89fcbf502b143777ce
+Deleted: sha256:393041ba04b55817a106508daa2afdffc9b011b550ed684c9b6a42c070487090
+Deleted: sha256:d0693367c12ce7d34415ffce10e489a6fd9c8a3cd8c2c944df1374969b60835e
+Untagged: ibmjava:8-sfj
+Untagged: ibmjava@sha256:aaef6e7d14b3c63b8df9eaea45334d3cc7678ba3878dfcb630be8706719df97e
+Deleted: sha256:ab418b419902ecc54a6f2b4c0f485c1105eec3395f253040087a954528de7b1b
+Deleted: sha256:2ffcfbe8352bdf9c70b66692e436ab03f01ca3dce37d7d49c79f5c4c80ec2044
+Deleted: sha256:c896bc720df99ee1a6ce305d17edfda42b043a47223ff2ac3e4f94199e6d595b
+Deleted: sha256:03952d61b1fc131f23629c02f7ffb93708ae77108a32e4eedd83d4ec987ba51c
+Deleted: sha256:a48e1b8909b41276ed1666d5262d981258163c6f0998b58e61efa4188944652e
+Deleted: sha256:872ef8aee8632246e43a346a70274030c3613fe81af162a2fb6d14e1fcba980d
+Deleted: sha256:1ea5a27b0484f2a227275fbb913d281461d9f356134a56002574904c3cfdea04
+----
+
+== Run the application on Docker using multi-stage build
+
+In this, building the application is a part of the docker image. It automatically does it for you. You need not run `mvn install` explicitly.
+
+=== Build the docker image
+
+Let's take look at the docker file before building it.
+
+----
+# Build stage - could use maven or our image
+FROM maven:3.3-jdk-8 as builder
+
+# Creating Work directory
+ENV BUILD_DIR=/usr/src/app/
+RUN mkdir $BUILD_DIR
+WORKDIR $BUILD_DIR
+
+# Reuse local .m2. if not all the dependencies will be always downloaded
+# This can be removed if you want to
+VOLUME ${HOME}/.m2:/root/.m2
+ADD . /usr/src/app
+
+RUN bash -c " mvn clean install"
+
+FROM ibmjava:8-sfj as runner
+
+# Install Extra Packages
+RUN apt-get update \
+ && apt-get install -y jq bash bc ca-certificates curl \
+ && update-ca-certificates
+
+# Create app directory
+ENV APP_HOME=/app
+WORKDIR $APP_HOME
+
+# Copy jar file over from builder stage
+COPY --from=builder /usr/src/app/target/cloudnativesampleapp-1.0-SNAPSHOT.jar $APP_HOME
+RUN mv ./cloudnativesampleapp-1.0-SNAPSHOT.jar app.jar
+
+ENV JAVA_OPTS=""
+ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar ./app.jar" ]
+----
+
+This Dockerfile leverages multi-stage builds, which lets you create multiple stages in your Dockerfile to do certain tasks.
+
+In our case, we have two stages.
+
+- The first one uses `maven:3.3-jdk-8` as its base image to download and build the project and its dependencies using Maven.
+- The second stage uses `ibmjava:8-sfj` as its base image to run the compiled code from the previous stage.
+
+The advantage of using the multi-stage builds approach is that the resulting image only uses the base image of the last stage. Meaning that in our case, we will only end up with the `ibmjava:8-sfj` as our base image, which is much tinier than having an image that has both Maven and the JRE.
+
+By using the multi-stage builds approach when it makes sense to use it, you will end up with much lighter and easier to maintain images, which can save you space on your Docker Registry. Also, having tinier images usually means less resource consumption on your worker nodes, which can result cost-savings.
+
+To build the docker image, run the below command.
+
+----
+docker build -f Dockerfile.multistage -t greeting:v2.0.0 .
+----
+
+You will see something like below.
+
+----
+$ docker build -f Dockerfile.multistage -t greeting:v2.0.0 .
+Sending build context to Docker daemon  28.99MB
+Step 1/15 : FROM maven:3.3-jdk-8 as builder
+3.3-jdk-8: Pulling from library/maven
+6d827a3ef358: Pull complete
+2726297beaf1: Pull complete
+7d27bd3d7fec: Pull complete
+e61641c845ed: Pull complete
+cce4cca5b76b: Pull complete
+6826227500b0: Pull complete
+c03b117ffd91: Pull complete
+821a1547b435: Pull complete
+2bd47f6b1b42: Pull complete
+e4cf3e9f705c: Pull complete
+3733107c5c01: Pull complete
+Digest: sha256:18e8bd367c73c93e29d62571ee235e106b18bf6718aeb235c7a07840328bba71
+Status: Downloaded newer image for maven:3.3-jdk-8
+ ---> 9997d8483b2f
+Step 2/15 : ENV BUILD_DIR=/usr/src/app/
+ ---> Running in e06b150515b9
+Removing intermediate container e06b150515b9
+ ---> a11487391e3c
+Step 3/15 : RUN mkdir $BUILD_DIR
+ ---> Running in 93e2bddea054
+Removing intermediate container 93e2bddea054
+ ---> 0af9806d421c
+Step 4/15 : WORKDIR $BUILD_DIR
+ ---> Running in c0df968ecb22
+Removing intermediate container c0df968ecb22
+ ---> f0a3bef870fb
+Step 5/15 : VOLUME ${HOME}/.m2:/root/.m2
+ ---> Running in 38fca9b0e2de
+Removing intermediate container 38fca9b0e2de
+ ---> 628afb08802a
+Step 6/15 : ADD . /usr/src/app
+ ---> 824dacff4b1c
+Step 7/15 : RUN bash -c " mvn clean install"
+ ---> Running in 018fc5b02052
+[INFO] Scanning for projects...
+Downloading: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/1.5.15.RELEASE/spring-boot-starter-parent-1.5.15.RELEASE.pom
+Downloaded: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/1.5.15.RELEASE/spring-boot-starter-parent-1.5.15.RELEASE.pom (8 KB at 9.1 KB/sec)
+Downloading: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-dependencies/1.5.15.RELEASE/spring-boot-dependencies-1.5.15.RELEASE.pom
+.................
+.................
+.................
+.................
+Step 15/15 : ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar ./app.jar" ]
+ ---> Running in 743a0dfaace5
+Removing intermediate container 743a0dfaace5
+ ---> f79f112b85de
+Successfully built f79f112b85de
+Successfully tagged greeting:v2.0.0
+----
+
+To verify if the image is built successfully, run the below command.
+
+----
+docker images
+----
+
+You will have something as follows.
+
+----
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
+greeting            v2.0.0              f79f112b85de        43 seconds ago       317MB
+ibmjava             8-sfj               ab418b419902        9 days ago           222MB
+maven               3.3-jdk-8           9997d8483b2f        2 years ago          653MB
+----
+
+=== Run the docker container
+
+- To run the docker container, use the below command.
+
+----
+docker run -p 8080:8080 -d --name greeting_multistage greeting:v2.0.0
+----
+
+Once done, you will have something like below.
+
+----
+$ docker run -p 8080:8080 -d --name greeting_multistage greeting:v2.0.0
+fe8dc2ebfc7db2173806dc736ce47c80c2ebad4f5b70a236dcb17bd8c6d09aba
+----
+
+- To list all the running containers, use the below command.
+
+----
+docker ps
+----
+
+You will have something like below.
+
+----
+$ docker ps
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
+fe8dc2ebfc7d        greeting:v2.0.0     "sh -c 'java $JAVA_O…"   17 seconds ago      Up 16 seconds       0.0.0.0:8080->8080/tcp   greeting_multistage
+----
+
+- To know more about the container, you can inspect the container.
+
+Run the below command.
+
+----
+docker inspect <container-name|container-id>
+----
+
+If we consider our container, it is as follows.
+
+----
+$ docker inspect greeting_multistage
+----
+
+- To get the logs, you use the below command.
+
+----
+docker logs <container-name|container-id>
+----
+
+If we consider our container, it is as follows.
+
+----
+$ docker logs greeting_multistage
+----
+
+=== Access the application
+
+- To access the application, run the below command.
+
+----
+curl http://localhost:8080/greeting?name=John
+----
+
+You will see something like below.
+
+----
+{"id":2,"content":"Welcome to Cloudnative bootcamp !!! Hello, John :)"}
+----
+
+=== Clean Up
+
+- To stop the container, run the below command.
+
+----
+docker stop <container-name|container-id>
+----
+
+For our sample application, it is as follows.
+
+----
+$ docker stop greeting_multistage
+greeting_multistage
+----
+
+- To remove the container, run the below command.
+
+----
+docker rm <container-name|container-id>
+----
+
+For our sample application, it is as follows.
+
+----
+$ docker rm greeting_multistage
+greeting_multistage
+----
+
+- To remove the image, run the below command.
+
+----
+docker rmi <image_id>
+----
+
+Get the image_ids and then remove them. Use the below commands to do that.
+
+----
+$ docker images
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+greeting            v2.0.0              f79f112b85de        5 minutes ago       317MB
+ibmjava             8-sfj               ab418b419902        9 days ago          222MB
+maven               3.3-jdk-8           9997d8483b2f        2 years ago         653MB
+
+$ docker rmi f79f112b85de ab418b419902 9997d8483b2f
+Untagged: greeting:v2.0.0
+Deleted: sha256:f79f112b85de5ecfd0bda14e513c46fe6ca97d7a482b558125a2ae6e746f4fa8
+Deleted: sha256:78b047c21b2efe3b407dfa94274dfab63711a21ab17361e4ef2045bac2cdb510
+Deleted: sha256:62d507c2ca92e54550759715e481588568461393d300e1e17a1cccb0ef42c65a
+Deleted: sha256:adc85f6f75dc02ec2df1f693392656d07ab6d6e1d8afe5c25faf4ab4c514dee7
+Deleted: sha256:ac671642300875b39c4fdc7ce4de82a7d1367f946644b13573f1ae31c490a12e
+Deleted: sha256:39221665a68e2890f4c3dba1cc977e16340f8e328be2697b1b89a6a2b8e9c246
+Deleted: sha256:c2c568f2599e5b74f79cbe2ebfbdf1c970ee6c3848e52494094b0e2d5632a40f
+Deleted: sha256:320f2d955769604fefff9ab673f2e4c4815e050f8eff51f83351df3691f373f5
+Deleted: sha256:64bc278ff6faceaf74159a463525d4dfe523392308a5a6d735e4e626a16885a7
+Deleted: sha256:1482dbbeb1629cd9b729092d25d0b666a739c53fe1531f74635179f77ba1ac93
+Deleted: sha256:c3cdbce0b6e8a74ea8cb81dc2a91cb399d64eb75558c3a2ace825a7b3999e042
+Untagged: ibmjava:8-sfj
+Untagged: ibmjava@sha256:aaef6e7d14b3c63b8df9eaea45334d3cc7678ba3878dfcb630be8706719df97e
+Deleted: sha256:ab418b419902ecc54a6f2b4c0f485c1105eec3395f253040087a954528de7b1b
+Deleted: sha256:2ffcfbe8352bdf9c70b66692e436ab03f01ca3dce37d7d49c79f5c4c80ec2044
+Deleted: sha256:c896bc720df99ee1a6ce305d17edfda42b043a47223ff2ac3e4f94199e6d595b
+Deleted: sha256:03952d61b1fc131f23629c02f7ffb93708ae77108a32e4eedd83d4ec987ba51c
+Deleted: sha256:a48e1b8909b41276ed1666d5262d981258163c6f0998b58e61efa4188944652e
+Deleted: sha256:872ef8aee8632246e43a346a70274030c3613fe81af162a2fb6d14e1fcba980d
+Deleted: sha256:1ea5a27b0484f2a227275fbb913d281461d9f356134a56002574904c3cfdea04
+Untagged: maven:3.3-jdk-8
+Untagged: maven@sha256:18e8bd367c73c93e29d62571ee235e106b18bf6718aeb235c7a07840328bba71
+Deleted: sha256:9997d8483b2fc521a4159feab922546dda0c5c22b5084f86dfab48f123ae4364
+Deleted: sha256:4670a3a3ccbe1fa08dbcd29629e833086949809a5bf6fe1ac4e336b65f0c814c
+Deleted: sha256:4501fab525c27427b85718fc477889071ec8a7adf2c3629bcff4246e4d1df787
+Deleted: sha256:32babe003c3a531aebcdb501deb957c9933f7c90beabfab5d8805f62a084f398
+Deleted: sha256:7d628fad6450f42db382a12b2d5470166b63fce76f6b1865f39718ad99accfab
+Deleted: sha256:6bc44dc0c6c47463f610e82d75246a0f804c27f86bdf46a8ae1563bb3cc77142
+Deleted: sha256:73d13c48b7fe3dbbf513351da9e439a2f38332c4cfcc149c6e7368dafc31e2d9
+Deleted: sha256:dcd168f76c182f075b2dcdafe6a80dcb6fa4180588214df23322b706dc2b9536
+Deleted: sha256:33690a5a483b7684bc809f4c4d8992d946f063b23fc99f68e661383953d910a8
+Deleted: sha256:2ecb867048da2f6e2740814c177ca71c959ab2c91acaefbe827149302b20076f
+Deleted: sha256:763ac6a64f068afd061160ff77b7ab41f61aba49b554bfe39ca033fcbf4f2d3c
+Deleted: sha256:5d6cbe0dbcf9a675e86aa0fbedf7ed8756d557c7468d6a7c64bde7fa9e029636
+----
+
+== Conclusion
+
+You have successfully completed this lab! Let's take a look at what you learned and did today:
+
+- Learned about Dockerfile.
+- Learned about docker images.
+- Learned about docker containers.
+- Learned about multi-stage docker builds.
+- Ran the Greetings service on Docker.
+
+Congratulations !!!
