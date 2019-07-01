@@ -1,0 +1,144 @@
+= Containerization - Docker
+Hemankita Perabathini <Hemankita.Perabathini@ibm.com>
+v1.0, 2019-05-28
+:toc:
+
+== Introduction
+
+You wanted to run your application on different computing environments. It may be your laptop, test environment, staging environment or production environment.
+
+So, when you run it on these different environments, will your application work reliably ?
+
+What if some underlying software changes ? What if the security policies are different ? or something else changes ?
+
+To solve this problems, we need Containers.
+
+== Containers
+
+Containers are a standard way to package an application and all its dependencies so that it can be moved between environments and run without change. They work by hiding the differences between applications inside the container so that everything outside the container can be standardized.
+
+For example, Docker created standard way to create images for Linux Containers.
+
+video::0qotVMX-J5s[youtube, width=640, height=480]
+
+== Why containers ?
+
+video::muTkqVewJMI[youtube, width=640, height=480]
+
+== Different Container Standards
+
+There are many different container standards available today. Some of them are as follows.
+
+*Docker* - The most common standard, made Linux containers usable by the masses.
+
+*Rocket (rkt)* - An emerging container standard from CoreOS, the company that developed etcd.
+
+*Garden* - The format Cloud Foundry builds using buildpacks.
+
+*Open Container Initiative (OCI)* - A Linux Foundation project developing a governed container standard.
+
+Among them, Docker was one of the most popular mainstream container software tools.
+
+== Benefits
+
+- Lightweight
+- Scalable
+- Efficient
+- Portable
+- Supports agile development
+
+To know about containerization and containers, we have couple of guides. Feel free to check them out.
+
+- https://www.ibm.com/cloud/learn/containerization[Containerization: A Complete Guide].
+- https://www.ibm.com/cloud/learn/containers[Containers: A Complete Guide]
+
+== Docker
+
+Docker is one of the most popular containerization platforms which allows you to develop, deploy, and run application inside containers.
+
+- It is an open source project.
+- It is originally built for Linux, but now it runs on Windows and MacOs
+
+video::wFNWl-QwPfc[youtube, width=640, height=480]
+
+=== Docker Image
+
+A read-only snapshot of a container that is stored in Docker Hub or in private repository. You use an image as a template for building containers.
+
+These images are build from the `Dockerfile`.
+
+*Dockerfile*
+
+- It is a text document that contains all the instructions that are necessary to build a docker image.
+- It is written in an easy-to-understand syntax.
+- It specifies the operating system.
+- It also includes things like environmental variables, ports, file locations etc.
+
+If you want to try building docker images, try this https://www.katacoda.com/courses/docker/2[course] on Katacoda.
+
+=== Docker Container
+
+The standard unit where the application service is located or transported. It packages up all code and its dependencies so that the application runs quickly and reliably from one computing environment to another.
+
+If you want to try deploying a docker container, try this https://www.katacoda.com/courses/docker/deploying-first-container[course] on Katacoda.
+
+=== Docker Engine
+
+Docker Engine is a program that creates, ships, and runs application containers. The engine runs on any physical or virtual machine or server locally, in private or public cloud. The client communicates with the engine to run commands.
+
+=== Docker Registry
+
+The registry stores, distributes, and shares container images. It is available in software as a service (SaaS) or in an enterprise to deploy anywhere you that you choose.
+
+Docker Hub is a popular registry.
+
+=== Docker Commands
+
+Below are some command we use often on Docker.
+
+----
+# Know docker version
+docker -version
+
+# Run a container
+docker run
+
+# List containers running
+docker ps
+
+# Stop a container
+docker stop
+
+# Remove a container
+docker rm
+
+# Login into registry
+docker login
+
+# Build an image
+docker build
+
+# Pull the image
+docker pull
+
+# Push an image
+docker push
+
+# List images
+docker images
+----
+
+video::CPJLKqvR8II[youtube, width=640, height=480]
+
+If you are interested, check this https://www.ibm.com/cloud/garage/content/course/containers-and-docker/0[course] out on Containers and Docker.
+
+== References
+
+- https://www.docker.com/resources[Docker resources]
+- https://docs.docker.com/get-started/[Docker tutorial]
+- https://dzone.com/articles/evolution-of-linux-containers-future[The Evolution of Linux Containers and Their Future]
+- https://coreos.com/rkt[rkt]
+- https://docs.cloudfoundry.org/concepts/architecture/garden.html[Cloud Foundry Garden container]
+- https://www.opencontainers.org[Open Container Initiative (OCI)]
+- https://www.cncf.io[Cloud Native Computing Foundation (CNCF)]
+- https://blog.docker.com/2017/07/demystifying-open-container-initiative-oci-specifications[Demystifying the Open Container Initiative (OCI) Specifications]
