@@ -2,6 +2,7 @@
 
 ## Pre-requisites 
 
+- Katacoda account
 - TDD
 - Twelve Factor
 - Kubernetes basics
