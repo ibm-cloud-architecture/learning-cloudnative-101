@@ -1,6 +1,6 @@
-= Cloud-native Overview
+= Cloud Native Overview
 Hemankita Perabathini <Hemankita.Perabathini@ibm.com>
-v1.0, 2019-05-27
+v1.0, 2019-06-27
 :toc:
 :imagesdir: images
 
@@ -130,6 +130,8 @@ image::landscape.png[landscape_serverless.png]
 == Summary
 
 In this, we covered the fundamentals of cloud native systems. You now know what cloud native is, why we need it and how it is important. Cloud native is not just deploying your application on cloud but it is more of taking full advantages of cloud. Also, from cloud-native roadmap, you will get an idea on how to design and architect your cloud-native system. You can also get the idea of different tools, frameworks, platforms etc from the cloud-native landscapes.
+
+Also, if you are interesting in knowing more, we have https://www.ibm.com/cloud/learn/cloud-native[Cloud-Native: A Complete Guide]. Feel free to check this out.
 
 == References
 
