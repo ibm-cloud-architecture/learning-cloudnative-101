@@ -11,6 +11,7 @@ In this lab, you will learn about how to use docker and how to run applications 
 == Prerequisites
 
 - https://www.docker.com/[Docker]
+- https://hub.docker.com/[DockerHub account]
 
 == Working with docker
 
@@ -267,6 +268,68 @@ You will see something like below.
 {"id":2,"content":"Welcome to Cloudnative bootcamp !!! Hello, John :)"}
 ----
 
+=== Pushing an image to a Registry
+
+Let us now push the image to docker hub registry.
+
+- Login into the docker hub registry.
+
+----
+$ docker login
+----
+
+Enter your Docker Hub credentials.
+
+----
+$ docker login
+Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
+Username: <user_name>
+Password:
+Login Succeeded
+----
+
+- Tag your image.
+
+----
+$ docker tag <src_image_name>:<tag> <repository_name>/<target_image>:<tag>
+----
+
+Let us now tag the image we built previously. Let us push it into your own repository.
+
+----
+$ docker tag greeting:v1.0.0 <repository_name>/greeting:v1.0.0
+----
+
+- Now push the image to the registry.
+
+----
+docker push <repository_name>/<image_name>:<tag>
+----
+
+In our case, it will be as follows.
+
+----
+docker push <repository_name>/greeting:v1.0.0
+----
+
+If everything goes fine, you will see something like below.
+
+----
+$ docker push <repository_name>/greeting:v1.0.0
+The push refers to repository [docker.io/<repository_name>/greeting]
+2e4d09cd03a2: Pushed
+d862b7819235: Pushed
+a9212239031e: Pushed
+4be784548734: Pushed
+a43c287826a1: Mounted from library/ibmjava
+e936f9f1df3e: Mounted from library/ibmjava
+92d3f22d44f3: Mounted from library/ibmjava
+10e46f329a25: Mounted from library/ibmjava
+24ab7de5faec: Mounted from library/ibmjava
+1ea5a27b0484: Mounted from library/ibmjava
+v1.0.0: digest: sha256:21c2034646a31a18b053546df00d9ce2e0871bafcdf764f872a318a54562e6b4 size: 2415
+----
+
 === Clean Up
 
 - To stop the container, run the below command.
@@ -325,6 +388,31 @@ Deleted: sha256:03952d61b1fc131f23629c02f7ffb93708ae77108a32e4eedd83d4ec987ba51c
 Deleted: sha256:a48e1b8909b41276ed1666d5262d981258163c6f0998b58e61efa4188944652e
 Deleted: sha256:872ef8aee8632246e43a346a70274030c3613fe81af162a2fb6d14e1fcba980d
 Deleted: sha256:1ea5a27b0484f2a227275fbb913d281461d9f356134a56002574904c3cfdea04
+----
+
+=== Pulling an image from the registry
+
+To pull the image from the registry, use the below command.
+
+----
+$ docker pull <repository_name>/<image_name>:<tag>
+----
+
+Since, we deleted the one we created previously, let us now push it from the registry.
+
+----
+$ docker pull <repository_name>/greeting:v1.0.0
+----
+
+If it successfully got pulled, we will see something like below.
+
+----
+ddcb5f219ce2: Pull complete
+e3371bbd24a0: Pull complete
+49d2efb3c01b: Pull complete
+Digest: sha256:21c2034646a31a18b053546df00d9ce2e0871bafcdf764f872a318a54562e6b4
+Status: Downloaded newer image for <repository_name>/greeting:v1.0.0
+docker.io/<repository_name>/greeting:v1.0.0
 ----
 
 == Run the application on Docker using multi-stage build
