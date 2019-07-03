@@ -1,6 +1,6 @@
 = Containerization - Docker
 Hemankita Perabathini <Hemankita.Perabathini@ibm.com>
-v1.0, 2019-05-28
+v1.0, 2019-06-28
 :toc:
 
 == Introduction
@@ -23,6 +23,10 @@ video::0qotVMX-J5s[youtube, width=640, height=480]
 
 == Why containers ?
 
+- We can run them anywhere.
+- They are lightweight .
+- Isolate your application from others.
+
 video::muTkqVewJMI[youtube, width=640, height=480]
 
 == Different Container Standards
@@ -35,9 +39,11 @@ There are many different container standards available today. Some of them are a
 
 *Garden* - The format Cloud Foundry builds using buildpacks.
 
-*Open Container Initiative (OCI)* - A Linux Foundation project developing a governed container standard.
-
 Among them, Docker was one of the most popular mainstream container software tools.
+
+[maroon]*Open Container Initiative (OCI)*
+
+A Linux Foundation project developing a governed container standard. Docker and Rocket are OCI-compliant. But, Garden is not.
 
 == Benefits
 
@@ -47,19 +53,21 @@ Among them, Docker was one of the most popular mainstream container software too
 - Portable
 - Supports agile development
 
-To know about containerization and containers, we have couple of guides. Feel free to check them out.
+To know more about containerization, we have couple of guides. Feel free to check them out.
 
 - https://www.ibm.com/cloud/learn/containerization[Containerization: A Complete Guide].
-- https://www.ibm.com/cloud/learn/containers[Containers: A Complete Guide]
+- https://www.ibm.com/cloud/learn/containers[Containers: A Complete Guide].
 
 == Docker
 
 Docker is one of the most popular containerization platforms which allows you to develop, deploy, and run application inside containers.
 
 - It is an open source project.
-- It is originally built for Linux, but now it runs on Windows and MacOs
+- Can run it anywhere.
 
 video::wFNWl-QwPfc[youtube, width=640, height=480]
+
+An installation of Docker includes an engine. This comes with a daemon, REST APIs, and CLI. Users can use CLI to interact with the docker using commands. These commands are sent to the daemon which listens for the Docker Rest APIs which in turn manages images and containers. The engine runs a container by retrieving its image from the local system or registry. A running container starts one or more processes in the Linux kernel.
 
 === Docker Image
 
@@ -90,7 +98,7 @@ Docker Engine is a program that creates, ships, and runs application containers.
 
 The registry stores, distributes, and shares container images. It is available in software as a service (SaaS) or in an enterprise to deploy anywhere you that you choose.
 
-Docker Hub is a popular registry.
+*Docker Hub* is a popular registry. It is a registry which allows you to download docker images which are built by different communities. You can also store your own images there. You can check out various images available on docker hub https://hub.docker.com/search?q=&type=image[here].
 
 === Docker Commands
 
@@ -101,28 +109,28 @@ Below are some command we use often on Docker.
 docker -version
 
 # Run a container
-docker run
+docker run <image>
 
 # List containers running
 docker ps
 
 # Stop a container
-docker stop
+docker stop <container-name|container-id>
 
 # Remove a container
-docker rm
+docker rm <container-name|container-id>
 
 # Login into registry
 docker login
 
 # Build an image
-docker build
+docker build <image_name>:<tag> .
 
 # Pull the image
-docker pull
+docker pull <image_name>:<tag>
 
 # Push an image
-docker push
+docker push <image_name>:<tag>
 
 # List images
 docker images
