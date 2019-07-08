@@ -93,7 +93,7 @@ To get the sample application, you will need to clone it from github.
 
 ----
 # Clone the sample app
-git clone https://github.ibm.com/CASE/cloudnative_sample_app.git
+git clone https://github.com/ibm-cloud-architecture/cloudnative_sample_app.git
 
 # Go to the project's root folder
 cd cloudnative_sample_app/
