@@ -12,21 +12,28 @@ video::fp9_ubiKqFU[youtube, width=640, height=480]
 
 == What is cloud-native?
 
-Cloud-native is more about how we build and run applications taking full advantage of cloud computing rather than worrying about where we deploy it.
+Cloud-native is about how we build and run applications taking full advantage of cloud computing rather than worrying about where we deploy it.
 
--	It is not just about optimizing your applications for cloud.
--	Allows you to build scalable systems.
--	Flexible and allows the companies to deliver continuous improvements.
+Cloud-native refers less to where an application resides and more to how it is built and deployed.
 
-Also cloud-native is an entirely different way of thinking and reasoning about software architecture.
+- A cloud-native application consists of discrete, reusable components known as microservices that are designed to integrate into any cloud environment.
+- These microservices act as building blocks and are often packaged in containers.
+- Microservices work together as a whole to comprise an application, yet each can be independently scaled, continuously improved, and quickly iterated through automation and orchestration processes.
+- The flexibility of each microservice adds to the agility and continuous improvement of cloud-native applications.
+
+[maroon]*CNCF Cloud Native Definition*
+
+Cloud native technologies empower organizations to build and run scalable applications in modern, dynamic environments such as public, private, and hybrid clouds. Containers, service meshes, microservices, immutable infrastructure, and declarative APIs exemplify this approach.
+
+These techniques enable loosely coupled systems that are resilient, manageable, and observable. Combined with robust automation, they allow engineers to make high-impact changes frequently and predictably with minimal toil.
+
+The Cloud Native Computing Foundation seeks to drive adoption of this paradigm by fostering and sustaining an ecosystem of open source, vendor-neutral projects. We democratize state-of-the-art patterns to make these innovations accessible for everyone.
 
 == Why cloud-native?
 
 Cloud-native applications are different from the traditional applications that run in your data centres. The applications that are designed in the traditional way are not built keeping cloud compatibility in mind. They may have strong ties with the internal systems. Also, they cannot take advantage of all the benefits of the cloud.
 
 So, we need a new architecture for our applications to utilize the benefits of cloud. There is a need to design the applications keeping cloud in mind and take advantage of several cloud services like storage, queuing, caching etc.
-
-== How is it important?
 
 - Speed, safety, and scalability comes with cloud-native applications.
 - Helps you to quickly deliver the advancements.
@@ -38,6 +45,17 @@ So, we need a new architecture for our applications to utilize the benefits of c
 - To meet the expectations of the today’s world customers, these systems are architected for elastic scalability.
 
 == Cloud-native concepts
+
+Some of the important characteristics of cloud-native applications are as follows.
+
+- Disposable Infrastructure
+- Isolation
+- Scalability
+- Disposable architecture
+- Value added cloud services
+- Polyglot cloud
+- Self-sufficient, full-stack teams
+- Cultural Change
 
 [big maroon]*Disposable Infrastructure*
 
@@ -117,15 +135,26 @@ To make that happen, cultural change is really important. To change the thinking
 
 == Cloud-native Roadmap
 
+You can define your cloud native road map in many ways. You can get there by choosing different paths. Let us see the trail map defined by CNCF.
+
+CNCF defined the Cloud Native Trail Map providing an overview for enterprises starting their cloud native journey as follows.
+
+This cloud map gives us various steps that an engineering team may use while considering the cloud native technologies and exploring them. The most common ones among them are Containerization, CI/CD, and Orchestration. Next crucial pieces will be Observability & Analysis and Service Mesh. And later comes the rest of them like Networking, Distributed Database, Messaging, Container runtime, and software distribution based on your requirements.
+
 image::CNCF_TrailMap_latest.png[]
 
-== Cloud-native Landscape
+- With out Containerization, you cannot build cloud native applications. This helps your application to run in any computing environment. Basically, all your code and dependencies are packaged up together in to a single unit here. Among different container platforms available, Docker is a preferred one.
+- To bring all the changes in the code to container automatically, it is nice to set up a CI/CD pipeline which does that. There are many tools available like jenkins, travis, etc.
+- Since we have containers, we need container orchestration to manage the container lifecycles. Currently, Kubernetes is one solution which is popular.
+- Monitoring and Observability plays a very important role. It is good to set up some of them like logging, tracing, metrics etc.
+- To enable more complex operational requirements, you can use a service mesh. It helps you out with several things like service discovery, health, routing, A/B testing etc. Istio is one of the examples of service mesh.
+- Networking plays a crucial role. You should define flexible networking layers based on your requirements. For this, you can use Calico, Weave Net etc.
+- Sometimes, you may need distributed databases. Based on your requirements, if you need more scalability and resiliency, these are required.
+- Messaging may be required sometimes too. Go with different messaging queues like Kafka, RabbitMQ etc available when you need them.
+- Container Registry helps you to store all your containers. You can also enable image scanning and signing if required.
+- As a part of your application, sometimes you may need a secure software distribution.
 
-image::landscape.png[]
-
-== Cloud-native Serverless Landscape
-
-image::landscape.png[landscape_serverless.png]
+Also, if you want to see the cloud native landscape, check it out https://landscape.cncf.io/images/landscape.png[here].
 
 == Summary
 
@@ -138,3 +167,4 @@ Also, if you are interesting in knowing more, we have https://www.ibm.com/cloud/
 - https://www.ibm.com/cloud/learn/cloud-native[Learn Cloud-native]
 - https://learning.oreilly.com/library/view/cloud-native-development/9781788473927/[John Gilbert, (2018). Cloud Native Development Patterns and Best Practices. Publisher: Packt Publishing]
 - https://github.com/cncf/landscape[CNCF landscape]
+- https://github.com/cncf/toc/blob/master/DEFINITION.md[CNCF Definition]
