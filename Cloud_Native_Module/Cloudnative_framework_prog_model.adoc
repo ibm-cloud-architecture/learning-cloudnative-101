@@ -1,0 +1,136 @@
+= Cloud Native Framework & Programming Model
+Hemankita Perabathini <Hemankita.Perabathini@ibm.com>
+v1.0, 2019-07-02
+:toc:
+:imagesdir: images
+
+In this section, let us explore the concepts of cloud native framework and programming models that are used for used for building cloud applications.
+
+== Cloud Native Framework
+
+For a basic cloud application, more or less the cloud native framework looks like below.
+
+image::CloudNativeApp.png[][alt=CloudNativeApp,width=640,height=480]
+
+The basic components of any cloud native architecture are
+
+- Microservices
+- DevOps
+- Continuous Delivery
+- Containers
+
+=== Microservices
+
+Microservices are small applications which are lightweight. This is an architectural style in which the application is a group of services.
+
+- They are loosely coupled.
+- They communicate with each other via application programming interfaces (APIs).
+
+video::CdBtNQZH8a4[youtube, width=640, height=480]
+
+To know more about Microservices, we have couple of resources. Feel free to check them out.
+
+- https://www.ibm.com/cloud/learn/microservices[Microservices: A Complete Guide].
+- https://developer.ibm.com/tv/microservices/[Microservices TV]
+
+=== DevOps
+
+Devops is a practice of bringing development and operations engineers closer to work in a more collaborative manner. The goal is to make them work together along the entire software development lifecycle beginning from design to development till production.
+
+- It is more a culture.
+- Utilizes the technology particularly automation tools.
+
+This helps to
+
+- Move faster leading to shorter development cycles.
+- Build high quality software.
+- Reduce bugs.
+- Reduce the delivery cost.
+
+video::2MwOjn4x638[youtube, width=640, height=480]
+
+For more details, refer `DevOps Concepts` concept in the further modules.
+
+=== Continuous Delivery
+
+Continuous Delivery is one of the most important practices in DevOps. If you are adopting DevOps, then Continuous Delivery is a must.
+
+In this process, any changes you made to the code will be automatically built, tested and prepared for a release to production. This is done with the help of an automated software production line called Continuous Delivery pipeline.
+
+Typically, a delivery pipeline will have the below stages. The stages may vary based on your requirements.
+
+- Build Automation
+- Test Automation
+- Deployment Automation
+
+video::hQ0recUXk9o[youtube, width=640, height=480]
+
+For more details, refer `CI/CD` concept in the further modules.
+
+=== Containers
+
+video::5d-iiA88vrY[youtube, width=640, height=480]
+
+Containers are a standard way to package an application and all its dependencies so that it can be moved between environments and run without change.
+
+They allow us to
+
+- Increase portability and efficiency.
+- Reduces overhead.
+- Increases speed.
+- Easy deployments.
+
+video::FWpnbGnzk08[youtube, width=640, height=480]
+
+For more details, go through the `Containerization` concept in the further module.
+
+== Programming Model
+
+For building a cloud native application, it is good to have a programming model. You can build a programming model from scratch or you can use the experience from existing models. Using the current technologies and new concepts, below is one of the models.
+
+image::CFPM.png[]
+
+=== Best of breed languages and frameworks
+
+Cloud-native application is a combination of many microservices. These microservices are written in different languages. Developers pick different frameworks based on the programming language.
+
+Cloud-native applications are polyglot. Based on the functionality of the individual services, you can pick different runtimes and different language frameworks.
+
+For instance, you can write the user interface of your application using Node.js and choose to write the APIs in Java using MicroProfile.
+
+There are many languages and their relative frameworks available. Some of them are as follows.
+
+- If you are an Enterprise Java developer and planning to use Java, you can opt https://microprofile.io/[MicroProfile framework].
+- If you prefer Spring, you can opt https://spring.io/projects/spring-boot[SpringBoot].
+- If you prefer Node.js, you can opt https://expressjs.com/[Express.js] or https://loopback.io/[LoopBack].
+- If you are Swift developer, you can opt https://www.kitura.io/[Kitura].
+
+=== Container Orchestration
+
+Container Orchestration is nothing but managing the lifecycles of the containers. This automates several aspects like the following to manage containers.
+
+- Provisioning
+- Deployment
+- Availability
+- Resource Allocation
+- Load balancing
+- Monitoring health
+- Config Management
+
+Among the different container orchestration tools, Kubernetes is one of the most popular ones.
+
+video::kBF6Bvth0zw[youtube, width=640, height=480]
+
+=== Service Mesh
+
+Service Mesh mediates all the communication between services. It offers things like service discovery, monitoring, security, scalability, and high availability. It also deals with other things like A/B testing, canary rollouts, load balancing, rate limiting etc.
+
+Istio provides behavioral insights and operational control over the service mesh as a whole, offering a complete solution to satisfy the diverse requirements of microservice applications.
+
+video::1iyFq2VaL5Y[youtube, width=640, height=480]
+
+== References
+
+- https://learning.oreilly.com/library/view/cloud-native-containers/9781492053811/[Peter Jausovec, Trent Swanson, Boris Scholl (2019). Cloud Native: Containers, Functions, Data, and Kubernetes. Publisher: O'Reilly Media, Inc.]
+- https://dzone.com/articles/implementing-cloud-native-enterprise-applications[Implementing Cloud-native Enterprise Applications]
+- https://istio.io/docs/concepts/what-is-istio/[Istio]
