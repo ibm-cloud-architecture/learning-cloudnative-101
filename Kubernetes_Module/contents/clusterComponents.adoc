@@ -1,0 +1,33 @@
+:imagesdir: ../images
+= Kubernetes Deployments
+video::Sulw5ndbE88[youtube,width=700,height=500]
+
+== Pods
+
+A Pod is the basic execution unit of a Kubernetes application–the smallest and simplest unit in the Kubernetes object model that you create or deploy. A Pod represents processes running on your cluster. Pods can run a single container or multiple containers at one time. 
+
+.Read More
+NOTE: Pod Information Overview: 
+      https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/[Here , window="_blank"]
+
+
+=== ReplicaSets
+
+A ReplicaSet is a defined set of fields that declares the number of replicas needed to obtain the desired state. 
+
+=== ReplicationControllers
+
+The ReplicationController controls the number of pod replicas running at one time in a cluster.  The ReplicationController is responsible for ensuring the correct number of pods are replicated and running. Pods maintained by a ReplicationController are automatically replaced 
+
+== Deployments
+
+A kubernetes deployment describes the desired state for a kubernetes cluster. The deployment controller changes the actual state to meet the desired state at a controlled rate.  Changes to a deployment can lead to new ReplicaSets, removal of previous deployments and allocate the resources for the new deployment.
+
+
+== Try It Out
+
+The link below will take you to Katacoda to walk you through creating a deployment and service via a YAML file. You will also change the number of replicas for the deployment and see how it automatically deploys the replicas for you. 
+
+.Walkthrough
+NOTE: Deployments using YAML: 
+      https://www.katacoda.com/courses/kubernetes/creating-kubernetes-yaml-definitions/[Katacoda , window="_blank"]

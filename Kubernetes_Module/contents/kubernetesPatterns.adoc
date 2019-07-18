@@ -1,0 +1,15 @@
+= Foudational Kubernetes Patterns
+
+== Predictable Demands Pattern
+
+
+== Declarative Deployment Pattern
+
+
+== Health Probe Pattern
+
+
+== Managed Lifecycle Pattern
+
+
+== Automated Placement Pattern

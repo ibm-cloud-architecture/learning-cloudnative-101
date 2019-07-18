@@ -1,0 +1,29 @@
+:imagesdir: ../images
+= Kubernetes Security
+
+When it comes to security for kubernetes we have to look beyond just kubernetes to ensure the security of our cluster.   Let's start by defining the different levels where security needs to be compliant. These levels are called the 4C's: *Cloud*, *Cluster*, *Container*, and *Code*.
+
+image::4C's.png[Security Levels]
+
+Each of these levels have different security practices and levels of vulnerability. To learn more about each click on the links below:
+
+[NOTE]
+====
+*Cloud*: https://kubernetes.io/docs/concepts/security/overview/#cloud[Security Details, window="_blank"]
+
+*Cluster*: https://kubernetes.io/docs/concepts/security/overview/#cluster[Security Details, window="_blank"]
+
+*Container*: https://kubernetes.io/docs/concepts/security/overview/#container[Security Details, window="_blank"]
+
+*Code*: https://kubernetes.io/docs/concepts/security/overview/#code[Security Details, window="_blank"]
+
+====
+
+
+== Try It Out
+
+The link below will take you to Katacoda to walk you through securely managing passwords and certificates.
+
+.Walkthrough
+NOTE: Managing Secrets and Passwords: 
+      https://www.katacoda.com/courses/kubernetes/managing-secrets/[Katacoda , window="_blank"]

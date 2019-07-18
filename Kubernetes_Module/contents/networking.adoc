@@ -1,0 +1,27 @@
+:imagesdir: ../images
+= Kubernetes Networking
+
+== Ingresses 
+
+The Ingress exposes HTTP and HTTPS routes from outside the cluster to services within the cluster. Traffic routing is controlled by rules defined in the Ingress resource.  An ingress will not work without an ingress controller running inside the cluster. Each of the Ingress rules contain a hostname, list of the paths associated with the service, and a backend.  The backend is a combination of the service and port names described in the https://kubernetes.io/docs/concepts/services-networking/service/[Service] doc. 
+
+    internet
+        |
+   [ Ingress ]
+   --|-----|--
+   [ Services ]
+
+=== Single Service Ingress
+
+== Ingress Controllers
+
+An Ingress Controller is responsible for fulfilling the Ingress by configuring a 
+
+== Network Policies
+
+.Try it out
+NOTE: Kubernetes Networking Course: 
+      https://www.katacoda.com/courses/kubernetes/networking-introduction[Here , window="_blank"]
+
+
+https://www.katacoda.com/courses/kubernetes/create-kubernetes-ingress-routes
