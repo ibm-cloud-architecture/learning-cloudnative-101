@@ -1,7 +1,7 @@
 :imagesdir: ../images
 = Kubernetes Architecture
 
-Kubernetes at it's core is a database (etcd) connected to "watchers" and "controllers".  The database contains the user's desired state while the "watchers" look for changes to the desired state and determine what changes the "controllers" need to make to the nodes.  
+Kubernetes at it's core is a database (etcd) connected to "watchers" and "controllers".  The database contains the user's desired state and the "watchers" look for changes to the desired state. When the "watchers" see a change to the desired state "controllers" make the changes necessary to match actual and desired states.  
 
 image::kubeArch.png[Kubernetes Architecture]
 

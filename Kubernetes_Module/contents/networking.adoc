@@ -11,17 +11,25 @@ The Ingress exposes HTTP and HTTPS routes from outside the cluster to services w
    --|-----|--
    [ Services ]
 
-=== Single Service Ingress
-
 == Ingress Controllers
 
-An Ingress Controller is responsible for fulfilling the Ingress by configuring a 
+An Ingress Controller is responsible for fulfilling the Ingress by configuring a the routing that is defined for each of the services defined in the Ingress resource.  It's important to remember that Ingress Controllers are not automatically started with a kubernetes cluster when it is created.  A Ingress Controller must be created and started if an Ingress resource is created.  Multiple Ingress Controllers can exist in a single cluster and it's recommended to annotate the ingress with an **ingress.class** in order to specify which controller should be used for configuring the routes. 
+
+.Try it out
+NOTE: Kubernetes Creating Ingress Routes: 
+      https://www.katacoda.com/courses/kubernetes/create-kubernetes-ingress-routes[Here , window="_blank"]
 
 == Network Policies
 
-.Try it out
+.Read More
+NOTE: To learn about specific Network Policies and to see examples of each check out: 
+      https://www.katacoda.com/courses/kubernetes/create-kubernetes-ingress-routes[Kubernetes Network Policies , window="_blank"]
+
+== Try It Out
+
+The link below will take you to Katacoda which will walk you through the basics of kubernetes networking.
+
+.Walkthrough
 NOTE: Kubernetes Networking Course: 
-      https://www.katacoda.com/courses/kubernetes/networking-introduction[Here , window="_blank"]
+      https://www.katacoda.com/courses/kubernetes/networking-introduction[Katacoda , window="_blank"]
 
-
-https://www.katacoda.com/courses/kubernetes/create-kubernetes-ingress-routes

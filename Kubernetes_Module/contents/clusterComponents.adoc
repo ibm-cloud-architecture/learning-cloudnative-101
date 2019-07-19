@@ -13,16 +13,19 @@ NOTE: Pod Information Overview:
 
 === ReplicaSets
 
-A ReplicaSet is a defined set of fields that declares the number of replicas needed to obtain the desired state. 
+A ReplicaSet is a defined set of fields that declares the number of replicas needed to obtain the desired state. A ReplicaSet fulfills it's purpose by creating and deleting Pods to match the desired number defined.  When a ReplicaSet creates a pod it uses a Pod Template. A ReplicaSet ensured the proper number of replicated pods are running at any given time, but it is recommended to use Deployments instead of directly using ReplicaSets since they are a higher level concept that manages ReplicaSets.
 
-=== ReplicationControllers
-
-The ReplicationController controls the number of pod replicas running at one time in a cluster.  The ReplicationController is responsible for ensuring the correct number of pods are replicated and running. Pods maintained by a ReplicationController are automatically replaced 
+.Check it out
+NOTE: ReplicaSet Example: 
+      https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/#example[Example , window="_blank"]
 
 == Deployments
 
-A kubernetes deployment describes the desired state for a kubernetes cluster. The deployment controller changes the actual state to meet the desired state at a controlled rate.  Changes to a deployment can lead to new ReplicaSets, removal of previous deployments and allocate the resources for the new deployment.
+A kubernetes deployment describes the desired state for a kubernetes cluster. The deployment controller changes the actual state to meet the desired state at a controlled rate.  Changes to a deployment can lead to new ReplicaSets, removal of previous deployments and allocate the resources for the new deployment.  Deployments can be updated and rolled back in case of any errors or mistakes made when editing a deployment.  A deployment can also be replicated in order to scale any deployment. In the link below you will find an example of a deployment. Below the example is also more information on updating, scaling, and pausing deployments.
 
+.Check it out
+NOTE: Deployment Example: 
+      https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#creating-a-deployment[Example , window="_blank"]
 
 == Try It Out
 

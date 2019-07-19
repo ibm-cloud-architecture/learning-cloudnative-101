@@ -19,7 +19,7 @@ In this module we will be covering Kubernetes concepts and components.  Kubernet
 == Getting Started with Kubernetes
 video::aSrqRSk43lY[youtube,width=800, height=500]
 
-https://www.youtube.com/watch?v=1Br4m0_8YDQ
+video::1Br4m0_8YDQ[youtube,width=800, height=500]
 
 include::architecture.adoc[leveloffset=+1]
 
