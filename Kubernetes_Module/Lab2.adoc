@@ -10,8 +10,9 @@ In this lab, you will learn about how to use docker and how to run applications 
 
 == Prerequisites
 
-- https://www.docker.com/[Docker]
-- https://hub.docker.com/[DockerHub account]
+- You need https://www.java.com/en/[Java] installed on your environment. You can download it https://www.java.com/download/[here]. Please install the latest version which is Java Version 8. Make sure you set `JAVA_HOME` environment variable. You can verify the version after installation using `java -version`.
+- Create a https://hub.docker.com/[DockerHub account]. This account is needed to push images to docker registry. Also create a repository following the instructions https://docs.docker.com/docker-hub/repos/[here].
+- You need to install https://www.docker.com/[Docker] in your environment. Follow the instructions https://docs.docker.com/docker-for-mac/install/[here] to install it on Mac and https://docs.docker.com/docker-for-windows/install/[here] to install it on Windows.
 
 == Working with docker
 
@@ -106,7 +107,7 @@ cd cloudnative_sample_app/
 To build the application, use the below command.
 
 ----
-mvn install
+./mvnw install
 ----
 
 You will notice something at the end like below once done.
@@ -143,7 +144,17 @@ ENTRYPOINT [ "sh", "-c", "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urando
 - `ENV` instruction helps us to pass environment variables.
 - `ENTRYPOINT` allows you to configure a container that runs as an executable.
 
-To build the docker image, run the below command.
+Once, you have the docker file ready, the nest step is to build it. The `build` command allows you to build a docker image which you can later run as a container.
+
+The command is as follows.
+
+----
+$ docker build -t <image_name>:<image_tag> .
+----
+
+Here, `-t` flag allows you to add a name to your image and optionally you can also add a tag. If you don't add a tag, by default the tag is `latest`. Also, the `.` at the end of the command specifies that the path for the Dockerfile is the current directory.
+
+To build the docker image for our sample application, run the below command.
 
 ----
 docker build -t greeting:v1.0.0 .
@@ -189,7 +200,9 @@ To verify if the image is built successfully, run the below command.
 docker images
 ----
 
-You will have something as follows.
+It shows the images, their repository and tags, and their size.
+
+The output will be as follows.
 
 ----
 $ docker images
@@ -204,6 +217,16 @@ hello-world         latest              fce289e99eb9        5 months ago        
 - To run the docker container, use the below command.
 
 ----
+docker run -p <port_to_expose>:<port> -d --name <container_name> <image_name>:<tag>
+----
+
+- `-p`: Allows you to publish the containers port to the host.
+- `-d`: Runs the container in background in detached mode.
+- `--name`: Allows you to specify the name of the container. If you don't use this one, docker creates a name automatically.
+
+To run the docker container for our sample application, use the below command.
+
+----
 docker run -p 8080:8080 -d --name greeting greeting:v1.0.0
 ----
 
@@ -213,6 +236,16 @@ Once done, you will have something like below.
 $ docker run -p 8080:8080 -d --name greeting greeting:v1.0.0
 a74b91789b29af6e7be92b30d0e68eef852bfb24336a44ef1485bb58becbd664
 ----
+
+Also, docker cannot create two containers with the same name. If you try to run the same container having the same name again, you will see something like below.
+
+----
+$ docker run -p 8080:8080 -d --name greeting greeting:v1.0.0
+docker: Error response from daemon: Conflict. The container name "/greeting" is already in use by container "a74b91789b29af6e7be92b30d0e68eef852bfb24336a44ef1485bb58becbd664". You have to remove (or rename) that container to be able to reuse that name.
+See 'docker run --help'.
+----
+
+It is a good to name your containers. Naming helps you to discover your service easily.
 
 - To list all the running containers, use the below command.
 
@@ -236,10 +269,39 @@ Run the below command.
 docker inspect <container-name|container-id>
 ----
 
-If we consider our container, it is as follows.
+By inspecting the container, you can access detailed information about the container. By using this command, you get to know the details about network settings, volumes, configs, state etc.
+
+If we consider our container, it is as follows. You can see lot of information about the `greeting` container.
 
 ----
 $ docker inspect greeting
+[
+    {
+        "Id": "992723e38ecbdcd50a08d2acc0848e3fb93f182d6e14141e892de5a3f02e14be",
+        "Created": "2019-07-15T21:35:18.0277554Z",
+        "Path": "sh",
+        "Args": [
+            "-c",
+            "java $JAVA_OPTS -Djava.security.egd=file:/dev/./urandom -jar /app.jar"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 46656,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2019-07-15T21:35:19.0475638Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        ..........
+        ..........
+        ..........
+    }
+]
 ----
 
 - To get the logs, you use the below command.
@@ -248,19 +310,33 @@ $ docker inspect greeting
 docker logs <container-name|container-id>
 ----
 
+It helps you to access the logs of your container. It allows you to debug the container if it fails. It also lets you to know what is happening with your application.
+
 If we consider our container, it is as follows.
 
 ----
 $ docker logs greeting
 ----
 
+At the end, you will see something like below.
+
+----
+mework.cloud.context.properties:name=configurationPropertiesRebinder,context=86174590,type=ConfigurationPropertiesRebinder]
+2019-07-15 21:35:31.136  INFO 6 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Located managed bean 'refreshEndpoint': registering with JMX server as MBean [org.springframework.cloud.endpoint:name=refreshEndpoint,type=RefreshEndpoint]
+2019-07-15 21:35:31.312  INFO 6 --- [           main] o.s.c.support.DefaultLifecycleProcessor  : Starting beans in phase 0
+2019-07-15 21:35:31.398  INFO 6 --- [           main] o.s.c.support.DefaultLifecycleProcessor  : Starting beans in phase 2147483647
+2019-07-15 21:35:31.399  INFO 6 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2019-07-15 21:35:31.435  INFO 6 --- [           main] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2019-07-15 21:35:31.468  INFO 6 --- [           main] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2019-07-15 21:35:31.779  INFO 6 --- [           main] s.b.c.e.t.TomcatEmbeddedServletContainer : Tomcat started on port(s): 8080 (http)
+2019-07-15 21:35:31.788  INFO 6 --- [           main] application.SBApplication                : Started SBApplication in 11.532 seconds (JVM running for 12.725)
+----
+
+This shows that the Spring Boot application is successfully started.
+
 === Access the application
 
-- To access the application, run the below command.
-
-----
-curl http://localhost:8080/greeting?name=John
-----
+- To access the application, open the browser and access http://localhost:8080/greeting?name=John.
 
 You will see something like below.
 
@@ -268,11 +344,15 @@ You will see something like below.
 {"id":2,"content":"Welcome to Cloudnative bootcamp !!! Hello, John :)"}
 ----
 
+[maroon]*Container Image Registry*
+
+Container Image Registry is a place where you can store the container images. They can be public or private registries. They can be hosted by third party as well. In this lab, we are using DockerHub.
+
 === Pushing an image to a Registry
 
 Let us now push the image to docker hub registry.
 
-- Login into the docker hub registry.
+- Before pushing the image to the registry, one needs to login. Let us now login into the docker hub registry.
 
 ----
 $ docker login
@@ -288,19 +368,19 @@ Password:
 Login Succeeded
 ----
 
-- Tag your image.
+- Tag your image. To push an image to a registry, you need to tag it with the repository name and port (port is optional). This command helps you to do that.
 
 ----
 $ docker tag <src_image_name>:<tag> <repository_name>/<target_image>:<tag>
 ----
 
-Let us now tag the image we built previously. Let us push it into your own repository.
+Let us now tag the image we built previously.
 
 ----
 $ docker tag greeting:v1.0.0 <repository_name>/greeting:v1.0.0
 ----
 
-- Now push the image to the registry.
+- Now push the image to the registry. This allows you to share images to a registry.
 
 ----
 docker push <repository_name>/<image_name>:<tag>
@@ -329,6 +409,8 @@ e936f9f1df3e: Mounted from library/ibmjava
 1ea5a27b0484: Mounted from library/ibmjava
 v1.0.0: digest: sha256:21c2034646a31a18b053546df00d9ce2e0871bafcdf764f872a318a54562e6b4 size: 2415
 ----
+
+Once the push is successful, your image will be residing in the registry.
 
 === Clean Up
 
@@ -391,6 +473,8 @@ Deleted: sha256:1ea5a27b0484f2a227275fbb913d281461d9f356134a56002574904c3cfdea04
 ----
 
 === Pulling an image from the registry
+
+Sometimes, you may need the images that are residing on your registry. Or you may want to use some public images out there. Then, we need to pull the image from the registry.
 
 To pull the image from the registry, use the below command.
 
@@ -605,11 +689,7 @@ $ docker logs greeting_multistage
 
 === Access the application
 
-- To access the application, run the below command.
-
-----
-curl http://localhost:8080/greeting?name=John
-----
+- To access the application, open the browser and access http://localhost:8080/greeting?name=John.
 
 You will see something like below.
 

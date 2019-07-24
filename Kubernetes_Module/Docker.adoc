@@ -82,13 +82,17 @@ These images are build from the `Dockerfile`.
 - It specifies the operating system.
 - It also includes things like environmental variables, ports, file locations etc.
 
-If you want to try building docker images, try this https://www.katacoda.com/courses/docker/2[course] on Katacoda.
+If you want to try building docker images, try this course on https://www.katacoda.com/[Katacoda] (Interactive Learning Platform).
+
+- https://www.katacoda.com/courses/docker/2[Building Container Images] -  Estimated Time: 10 minutes.
 
 === Docker Container
 
 The standard unit where the application service is located or transported. It packages up all code and its dependencies so that the application runs quickly and reliably from one computing environment to another.
 
-If you want to try deploying a docker container, try this https://www.katacoda.com/courses/docker/deploying-first-container[course] on Katacoda.
+If you want to try deploying a docker container, try this course on https://www.katacoda.com/[Katacoda] (Interactive Learning Platform).
+
+- https://www.katacoda.com/courses/docker/deploying-first-container[Deploying Your First Docker Container] -  Estimated Time: 10 minutes.
 
 === Docker Engine
 
