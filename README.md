@@ -20,8 +20,8 @@
 
 | Duration | Module | Link | Owner |
 | ---------- | ------ | ---- | ----- |
-|   30 Mins | *Containerization* | TBD | Hema |
-|   45 Mins | *Lab 2: Docker* | TBD | Hema |
+|   30 Mins | *Containerization* | https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/Docker.html | Hema |
+|   45 Mins | *Lab 2: Docker* | https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/Lab2.html | Hema |
 |   1 Hr | *Kubernetes Patterns* | TBD | Bryan |
 |   30 Mins | *Cloud Platforms & Local Kube clusters* | TBD | Bryan |
 |   45 Mins | *Lab 3: Kubernetes patterns* | TBD | Bryan |
