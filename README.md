@@ -2,9 +2,9 @@
 
 ## Pre-requisites 
 
-- You need https://www.java.com/en/[Java] installed on your environment. You can download it https://www.java.com/download/[here]. Please install the latest version which is Java Version 8. Make sure you set `JAVA_HOME` environment variable. You can verify the version after installation using `java -version`.
-- Create a https://hub.docker.com/[DockerHub account]. This account is needed to push images to docker registry. Also create a repository following the instructions https://docs.docker.com/docker-hub/repos/[here].
-- You need to install https://www.docker.com/[Docker] in your environment. Follow the instructions https://docs.docker.com/docker-for-mac/install/[here] to install it on Mac and https://docs.docker.com/docker-for-windows/install/[here] to install it on Windows.
+- You need [Java](https://www.java.com/en/) installed on your environment. You can download it [here](https://www.java.com/download/). Please install the latest version which is Java Version 8. Make sure you set `JAVA_HOME` environment variable. You can verify the version after installation using `java -version`.
+- Create a [DockerHub account](https://hub.docker.com/). This account is needed to push images to docker registry. Also create a repository following the instructions [here](https://docs.docker.com/docker-hub/repos/[).
+- You need to install [Docker](https://www.docker.com/) in your environment. Follow the instructions [here](https://docs.docker.com/docker-for-mac/install/) to install it on Mac and [here](https://docs.docker.com/docker-for-windows/install/) to install it on Windows.
 - Kubernetes basics
 
 ## Cloud Native Module 
