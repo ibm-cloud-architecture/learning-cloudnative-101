@@ -1,0 +1,272 @@
+= Lab 9
+Hemankita Perabathini <Hemankita.Perabathini@ibm.com>
+v1.0, 2019-07-15
+:toc:
+:imagesdir: images
+
+== Introduction
+
+In this lab, you will learn about how to define Continuous Delivery for your application. We are using https://argoproj.github.io/argo-cd/[Argo] to define it.
+
+[maroon]*Argo CD*
+
+Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes. In you applications, application definitions, configurations, and environments should be declarative and version controlled. Also application deployment and lifecycle management should be automated, auditable, and easy to understand. All this can be done using Argo.
+
+video::KJzgwJrY-mE[youtube, width=640, height=480, align="center"]
+
+Check these guides out if you want to know more about Argo - https://argoproj.github.io/argo-cd/[Argo CD - Declarative GitOps CD for Kubernetes].
+
+== Prerequisites
+
+- You need an https://cloud.ibm.com/login[IBM cloud account].
+- Create kubernetes cluster using https://cloud.ibm.com/docs/containers?topic=containers-getting-started[IBM Cloud Kubernetes Service]. Here, you can choose a kubernetes cluster.
+- Install https://kubernetes.io/docs/tasks/tools/install-kubectl/[kubectl] command line tool.
+- You should be familiar with basics like Containers, Docker, Kubernetes.
+- In this lab, we are using the deploy repo which we used in the previous lab. If you have your own deploy repository, use it. If you did not get a chance to do the previous lab, you can use this https://github.com/ibm-cloud-architecture/cloudnative_sample_app_deploy[repo]. This repo will be updated by CI whenever there are changes.
+
+== Continuous deployment
+
+=== Installation
+
+- Create a namespace to install argocd.
+
+This command allows you to create namespace. Namespaces helps you divide the kubernetes cluster resources among multiple users. If you wanted to learn more about namespaces, check out kubernetes https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/[namespace].
+
+----
+$ kubectl create namespace argocd
+----
+
+If successful, you will see something like below.
+
+----
+namespace/argocd created
+----
+
+- Install ArgoCD as follows.
+
+This command allows you to apply a configuration to a resource by filename or stdin. To know more about this, check out https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#apply[kubectl apply] command.
+
+----
+$ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+----
+
+Here, `-n` is used to pass the namespace and `-f` is used to input the filename.
+
+You will see something like below at the end if it is executed successfully.
+
+----
+deployment.apps/argocd-redis created
+deployment.apps/argocd-repo-server created
+deployment.apps/argocd-server created
+----
+
+- Download the latest version from https://github.com/argoproj/argo-cd/releases/latest[here].
+
+For mac, it is also available in homebrew.
+
+----
+$ brew tap argoproj/tap
+$ brew install argoproj/tap/argocd
+----
+
+- Access the argoCD api server as follows.
+
+Change the argocd-server service type to LoadBalancer:
+
+This command allows you to update the service. For more details, refer https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#patch[kubectl patch] command.
+
+----
+$ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+----
+
+Here, `-n` is used to pass the namespace and `-p` is used to specify the patch to be applied to the resource JSON file.
+
+Once done, you will see something like below.
+
+----
+$ kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+service/argocd-server patched
+----
+
+Access the service as follows.
+
+This command lists all services. To know more, check out https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get[kubectl get] command.
+
+----
+$ kubectl get svc -n argocd
+NAME                    TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)                      AGE
+argocd-dex-server       ClusterIP      172.21.204.98    <none>           5556/TCP,5557/TCP            13m
+argocd-metrics          ClusterIP      172.21.149.189   <none>           8082/TCP                     13m
+argocd-redis            ClusterIP      172.21.177.101   <none>           6379/TCP                     13m
+argocd-repo-server      ClusterIP      172.21.45.103    <none>           8081/TCP,8084/TCP            13m
+argocd-server           LoadBalancer   172.21.60.81     169.63.132.123   80:30123/TCP,443:31752/TCP   13m
+argocd-server-metrics   ClusterIP      172.21.171.206   <none>           8083/TCP                     13m
+----
+
+Here, we are passing `svc` as the type to access and `-n` is used to pass the namespace.
+
+Now, you can access it at `External-ip:Node-port` which in this case will be `169.63.132.123:30123`.
+
+Alternatively, with out exposing the service, you can also use port forwarding as follows.
+
+This command allows you to forward one or more local ports to a pod. This command requires the node to have 'socat' installed. To learn more about this, check out https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#port-forward[kubectl port-forward] command.
+
+----
+$ kubectl port-forward svc/argocd-server -n argocd 8080:443
+----
+
+- Open a new terminal.
+
+- Login using the cli.
+
+Login as the `admin` user.
+The initial password is autogenerated to be the pod name of the Argo CD API server. This can be retrieved with the following command.
+
+----
+$ kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
+----
+
+Now login as follows.
+
+----
+$ argocd login <ARGOCD_SERVER>
+----
+
+If you are using a load balancer, it will be
+
+----
+$ argocd login 169.63.132.123:30123
+WARNING: server certificate had error: x509: cannot validate certificate for 169.63.132.123 because it doesn't contain any IP SANs. Proceed insecurely (y/n)? y
+Username: admin
+Password:
+'admin' logged in successfully
+Context '169.63.132.123:30123' updated
+----
+
+If you want to change the password, it is as below.
+
+----
+$ argocd account update-password
+*** Enter current password:
+*** Enter new password:
+*** Confirm new password:
+Password updated
+Context '169.63.132.123:30123' updated
+----
+
+If you are using port forwarding, it will be
+
+----
+$ argocd login localhost:8080
+WARNING: server certificate had error: x509: certificate signed by unknown authority. Proceed insecurely (y/n)? y
+Username: admin
+Password:
+'admin' logged in successfully
+Context 'localhost:8080' updated
+----
+
+If you want to change the password, it is as below.
+
+----
+$ argocd account update-password
+*** Enter current password:
+*** Enter new password:
+*** Confirm new password:
+Password updated
+Context 'localhost:8080' updated
+----
+
+=== Deploying the app
+
+Note: Replace `https://github.com/ibm-cloud-architecture/cloudnative_sample_app_deploy` with your forked repo in all the below steps if you want to use the one you built.
+
+- Add the repository using Argo CLI.
+
+For username and password, pass your github credentials.
+
+----
+$ argocd repo add https://github.com/ibm-cloud-architecture/cloudnative_sample_app_deploy --username <username> --password <password>
+----
+
+- Create the app.
+
+----
+$ argocd app create sampleapp \
+   --repo https://github.com/ibm-cloud-architecture/cloudnative_sample_app_deploy.git \
+   --path chart/cloudnativesampleapp \
+   --dest-server https://kubernetes.default.svc \
+   --dest-namespace default
+----
+
+If it is successful, you will something like below.
+
+----
+$ argocd app create sampleapp \
+>    --repo https://github.com/Hemankita/cloudnative_sample_app_deploy.git \
+>    --path chart/cloudnativesampleapp \
+>    --dest-server https://kubernetes.default.svc \
+>    --dest-namespace default
+application 'sampleapp' created
+----
+
+- Also, there is an UI available. Let us now login and see our deployment in UI.
+
+image::argocd_login.png[align="center"]
+
+- You will now see the available apps.
+
+image::sampleapp_create.png[align="center"]
+
+- Initially, the app will be out of sync. It is yet to be deployed. You need to sync it for deploying.
+
+image::out_of_sync.png[align="center"]
+
+To sync the application, click `SYNC` and then `SYNCHRONIZE`.
+
+You can also do it in command line using the below command.
+
+----
+$ argocd app sync sampleapp
+----
+
+image::sync_the_app.png[align="center"]
+
+- Wait till the app is deployed.
+
+image::synched_app.png[align="center"]
+
+- Once the app is deployed, click on it to see the details.
+
+image::sample_app_deployed.png[align="center"]
+
+image::sample_app_full_deployment.png[align="center"]
+
+=== Verifying the deployment
+
+- Access the app to verify if it is correctly deployed.
+
+Go to terminal and run the below command.
+
+This command lists all services. We are passing `svc` as the type to access. To know more, check out kubectl get[https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get] command.
+
+----
+$ kubectl get svc
+----
+
+If your app is deployed properly, you will see something like below.
+
+----
+$ kubectl get svc
+NAME                              TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+cloudnativesampleapp-service      NodePort    172.21.6.157     <none>        8080:30807/TCP   9m48s
+----
+
+You can access the app at http://<host>:<port>/greeting?name=John.
+
+For instance in our case, it will be `http://169.63.132.123:30807/greeting?name=John`
+
+image::sampl_app_output.png[align="center"]
+
+== References
+
+- https://argoproj.github.io/argo-cd/[ArgoCD]
