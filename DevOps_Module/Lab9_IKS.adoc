@@ -10,7 +10,7 @@ In this lab, you will learn about how to define Continuous Delivery for your app
 
 [maroon]*Argo CD*
 
-Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes. In you applications, application definitions, configurations, and environments should be declarative and version controlled. Also application deployment and lifecycle management should be automated, auditable, and easy to understand. All this can be done using Argo.
+Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes. In your applications, application definitions, configurations, and environments should be declarative and version controlled. Also application deployment and lifecycle management should be automated, auditable, and easy to understand. All this can be done using Argo.
 
 video::KJzgwJrY-mE[youtube, width=640, height=480, align="center"]
 
@@ -198,7 +198,7 @@ $ argocd app create sampleapp \
    --dest-namespace default
 ----
 
-If it is successful, you will something like below.
+If it is successful, your output will be something like below.
 
 ----
 $ argocd app create sampleapp \
@@ -247,7 +247,7 @@ image::sample_app_full_deployment.png[align="center"]
 
 Go to terminal and run the below command.
 
-This command lists all services. We are passing `svc` as the type to access. To know more, check out kubectl get[https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get] command.
+This command lists all services. We are passing `svc` as the type to access. To know more, check out https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get[kubectl get] command.
 
 ----
 $ kubectl get svc

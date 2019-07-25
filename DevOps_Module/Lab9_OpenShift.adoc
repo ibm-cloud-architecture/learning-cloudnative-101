@@ -10,7 +10,7 @@ In this lab, you will learn about how to define Continuous Delivery for your app
 
 [maroon]*Argo CD*
 
-Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes. In you applications, application definitions, configurations, and environments should be declarative and version controlled. Also application deployment and lifecycle management should be automated, auditable, and easy to understand. All this can be done using Argo.
+Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes. In your applications, application definitions, configurations, and environments should be declarative and version controlled. Also application deployment and lifecycle management should be automated, auditable, and easy to understand. All this can be done using Argo.
 
 video::KJzgwJrY-mE[youtube, width=640, height=480, align="center"]
 
@@ -30,7 +30,7 @@ Check these guides out if you want to know more about Argo - https://argoproj.gi
 
 - Create a namespace to install argocd.
 
-This command allows you to create namespace. Namespaces helps you divide the kubernetes cluster resources among multiple users. If you wanted to learn more about namespaces, check out kubernetes https://docs.openshift.com/enterprise/3.0/architecture/core_concepts/projects_and_users.html#namespaces[namespace].
+This command allows you to create namespace. Namespaces helps you divide the kubernetes cluster resources among multiple users. If you wanted to learn more about namespaces, check out https://docs.openshift.com/enterprise/3.0/architecture/core_concepts/projects_and_users.html#namespaces[namespace].
 
 ----
 $ oc create namespace argocd
@@ -204,7 +204,7 @@ $ argocd app create sampleapp \
    --dest-namespace default
 ----
 
-If it is successful, you will something like below.
+If it is successful, your output will be something like below.
 
 ----
 $ argocd app create sampleapp \
