@@ -35,8 +35,8 @@
 
 | Module | Link | Owner |
 | ------ | ---- | ----- |
-| *Kubernetes for Cloud Foundry users* | TBD | Budi & Dave |
-| *CF migration tool* | https://github.com/ibm-cloud-architecture/cf-transformation | Budi & Dave |
+| *Kubernetes for Cloud Foundry users* | https://pages.github.ibm.com/CASE/cloudnative-bootcamp/CF_Migrate_Module/Kubernetes-for-CF.html | Budi & Dave |
+| *CF migration tool* | https://pages.github.ibm.com/CASE/cloudnative-bootcamp/CF_Migrate_Module/CF-migration.html | Budi & Dave |
 | *Lab 7: Migrate your app from CF to Kube* | Liberty, SpringBoot, Nodejs  - [IKS](https://github.com/ibm-cloud-architecture/cf-transformation/blob/master/exercise/iks.md), [OpenShift](https://github.com/ibm-cloud-architecture/cf-transformation/blob/master/exercise/openshift.md)| Budi & Dave |
 
 ## DevOps Module
