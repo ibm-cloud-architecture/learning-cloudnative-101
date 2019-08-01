@@ -1,0 +1,410 @@
+= DevOps Tooling
+Hemankita Perabathini <Hemankita.Perabathini@ibm.com>
+v1.0, 2019-07-26
+:toc:
+:imagesdir: images
+
+== Introduction
+
+DevOps is a software development and delivery process. It provides frameworks using several open source tools available to manage different phases of the application life cycle. It also ensures that all of them work together as a single cohesive unit.
+
+image::cicd_process.png[align="center"]
+
+Today across the industry, there are some best practices for DevOps. They include Source Code Management, Code Review, Configuration Management, Build Management, Artifact Repository Management, Release Management, Test Automation, Continuous Integration, Continuous Delivery, Continuous Deployment, Infrastructure As Code, Automation, Key Application Performance Monitoring/Indicators.
+
+In order to implement all of them, we need appropriate tools. In this section, let us explore what are the different tools available and how these tools can be used to maintain and improve the aspects of DevOps.
+
+== Source Code Management Tools
+
+[maroon]*Git*
+
+Git is a distributed version control system. It is capable of efficiently handling small to very large projects with speed. In the current market, this is one of the best free open source version control tools.
+
+To know more about Git, check out https://git-scm.com/doc[Git SCM].
+
+[maroon]*Concurrent Version System (CVS)*
+
+CVS is a free client server revision control system. It keeps track of all the changes and work that the developers do and allows them to collaborate. This is also a popular open source revision control system.
+
+To know more about CVS, check out https://www.gnu.org/software/trans-coord/manual/cvs/cvs.html[CVS—Concurrent Versions System].
+
+[maroon]*Subversion (SVN)*
+
+SVN is a software versioning and revision control system. It helps the developers to maintain the current and historical versions of their work. This is an open source tool aiming at being the best match successor to CVS.
+
+To know more about SVN, check out https://subversion.apache.org/[Apache Subversion].
+
+[maroon]*Revision control systems (RCS)*
+
+RCS is an early open source version control system. It supports local repository model and supports Unix-like platforms. It contains a set of unix commands which allows multiple developers to maintain source code, docs etc.
+
+To know more about RCS, check out https://www.gnu.org/software/rcs/[GNU RCS].
+
+Apart from the above, some more common tools available are SCCS, Revision Control Systems, Bitbucket.
+
+== Code Review Tools
+
+[maroon]*Phabricator Differential*
+
+Phabricator is an open source code scanner. It helps with the code reviews, repository hosting, bug tracking, etc. This can be used with SCMs like Git, SVN.
+
+This tool provides the capability of pre-commit code review allowing you to easily read and review others code using https://phacility.com/phabricator/differential/?source=post_page---------------------------[Differential] which is a part of it. This provides capabilities like side by side reviews, inline commenting, see comments from previous diffs, and marking the items resolved as done.
+
+To know more about Phabricator, check out https://www.phacility.com/phabricator/[Discuss. Plan. Code. Review. Test - Phacility Phabricator].
+
+To know more about the code review capability of Phabricator which is Differential, check out https://phacility.com/phabricator/differential/?source=post_page---------------------------[Differential - Minimize the effort to producing the highest quality code].
+
+[maroon]*Review board*
+
+Review board is a simple open source code review tool. It provides the capabilities like diff and ability to make comments helping the developers to focus more on making software rather than worry about the code sanity. It is mostly used to review code and documentation by open source projects and organizations.
+
+To know more about Review board, check out https://www.reviewboard.org/docs/manual/dev/[Review Board Manual].
+
+[maroon]*Gerrit*
+
+Gerrit is an open source lightweight tool built over Git version control system. It gives the developers working on the project a chance to check over all changes made to the project. So, we can use this tool in a trusted environment where all users are trusted developers committing the code. It provide capabilities such as finding errors in the source code, making changes to the source code, etc. Also, it allows the code to be pushed into the code base only after the review is done.
+
+To know more about Gerrit, check out https://gerrit-documentation.storage.googleapis.com/Documentation/3.0.1/index.html[Gerrit Code Review for Git].
+
+[maroon]*Reviewable*
+
+Reviewable is an open source code review tool with powerful code analysis. It comes with a nice UI. It provides different features like diff, details of commits, highlighting the syntax, finding bugs etc and makes the review thorough and faster. It only works with GitHub and GitHub Enterprise.
+
+To know more about Reviewable, check out https://reviewable.io/[Reviewable].
+
+Apart from the above, some more common tools available are Crucible, Collaborator, Codacy, GitLab.
+
+== Configuration Management Tools
+
+[maroon]*Ansible*
+
+Ansible is an open source tool. It includes configuration management, deployment, and orchestration. It is also an automation engine which helps to automate the complete IT infrastructure.
+
+It is a push-based configuration tool and the simplest solution available out there. Also, the learning curve is extremely low.
+
+To know more about Ansible Configuration Management, check out https://www.ansible.com/use-cases/configuration-management[RedHat Ansible - Use case Configuration Management].
+
+[maroon]*CFEngine*
+
+CFEngine is one of the popular older configuration management system. It is open source tool that provides automation configuration and maintenance of large scale computer systems, which includes servers, systems, users, embedded networked devices, and mobile devices.
+
+To know more about CFEngine Configuration Tool, check out https://cfengine.com/solutions/configuration-management/[CFEngine - Configuration Management]
+
+[maroon]*Chef*
+
+Chef is an automation platform which brings the benefits of configuration management to the entire infrastructure of your application. It allows you to configure and manage the infrastructure.
+
+To know more about Chef Configuration Tool, check out https://docs.chef.io/[Chef Docs].
+
+[maroon]*Puppet*
+
+Puppet is an open source configuration management tool which is used for deploying, configuring and managing servers. It is based on the client-server architecture. It defines the configurations as policies and enforces them as a policy which in turn will be audited and then enforced.
+
+To know more about Puppet Configuration Tool, check out https://puppet.com/solutions/configuration-management[Puppet Configuration Management] and https://puppet.com/docs[Puppet Docs].
+
+Apart from the above, some more common tools available are Salt, Juju.
+
+== Build Management Tools
+
+[maroon]*Maven*
+
+Maven is a build management tool which is open source. It is based on the project object model (POM). It helps in managing the project build. It also manages reporting and documentation from the central repository. It is used for Java projects.
+
+To know more about Maven, check out https://maven.apache.org/guides/index.html[Maven Documentation].
+
+[maroon]*Gradle*
+
+Gradle is a build management tool which is also open source. It helps teams build, automate and deliver software faster for applications ranging from mobile to microservices. It is designed for multiple projects and provides rich API.
+
+To know more about Gradle, check out https://docs.gradle.org/current/userguide/userguide.html[Gradle User Manual].
+
+[maroon]*Ant*
+
+Ant is a Java based command line tool which does build management. It is open source and supports Java applications. It allows to compile, assemble, test, and run the applications. Apart from Java, you can also use it for C and C++.
+
+To know more about Ant, check out https://ant.apache.org/[Apache Ant Project].
+
+[maroon]*MSbuild*
+
+MSbuild is a microsoft build tool and supports .Net framework. It allows to build the applications based on an XML schema. It helps in orchestrating and building the solutions.
+
+To know more about MSbuild, check out https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild?view=vs-2019[MSbuild Engine].
+
+[maroon]*Grunt*
+
+Grunt is a Javascript task runner and it is published under MIT license. It is a command line tool and provides minification, compilation, testing, and linting for your applications.
+
+To know more about Grunt, check out https://gruntjs.com/[GRUNT - The JavaScript Task Runner].
+
+Apart from the above, some more common tools available are CMake, gulp, Buildr, NAnt.
+
+== Container Management Tools
+
+[maroon]*Kubernetes*
+
+In todays industry, kubernetes is the most popular container management tool. It allows to automate, deploy, scale and manage the containerized applications. Basically, it is an open source platform for container orchestration.
+
+To know more about Kubernetes, check out https://kubernetes.io/docs/home/[Kubernetes Documentation].
+
+[maroon]*OpenShift*
+
+OpenShift is a container platform offered by RedHat. It depends on the docker containers which are orchestrated by kubernetes that runs on the red hat's linux operating system. It is easy to manage and secure.
+
+To know more about OpenShift, check out https://docs.openshift.com/[Openshift Documentation].
+
+[maroon]*Mesos and DC/OS*
+
+Mesos and its commercial descendent DC/OS follows a different approach compared to Kubernetes in container management. In this, Mesos cluster is used to join the clusters. These clusters are presented as one large computer. Recently, kubernetes supports is added to it but it adds an extra layer of management for maintenance.
+
+To know more about Mesos, check out https://docs.mesosphere.com/[Mesos and DC/OS Documentation].
+
+[maroon]*Docker Enterprise*
+
+Docker Enterprise Edition is a container management tool provided by Docker. It helps to build, share and run container based applications. It also integrates kubernetes into its platform.
+
+To know more about Docker Enterprise, check out https://docs.docker.com/ee/[Docker Enterprise Docs].
+
+== Artifact Repository Management Tools
+
+[maroon]*JFrog Artifactory*
+
+JFrog is an enterprise ready repository manager which provides secure, clustered, and docker registries that are highly available. Software packages created in any language are supported by this universal artifact repository manager. It helps to track the artifacts from development to production. Also, integration with other CI/CD and DevOps tools is easy.
+
+To know more about JFrog Artifactory, check out https://www.jfrog.com/confluence/display/RTF/Welcome+to+Artifactory[JFrog Artifactory User Guide].
+
+[maroon]*Sonatype Nexus*
+
+Sonatype Nexus is one of the most reliable artifact repository. It helps to manage all the software artifacts which are required during the development and deployment. The access to all these artifacts are managed from a centralized location. It also allows the developers to share the artifacts.
+
+To know more about Sonatype Nexus, check out https://help.sonatype.com/repomanager3[Sonatype Nexus Repository Manager Docs].
+
+[maroon]*Pulp*
+
+Pulp is a free and open source artifact repository which allows to manage software packages. It makes them available to large number of users so that they make use of them. It stores the content from various sources to a single and centralized location. It allows developers to host their own software packages in the repository. Apart from that, it also has a capability of mirroring the repository.
+
+To know more about Pulp, check out https://pulpproject.org/[Pulp - Fetch, Upload, Organize, and Distribute Software Packages].
+
+[maroon]*Docker Hub*
+
+Docker Hub allows docker users to manage docker container images. User can store both public and private images. It allows the user to easily access the image repositories that are public and open source where as on the other side user can also use it for creating private repositories. It is more of a cloud repository which allows the users to create, test, store and distribute container images.
+
+To know more about Docker Hub, check out https://docs.docker.com/docker-hub/[Docker Hub Docs].
+
+Apart from the above, some more common tools available are Apache Archiva, NuGet, Npm, Cloudsmith Package, Archiva, Helix Core Version Control.
+
+== Release Management Tools
+
+[maroon]*IBM UrbanCode Release*
+
+IBM UrbanCode Release is a release automation tool which has the ability to deploy the applications to various environments. It provides capabilities like visibility, traceability, and auditing. It helps to automate the deployments, saves time and reduces the chances of error during full deployments. At the same time, it also allows the user to rollback to previous configurations if required. It easily integrates with other platforms like GIT and makes the process easier.
+
+To know more about IBM UrbanCode Release, check out https://www.ibm.com/support/knowledgecenter/en/SS4GCC_6.2.1/com.ibm.urelease.doc/ucr_version_welcome.html[IBM UrbanCode Release Documentation].
+
+[maroon]*Automic*
+
+Automic Release provides easier release automation by providing the ability to package, deploy, design and execute the applications on different environments. It is optimized for enterprise environments. It accelerates the deployment process and helps the developers to release quality code and operators to reduce the downtime.
+
+To know more about Automic, check out https://docs.automic.com/documentation/webhelp/english/ARA/12.1/DOCU/12.1/ARA%20Guides/Default.htm#[Automic Release Automation].
+
+[maroon]*Octopus Deploy*
+
+Octopus Deploy is a release automation tool which securely deploys the automated releases of .NET applications in various environments. Making changes to the configurations in different environment is easy and also provides seamless integration with other platforms. It is based on the idea of PowerShell. So, it assumes everything is packaged and ready to be deployed. Along with the automated deployments, it also provides audit information.
+
+To know more about Octopus Deploy, check out https://octopus.com/docs[Octopus Deploy documentation].
+
+[maroon]*Plutora Release*
+
+Plutora Release is an on-demand release management tool which helps to manage releases efficiently. It is robust and allows to plan, execute, and coordinate the releases among applications. This is a cloud based release management tool. It ensures increased productivity, effective collaboration, high release throughput and better visibility.
+
+To know more about Plutora Release, check out https://help.plutora.com/knowledge-base/[Plutora Knowledge Base].
+
+Apart from the above, some more common tools available are Electric Cloud, Quikbuild, BMC Release Process Management, CA Release Automation, Serena Release, MS Visual Studio, StackStorm, Rally.
+
+== Test Automation Tools
+
+[maroon]*Selenium*
+
+Selenium is one of the popular open source automation testing tools for testing user interface of web applications. It supports many programming languages and frameworks. This helps developers or testes to use their favourite language and define automation frameworks and libraries required for test automation. Also, it is scalable across different environments (operating systems) and also supports multiple browsers.
+
+To know more about Selenium, check out https://www.seleniumhq.org/docs/01_introducing_selenium.jsp[Selenium - Test Automation for Web Applications].
+
+[maroon]*SoapUI*
+
+SoapUI is a test automation tool for testing APIs and services. It is specially designed for API testing. It provides end to end testing for REST and SOAP services. It is an open source functional testing tool and it is also available in a pro version which has some more additional capabilities like user friendly UI, , SQL query builder etc.
+
+To know more about SoapUI, check out https://www.soapui.org/soapui-projects/soapui-projects.html[SoapUI Documentation].
+
+[maroon]*Apache JMeter*
+
+Apache JMeter is an open source test automation tool designed for load and performance testing. It is a Java based desktop application which allows developers or testers to perform performance testing. Along with it, it does unit testing and limited functional testing. It also provides other features like dynamic reporting, portability, multithreading, command line mode etc.
+
+To know more about Apache JMeter, check out http://jmeter.apache.org/[JMeter Docs].
+
+[maroon]*PACT*
+
+PACT is a contract testing tool. It allows the developers or testers to know if the communication across different services in an application is all good. It does this by making sure that the API provider and client can communicate properly without any interruption. It allows you to safely confirm that the applications will work together before deploying them to external world. Using this, there is no need of defining any more integration tests which are expensive.
+
+To know more about PACT, check out https://docs.pact.io/[PACT Docs].
+
+Apart from the above, some more common tools available are Visual Studio Test Professional, QTP (UFT), Junit, Karma, Jasmine, TestDrive, FitNesse, Telerik Test Studio, TestComplete, Watir, Robotium.
+
+== Continuous Integration Tools
+
+[maroon]*Jenkins*
+
+Jenkins is a popular open source Continuous Integration tool. It is built in Java. It allows the developers to perform continuous integration and build automation. It allows you to define steps and executes them based on the instructions like building the application using build tools like Ant, Gradle, Maven etc, executing shell scripts, running tests etc. All the steps can be executed based on the timing or event. It depends on the setup. It helps to monitor all these steps and sends notifications to the team members in case of failures. Also, it is very flexible and has a large plugin list which one easily add based on their requirements.
+
+To know more about Jenkins, check out https://jenkins.io/doc/[Jenkins, Leading open source automation server].
+
+[maroon]*CircleCI*
+
+Circle CI is a cloud based Continuous Integration tool. It is simple and easy to get started. It also offers a free plan for business account. It allows developers to access the projects and build artifacts out of them which will be later used in the deployment. It currently only supports GitHub. Also, it offers support for only some languages which includes Java, Python, Ruby/Rails, Python, Node.js, PHP, Haskell, and Scala.
+
+To know more about CircleCI, check out https://circleci.com/docs/[CircleCI Documentation].
+
+[maroon]*GitLab CI*
+
+GitLab CI is a web based DevOps tool that provides CI capabilities. It helps in integrating the code using a shared repository. It helps to build, test and validate code. The build is triggered whenever a Pull Request is raised and it validates the changes before merging the code in to the repository. It also provides features like access control, issue tracking, tracking, code reviews etc.
+
+To know more about GitLab, check out https://docs.gitlab.com/ee/gitlab-basics/[GitLab basics guides].
+
+[maroon]*Travis*
+
+Travis is one of the oldest and popular continuous integration tools. It is open source and free for all the open source github projects. It offers both hosted and on premise solutions. It allows to build the application and test it whenever new changes are pushed to the repository. It supports variety of languages and have good documentation to back them up.
+
+To know more about Travis, check out https://docs.travis-ci.com/[Travis CI].
+
+Apart from the above, some more common tools available are Buddy, Bitbucket, CruiseControl, Bamboo, TeamCity.
+
+== Continuous Delivery/Deployment Tools
+
+[maroon]*Argo*
+
+Argo is a declarative open source continuous delivery system. Also, this is one of the most compatible CI/CD for cloud native applications. It is developed to work on kubernetes and so it make use of the kubernetes apis making it more feasible to use it with cloud native applications.
+
+To know more about Argo, check out https://argoproj.github.io/argo-cd/[Argo CD - Declarative GitOps CD for Kubernetes].
+
+[maroon]*Jenkins*
+
+Jenkins is an open source platform. It is a popular automation server that allows developers to deploy software. It offers a simple way to set continuous delivery.
+
+To know more about Jenkins, check out https://jenkins.io/doc/[Jenkins, Leading open source automation server].
+
+[maroon]*GoCD*
+
+GoCD is a continuous delivery tool and offers native support for kubernetes. It allows the infrastructure to be deployed easily using a helm chart. It offers deployment engine which in turn offers great visibility and control.
+
+To know more about GoCD, check out https://docs.gocd.org/current/[GoCD - an open-source Continuous Integration and Continuous Delivery system].
+
+[maroon]*GitLab*
+
+GitLab is a web based DevOps tool that provides CD capabilities. It supports kubernetes, has a built in container registry, and also allows monitoring deployments inside the cluster.
+
+To know more about GitLab, check out https://docs.gitlab.com/ee/gitlab-basics/[GitLab basics guides].
+
+[maroon]*Spinnaker*
+
+Spinnaker is an open source multi cloud continuous delivery platform. It allows several deployment capabilities like red-black deployments, approval, roll back on problems etc. It makes use of load balancers and health probes to ensure safe deployments. It basically makes the multiple cluster management easy.
+
+To know more about Spinnaker, check out https://www.spinnaker.io/concepts/[Spinnaker Concepts].
+
+Apart from the above, some more common tools available are CircleCI, CodeShip, TravisCI, Octopus Deploy.
+
+== Infrastructure As Code (IaC) Tools
+
+[maroon]*Terraform*
+
+Terraform is an open source IaC tool which enables the developers to improve their software infrastructure by allowing them to create and change the infrastructure based on their requirements. It is cloud agnostic. It allows to automate the infrastructure from multiple cloud providers.
+
+To know more about Terraform, check out https://www.terraform.io/docs/index.html[Terraform Documentation].
+
+[maroon]*Chef*
+
+Chef is one of the popular IaC tools among organizations that use CI/CD. It uses Ruby based DSL. It allows the developers to create recipes and cookbooks. It is cloud agnostic and works with several cloud service providers.
+
+To know more about Chef, check out https://docs.chef.io/[Chef Site Map].
+
+[maroon]*Ansible*
+
+Ansible is an IaC tool created by Red Hat and is one of the most flexible tools in market now. Instead of managing the systems independently, it describes the relations between the components and system to model the infrastructure. It is easy to understand and uses yaml to define the playbooks.
+
+To know more about Ansible, check out https://docs.ansible.com/[Ansible Docs].
+
+[maroon]*Puppet*
+
+Puppet is another popular IaC tool. It uses Ruby-based DSL as primary language. Using this, developers can define the end state of the infrastructure. That is all it want and it will automatically create the desired end state based on your end state definition. It also monitors the infrastructure and fixes the incorrect changes if there are any.
+
+To know more about Puppet, check out https://puppet.com/docs[Puppet Documentation].
+
+Apart from the above, some more common tools available are CFEngine, SaltStack, Juju, Vagrant.
+
+== Monitoring Tools
+
+[maroon]*Nagios*
+
+Nagios is an open source infrastructure monitoring tool. It provides monitoring and alerting services for applications, servers, switches, and services. It covers network resources such as FTP, HTTP, POP2, SSH etc. It also keep checking the host resources like disk usage, processor load, and system logs.
+
+To know more about Nagios, check out https://www.nagios.org/documentation/[Nagios - The Industry Standard In IT Infrastructure Monitoring].
+
+[maroon]*Prometheus*
+
+Prometheus is an open source monitoring and alerting tool. It monitors the containers and microservices. It provides metrics related to them. This tools has a great range of service discovery options. It communicated with the application services and collects the metrics from them. This data will be stored and provided to the user on its dashboard.
+
+To know more about Prometheus, check out https://prometheus.io/docs/introduction/overview/[Prometheus - From metrics to insight].
+
+[maroon]*Zabbix*
+
+Zabbix is an open source monitoring tool which provides real time monitoring. It has capabilities like auto discovery, mapping, and data centre monitoring. It has built in Java application server, VMware monitoring, and hardware monitoring.
+
+To know more about Zabbix, check out https://www.zabbix.com/manuals[Zabbix Manuals].
+
+Apart from the above, some more common tools available are Ganglia, ExtraHop, Data Dog, Signal fx.
+
+== Alerting tools
+
+[maroon]*PagerDuty*
+
+PagerDuty is an alerting tool which includes alarm aggregation and dispatching. It provides full incident response management. This also includes artificial intelligence based automated response. It helps to configure support team members, schedule calls, escalations and other things related to incident response streamlining it.
+
+To know more about PagerDuty, check out https://support.pagerduty.com/[PagerDuty - Real-Time Operations Made Simple] Knowledge base.
+
+[maroon]*OpsGenie*
+
+OpsGenie provides incident management and alerting. This tool is less costly alternative than the others. It helps in planning and preparation like who should handle the incidents and how they can be resolved. It also send alerts keeping the team notified all the time about the incidents and improves the operational efficiency.
+
+To know more about OpsGenie, check out https://docs.opsgenie.com/[Opsgenie's] Learning Center.
+
+[maroon]*VictorOps*
+
+VictorOps is an incident management and it alerting tool. It aims at improving the incident visibility and communication among the teams. This incident management software provides real time alerting, effective collaboration, observability to build, deploy and operate the applications.
+
+To know more about VictorOps, check out https://help.victorops.com/[VictorOps] Knowledge base.
+
+Apart from the above, some more common tools available are OpenDuty, Slack, AlertOps, Cabot.
+
+== Logging tools
+
+[maroon]*LogDNA*
+
+LogDNA is a cloud based log management tool. It helps in managing the logs by aggregating all the different logs like system logs, application logs etc into one centralized logging system. It helps to analyze the logs with nice visuals and good alerting.
+
+To know more about LogDNA, check out https://docs.logdna.com/docs[LogDNA Docs].
+
+[maroon]*Fluentd*
+
+Fluentd is an open source log aggregation tool. It is mostly used with kubernetes deployments. This is due to the tool's small footprint, ability to add useful metadata, and a better plugin library. It helps in collection the data, unifying it, and makes it understandable for consumption.
+
+To know more about Fluentd, check out https://docs.fluentd.org/[Fluentd Docs].
+
+[maroon]*Logwatch*
+
+Logwatch is a lightweight log management tool. It produces reports based on the log activity. It takes all the information from the log files and generates reports out of them.
+
+To know more about Logwatch, check out https://linux.die.net/man/8/logwatch[logwatch - Linux man page].
+
+Apart from the above, some more common tools available are Logalyze, Journald, Splunk, SumoLogic, Scalyr.
+
+== References
+
+- https://learning.oreilly.com/library/view/devops-continuous-delivery/9781789132991/[Sricharan Vadapalli (2018). DevOps: Continuous Delivery, Integration, and Deployment with DevOps. Publisher: Packt Publishing]
+- https://devops.com/wp-content/uploads/2018/03/StateOfDevOpsTools_v13.pdf?_hsenc=p2ANqtz-_X-1sZIJtMUfZ0--6uKUF8KS9-HY3ECaTpFFpSy7VIIAPyWB1nu0m6wKyCY7SUbT3k4vmgngCfqQaMObuQJAuwG36x9p8OsD0Ml7ERTR8GtWnRohw&_hsmi=61625581[Don McVittie and Alan Shimel. The State of DevOps Tools. DevOps.com]
