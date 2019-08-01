@@ -45,7 +45,7 @@
 | ------ | ---- | ----- |
 | *Devops Concepts* | https://pages.github.ibm.com/CASE/cloudnative-bootcamp/DevOps_Module/Devops_Concepts.html | Hema |
 | *CI/CD* | https://pages.github.ibm.com/CASE/cloudnative-bootcamp/DevOps_Module/cicd.html | Hema |
-| *Devops Tooling* | TBD | Hema |
+| *Devops Tooling* | https://pages.github.ibm.com/CASE/cloudnative-bootcamp/DevOps_Module/devops_tooling.html | Hema |
 | *Lab 8: CI* | TBD | Hema |
 | *Lab 9: CD* | [IKS](https://pages.github.ibm.com/CASE/cloudnative-bootcamp/DevOps_Module/Lab9_IKS.html), [OpenShift](https://pages.github.ibm.com/CASE/cloudnative-bootcamp/DevOps_Module/Lab9_OpenShift.html) | Hema |
 | *Pipeline and Toolchains* | TBD | Hema / Bryan |
