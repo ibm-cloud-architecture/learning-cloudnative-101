@@ -23,6 +23,21 @@ Check these guides out if you want to know more about Argo - https://argoproj.gi
 - Install https://www.okd.io/download.html[oc] command line tool.
 - You should be familiar with basics like Containers, Docker, Kubernetes.
 - In this lab, we are using the deploy repo which we used in the previous lab. If you have your own deploy repository, use it. If you did not get a chance to do the previous lab, you can use https://github.com/ibm-cloud-architecture/cloudnative_sample_app_deploy. This repo will be updated by CI whenever there are changes.
+- The image used in the deployment is stored in IBM Container Registry `us.icr.io`. We need an image pull secret in order to pull this image.
+
+Verify if it is already present.
+----
+$ oc get secrets
+NAME                  TYPE                                  DATA      AGE
+test-us-icr-io        kubernetes.io/dockerconfigjson        1         16m
+----
+
+If not create one as below.
+----
+$ oc -n default create secret docker-registry test-us-icr-io --docker-server=us.icr.io --docker-username=iamapikey --docker-password=<Your api key> --docker-email=<Your docker email>
+----
+
+If it is successfully created, you will see something like `secret/test-us-icr-io created`.
 
 == Continuous deployment
 

@@ -7,4 +7,5 @@ script:
 - asciidoctor Kubernetes_Module/*.adoc
 - asciidoctor DevOps_Module/*.adoc
 - asciidoctor CF_Migrate_Module/*.adoc
+- asciidoctor index.adoc
 - bash travis/push.sh
