@@ -8,7 +8,7 @@ v1.0, 2019-06-27
 
 Cloud is everywhere. Today, many companies want to migrate their applications on to cloud. For this migration to be done, the applications must be re-architected in a way that they fully utilize the advantages of the cloud.
 
-video::fp9_ubiKqFU[youtube, width=640, height=480]
+video::fp9_ubiKqFU[youtube, width=640, height=480, align="center"]
 
 == What is cloud-native?
 
@@ -141,7 +141,7 @@ CNCF defined the Cloud Native Trail Map providing an overview for enterprises st
 
 This cloud map gives us various steps that an engineering team may use while considering the cloud native technologies and exploring them. The most common ones among them are Containerization, CI/CD, and Orchestration. Next crucial pieces will be Observability & Analysis and Service Mesh. And later comes the rest of them like Networking, Distributed Database, Messaging, Container runtime, and software distribution based on your requirements.
 
-image::CNCF_TrailMap_latest.png[]
+image::CNCF_TrailMap_latest.png[align="center"]
 
 - With out Containerization, you cannot build cloud native applications. This helps your application to run in any computing environment. Basically, all your code and dependencies are packaged up together in to a single unit here. Among different container platforms available, Docker is a preferred one.
 - To bring all the changes in the code to container automatically, it is nice to set up a CI/CD pipeline which does that. There are many tools available like jenkins, travis, etc.

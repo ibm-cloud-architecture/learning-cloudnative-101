@@ -4,13 +4,19 @@ v1.0, 2019-07-02
 :toc:
 :imagesdir: images
 
-In this section, let us explore the concepts of cloud native framework and programming models that are used for used for building cloud applications.
+In this section, let us explore the concepts of cloud native framework and programming models that are used for building cloud applications.
 
-== Cloud Native Framework
+== Cloud Native Application Framework
 
-For a basic cloud application, more or less the cloud native framework looks like below.
+https://github.com/cncf/toc/blob/master/DEFINITION.md#cncf-cloud-native-definition-v10[CNCF Cloud Native Definition v1.0]
 
-image::CloudNativeApp.png[][alt=CloudNativeApp,width=640,height=480]
+Cloud native technologies empower organizations to build and run scalable applications in modern, dynamic environments such as public, private, and hybrid clouds. Containers, service meshes, microservices, immutable infrastructure, and declarative APIs exemplify this approach.
+
+These techniques enable loosely coupled systems that are resilient, manageable, and observable. Combined with robust automation, they allow engineers to make high-impact changes frequently and predictably with minimal toil.
+
+The Cloud Native Computing Foundation seeks to drive adoption of this paradigm by fostering and sustaining an ecosystem of open source, vendor-neutral projects. We democratize state-of-the-art patterns to make these innovations accessible for everyone.
+
+image::CloudNativeApp.png[align="center"][alt=CloudNativeApp,width=640,height=480]
 
 The basic components of any cloud native architecture are
 
@@ -26,7 +32,7 @@ Microservices are small applications which are lightweight. This is an architect
 - They are loosely coupled.
 - They communicate with each other via application programming interfaces (APIs).
 
-video::CdBtNQZH8a4[youtube, width=640, height=480]
+video::CdBtNQZH8a4[youtube, width=640, height=480, align="center"]
 
 To know more about Microservices, we have couple of resources. Feel free to check them out.
 
@@ -47,7 +53,7 @@ This helps to
 - Reduce bugs.
 - Reduce the delivery cost.
 
-video::2MwOjn4x638[youtube, width=640, height=480]
+video::2MwOjn4x638[youtube, width=640, height=480, align="center"]
 
 For more details, refer `DevOps Concepts` concept in the further modules.
 
@@ -63,13 +69,13 @@ Typically, a delivery pipeline will have the below stages. The stages may vary b
 - Test Automation
 - Deployment Automation
 
-video::hQ0recUXk9o[youtube, width=640, height=480]
+video::hQ0recUXk9o[youtube, width=640, height=480, align="center"]
 
 For more details, refer `CI/CD` concept in the further modules.
 
 === Containers
 
-video::5d-iiA88vrY[youtube, width=640, height=480]
+video::5d-iiA88vrY[youtube, width=640, height=480, align="center"]
 
 Containers are a standard way to package an application and all its dependencies so that it can be moved between environments and run without change.
 
@@ -80,15 +86,15 @@ They allow us to
 - Increases speed.
 - Easy deployments.
 
-video::FWpnbGnzk08[youtube, width=640, height=480]
+video::FWpnbGnzk08[youtube, width=640, height=480, align="center"]
 
 For more details, go through the `Containerization` concept in the further module.
 
-== Programming Model
+== Framework & Programming Model
 
 For building a cloud native application, it is good to have a programming model. You can build a programming model from scratch or you can use the experience from existing models. Using the current technologies and new concepts, below is one of the models.
 
-image::CFPM.png[]
+image::CFPM.png[align="center"]
 
 === Best of breed languages and frameworks
 
@@ -119,7 +125,7 @@ Container Orchestration is nothing but managing the lifecycles of the containers
 
 Among the different container orchestration tools, Kubernetes is one of the most popular ones.
 
-video::kBF6Bvth0zw[youtube, width=640, height=480]
+video::kBF6Bvth0zw[youtube, width=640, height=480, align="center"]
 
 === Service Mesh
 
@@ -127,7 +133,15 @@ Service Mesh mediates all the communication between services. It offers things l
 
 Istio provides behavioral insights and operational control over the service mesh as a whole, offering a complete solution to satisfy the diverse requirements of microservice applications.
 
-video::1iyFq2VaL5Y[youtube, width=640, height=480]
+video::1iyFq2VaL5Y[youtube, width=640, height=480, align="center"]
+
+=== Programming Model
+
+All these great new technologies and concepts can be used to design a well grooved path for doing software engineering. The programming model above helps the developers to get started with their cloudnative journey without constructing everything from scratch.
+
+- The latest frameworks and languages offer many of these capabilities. They cover features like configurations, JSON handling, tracing, metrics, REST APIs, API documentation, security, health checks, fault tolerance, etc.
+- Also container orchestration helps to achieve some of these by offering Config Management, health monitoring etc.
+- Service Mesh like Istio provides capabilities which covers tracing, fault tolerance, security and traffic management.
 
 == References
 
