@@ -52,6 +52,5 @@ Pre-requisites
 * xref:DevOps_Module/devops_tooling.adoc[Devops Tooling]
 * xref:DevOps_Module/Lab8_Openshift.adoc[Lab 8: CI (Openshift)]
 * Lab 8: CI (IKS)
-* xref:DevOps_Module/Lab9_IKS.adoc[Lab 9: CD (Openshift)]
-* xref:DevOps_Module/Lab9_OpenShift.adoc[Lab 9: CD (IKS)]
-* Pipeline and Toolchains
+* xref:DevOps_Module/Lab9_OpenShift.adoc[Lab 9: CD (Openshift)]
+* xref:DevOps_Module/Lab9_IKS.adoc[Lab 9: CD (IKS)]

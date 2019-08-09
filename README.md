@@ -1,13 +1,13 @@
 # CloudNative Bootcamp
 
-## Pre-requisites 
+## Pre-requisites
 
 - You need [Java](https://www.java.com/en/) installed on your environment. You can download it [here](https://www.java.com/download/). Please install the latest version which is Java Version 8. Make sure you set `JAVA_HOME` environment variable. You can verify the version after installation using `java -version`.
 - Create a [DockerHub account](https://hub.docker.com/). This account is needed to push images to docker registry. Also create a repository following the instructions [here](https://docs.docker.com/docker-hub/repos/[).
 - You need to install [Docker](https://www.docker.com/) in your environment. Follow the instructions [here](https://docs.docker.com/docker-for-mac/install/) to install it on Mac and [here](https://docs.docker.com/docker-for-windows/install/) to install it on Windows.
 - Kubernetes basics
 
-## Cloud Native Module 
+## Cloud Native Module
 
 | Module | Link | Owner |
 | ------ | ---- | ----- |
@@ -48,4 +48,3 @@
 | *Devops Tooling* | https://pages.github.ibm.com/CASE/cloudnative-bootcamp/DevOps_Module/devops_tooling.html | Hema |
 | *Lab 8: CI* | https://pages.github.ibm.com/CASE/cloudnative-bootcamp/DevOps_Module/Lab8_Openshift.html | Hema |
 | *Lab 9: CD* | [IKS](https://pages.github.ibm.com/CASE/cloudnative-bootcamp/DevOps_Module/Lab9_IKS.html), [OpenShift](https://pages.github.ibm.com/CASE/cloudnative-bootcamp/DevOps_Module/Lab9_OpenShift.html) | Hema |
-| *Pipeline and Toolchains* | TBD | Hema / Bryan |
