@@ -1,0 +1,22 @@
+= Lab 3 - Kubernetes Patterns
+Bryan Kribbs <bakribbs@us.ibm.com>
+v1.0, 2019-05-28
+:toc:
+:imagesdir: images
+
+== Introduction
+
+In this lab, you will learn about how to use docker and how to run applications using docker.
+
+== Prerequisites
+
+- You need https://www.java.com/en/[Java] installed on your environment. You can download it https://www.java.com/download/[here]. Please install the latest version which is Java Version 8. Make sure you set `JAVA_HOME` environment variable. You can verify the version after installation using `java -version`.
+- Create a https://hub.docker.com/[DockerHub account]. This account is needed to push images to docker registry. Also create a repository following the instructions https://docs.docker.com/docker-hub/repos/[here].
+- You need to install https://www.docker.com/[Docker] in your environment. Follow the instructions https://docs.docker.com/docker-for-mac/install/[here] to install it on Mac and https://docs.docker.com/docker-for-windows/install/[here] to install it on Windows.
+
+== Working with docker
+
+
+== Conclusion
+
+Congratulations !!!

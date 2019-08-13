@@ -1,0 +1,62 @@
+= Lab 5 Deploy Applications on Kubernetes
+Bryan Kribbs <bakribbs@us.ibm.com>
+v1.0, 2019-05-28
+:toc:
+:imagesdir: images
+
+== Introduction
+
+In this lab, you will learn how to get started using Kubernetes by creating a new Kubernetes cluster on your IBM Cloud account.  We are going to walk through how to *Create a Kubernetes Resource* using the IBM Cloud Dashboard. *Create a Cluster* and navigate through the *Kubernetes Cluster Dashboard* to see information about your created cluster.
+
+== Prerequisites
+
+- You will need an IBM Account for https://cloud.ibm.com/[IBM Cloud]
+- Downloaded and installed the Kubernetes CLI at https://kubernetes.io/docs/tasks/tools/install-kubectl/[Kubernetes CLI Installation]. Follow the instructions for your computer's operating system.
+- Downloaded and installed the IBM Cloud CLI at https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started#step1-install-idt[IBM Cloud CLI Installation]. Follow the instructions for your computer's operating system..
+
+== IBM Cloud Login
+
+Start by opening a web browser and navigating to https://cloud.ibm.com/[IBM Cloud].
+
+image::Cloud-Login.png[]
+
+Next *_login_* with your IBM Cloud login you created.  After login you will be navigated to your *Cloud Dashboard*. 
+
+image::IBM_Cloud_Dashboard.png[]
+
+On the *Cloud Dashboard* in the resource summary section, select *Kubernetes Clusters*.
+
+image::CL_Dash_Kube.png[][]
+
+In Kubernetes Cluster list, select the cluster you would like to access. Make sure the cluster you select has a blue square icon next to it.  
+
+== Accessing the Kubernetes Cluster
+
+Once on the *Overview* screen of your kubernetes cluster, select the *Connect via CLI* in the upper right hand corner.
+
+Next open up a *Terminal* window and follow the steps on the screen. (Make sure to append "--sso" after "login" if needed).
+
+
+
+== Getting the Sample Application
+
+https://github.com/ibm-cloud-architecture/cloudnative_sample_app
+
+
+== Deploying the Sample Application
+
+
+== Accessing the new Application
+
+
+== Conclusion
+
+You have successfully completed this lab! Let's take a look at what you learned and did today:
+
+    - Logged into IBM Cloud
+    - Created a Kubernetes Resource for your account.
+    - Selected a Kubernetes Type.
+    - Navigated through the Kubernetes Dashboard.
+
+
+     

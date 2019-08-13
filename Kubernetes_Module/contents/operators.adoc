@@ -1,5 +1,0 @@
-= Operators & Helm
-
-.Try it out
-NOTE: Helm Deployment Lab: 
-      https://www.katacoda.com/courses/kubernetes/helm-package-manager[Here , window="_blank"]

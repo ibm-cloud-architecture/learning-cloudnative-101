@@ -31,6 +31,7 @@
 | *Helm/Operator Patterns* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/operators.html | Bryan |
 | *Lab 6: Deploy the app on Kube using helm* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/Lab6.html | Bryan |
 
+
 ## Cloud Foundry Migration Module
 
 | Module | Link | Owner |
