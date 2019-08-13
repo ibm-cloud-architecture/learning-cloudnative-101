@@ -1,4 +1,4 @@
-= Lab 5 Deploy Applications on Kubernetes
+= Lab 4 - Deploy Applications on Kubernetes
 Bryan Kribbs <bakribbs@us.ibm.com>
 v1.0, 2019-05-28
 :toc:

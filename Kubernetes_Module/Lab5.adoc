@@ -1,4 +1,4 @@
-= Lab 6 - Deploy App on Kubernetes using Helm
+= Lab 5 - Deploy App on Kubernetes using Helm
 Bryan Kribbs <bakribbs@us.ibm.com>
 v1.0, 2019-05-28
 :toc:
