@@ -8,7 +8,7 @@ v1.0, 2019-06-27
 
 Cloud native is all about the concepts that are used for building and deploying your applications on any cloud platform. It involves many things like adopting microservices architecture, containerization, orchestration etc.
 
-As you all know, cloud native applications will be managed by the infrastructure which in turn is managed by applications. In this installment, let us see what you need to include in your cloud native applications and how to run them on the cloud infrastructure.
+Cloud native applications will be managed by the infrastructure which in turn is managed by applications. In this installment, let us see what you need to include in your cloud native applications and how to run them on the cloud infrastructure.
 
 == Application Design
 
@@ -22,9 +22,9 @@ Will you call such an application cloud-native ? Definitely not.
 
 Containers and Kubernetes help you to run the applications smoothly on cloud infrastructure. Along with this, you also need to know how to effectively build and manage these applications.
 
-== Cloud native patterns implementation
+== Cloud native Capabilities
 
-While developing cloud native applications, some of the patterns that we include in the applications are as follows.
+While developing cloud native applications, some of the capabilities that we include in the applications are as follows.
 
 - Configuration
 - Health Checks
@@ -38,9 +38,9 @@ Usually, you can implement them in your applications in two ways.
 - Using the language libraries
 - Using sidecar
 
-To implement these patterns, you can import the language libraries into your application which will automatically get you most of these patterns with defining any extra code. This is easy to do and is well suitable if you have few languages in your applications.
+To implement these capabilities, you can import the language libraries into your application which will automatically get you most of these capabilities with out defining any extra code. This is easy to do and is well suitable if you have few languages in your applications.
 
-But if your application is a polyglot with many different languages, it is difficult to manage all the libraries. In such cases, you can use sidecar which is implemented as separate service including things like Health end point monitoring health of the application, configuration watching changes in the configs and reloading the application when required, registrator for service discovery, envoy proxy to handle resiliency and metric etc.
+But if your application is a polyglot with many different languages, it is difficult to manage all the libraries. In such cases, you can use sidecar which is implemented as separate service including things like Health end point monitoring health of the application, configuration watching changes in the configs and reloading the application when required, registrator for service discovery, envoy proxy to handle resiliency and metrics etc.
 
 == Application Lifecycle
 
@@ -96,7 +96,7 @@ If you keep deploying new services without cleaning up the old ones which are in
 - *Logs* - Treat logs as event streams.
 - *Admin processes* - Run admin/management tasks as one-off processes.
 
-video::jufe_sHejXc[youtube, width=640, height=480]
+video::jufe_sHejXc[youtube, width=640, height=480, align="center"]
 
 == Application Requirements
 

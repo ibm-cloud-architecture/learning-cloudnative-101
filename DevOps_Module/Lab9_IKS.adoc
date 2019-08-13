@@ -10,7 +10,7 @@ In this lab, you will learn about how to define Continuous Delivery for your app
 
 [maroon]*Argo CD*
 
-Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes. In you applications, application definitions, configurations, and environments should be declarative and version controlled. Also application deployment and lifecycle management should be automated, auditable, and easy to understand. All this can be done using Argo.
+Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes. In your applications, application definitions, configurations, and environments should be declarative and version controlled. Also application deployment and lifecycle management should be automated, auditable, and easy to understand. All this can be done using Argo.
 
 video::KJzgwJrY-mE[youtube, width=640, height=480, align="center"]
 
@@ -23,6 +23,21 @@ Check these guides out if you want to know more about Argo - https://argoproj.gi
 - Install https://kubernetes.io/docs/tasks/tools/install-kubectl/[kubectl] command line tool.
 - You should be familiar with basics like Containers, Docker, Kubernetes.
 - In this lab, we are using the deploy repo which we used in the previous lab. If you have your own deploy repository, use it. If you did not get a chance to do the previous lab, you can use this https://github.com/ibm-cloud-architecture/cloudnative_sample_app_deploy[repo]. This repo will be updated by CI whenever there are changes.
+- The image used in the deployment is stored in IBM Container Registry `us.icr.io`. We need an image pull secret in order to pull this image.
+
+Verify if it is already present.
+----
+$ kubectl get secrets
+NAME                  TYPE                                  DATA      AGE
+test-us-icr-io        kubernetes.io/dockerconfigjson        1         16m
+----
+
+If not create one as below.
+----
+$ kubectl -n default create secret docker-registry test-us-icr-io --docker-server=us.icr.io --docker-username=iamapikey --docker-password=<Your api key> --docker-email=<Your docker email>
+----
+
+If it is successfully created, you will see something like `secret/test-us-icr-io created`.
 
 == Continuous deployment
 
@@ -198,7 +213,7 @@ $ argocd app create sampleapp \
    --dest-namespace default
 ----
 
-If it is successful, you will something like below.
+If it is successful, your output will be something like below.
 
 ----
 $ argocd app create sampleapp \
@@ -247,7 +262,7 @@ image::sample_app_full_deployment.png[align="center"]
 
 Go to terminal and run the below command.
 
-This command lists all services. We are passing `svc` as the type to access. To know more, check out kubectl get[https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get] command.
+This command lists all services. We are passing `svc` as the type to access. To know more, check out https://kubernetes.io/docs/reference/generated/kubectl/kubectl-commands#get[kubectl get] command.
 
 ----
 $ kubectl get svc

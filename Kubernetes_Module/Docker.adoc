@@ -19,7 +19,7 @@ Containers are a standard way to package an application and all its dependencies
 
 For example, Docker created standard way to create images for Linux Containers.
 
-video::0qotVMX-J5s[youtube, width=640, height=480]
+video::0qotVMX-J5s[youtube, width=640, height=480, align="center"]
 
 == Why containers ?
 
@@ -27,7 +27,7 @@ video::0qotVMX-J5s[youtube, width=640, height=480]
 - They are lightweight .
 - Isolate your application from others.
 
-video::muTkqVewJMI[youtube, width=640, height=480]
+video::muTkqVewJMI[youtube, width=640, height=480, align="center"]
 
 == Different Container Standards
 
@@ -53,19 +53,19 @@ A Linux Foundation project developing a governed container standard. Docker and 
 - Portable
 - Supports agile development
 
-To know more about containerization, we have couple of guides. Feel free to check them out.
+To know more about Containerization, we have couple of guides. Feel free to check them out.
 
 - https://www.ibm.com/cloud/learn/containerization[Containerization: A Complete Guide].
 - https://www.ibm.com/cloud/learn/containers[Containers: A Complete Guide].
 
 == Docker
 
-Docker is one of the most popular containerization platforms which allows you to develop, deploy, and run application inside containers.
+Docker is one of the most popular Containerization platforms which allows you to develop, deploy, and run application inside containers.
 
 - It is an open source project.
 - Can run it anywhere.
 
-video::wFNWl-QwPfc[youtube, width=640, height=480]
+video::wFNWl-QwPfc[youtube, width=640, height=480, align="center"]
 
 An installation of Docker includes an engine. This comes with a daemon, REST APIs, and CLI. Users can use CLI to interact with the docker using commands. These commands are sent to the daemon which listens for the Docker Rest APIs which in turn manages images and containers. The engine runs a container by retrieving its image from the local system or registry. A running container starts one or more processes in the Linux kernel.
 
@@ -140,7 +140,7 @@ docker push <image_name>:<tag>
 docker images
 ----
 
-video::CPJLKqvR8II[youtube, width=640, height=480]
+video::CPJLKqvR8II[youtube, width=640, height=480, align="center"]
 
 If you are interested, check this https://www.ibm.com/cloud/garage/content/course/containers-and-docker/0[course] out on Containers and Docker.
 

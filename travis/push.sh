@@ -22,6 +22,7 @@ commit_html_files() {
 }
 
 upload_html_files() {
+  git fetch
   git push --quiet --set-upstream origin-pages gh-pages
 }
 
