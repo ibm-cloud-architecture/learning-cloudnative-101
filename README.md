@@ -23,7 +23,7 @@
 | *Containerization* | https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/Docker.html | Hema |
 | *Lab 2: Docker* | https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/Lab2.html | Hema |
 | *Kubernetes Patterns* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/kubernetesPatterns.html | Bryan |
-| *Cloud Platforms & Local Kube clusters* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/kubernetesPlatforms.html | Bryan |
+| *Cloud Platforms & Local Kube clusters* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/cloudPlatforms.html | Bryan |
 | *Lab 3: Kubernetes patterns* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/Lab3.html | Bryan |
 | *Lab 4: Deploy the app on Kube* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/Lab4.html | Bryan |
 | *Helm/Operator Patterns* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/operators.html | Bryan |
