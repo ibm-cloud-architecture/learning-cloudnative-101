@@ -1,3 +1,0 @@
-:imagesdir: ../images
-= Cluster Administration
-

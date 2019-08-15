@@ -1,6 +1,4 @@
-:imagesdir: ./images
-= Lab 4 - Kubernetes Tooling
-
+= Lab 4 - Deploy Applications on Kubernetes
 Bryan Kribbs <bakribbs@us.ibm.com>
 v1.0, 2019-05-28
 :toc:
@@ -8,17 +6,57 @@ v1.0, 2019-05-28
 
 == Introduction
 
-In this lab, you will learn about how to use docker and how to run applications using docker.
+In this lab, you will learn how to get started using Kubernetes by creating a new Kubernetes cluster on your IBM Cloud account.  We are going to walk through how to *Create a Kubernetes Resource* using the IBM Cloud Dashboard. *Create a Cluster* and navigate through the *Kubernetes Cluster Dashboard* to see information about your created cluster.
 
 == Prerequisites
 
-- You need https://www.java.com/en/[Java] installed on your environment. You can download it https://www.java.com/download/[here]. Please install the latest version which is Java Version 8. Make sure you set `JAVA_HOME` environment variable. You can verify the version after installation using `java -version`.
-- Create a https://hub.docker.com/[DockerHub account]. This account is needed to push images to docker registry. Also create a repository following the instructions https://docs.docker.com/docker-hub/repos/[here].
-- You need to install https://www.docker.com/[Docker] in your environment. Follow the instructions https://docs.docker.com/docker-for-mac/install/[here] to install it on Mac and https://docs.docker.com/docker-for-windows/install/[here] to install it on Windows.
+- You will need an IBM Account for https://cloud.ibm.com/[IBM Cloud]
+- Downloaded and installed the Kubernetes CLI at https://kubernetes.io/docs/tasks/tools/install-kubectl/[Kubernetes CLI Installation]. Follow the instructions for your computer's operating system.
+- Downloaded and installed the IBM Cloud CLI at https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started#step1-install-idt[IBM Cloud CLI Installation]. Follow the instructions for your computer's operating system..
 
-== Working with docker
+== IBM Cloud Login
+
+Start by opening a web browser and navigating to https://cloud.ibm.com/[IBM Cloud].
+
+image::Cloud-Login.png[]
+
+Next *_login_* with your IBM Cloud login you created.  After login you will be navigated to your *Cloud Dashboard*. 
+
+image::IBM_Cloud_Dashboard.png[]
+
+On the *Cloud Dashboard* in the resource summary section, select *Kubernetes Clusters*.
+
+image::CL_Dash_Kube.png[][]
+
+In Kubernetes Cluster list, select the cluster you would like to access. Make sure the cluster you select has a blue square icon next to it.  
+
+== Accessing the Kubernetes Cluster
+
+Once on the *Overview* screen of your kubernetes cluster, select the *Connect via CLI* in the upper right hand corner.
+
+Next open up a *Terminal* window and follow the steps on the screen. (Make sure to append "--sso" after "login" if needed).
+
+
+
+== Getting the Sample Application
+
+https://github.com/ibm-cloud-architecture/cloudnative_sample_app
+
+
+== Deploying the Sample Application
+
+
+== Accessing the new Application
 
 
 == Conclusion
 
-Congratulations !!!
+You have successfully completed this lab! Let's take a look at what you learned and did today:
+
+    - Logged into IBM Cloud
+    - Created a Kubernetes Resource for your account.
+    - Selected a Kubernetes Type.
+    - Navigated through the Kubernetes Dashboard.
+
+
+     

@@ -25,11 +25,9 @@
 | *Kubernetes Patterns* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/kubernetesPatterns.html | Bryan |
 | *Cloud Platforms & Local Kube clusters* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/kubernetesPlatforms.html | Bryan |
 | *Lab 3: Kubernetes patterns* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/Lab3.html | Bryan |
-| *Kubernetes Tooling* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/kubernetesTooling.html | Bryan |
-| *Lab 4: Kubernetes Tooling* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/Lab4.html | Bryan |
-| *Lab 5: Deploy the app on Kube* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/Lab5.html | Bryan |
+| *Lab 4: Deploy the app on Kube* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/Lab4.html | Bryan |
 | *Helm/Operator Patterns* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/operators.html | Bryan |
-| *Lab 6: Deploy the app on Kube using helm* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/Lab6.html | Bryan |
+| *Lab 5: Deploy the app on Kube using helm* | 	https://pages.github.ibm.com/CASE/cloudnative-bootcamp/Kubernetes_Module/Lab5.html | Bryan |
 
 
 ## Cloud Foundry Migration Module
