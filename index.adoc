@@ -30,11 +30,9 @@ Pre-requisites
 * xref:Kubernetes_Module/kubernetesPatterns.adoc[Kubernetes Patterns]
 * xref:Kubernetes_Module/kubernetesPlatforms.adoc[Cloud Platforms & Local Kube clusters]
 * xref:Kubernetes_Module/Lab3.adoc[Lab 3: Kubernetes patterns]
-* xref:Kubernetes_Module/kubernetesTooling.adoc[Kubernetes Tooling]
-* xref:Kubernetes_Module/Lab4.adoc[Lab 4: Kubernetes Tooling]
-* xref:Kubernetes_Module/Lab5.adoc[Lab 5: Deploy the app on Kube]
+* xref:Kubernetes_Module/Lab4.adoc[Lab 4: Deploy the app on Kube]
 * xref:Kubernetes_Module/operators.adoc[Helm/Operator Patterns]
-* xref:Kubernetes_Module/Lab6.adoc[Lab 6: Deploy the app on Kube using helm]
+* xref:Kubernetes_Module/Lab5.adoc[Lab 5: Deploy the app on Kube using helm]
 
 [.tile]
 === Cloud Foundry Migration Module
