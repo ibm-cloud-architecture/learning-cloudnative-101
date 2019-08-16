@@ -123,5 +123,3 @@ The postStart hook is a command that is run after the creation of a container an
 === preStop
 
 The preStop hook is a call that blocks a container from terminating too quickly and makes sure the container has a graceful shutdown.  The preStop call must finish before the container is deleted by the container runtime.  The preStop signal does not stop the container from being deleted completely, it is only an alternative to a SIGTERM signal for a graceful shutdown. 
-
-== Automated Placement Pattern

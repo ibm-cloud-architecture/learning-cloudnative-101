@@ -1,5 +1,15 @@
 :imagesdir: ./images
-= Operators & Helm
+= Helm & Operators
+
+
+== Helm
+Helm is a package manager built atop of Kubernetes.  Helm is used to steamline installation and management of Kubernetes applications.  Helm is good for sharing built applications across teams, managing kubernetes manifest files, and maintaining consistent builds through each release.  Helm use a tool called a Helm Chart to package together pre-configured Kubernetes resources for a given application.  Helm Charts contain at least two things, a description of the package (Chart.yaml) and the necessary kubernetes manifest files.
+
+=== Helm Charts
+
+Helm Charts 
+
+
 
 .Try it out
 NOTE: Helm Deployment Lab: 
