@@ -2,7 +2,7 @@
 Budi Darmawan <vbudi@us.ibm.com>
 v1.0 2019-07-10
 :toc:
-:imagesdir: imagelab
+:imagesdir: images
 
 This exercise describes using the migration tool to migrate each of the following example applications to IBM Kubernetes Services:
 
@@ -16,7 +16,7 @@ The migration tool is run from a Docker container. The migration tool Docker con
 
 In the beginning of the exercise, you deploy the application to a CloudFoundry platform. The instructions use the IBM Cloud Public Cloud Foundry platform for convenience, but the tool is designed to work with Pivotal or any other Cloud Foundry platform.
 
-The applications are deployed to Cloud Foundry for two purposes: 
+The applications are deployed to Cloud Foundry for two purposes:
 
 - To validate that the application **does** run in CloudFoundry
 - To extract the credentials for any backend services used by the Cloud Foundry application in the VCAP_SERVICES environment variable. As part of the migration, these credentials are used to create Kubernetes secrets, to allow the same backend services to be accessed by the application running on the target Kubernetes platform (OpenShift, IBM Kubernetes Service, or IBM Cloud Public).
@@ -29,9 +29,9 @@ In this first case, you migrate an application that runs on WebSphere Liberty in
 
 === Preparing the migration environment
 
-You run these preparation steps only once. There is no need to redo these steps for subsequent lab exercises: 
+You run these preparation steps only once. There is no need to redo these steps for subsequent lab exercises:
 
-1. Run the provided docker image. You should have Docker installed and running on your system. Provide an empty local directory path to be used as the conversion working directory. The following command connects you to a bash shell inside the migration tool container. 
+1. Run the provided docker image. You should have Docker installed and running on your system. Provide an empty local directory path to be used as the conversion working directory. The following command connects you to a bash shell inside the migration tool container.
 
 		docker run -v <your_local_path>:/data -v /var/run/docker.sock:/var/run/docker.sock -it ibmcloudacademy/cfmigrationtool bash
 
@@ -53,13 +53,13 @@ As mentioned at the beginning of the exercise, you deploy the application to Clo
 +
 image::001-docker.png[]
 
-2. Login and deploy the application to Cloud Foundry in IBM Cloud Public. 
- 
-	- You will be prompted for your user id, password, and region for login 
+2. Login and deploy the application to Cloud Foundry in IBM Cloud Public.
+
+	- You will be prompted for your user id, password, and region for login
 	- You should substitute your first and last name for the User Provided Service values
 	- Substitute your initials for the `abc` in the `ibmcloud app push` command. Your application name and route must be unique.
 
-			ibmcloud login 
+			ibmcloud login
 			ibmcloud target --cf
 +
 image::002-cflogin.png[]
@@ -73,7 +73,7 @@ image::002-cflogin.png[]
 image::003-cups.png[]
 image::003-cfpush.png[]
 
-3. Test your application to see whether it is running on Cloud Foundry. Go to the URL `http://abc-hello-world.mybluemix.net`, substituting your initials for `abc`. You should see the following screen, with your name displayed: 
+3. Test your application to see whether it is running on Cloud Foundry. Go to the URL `http://abc-hello-world.mybluemix.net`, substituting your initials for `abc`. You should see the following screen, with your name displayed:
 +
 image::004-sampleapp.png[]
 
@@ -90,7 +90,7 @@ image::004-sampleapp.png[]
 
 === Running the migration tool and deploying the application to IBM Kubernetes Services
 
-The last stage of the migration is performed for the specific target environment. 
+The last stage of the migration is performed for the specific target environment.
 
 1. Run the migration command:
 
@@ -110,7 +110,7 @@ image::006-convert.png[]
 ** Kubernetes cluster name (CLUSTER)
 
 +
-Note that for login to the IBM Kubernetes Services cluster using the `ibmcloud login` command, you may be asked to get an SSO login token. The commands that are listed in steps 2 and later are using the environment variables that are set above. If you have defined these environment variables, you should be able to run the commands as-is, directly cut-and-pasted from the `result.html` browser page to the bash prompt of the cfmigrationtool container. 
+Note that for login to the IBM Kubernetes Services cluster using the `ibmcloud login` command, you may be asked to get an SSO login token. The commands that are listed in steps 2 and later are using the environment variables that are set above. If you have defined these environment variables, you should be able to run the commands as-is, directly cut-and-pasted from the `result.html` browser page to the bash prompt of the cfmigrationtool container.
 
 +
 image::007-1-output.png[]
@@ -131,7 +131,7 @@ image::008-sampleapp.png[]
 
 == Liberty hello-world application accessed from a Git repository
 
-In this second test case, you will migrate content that is retrieved directly from a git repository. This sample application does not use any backend services, hence you do not need to collect the VCAP_SERVICES values. The steps listed here can be performed directly similar to the previous exercise. 
+In this second test case, you will migrate content that is retrieved directly from a git repository. This sample application does not use any backend services, hence you do not need to collect the VCAP_SERVICES values. The steps listed here can be performed directly similar to the previous exercise.
 
 1. Go back to the `migrate` directory and run the following command:
 
@@ -144,21 +144,21 @@ image::liberty2.png[]
 
 == SpringBoot application (jar file) accessed from a Git repository
 
-In this third test case, you will migrate a SpringBoot REST application from a git repository. This sample application does not use any backend services, hence you do not need to collect the VCAP_SERVICES values. The steps listed here can be performed directly similar to the first exercise. 
+In this third test case, you will migrate a SpringBoot REST application from a git repository. This sample application does not use any backend services, hence you do not need to collect the VCAP_SERVICES values. The steps listed here can be performed directly similar to the first exercise.
 
 1. Go back to the `migrate` directory and run the following command:
 
 		cd /cf-transformation/migrate
 		./cf-migrate.sh -s https://github.com/ibm-cloud-academy/lightblue-customer -t /data/cfjava -e iks -b java
 
-2. Open the `result.html` file in subdirectory `cfjava/target` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on IBM Kubernetes Services. Check the URL `https://<routehost>/customer`. 
+2. Open the `result.html` file in subdirectory `cfjava/target` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on IBM Kubernetes Services. Check the URL `https://<routehost>/customer`.
 +
 image::customer.png[]
 
 
 == Node.js application accessed from a Git repository
 
-In this fourth test case, you will migrate a Node.js application from a git repository. This sample application does not use any backend services, hence you do not need to collect the VCAP_SERVICES values. The steps listed here can be performed directly similar to the first exercise. 
+In this fourth test case, you will migrate a Node.js application from a git repository. This sample application does not use any backend services, hence you do not need to collect the VCAP_SERVICES values. The steps listed here can be performed directly similar to the first exercise.
 
 1. Go back to the `migrate` directory and run the following command:
 
@@ -171,7 +171,7 @@ In this fourth test case, you will migrate a Node.js application from a git repo
 image::nodehello.png[]
 
 == Node.js application with a Cloudant database backend service
- 
+
 In this last test case, we demonstrate another example that uses a backend service. This sample application uses a Cloudant database. Therefore in this case you will deploy the application to Cloud Foundry first so you can collect the VCAP_SERVICES information.
 
 1. Clone the application, and deploy the Cloudant database backend service and the application. Assuming you are still logged on to IBM Cloud Public, the following commands are used.
@@ -180,15 +180,15 @@ In this last test case, we demonstrate another example that uses a backend servi
 		cd nodejs-cloudant
 		ibmcloud service create cloudantNoSQLDB Lite sample-nodejs-cloudant-cloudantNoSQLDB
 		ibmcloud service list
-+	
++
 Keep running the `ibmcloud service list` command until the `last operation` of the Cloudant service returns as `create succeeded`. Then continue with the following command.
-		
+
 		ibmcloud app push
 
-** The application and its Cloudant service will be deployed automatically. The route is shown at the end of the deployment. 
+** The application and its Cloudant service will be deployed automatically. The route is shown at the end of the deployment.
 +
 image::deploycld.png[]
-** Open the application and try uploading any file from your local system to the organizer application. Use **Choose file** and then **Upload**. This action is needed to demonstrate that the migrated application is using the same Cloudant backend service from IBM Kubernetes Services. 
+** Open the application and try uploading any file from your local system to the organizer application. Use **Choose file** and then **Upload**. This action is needed to demonstrate that the migrated application is using the same Cloudant backend service from IBM Kubernetes Services.
 +
 image::organizer.png[]
 
@@ -196,10 +196,9 @@ image::organizer.png[]
 
 		cd /cf-transformation/migrate
 		ibmcloud cf env sample-nodejs-cloudant | awk '/VCAP_SERVICES/{flag=1} /^}/{flag=0} flag' | sed 's/"VCAP_SERVICES"://' > vcap.json
-		
+
 3. Run the migration tool:
 
 		./cf-migrate.sh -s https://github.com/IBM-Cloud/nodejs-cloudant -t /data/cfnodecloudant -e iks -b nodejs
 
 2. Open the `result.html` file in subdirectory `cfnodecloudant/nodejs-cloudant` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on IBM Kubernetes Services. Check the URL `https://<routehost>/`. Make sure that the file that you uploaded in step 1 on Cloud Foundry exists and is displayed from the database.
-

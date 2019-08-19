@@ -1,0 +1,24 @@
+* Cloud Native Module
+** xref:Cloud_Native_Module/Cloudnative_Overview.adoc[Cloudnative Overview]
+** xref:Cloud_Native_Module/Cloudnative_framework_prog_model.adoc[Cloudnative Framework & Programming Model]
+** xref:Cloud_Native_Module/Cloudnative_app_development.adoc[Cloud Native App Development]
+** xref:Cloud_Native_Module/Lab1.adoc[Lab 1: Cloudnative App Development]
+* Kubernetes Module
+** xref:Kubernetes_Module/Docker.adoc[Containerization]
+** xref:Kubernetes_Module/Lab2.adoc[Lab 2: Docker]
+** xref:Kubernetes_Module/kubernetesPatterns.adoc[Kubernetes Patterns (TODO)]
+** xref:Kubernetes_Module/Lab3.adoc[Lab 3: Kubernetes Patterns]
+** xref:Kubernetes_Module/Lab4.adoc[Lab 4: Deploy the app on Kube (TODO)]
+** xref:Kubernetes_Module/operators.adoc[Helm/Operator Patterns]
+** xref:Kubernetes_Module/Lab5.adoc[Lab 5: Deploy the app on Kube using Helm (TODO)]
+* Cloud Foundry Migration Module
+** xref:CF_Migrate_Module/Kubernetes-for-CF.adoc[Kubernetes for Cloud Foundry users]
+** xref:CF_Migrate_Module/CF-migration.adoc[CF Migration Tool]
+** https://github.com/ibm-cloud-architecture/cf-transformation/blob/master/exercise/openshift.md[Lab 7: Migrate your app from CF to Kube (Openshift) - Github Link]
+** https://github.com/ibm-cloud-architecture/cf-transformation/blob/master/exercise/iks.md[Lab 7: Migrate your app from CF to Kube (IKS) - Github link]
+* DevOps Module
+** xref:DevOps_Module/Devops_Concepts.adoc[DevOps Concepts]
+** xref:DevOps_Module/cicd.adoc[CI/CD]
+** xref:DevOps_Module/devops_tooling.adoc[Devops Tooling]
+** xref:DevOps_Module/Lab8_Openshift.adoc[Lab 8: CI]
+** xref:DevOps_Module/Lab9_OpenShift.adoc[Lab 9: CD]
