@@ -1,16 +1,89 @@
 :imagesdir: ./images
 = Helm & Operators
 
-
 == Helm
 Helm is a package manager built atop of Kubernetes.  Helm is used to steamline installation and management of Kubernetes applications.  Helm is good for sharing built applications across teams, managing kubernetes manifest files, and maintaining consistent builds through each release.  Helm use a tool called a Helm Chart to package together pre-configured Kubernetes resources for a given application.  Helm Charts contain at least two things, a description of the package (Chart.yaml) and the necessary kubernetes manifest files.
 
 === Helm Charts
 
-Helm Charts 
+Helm Charts are a collection of files for Kubernetes to create resources with.  Charts can be used to deploy a simple service with one function or something very complex such as a full stack web application with backend services.  Helm Charts are a collection of files inside of a directory containing the `Chart.yaml` file which is required for each helm chart that is created.  
 
+.Example Chart.yaml
+----
+name: nginx
+description: A basic NGINX HTTP server
+version: 0.1.0
+kubeVersion: ">=1.2.0"
+keywords:
+  - http
+  - nginx
+  - www
+  - web
+home: https://github.com/helm/helm
+sources:
+  - https://hub.docker.com/_/nginx/
+maintainers:
+  - name: technosophos
+    email: mbutcher@deis.com
+----
 
+Each `Chart.yaml` file declares the name of the chart with a description, version, and kubernetes version it is running.  Every chart must have a version number that follows the https://semver.org/[SemVer 2, window="_blank"] standard.  
+
+==== Declaring Helm Chart Dependencies
+Helm charts may depend on any number of other charts and these charts can be linked through the `requirements.yaml` file. The `requirements.yaml` file simply lists the name, version, and repository for each of the charts that are required.  
+
+.Example Requirements.yaml
+----
+dependencies:
+  - name: apache
+    version: 1.2.3
+    repository: http://example.com/charts
+  - name: mysql
+    version: 3.2.1
+    repository: http://another.example.com/charts
+----
+
+Once dependencies are declared, you can run `helm dependency update` to download all the charts listed in the requirements file and have them stored in the `charts/` directory for use by the `Chart.yaml`.
+
+Use the link below to go through a Katacoda course that uses Helm to deploy an application on Kubernetes.
 
 .Try it out
 NOTE: Helm Deployment Lab: 
-      https://www.katacoda.com/courses/kubernetes/helm-package-manager[Katacoda , window="_blank"]
+      https://www.katacoda.com/courses/kubernetes/helm-package-manager[Katacoda, window="_blank"]
+
+== IBM Cloud Operator
+
+The IBM Cloud Operator provides a Kubernetes CRD-Based API that gives users the ability to provision and manage bindings of IBM public cloud services.  The operator can be installed on any Kubernetes cluster version 1.11 or higher.  The operator means there is no longer a need for out-of-band processes in order to use cloud services within the users applications being hosted on the cluster.  In order to run the IBM Cloud Operator on a cluster the administrator needs the following things:
+
+- IBM Cloud Account
+- IBM Cloud CLI 
+- Kubectl CLI
+
+The operator is installed and removed through two different scripts provided in the operators documentation.
+
+.Learn More
+NOTE: IBM Cloud Operator Github:
+    https://github.com/IBM/cloud-operators[IBM Cloud Operator , window="_blank"]
+
+
+== MongoDB Operator
+
+The MongoDB Enterprise Operator gives users the ability to easily deploy MongoDB into Kubernetes clusters. THe operator allows users to manage, monitor, and perform backups on the different instances of MongoDB within the cluster.  The operator can be installed on any Kubernetes cluster version 1.11 or higher and has been tested on Openshift version 3.11.  The MongoDB operator requires https://docs.opsmanager.mongodb.com/current/[Ops Manager , window="_blank"] and Cloud Manager. 
+
+To install the operator a namespace named "mongodb" must be created first, then the operator can installed one of two ways.
+
+.Namespace Creation
+----
+kubectl create namespace mongodb
+----
+
+Ways to Install:
+
+- https://github.com/mongodb/mongodb-enterprise-kubernetes#installation-using-yaml-files[YAML Files, window="_blank"] 
+- https://github.com/mongodb/mongodb-enterprise-kubernetes#installation-using-helm-chart[Helm Charts, window="_blank"] 
+
+Use the link below to see the documentation of the MongoDB Operator.
+
+.Learn More
+NOTE: MongoDB Operator Github:
+    https://github.com/mongodb/mongodb-enterprise-kubernetes[MongoDB Operator , window="_blank"]
