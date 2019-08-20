@@ -6,9 +6,9 @@
 * Kubernetes Module
 ** xref:Kubernetes_Module/Docker.adoc[Containerization]
 ** xref:Kubernetes_Module/Lab2.adoc[Lab 2: Docker]
-** xref:Kubernetes_Module/kubernetesPatterns.adoc[Kubernetes Patterns (TODO)]
+** xref:Kubernetes_Module/kubernetesPatterns.adoc[Kubernetes Patterns]
 ** xref:Kubernetes_Module/Lab3.adoc[Lab 3: Kubernetes Patterns]
-** xref:Kubernetes_Module/Lab4.adoc[Lab 4: Deploy the app on Kube (TODO)]
+** xref:Kubernetes_Module/Lab4.adoc[Lab 4: Deploy the app on Kube]
 ** xref:Kubernetes_Module/operators.adoc[Helm/Operator Patterns]
 ** xref:Kubernetes_Module/Lab5.adoc[Lab 5: Deploy the app on Kube using Helm (TODO)]
 * Cloud Foundry Migration Module
