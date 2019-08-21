@@ -17,6 +17,7 @@ In this lab, you will learn about how to build a cloud native app, its design me
 
 In order to view the code for this project, you will need to clone it from github.
 
+[source, bash]
 ----
 # Clone the sample app
 git clone https://github.com/ibm-cloud-architecture/cloudnative_sample_app.git
@@ -95,6 +96,7 @@ As mentioned earlier, the inventory service is built using Maven, which is a bui
 
 Maven needs a `pom.xml` file where you can define the application dependencies and the automation tasks. Let's look at what the project's pom.xml file:
 
+[source, xml]
 ----
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -180,6 +182,7 @@ In this section we will go over the contents of the `src` folder.
 
 *SBApplication.java* is the project's main class. To see its contents, run `cat src/main/java/application/SBApplication.java` and you should see something like the following:
 
+[source, java]
 ----
 @SpringBootApplication
 public class SBApplication {
@@ -200,6 +203,7 @@ The class is annotated with `@SpringBootApplication` which indicates that the ap
 
 `Greeting.java` is the project's Entity class. To see its contents, run `cat src/main/java/application/model/Greeting.java` and you should see the following file:
 
+[source, java]
 ----
 package application.model;
 
@@ -230,6 +234,7 @@ We have a REST endpoint defined in our application. For that we will need a `Spr
 
 `GreetingController.java` is the project's RestController class. To see its contents, run `cat src/main/java/application/rest/GreetingController.java` and you should see the following file:
 
+[source, java]
 ----
 package application.rest;
 
@@ -275,6 +280,7 @@ The **greeting(@RequestParam(value="name", defaultValue="User") String name)** m
 
 For this application, the configurations are all stored in the `application.properties` file. This file will pick up the environment variables. To see its contents, run `cat src/main/resources/application.properties` and you should see the following file:
 
+[source, properties]
 ----
 greetings=Welcome to Cloudnative bootcamp !!!
 
@@ -289,6 +295,7 @@ management.security.enabled=false
 
 If you observe the GreetingController class, we are passing the environmental variable `greetings=Welcome to Cloudnative bootcamp !!!` from `application.properties` as follows in `GreetingController.java`.
 
+[source, java]
 ----
 @Value("${greetings}")
 private String welcomeMsg;
@@ -300,6 +307,7 @@ Spring boot actuator brings us feature which allows us to monitor the health of 
 
 To access this end point, run `cat src/main/application/rest/HealthEndpoint.java`
 
+[source, java]
 ----
 package application.rest;
 
@@ -329,6 +337,7 @@ Spring boot actuator brings us feature which displays trace information. You can
 
 For logging, we are using slf4j for logging. You can enable it as follows.
 
+[source, java]
 ----
 Logger logger = LoggerFactory.getLogger(GreetingController.class);
 ----
@@ -341,6 +350,7 @@ To enable this, add `springfox-swagger2` and `springfox-swagger-ui` as dependenc
 
 To see the Swagger config, run `cat src/main/java/application/SwaggerConfig.java`. You see the file as below.
 
+[source, java]
 ----
 package application;
 
@@ -384,12 +394,14 @@ To run the application, use the below commands.
 
 - Build the application.
 
+[source, bash]
 ----
 mvn install
 ----
 
 - Run the application.
 
+[source, bash]
 ----
 java -jar ./target/cloudnativesampleapp-1.0-SNAPSHOT.jar
 ----
@@ -398,60 +410,70 @@ java -jar ./target/cloudnativesampleapp-1.0-SNAPSHOT.jar
 
 - To validate the application, run the below command.
 
+[source, bash]
 ----
 curl http://localhost:8080/greeting?name=John
 ----
 
 You will see something like below.
 
+[source, json]
 ----
 {"id":2,"content":"Welcome to Cloudnative bootcamp !!! Hello, John :)"}
 ----
 
 - To get general information, run the below command.
 
+[source, bash]
 ----
 curl http://localhost:8080/info
 ----
 
 You will see something like below.
 
+[source, json]
 ----
 {"app":{"description":"Demo application for bootcamp","name":"Greetings application","version":"1.0.0"}}
 ----
 
 - To check the health of the application, run the below command.
 
+[source, bash]
 ----
 curl http://localhost:8080/health
 ----
 
 You will see something like below.
 
+[source, json]
 ----
 {"status":"UP","diskSpace":{"status":"UP","total":499963170816,"free":195645665280,"threshold":10485760},"refreshScope":{"status":"UP"},"hystrix":{"status":"UP"}}
 ----
 
 - To access the metrics of the application, run the below command.
 
+[source, bash]
 ----
 curl http://localhost:8080/metrics
 ----
 
 You will see something like below.
 
+[source, json]
 ----
 {"mem":705452,"mem.free":412452,"processors":8,"instance.uptime":440835,"uptime":456203,"systemload.average":2.98046875,"heap.committed":646656,"heap.init":262144,"heap.used":234203,"heap":3728384,"nonheap.committed":60864,"nonheap.init":2496,"nonheap.used":58797,"nonheap":0,"threads.peak":24,"threads.daemon":20,"threads.totalStarted":29,"threads":22,"classes":7338,"classes.loaded":7338,"classes.unloaded":0,"gc.ps_scavenge.count":12,"gc.ps_scavenge.time":99,"gc.ps_marksweep.count":2,"gc.ps_marksweep.time":173,"httpsessions.max":-1,"httpsessions.active":0,"gauge.response.greeting":5.0,"gauge.response.health":8.0,"counter.status.200.health":2,"counter.status.200.greeting":5}
 ----
 
 - To get the tracing information, run the below command.
 
+[source, bash]
 ----
 curl http://localhost:8080/trace
 ----
 
 You will see something like below.
 
+[source, json]
 ----
 [{"timestamp":1561648878611,"info":{"method":"GET","path":"/metrics","headers":{"request":{"host":"localhost:8080","user-agent":"curl/7.54.0","accept":"*/*"},"response":{"X-Application-Context":"application","Content-Type":"application/vnd.spring-boot.actuator.v1+json;charset=UTF-8","Transfer-Encoding":"chunked","Date":"Thu, 27 Jun 2019 15:21:18 GMT","status":"200"}},"timeTaken":"14"}},{"timestamp":1561648770090,"info":{"method":"GET","path":"/health","headers":{"request":{"host":"localhost:8080","connection":"keep-alive","upgrade-insecure-requests":"1","user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36","accept":"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3","accept-encoding":"gzip, deflate, br","accept-language":"en-US,en;q=0.9","cookie":"JSESSIONID=0000Exd74POv8ESNuDJ0RCdlxzz:b8fac4f4-4300-45f4-a92c-558cddc26cbf"},"response":{"X-Application-Context":"application","Content-Type":"application/vnd.spring-boot.actuator.v1+json;charset=UTF-8","Transfer-Encoding":"chunked","Date":"Thu, 27 Jun 2019 15:19:30 GMT","status":"200"}},"timeTaken":"4"}},{"timestamp":1561648748298,"info":{"method":"GET","path":"/health","headers":{"request":{"host":"localhost:8080","user-agent":"curl/7.54.0","accept":"*/*"},"response":{"X-Application-Context":"application","Content-Type":"application/vnd.spring-boot.actuator.v1+json;charset=UTF-8","Transfer-Encoding":"chunked","Date":"Thu, 27 Jun 2019 15:19:08 GMT","status":"200"}},"timeTaken":"24"}},{"timestamp":1561648642317,"info":{"method":"GET","path":"/greeting","headers":{"request":{"host":"localhost:8080","user-agent":"curl/7.54.0","accept":"*/*"},"response":{"X-Application-Context":"application","Content-Type":"application/json;charset=UTF-8","Transfer-Encoding":"chunked","Date":"Thu, 27 Jun 2019 15:17:22 GMT","status":"200"}},"timeTaken":"4"}},{"timestamp":1561648540673,"info":{"method":"GET","path":"/greeting","headers":{"request":{"host":"localhost:8080","user-agent":"curl/7.54.0","accept":"*/*"},"response":{"X-Application-Context":"application","Content-Type":"application/json;charset=UTF-8","Transfer-Encoding":"chunked","Date":"Thu, 27 Jun 2019 15:15:40 GMT","status":"200"}},"timeTaken":"2"}},{"timestamp":1561648537651,"info":{"method":"GET","path":"/greeting","headers":{"request":{"host":"localhost:8080","user-agent":"curl/7.54.0","accept":"*/*"},"response":{"X-Application-Context":"application","Content-Type":"application/json;charset=UTF-8","Transfer-Encoding":"chunked","Date":"Thu, 27 Jun 2019 15:15:37 GMT","status":"200"}},"timeTaken":"4"}},{"timestamp":1561648529838,"info":{"method":"GET","path":"/greeting","headers":{"request":{"host":"localhost:8080","user-agent":"curl/7.54.0","accept":"*/*"},"response":{"X-Application-Context":"application","Content-Type":"application/json;charset=UTF-8","Transfer-Encoding":"chunked","Date":"Thu, 27 Jun 2019 15:15:29 GMT","status":"200"}},"timeTaken":"5"}},{"timestamp":1561648515701,"info":{"method":"GET","path":"/greeting","headers":{"request":{"host":"localhost:8080","user-agent":"curl/7.54.0","accept":"*/*"},"response":{"X-Application-Context":"application","Content-Type":"application/json;charset=UTF-8","Transfer-Encoding":"chunked","Date":"Thu, 27 Jun 2019 15:15:15 GMT","status":"200"}},"timeTaken":"83"}}]
 ----
