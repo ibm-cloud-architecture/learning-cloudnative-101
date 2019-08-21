@@ -35,7 +35,7 @@ jobs:
             git config user.name "Carlos Santana"
       - add_ssh_keys:
           fingerprints:
-            - "43:e4:cf:08:df:df:7f:df:23:d8:55:89:be:b7:d0:08"
+            - "9a:31:56:e5:3e:11:5a:c1:f7:d3:06:d3:43:4f:b9:6d"
       - run:
           name: Deploy docs to gh-pages branch
           command: gh-pages --dotfiles --message "[skip ci] Publishing new documentation" --dist gh-pages
