@@ -31,7 +31,7 @@ jobs:
           name: Install and configure dependencies
           command: |
             yarn  global add gh-pages@2.0.1
-            git config user.email "csantanapr@apache.org"
+            git config user.email "csantana@us.ibm.com"
             git config user.name "Carlos Santana"
       - add_ssh_keys:
           fingerprints:

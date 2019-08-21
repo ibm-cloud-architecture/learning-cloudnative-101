@@ -21,7 +21,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/csantanapr/cloudnative-learning-101.git"
+        "url": "git+https://github.com/ibm-cloud-architecture/cloudnative-learning-101.git"
     },
     "license": "Apache-2.0",
     "babel": {
