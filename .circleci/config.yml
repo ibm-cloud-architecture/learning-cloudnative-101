@@ -43,7 +43,10 @@ workflows:
   version: 2
   build:
     jobs:
-      - antora
+      - antora:
+          filters:
+            branches:
+              ignore: gh-pages
       - site-deploy:
           requires:
             - antora
