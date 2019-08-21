@@ -1,4 +1,4 @@
-= Lab 9
+= Lab 9: CD Openshift
 Hemankita Perabathini <Hemankita.Perabathini@ibm.com>
 v1.0, 2019-07-25
 :toc:

@@ -1,4 +1,4 @@
-= Lab 8
+= Lab 8: CI IKS
 Hemankita Perabathini <Hemankita.Perabathini@ibm.com>
 v1.0, 2019-08-07
 :toc:
