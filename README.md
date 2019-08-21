@@ -6,3 +6,7 @@
 ## Learning Journey
 Access the learning modules [https://csantanapr.github.io/cloudnative-learning-101/](https://csantanapr.github.io/cloudnative-learning-101/).
 
+## Contributing
+
+Please refer to the [how to contribute?](CONTRIBUTING.md) on how you can contribute to the learning documentation.
+
