@@ -52,15 +52,15 @@ Assuming that you have docker running, do the following steps to run the migrati
 
                 git clone https://github.com/ibm-cloud-architecture/cf-transformation
 
-2. Change the directory to the `migrate` sub-directory:
+5. Change the directory to the `migrate` sub-directory:
 
 		cd cf-transformation/migrate
 
-3. Get the content of your application's VCAP_SERVICES environment variables from Cloud Foundry. Most importantly, these variables contain the names, descriptions, and credentials required to access any backend services used by the application:
+6. Get the content of your application's VCAP_SERVICES environment variables from Cloud Foundry. Most importantly, these variables contain the names, descriptions, and credentials required to access any backend services used by the application:
 
 		cf env <appname> | awk '/VCAP_SERVICES/{flag=1} /^}/{flag=0} flag' | sed 's/"VCAP_SERVICES"://' > vcap.json
 
-3. Run the migration tool against your application source code:
+7. Run the migration tool against your application source code:
 
 		./cf-migrate.sh -s <source> -t <tempdir> -b <app type> -e <target type>
 

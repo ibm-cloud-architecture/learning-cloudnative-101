@@ -103,7 +103,7 @@ image::006-convert.png[]
 2. Open the generated `result.html` file using a Web browser (remember the path mapping that you did in the first step of preparing the environment). The `result.html` file will be in the subdirectory `cfliberty1/hello-world/defaultServer`.
 	image::007-result.png[]
 
-10. Go directly to the section **Deploying application to IBM Kubernetes Services** and perform the step-by-step instructions there. Note that you must specify the following values:
+3. Go directly to the section **Deploying application to IBM Kubernetes Services** and perform the step-by-step instructions there. Note that you must specify the following values:
 
 ** Repository host (REPOHOST). You can use `docker.io` to use DockerHub or use `icr.io` for IBM Cloud registry.
 ** Namespace (REPOSPACE). Your namespace (in DockerHub, it is similar to your userID) that you define in the repository.
@@ -201,4 +201,4 @@ image::organizer.png[]
 
 		./cf-migrate.sh -s https://github.com/IBM-Cloud/nodejs-cloudant -t /data/cfnodecloudant -e iks -b nodejs
 
-2. Open the `result.html` file in subdirectory `cfnodecloudant/nodejs-cloudant` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on IBM Kubernetes Services. Check the URL `https://<routehost>/`. Make sure that the file that you uploaded in step 1 on Cloud Foundry exists and is displayed from the database.
+4. Open the `result.html` file in subdirectory `cfnodecloudant/nodejs-cloudant` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on IBM Kubernetes Services. Check the URL `https://<routehost>/`. Make sure that the file that you uploaded in step 1 on Cloud Foundry exists and is displayed from the database.
