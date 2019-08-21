@@ -13,4 +13,4 @@ Pre-requisites
 
 ****
 
-Get started with your Cloudnative journey by exploring the modules.
+Get started with your Cloudnative journey by starting with the * xref:Cloud_Native_Module/Cloudnative_Overview.adoc[Cloudnative Overview] or exploring any of the other modules in the navigation menu.

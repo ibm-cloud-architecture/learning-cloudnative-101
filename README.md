@@ -3,8 +3,6 @@
 
 
 
-
-Access the learning modules [https://csantanapr.github.io/cloudnative-learning-101/](https://csantanapr.github.io/cloudnative-learning-101/cloudnative-learning-101/1.0.0/).
-
-
+## Learning Journey
+Access the learning modules [https://csantanapr.github.io/cloudnative-learning-101/](https://csantanapr.github.io/cloudnative-learning-101/).
 
