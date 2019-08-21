@@ -3,6 +3,8 @@ runtime:
 
 site:
   title: Cloudnative Learning 101
+  url: https://csantanapr.github.io/cloudnative-learning-101
+  start_page: cloudnative-learning-101::index.adoc
 
 content:
   sources:
