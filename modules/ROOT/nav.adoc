@@ -15,7 +15,7 @@
 ** xref:CF_Migrate_Module/Kubernetes-for-CF.adoc[Kubernetes for Cloud Foundry users]
 ** xref:CF_Migrate_Module/CF-migration.adoc[CF Migration Tool]
 ** https://github.com/ibm-cloud-architecture/cf-transformation/blob/master/exercise/openshift.md[Lab 7: Migrate your app from CF to Kube (Openshift) - Github Link]
-** https://github.com/ibm-cloud-architecture/cf-transformation/blob/master/exercise/iks.md[Lab 7: Migrate your app from CF to Kube (IKS) - Github link]
+** xref:CF_Migrate_Module/cf-migrate-exercise-iks.adoc[Lab 7: Migrate CloudFoundry (IKS)]
 * DevOps Module
 ** xref:DevOps_Module/Devops_Concepts.adoc[DevOps Concepts]
 ** xref:DevOps_Module/cicd.adoc[CI/CD]
