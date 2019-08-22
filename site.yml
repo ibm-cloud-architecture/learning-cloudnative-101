@@ -3,13 +3,13 @@ runtime:
 
 site:
   title: Cloudnative Learning 101
-  url: https://ibm-cloud-architecture.github.io/cloudnative-learning-101
+  url: https://ibm-cloud-architecture.github.io/cloudnative-learning-101/
   start_page: cloudnative-learning-101::index.adoc
 
 content:
   sources:
-    - url: .
-      branches: HEAD
+    - url: https://github.com/ibm-cloud-architecture/cloudnative-learning-101.git
+      branches: 'master'
 ui:
   bundle:
     url: https://gitlab.com/antora/antora-ui-default/-/jobs/artifacts/master/raw/build/ui-bundle.zip?job=bundle-stable
