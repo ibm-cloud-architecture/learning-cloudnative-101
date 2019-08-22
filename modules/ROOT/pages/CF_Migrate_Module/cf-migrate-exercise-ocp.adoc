@@ -1,10 +1,10 @@
-= Migrating Cloud Foundry applications to IBM Kubernetes Service
+= Migrating Cloud Foundry applications to OpenShift
 Budi Darmawan <vbudi@us.ibm.com>
 v1.1 2019-08-21
 :toc:
 :imagesdir: images
 
-This exercise describes using the migration tool to migrate each of the following example applications to IBM Kubernetes Service:
+This exercise describes using the migration tool to migrate each of the following example applications to OpenShift:
 
 - Java hello-world application using the `ibm-websphere-liberty` buildpack, and requiring some backend services. The source code is pulled from a local directory.
 - Different Java hello-world application using the `ibm-websphere-liberty` buildpack and no backend services. The source code is pulled from a github repository.
@@ -29,7 +29,7 @@ In this first example, you migrate an application that runs on WebSphere Liberty
 
 - Preparing the migration environment
 - Testing the application on Cloud Foundry
-- Running the migration tool and deploying the application to IBM Kubernetes Service
+- Running the migration tool and deploying the application to OpenShift
 
 === Preparing the migration environment
 
@@ -42,20 +42,17 @@ You run these preparation steps only once. There is no need to redo these steps 
 
 2. From the bash shell of the Docker container, clone the repository containing the migration tool and sample application code:
 
-
 		git clone https://github.com/ibm-cloud-architecture/cf-transformation
-
 +
 The result is that you have a `/cf-transformation` directory that contains the conversion code.
 
-=== Testing the application on the Cloud Foundry environment
+=== Testing the application on Cloud Foundry
 
 As mentioned at the beginning of the exercise, you deploy the application to Cloud Foundry. This stage verifies that the application actually runs and allows you to collect the VCAP_SERVICES environment variable contents for the application's backend services. 
 
 1. Go to the example application code directory:
 
 		cd cf-transformation/exemplar/hello-world
-
 +
 image::001-docker.png[]
 
@@ -65,8 +62,9 @@ image::001-docker.png[]
 
 			ibmcloud login 
 			ibmcloud target --cf
+
 +
-image::002-cflogin.png[]
+image::002a-cflogin.png[]
 	
 	- Take note of the *CF API Endpont* returned by the `ibmcloud target --cf` command. You will need this for your standard Cloud Foundry login. If you are using the US South region, your CF API Endpoint will be `https://api.ng.bluemix.net`. 
 	- Login to Cloud Foundry. By logging in to Cloud Foundry, you are able to use the standard `cf` commands, the same commands as you would use for Pivotal or other non-IBM Cloud Foundry platforms. Use the same user id and password.
@@ -86,12 +84,13 @@ image::002a-cflogin2.png[]
 			cf push jc-hello-world -n jc-hello-world
 
 +
-image::003-cups.png[]
-image::003-cfpush.png[]
+image::003a-cups.png[]
+image::003a-cfpush.png[]
 
 3. Test your application to see whether it is running on Cloud Foundry. Go to the URL `http://jc-hello-world.mybluemix.net`, substituting your initials for `jc`. You should see the following screen, with your name displayed:
+
 +
-image::004-sampleapp.png[]
+image::004a-sampleapp.png[]
 
 4. Now that the application is running, you should see that it is getting the values for your first and last name from the Custom User Provided Services (cups) you created and populated in the previous commands.
 
@@ -103,49 +102,46 @@ image::004-sampleapp.png[]
 
 		cf env jc-hello-world | awk '/VCAP_SERVICES/{flag=1} /^}/{flag=0} flag' | sed 's/"VCAP_SERVICES"://' > vcap.json
 		cat vcap.json
-+		
+		
++
 The output should be similar to the following:
 +
 image::005-vcapjson.png[]
-   
-=== Running the migration tool and deploying the application to IBM Kubernetes Service
+
+=== Running the migration tool and deploying the application to OpenShift
 
 The last stage of the migration is performed for the specific target environment. 
 
 1. Run the migration command:
 
-		./cf-migrate.sh -s /cf-transformation/exemplar/hello-world -t /data/cfliberty1 -e iks -b ibm-websphere-liberty
+		./cf-migrate.sh -s /cf-transformation/exemplar/hello-world -t /data/cfliberty1 -e openshift -b ibm-websphere-liberty
 +
 The output should be similar to the following:
 +
-image::006a-convert-iks.png[]
+image::006a-convert.png[]
 
 2. Open the generated `result.html` file using a Web browser (remember the path mapping that you did in the first step of preparing the environment). The `result.html` file will be in the subdirectory `cfliberty1/hello-world/defaultServer`.
 +
-image::007a-result-iks.png[]
+image::007a-result.png[]
 
-3. Go directly to the section **Deploying application to iks** and perform the step-by-step instructions there. Note that you must specify the following values:
+3. Go directly to the section **Deploying application to openshift** and perform the step-by-step instructions there. Note that you must specify the following values:
 
-	- Repository host (REPOHOST). You can use `docker.io` to use DockerHub or use `icr.io` for IBM Cloud registry.
-	- Namespace (REPOSPACE). Your namespace (in DockerHub, it is similar to your userID) that you define in the repository.
-	- Kubernetes cluster name (CLUSTER)
+	- Repository host (REPOHOST). You can use `docker.io` to use DockerHub
+	- Namespace (REPOSPACE). Your own namespace in DockerHub (similar to your userID)
+	- Openshift cluster host URL (SERVER)
 
-	Note that for login to the IBM Kubernetes Services cluster using the `ibmcloud login` command, you may be asked to get an SSO login token. The commands that are listed in steps 2 and later are using the environment variables that are set above. If you have defined these environment variables, you should be able to run the commands as-is, directly cut-and-pasted from the `result.html` browser page to the bash prompt of the cfmigrationtool container. 
+	Note that for login to the OpenShift cluster using the `oc login` command, you may be asked to get a login token from the server. You can easily get this token from a login session to the OpenShift Web Console GUI. The commands that are listed in steps 2 and later are using the environment variables that are set above. If you have defined these environment variables, you should be able to run the commands as-is, directly cut-and-pasted from the `result.html` browser page to the bash prompt of the cfmigrationtool container. 
 
 +
-image::007-1-output-iks.png[]
-image::007-2-output-iks.png[]
-image::007-3-output-iks.png[]
+image::007-1-output.png[]
+image::007-2-output.png[]
+image::007-3-output.png[]
 
 
-4. Once the migration is completed, depending on the Kubernetes cluster type (Free or Paid cluster), collect the target route as follows (you must do the same thing for each of the other scenarios below):
+4. Once the migration is completed, check the route that is created and open a browser window to `https://<routehost>/JavaHelloWorldApp`. The result should be similar to the one you had for the application on Cloud Foundry.
 
-	- For free cluster, use the Worker Node public IP and NodePort, run `ibmcloud ks workers --cluster $CLUSTER` and `kubectl get service`
-	- For a paid cluster, the target route should be: `<APPLNAME>.<CLUSTER>.<REGION>.containers.appdomain.cloud`
 +
-Open a browser window to `http://<routehost>/JavaHelloWorldApp`. The result should be similar to the one you had for the application on Cloud Foundry.
-+
-image::008a-sampleapp-iks.png[]
+image::008a-sampleapp.png[]
 
 == Liberty hello-world application accessed from a Git repository
 
@@ -154,9 +150,9 @@ In this second test case, you will migrate content that is retrieved directly fr
 1. Go back to the `migrate` directory and run the following command:
 
 		cd /cf-transformation/migrate
-		./cf-migrate.sh -s https://github.com/IBM-Cloud/java-helloworld -t /data/cfliberty2 -e iks -b ibm-websphere-liberty
+		./cf-migrate.sh -s https://github.com/IBM-Cloud/java-helloworld -t /data/cfliberty2 -e openshift -b ibm-websphere-liberty
 
-2. Open the `result.html` file in subdirectory `cfliberty2/hello-world/defaultServer` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on IBM Kubernetes Services. Check the URL `https://<routehost>/JavaHelloWorldApp`.
+2. Open the `result.html` file in subdirectory `cfliberty2/target` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on OpenShift. Check the URL `https://<routehost>/JavaHelloWorldApp`.
 +
 image::liberty2.png[]
 
@@ -167,9 +163,9 @@ In this third test case, you will migrate a SpringBoot REST application from a g
 1. Go back to the `migrate` directory and run the following command:
 
 		cd /cf-transformation/migrate
-		./cf-migrate.sh -s https://github.com/ibm-cloud-academy/lightblue-customer -t /data/cfjava -e iks -b java
+		./cf-migrate.sh -s https://github.com/ibm-cloud-academy/lightblue-customer -t /data/cfjava -e openshift -b java
 
-2. Open the `result.html` file in subdirectory `cfjava/target` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on IBM Kubernetes Services. Check the URL `https://<routehost>/customer`.
+2. Open the `result.html` file in subdirectory `cfjava/target` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on OpenShift. Check the URL `https://<routehost>/customer`.
 +
 image::customer.png[]
 
@@ -181,9 +177,9 @@ In this fourth test case, you will migrate a Node.js application from a git repo
 1. Go back to the `migrate` directory and run the following command:
 
 		cd /cf-transformation/migrate
-		./cf-migrate.sh -s https://github.com/IBM-Cloud/node-helloworld -t /data/cfnodejs -e iks -b nodejs
+		./cf-migrate.sh -s https://github.com/IBM-Cloud/node-helloworld -t /data/cfnodejs -e openshift -b nodejs
 
-2. Open the `result.html` file in subdirectory `cfnodejs/node-helloworld` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on IBM Kubernetes Services. Check the URL `https://<routehost>/`.
+2. Open the `result.html` file in subdirectory `cfnodejs/node-helloworld` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on OpenShift. Check the URL `https://<routehost>/`.
 +
 image::nodehello.png[]
 
@@ -193,11 +189,11 @@ In this last test case, we demonstrate migrating an application that uses a Clou
 
 1. Clone the application, and deploy the Cloudant database backend service and the application. Assuming you are still logged into IBM Cloud Public, the following commands are used.
 
-		git clone https://github.com/IBM-Cloud/nodejs-cloudant.git
+		git clone https://github.com/IBM-Cloud/nodejs-cloudant
 		cd nodejs-cloudant
 		cf create-service cloudantNoSQLDB Lite sample-nodejs-cloudant-cloudantNoSQLDB
 		cf services
-+	
++
 Keep running the `cf services` command until the `last operation` of the Cloudant service returns as `create succeeded`. Then continue with the following command.
 		
 		cf push
@@ -206,8 +202,8 @@ Keep running the `cf services` command until the `last operation` of the Cloudan
 +
 image::deploycld1.png[]
 
- - Open the application and try uploading any file from your local system to the organizer application. Use **Choose file** and then **Upload**. This action is needed to demonstrate that the migrated application is using the same Cloudant backend service from IBM Kubernetes Services.
- 
+ - Open the application and try uploading any file from your local system to the organizer application. Use **Choose file** and then **Upload**. This action is needed to demonstrate that the migrated application is using the same Cloudant backend service from OpenShift. 
+
 +
 image::organizer.png[]
 
@@ -219,6 +215,6 @@ image::organizer.png[]
 		
 3. Run the migration tool:
 
-		./cf-migrate.sh -s https://github.com/IBM-Cloud/nodejs-cloudant -t /data/cfnodecloudant -e iks -b nodejs
+		./cf-migrate.sh -s https://github.com/IBM-Cloud/nodejs-cloudant -t /data/cfnodecloudant -e openshift -b nodejs
 
-4. Open the `result.html` file in subdirectory `cfnodecloudant/nodejs-cloudant` in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on IBM Kubernetes Services. Check the URL `http://<routehost>/`. Make sure that the file that you uploaded from Cloud Foundry exists and is displayed from the database.
+4. Open the `result.html` file in subdirectory `cfnodecloudant/nodejs-cloudant`in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on OpenShift. Check the URL `https://<routehost>/`. Make sure that the file that you uploaded from Cloud Foundry exists and is displayed from the database.
