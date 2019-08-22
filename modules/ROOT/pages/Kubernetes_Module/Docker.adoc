@@ -108,6 +108,7 @@ The registry stores, distributes, and shares container images. It is available i
 
 Below are some command we use often on Docker.
 
+[source, bash]
 ----
 # Know docker version
 docker -version

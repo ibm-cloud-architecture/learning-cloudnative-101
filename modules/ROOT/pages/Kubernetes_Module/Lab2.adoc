@@ -18,12 +18,14 @@ In this lab, you will learn about how to use docker and how to run applications 
 
 Before proceeding, make sure docker is properly installed on your system. To verify this, run the below command.
 
+[source, bash]
 ----
-docker -v
+$ docker -v
 ----
 
 If it is installed, you will see a version number something similar to below.
 
+[source, bash]
 ----
 Docker version 19.03.0-beta3, build c55e026
 ----
@@ -32,12 +34,14 @@ Docker version 19.03.0-beta3, build c55e026
 
 Let us start with a `hello-world` container. To run a `hello-world` container, use the below command.
 
+[source, bash]
 ----
-docker run hello-world
+$ docker run hello-world
 ----
 
 If it is successfully run, you will see something like below.
 
+[source, bash]
 ----
 $ docker run hello-world
 Unable to find image 'hello-world:latest' locally
@@ -76,12 +80,14 @@ This image is pulled from https://hub.docker.com/_/hello-world. Docker hub is a 
 
 To verify if an image is existing in your system locally, run the below command.
 
+[source, bash]
 ----
-docker images
+$ docker images
 ----
 
 You will then see something like below.
 
+[source, bash]
 ----
 $ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
@@ -92,12 +98,13 @@ hello-world         latest              fce289e99eb9        5 months ago        
 
 To get the sample application, you will need to clone it from github.
 
+[source, bash]
 ----
 # Clone the sample app
-git clone https://github.com/ibm-cloud-architecture/cloudnative_sample_app.git
+$ git clone https://github.com/ibm-cloud-architecture/cloudnative_sample_app.git
 
 # Go to the project's root folder
-cd cloudnative_sample_app/
+$ cd cloudnative_sample_app/
 ----
 
 == Run the application on Docker
@@ -106,12 +113,14 @@ cd cloudnative_sample_app/
 
 To build the application, use the below command.
 
+[source, bash]
 ----
-./mvnw install
+$ ./mvnw install
 ----
 
 You will notice something at the end like below once done.
 
+[source, bash]
 ----
 [INFO] --- maven-install-plugin:2.5.2:install (default-install) @ cloudnativesampleapp ---
 [INFO] Installing /Users/user@ibm.com/cloudnative_sample_app/target/cloudnativesampleapp-1.0-SNAPSHOT.jar to /Users/user@ibm.com/.m2/repository/projects/cloudnativesampleapp/1.0-SNAPSHOT/cloudnativesampleapp-1.0-SNAPSHOT.jar
@@ -148,6 +157,7 @@ Once, you have the docker file ready, the nest step is to build it. The `build` 
 
 The command is as follows.
 
+[source, bash]
 ----
 $ docker build -t <image_name>:<image_tag> .
 ----
@@ -156,12 +166,14 @@ Here, `-t` flag allows you to add a name to your image and optionally you can al
 
 To build the docker image for our sample application, run the below command.
 
+[source, bash]
 ----
-docker build -t greeting:v1.0.0 .
+$ docker build -t greeting:v1.0.0 .
 ----
 
 You will see something like below.
 
+[source, bash]
 ----
 $ docker build -t greeting:v1.0.0 .
 Sending build context to Docker daemon  28.99MB
@@ -196,14 +208,16 @@ Successfully tagged greeting:v1.0.0
 
 To verify if the image is built successfully, run the below command.
 
+[source, bash]
 ----
-docker images
+$ docker images
 ----
 
 It shows the images, their repository and tags, and their size.
 
 The output will be as follows.
 
+[source, bash]
 ----
 $ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
@@ -216,8 +230,9 @@ hello-world         latest              fce289e99eb9        5 months ago        
 
 - To run the docker container, use the below command.
 
+[source, bash]
 ----
-docker run -p <port_to_expose>:<port> -d --name <container_name> <image_name>:<tag>
+$ docker run -p <port_to_expose>:<port> -d --name <container_name> <image_name>:<tag>
 ----
 
 - `-p`: Allows you to publish the containers port to the host.
@@ -226,12 +241,14 @@ docker run -p <port_to_expose>:<port> -d --name <container_name> <image_name>:<t
 
 To run the docker container for our sample application, use the below command.
 
+[source, bash]
 ----
-docker run -p 8080:8080 -d --name greeting greeting:v1.0.0
+$ docker run -p 8080:8080 -d --name greeting greeting:v1.0.0
 ----
 
 Once done, you will have something like below.
 
+[source, bash]
 ----
 $ docker run -p 8080:8080 -d --name greeting greeting:v1.0.0
 a74b91789b29af6e7be92b30d0e68eef852bfb24336a44ef1485bb58becbd664
@@ -239,6 +256,7 @@ a74b91789b29af6e7be92b30d0e68eef852bfb24336a44ef1485bb58becbd664
 
 Also, docker cannot create two containers with the same name. If you try to run the same container having the same name again, you will see something like below.
 
+[source, bash]
 ----
 $ docker run -p 8080:8080 -d --name greeting greeting:v1.0.0
 docker: Error response from daemon: Conflict. The container name "/greeting" is already in use by container "a74b91789b29af6e7be92b30d0e68eef852bfb24336a44ef1485bb58becbd664". You have to remove (or rename) that container to be able to reuse that name.
@@ -249,12 +267,14 @@ It is a good to name your containers. Naming helps you to discover your service 
 
 - To list all the running containers, use the below command.
 
+[source, bash]
 ----
-docker ps
+$ docker ps
 ----
 
 You will see something like below.
 
+[source, bash]
 ----
 $ docker ps
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
@@ -265,14 +285,16 @@ a74b91789b29        greeting:v1.0.0     "sh -c 'java $JAVA_O…"   2 minutes ago
 
 Run the below command.
 
+[source, bash]
 ----
-docker inspect <container-name|container-id>
+$ docker inspect <container-name|container-id>
 ----
 
 By inspecting the container, you can access detailed information about the container. By using this command, you get to know the details about network settings, volumes, configs, state etc.
 
 If we consider our container, it is as follows. You can see lot of information about the `greeting` container.
 
+[source, bash]
 ----
 $ docker inspect greeting
 [
@@ -306,20 +328,23 @@ $ docker inspect greeting
 
 - To get the logs, you use the below command.
 
+[source, bash]
 ----
-docker logs <container-name|container-id>
+$ docker logs <container-name|container-id>
 ----
 
 It helps you to access the logs of your container. It allows you to debug the container if it fails. It also lets you to know what is happening with your application.
 
 If we consider our container, it is as follows.
 
+[source, bash]
 ----
 $ docker logs greeting
 ----
 
 At the end, you will see something like below.
 
+[source, bash]
 ----
 mework.cloud.context.properties:name=configurationPropertiesRebinder,context=86174590,type=ConfigurationPropertiesRebinder]
 2019-07-15 21:35:31.136  INFO 6 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Located managed bean 'refreshEndpoint': registering with JMX server as MBean [org.springframework.cloud.endpoint:name=refreshEndpoint,type=RefreshEndpoint]
@@ -340,6 +365,7 @@ This shows that the Spring Boot application is successfully started.
 
 You will see something like below.
 
+[source, bash]
 ----
 {"id":2,"content":"Welcome to Cloudnative bootcamp !!! Hello, John :)"}
 ----
@@ -354,12 +380,14 @@ Let us now push the image to docker hub registry.
 
 - Before pushing the image to the registry, one needs to login. Let us now login into the docker hub registry.
 
+[source, bash]
 ----
 $ docker login
 ----
 
 Enter your Docker Hub credentials.
 
+[source, bash]
 ----
 $ docker login
 Login with your Docker ID to push and pull images from Docker Hub. If you don't have a Docker ID, head over to https://hub.docker.com to create one.
@@ -370,30 +398,35 @@ Login Succeeded
 
 - Tag your image. To push an image to a registry, you need to tag it with the repository name and port (port is optional). This command helps you to do that.
 
+[source, bash]
 ----
 $ docker tag <src_image_name>:<tag> <repository_name>/<target_image>:<tag>
 ----
 
 Let us now tag the image we built previously.
 
+[source, bash]
 ----
 $ docker tag greeting:v1.0.0 <repository_name>/greeting:v1.0.0
 ----
 
 - Now push the image to the registry. This allows you to share images to a registry.
 
+[source, bash]
 ----
-docker push <repository_name>/<image_name>:<tag>
+$ docker push <repository_name>/<image_name>:<tag>
 ----
 
 In our case, it will be as follows.
 
+[source, bash]
 ----
-docker push <repository_name>/greeting:v1.0.0
+$ docker push <repository_name>/greeting:v1.0.0
 ----
 
 If everything goes fine, you will see something like below.
 
+[source, bash]
 ----
 $ docker push <repository_name>/greeting:v1.0.0
 The push refers to repository [docker.io/<repository_name>/greeting]
@@ -416,12 +449,14 @@ Once the push is successful, your image will be residing in the registry.
 
 - To stop the container, run the below command.
 
+[source, bash]
 ----
-docker stop <container-name|container-id>
+$ docker stop <container-name|container-id>
 ----
 
 For our sample application, it is as follows.
 
+[source, bash]
 ----
 $ docker stop greeting
 greeting
@@ -429,12 +464,14 @@ greeting
 
 - To remove the container, run the below command.
 
+[source, bash]
 ----
-docker rm <container-name|container-id>
+$ docker rm <container-name|container-id>
 ----
 
 For our sample application, it is as follows.
 
+[source, bash]
 ----
 $ docker rm greeting
 greeting
@@ -442,12 +479,14 @@ greeting
 
 - To remove the image, run the below command.
 
+[source, bash]
 ----
-docker rmi <image_id>
+$ docker rmi <image_id>
 ----
 
 Get the image_ids and then remove them. Use the below commands to do that.
 
+[source, bash]
 ----
 $ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
@@ -478,18 +517,21 @@ Sometimes, you may need the images that are residing on your registry. Or you ma
 
 To pull the image from the registry, use the below command.
 
+[source, bash]
 ----
 $ docker pull <repository_name>/<image_name>:<tag>
 ----
 
 Since, we deleted the one we created previously, let us now push it from the registry.
 
+[source, bash]
 ----
 $ docker pull <repository_name>/greeting:v1.0.0
 ----
 
 If it successfully got pulled, we will see something like below.
 
+[source, bash]
 ----
 ddcb5f219ce2: Pull complete
 e3371bbd24a0: Pull complete
@@ -555,12 +597,14 @@ By using the multi-stage builds approach when it makes sense to use it, you will
 
 To build the docker image, run the below command.
 
+[source, bash]
 ----
-docker build -f Dockerfile.multistage -t greeting:v2.0.0 .
+$ docker build -f Dockerfile.multistage -t greeting:v2.0.0 .
 ----
 
 You will see something like below.
 
+[source, bash]
 ----
 $ docker build -f Dockerfile.multistage -t greeting:v2.0.0 .
 Sending build context to Docker daemon  28.99MB
@@ -618,12 +662,14 @@ Successfully tagged greeting:v2.0.0
 
 To verify if the image is built successfully, run the below command.
 
+[source, bash]
 ----
-docker images
+$ docker images
 ----
 
 You will have something as follows.
 
+[source, bash]
 ----
 $ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED              SIZE
@@ -636,12 +682,14 @@ maven               3.3-jdk-8           9997d8483b2f        2 years ago         
 
 - To run the docker container, use the below command.
 
+[source, bash]
 ----
-docker run -p 8080:8080 -d --name greeting_multistage greeting:v2.0.0
+$ docker run -p 8080:8080 -d --name greeting_multistage greeting:v2.0.0
 ----
 
 Once done, you will have something like below.
 
+[source, bash]
 ----
 $ docker run -p 8080:8080 -d --name greeting_multistage greeting:v2.0.0
 fe8dc2ebfc7db2173806dc736ce47c80c2ebad4f5b70a236dcb17bd8c6d09aba
@@ -649,12 +697,14 @@ fe8dc2ebfc7db2173806dc736ce47c80c2ebad4f5b70a236dcb17bd8c6d09aba
 
 - To list all the running containers, use the below command.
 
+[source, bash]
 ----
-docker ps
+$ docker ps
 ----
 
 You will have something like below.
 
+[source, bash]
 ----
 $ docker ps
 CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
@@ -665,24 +715,28 @@ fe8dc2ebfc7d        greeting:v2.0.0     "sh -c 'java $JAVA_O…"   17 seconds ag
 
 Run the below command.
 
+[source, bash]
 ----
-docker inspect <container-name|container-id>
+$ docker inspect <container-name|container-id>
 ----
 
 If we consider our container, it is as follows.
 
+[source, bash]
 ----
 $ docker inspect greeting_multistage
 ----
 
 - To get the logs, you use the below command.
 
+[source, bash]
 ----
-docker logs <container-name|container-id>
+$ docker logs <container-name|container-id>
 ----
 
 If we consider our container, it is as follows.
 
+[source, bash]
 ----
 $ docker logs greeting_multistage
 ----
@@ -693,6 +747,7 @@ $ docker logs greeting_multistage
 
 You will see something like below.
 
+[source, bash]
 ----
 {"id":2,"content":"Welcome to Cloudnative bootcamp !!! Hello, John :)"}
 ----
@@ -701,12 +756,14 @@ You will see something like below.
 
 - To stop the container, run the below command.
 
+[source, bash]
 ----
-docker stop <container-name|container-id>
+$ docker stop <container-name|container-id>
 ----
 
 For our sample application, it is as follows.
 
+[source, bash]
 ----
 $ docker stop greeting_multistage
 greeting_multistage
@@ -714,12 +771,14 @@ greeting_multistage
 
 - To remove the container, run the below command.
 
+[source, bash]
 ----
-docker rm <container-name|container-id>
+$ docker rm <container-name|container-id>
 ----
 
 For our sample application, it is as follows.
 
+[source, bash]
 ----
 $ docker rm greeting_multistage
 greeting_multistage
@@ -727,12 +786,14 @@ greeting_multistage
 
 - To remove the image, run the below command.
 
+[source, bash]
 ----
-docker rmi <image_id>
+$ docker rmi <image_id>
 ----
 
 Get the image_ids and then remove them. Use the below commands to do that.
 
+[source, bash]
 ----
 $ docker images
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
