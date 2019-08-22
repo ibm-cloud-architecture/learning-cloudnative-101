@@ -115,14 +115,12 @@ The last stage of the migration is performed for the specific target environment
 1. Run the migration command:
 
 		./cf-migrate.sh -s /cf-transformation/exemplar/hello-world -t /data/cfliberty1 -e openshift -b ibm-websphere-liberty
-
 +
 The output should be similar to the following:
 +
 image::006a-convert.png[]
 
 2. Open the generated `result.html` file using a Web browser (remember the path mapping that you did in the first step of preparing the environment). The `result.html` file will be in the subdirectory `cfliberty1/hello-world/defaultServer`.
-
 +
 image::007a-result.png[]
 
@@ -219,4 +217,4 @@ image::organizer.png[]
 
 		./cf-migrate.sh -s https://github.com/IBM-Cloud/nodejs-cloudant -t /data/cfnodecloudant -e openshift -b nodejs
 
-2. Open the `result.html` file in subdirectory `cfnodecloudant/nodejs-cloudant`in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on OpenShift. Check the URL `https://<routehost>/`. Make sure that the file that you uploaded from Cloud Foundry exists and is displayed from the database.
+4. Open the `result.html` file in subdirectory `cfnodecloudant/nodejs-cloudant`in a Web browser and follow the instructions similar to the first test case. Check whether the application has launched and can be accessed on OpenShift. Check the URL `https://<routehost>/`. Make sure that the file that you uploaded from Cloud Foundry exists and is displayed from the database.
