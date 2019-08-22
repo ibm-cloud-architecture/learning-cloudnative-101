@@ -81,6 +81,7 @@ https://github.com/ibm-cloud-architecture/cloudnative_sample_app
 
 - Clone the forked repository.
 
+[source, bash]
 ----
 $ git clone https://github.com/<user>/cloudnative_sample_app.git
 ----

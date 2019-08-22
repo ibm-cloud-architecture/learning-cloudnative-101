@@ -27,12 +27,14 @@ Check these guides out if you want to know more about Jenkins - https://jenkins.
 
 - Initially log in into your ibm cloud account as follows.
 
+[source, bash]
 ----
 $ ibmcloud login -a cloud.ibm.com -r <region> -g <cluster_name>
 ----
 
 And then download the Kube config files as below.
 
+[source, bash]
 ----
 $ ibmcloud ks cluster-config --cluster <cluster_name>
 ----
@@ -41,12 +43,14 @@ You can also get the `access` instructions in `IBM Cloud Dashboard > Kubernetes 
 
 - Install Jenkins using helm using the below command. We are not using persistence in this lab.
 
+[source, bash]
 ----
 $ helm install --name cloudnative-jenkins --set persistence.enabled=false stable/jenkins
 ----
 
 If it is successfully executed, you will see something like below.
 
+[source, bash]
 ----
 $ helm install --name cloudnative-jenkins --set persistence.enabled=false stable/jenkins
 NAME:   cloudnative
@@ -114,6 +118,7 @@ https://cloud.google.com/solutions/jenkins-on-container-engine
 
 To get the url, run the below commands.
 
+[source, bash]
 ----
 $ export SERVICE_IP=$(kubectl get svc --namespace default cloudnative-jenkins --template "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}")
 $ echo http://$SERVICE_IP:8080/login
@@ -121,6 +126,7 @@ $ echo http://$SERVICE_IP:8080/login
 
 Once executed, you will see something like below.
 
+[source, bash]
 ----
 $ echo http://$SERVICE_IP:8080/login
 http://169.63.132.124:8080/login
@@ -132,12 +138,14 @@ image::Jenkins_iks_login.png[align="center"]
 
 The user name will be `admin` and to get the password, run the below command.
 
+[source, bash]
 ----
 $ printf $(kubectl get secret --namespace default cloudnative-jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
 ----
 
 It returns you the password as follows.
 
+[source, bash]
 ----
 $ printf $(kubectl get secret --namespace default cloudnative-jenkins -o jsonpath="{.data.jenkins-admin-password}" | base64 --decode);echo
 password
@@ -157,6 +165,7 @@ https://github.com/ibm-cloud-architecture/cloudnative_sample_app
 
 - Clone the forked repository.
 
+[source, bash]
 ----
 $ git clone https://github.com/<user>/cloudnative_sample_app.git
 ----

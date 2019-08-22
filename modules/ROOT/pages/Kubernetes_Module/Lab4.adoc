@@ -6,7 +6,7 @@ v1.0, 2019-05-28
 
 == Introduction
 
-In this lab, you will learn how to get started using Open Shift by deploying a sample application on an OpenShift service hosted by IBM Cloud.  The sample application is built using Java 8. 
+In this lab, you will learn how to get started using Open Shift by deploying a sample application on an OpenShift service hosted by IBM Cloud.  The sample application is built using Java 8.
 
 == Prerequisites
 
@@ -22,7 +22,7 @@ Start by opening a web browser and navigating to https://cloud.ibm.com/[IBM Clou
 
 image::Cloud-Login.png[]
 
-Next *_login_* with your IBM Cloud login you created.  After login you will be navigated to your *Cloud Dashboard*. 
+Next *_login_* with your IBM Cloud login you created.  After login you will be navigated to your *Cloud Dashboard*.
 
 image::IBM_Cloud_Dashboard.png[]
 
@@ -30,7 +30,7 @@ On the *Cloud Dashboard* in the resource summary section, select *Open Shift Clu
 
 image::CL_Dash_Kube.png[]
 
-In cluster list, select the cluster you would like to access. Make sure the cluster you select has a red circle openshift icon next to it.  
+In cluster list, select the cluster you would like to access. Make sure the cluster you select has a red circle openshift icon next to it.
 
 == Accessing the Open Shift Cluster
 
@@ -64,13 +64,13 @@ image::project-details.png[]
 
 You will see that a new project was created in the list. _Click_ on the *Project Name*(deploy-sample).
 
-Now you will see the project screen and it's time to add the *deployment* and *service*. 
+Now you will see the project screen and it's time to add the *deployment* and *service*.
 
 ==== Create Deployment & Service
 
 In *Finder* or *File Explorer* navigate to the *chart/cloudnativesampleapp* directory of the sample application.
 
-Once there you will see two files: *deployment.yaml* and *service.yaml* 
+Once there you will see two files: *deployment.yaml* and *service.yaml*
 
 Move back to the Openshift console and find *Add to Project* in the upper-right corner.  _Click_ it and select *Import YAML/JSON*.
 
@@ -110,7 +110,7 @@ This will open a form with values prepopulated for *Creating a Route*. No need t
 
 image::serviceRoute.png[]
 
-A new route has now been created allowing us to access it from the internet. You can see the *Route's Hostname*. That's the new address for your service and we want to _Copy_ it. 
+A new route has now been created allowing us to access it from the internet. You can see the *Route's Hostname*. That's the new address for your service and we want to _Copy_ it.
 
 Next, _Open a New Tab_ in your web browser and _paste_ the copied address in the search bar.  *BEFORE pressing enter* append */greeting?name=John* to the end of the address.  Then _Press Enter_
 
@@ -127,47 +127,59 @@ Next open up a *Terminal* window and follow the steps from the *Accessing the Op
 Once logged in, we want to create a new project called deploy-sample in your OpenShift Cluster:
 
 .Create A Project
+
+[source, bash]
 ----
-oc new-project deploy-sample
+$ oc new-project deploy-sample
 ----
 
 After we have created the project we need to create a deployment of our application.  Navigate to the *chart/cloudnativesampleapp* directory of the sample application.
 
-Once there you will see two files: *deployment.yaml* and *service.yaml* 
+Once there you will see two files: *deployment.yaml* and *service.yaml*
 
 In next few steps we will deploy each of them. We will start with creating the deployment:
 
 .Create A Deployment
+
+[source, bash]
 ----
-oc create -f deployment.yaml 
+$ oc create -f deployment.yaml
 ----
 
 To verify your deployment is created:
 
 .Verify Deployment
+
+[source, bash]
 ----
-oc get deployment
+$ oc get deployment
 ----
 
 Next, we will create the service:
 
 .Create A Service
+
+[source, bash]
 ----
-oc create -f service.yaml 
+$ oc create -f service.yaml
 ----
 
 To verify your service is created:
 
 .Verify Service
+
+[source, bash]
 ----
-oc get svc
+$ oc get svc
 ----
 
 With everything deployed, we next need to expose the service outside the cluster. To do this we need to *create a route*
 
 .Create a Route
+
+[source, bash]
 ----
-oc expose svc greeting-service  
+$ oc expose svc greeting-service
 ----
 
 This creates a route connecting the application to users outside of the cluster.  Now that we have a route created we can access the application from a web browser.
@@ -175,8 +187,10 @@ This creates a route connecting the application to users outside of the cluster.
 To get the created route run:
 
 .Retrieve the Route
+
+[source, bash]
 ----
-oc get route   
+$ oc get route
 ----
 
 Find the route named *greeting-service* and copy the HOST/PORT. Should start with *greeting-service-deploy-sample*
@@ -199,6 +213,3 @@ You have successfully completed this lab! Let's take a look at what you learned 
     - Created a Service on Openshift.
     - Created a Route on Openshift.
     - Accessed an application through a web browser.
-
-
-     
