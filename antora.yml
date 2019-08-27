@@ -1,6 +1,6 @@
 name: web
 title: Learning Cloudnative 101
 version: 1.0.0
-start_page: ROOT:index.adoc
+start_page: ROOT:Cloud_Native_Module/Cloudnative_Overview.adoc
 nav:
   - modules/ROOT/nav.adoc

@@ -4,7 +4,7 @@ runtime:
 site:
   title: Learning Cloudnative 101
   url: https://ibm-cloud-architecture.github.io/learning-cloudnative-101/
-  start_page: web::index.adoc
+  start_page: web::Cloud_Native_Module/Cloudnative_Overview.adoc
 
 content:
   sources:
