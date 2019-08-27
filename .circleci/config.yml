@@ -61,11 +61,6 @@ workflows:
   build:
     jobs:
       - antora-pr:
-          filters:
-            branches:
-              ignore:
-                - gh-pages
-                - master
       - antora:
           filters:
             branches:
