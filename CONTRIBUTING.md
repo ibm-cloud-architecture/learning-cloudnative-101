@@ -13,6 +13,6 @@ Making any changes to your local repositories above cloned earlier, will be auto
 == Send your contribution
 
 Now you are all set, 
-- Open an Issue in http://github.com/ibm-cloud-architecture/cloudnative-learning-101.git/issues
+- Open an Issue in http://github.com/ibm-cloud-architecture/learning-cloudnative-101/issues
 - Prepare your changes in the respective documentation repository
 - Send the PR to respective repositories listed above
