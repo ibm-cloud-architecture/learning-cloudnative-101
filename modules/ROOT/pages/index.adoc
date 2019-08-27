@@ -1,4 +1,4 @@
-= Cloudnative Learning 101
+= Learning Cloudnative  101
 
 ****
 Pre-requisites
