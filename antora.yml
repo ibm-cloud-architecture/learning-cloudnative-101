@@ -1,5 +1,5 @@
-name: cloudnative-learning-101
-title: Cloudnative Learning 101
+name: learning-cloudnative-101
+title: Learning Cloudnative 101
 version: 1.0.0
 start_page: ROOT:index.adoc
 nav:
