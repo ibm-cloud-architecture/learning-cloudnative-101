@@ -17,6 +17,23 @@ jobs:
           root: gh-pages
           paths:
             - "*"
+  antora-pr:
+    docker:
+      - image: node:lts-jessie
+    steps:
+      - checkout
+      - run:
+          name: Install Antora and its dependencies
+          command: |
+            yarn global add @antora/cli@2.0
+            yarn global add @antora/site-generator-default@2.0
+      - run:
+          name: Build docs
+          command: antora --pull --stacktrace site-dev.yml
+      - persist_to_workspace:
+          root: gh-pages
+          paths:
+            - "*"
   site-deploy:
     docker:
       - image: node:lts-jessie
@@ -43,10 +60,12 @@ workflows:
   version: 2
   build:
     jobs:
-      - antora:
+      - antora-pr:
           filters:
             branches:
-              ignore: gh-pages
+              ignore:
+                - gh-pages
+                - master
       - site-deploy:
           requires:
             - antora
