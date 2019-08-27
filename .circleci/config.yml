@@ -66,6 +66,11 @@ workflows:
               ignore:
                 - gh-pages
                 - master
+      - antora:
+          filters:
+            branches:
+              only:
+                - master
       - site-deploy:
           requires:
             - antora
