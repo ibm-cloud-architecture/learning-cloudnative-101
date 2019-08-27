@@ -1,5 +1,5 @@
 # Learning Cloudnative 101
-[![CircleCI](https://circleci.com/gh/ibm-cloud-architecture/cloudnative-learning-101/tree/master.svg?style=svg)](https://circleci.com/gh/ibm-cloud-architecture/cloudnative-learning-101/tree/master)
+[![CircleCI](https://circleci.com/gh/ibm-cloud-architecture/learning-cloudnative-101.svg?style=svg)](https://circleci.com/gh/ibm-cloud-architecture/learning-cloudnative-101)
 
 
 
