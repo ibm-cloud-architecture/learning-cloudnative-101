@@ -4,7 +4,7 @@
 
 
 ## Learning Journey
-Access the learning modules [https://ibm-cloud-architecture.github.io/cloudnative-learning-101/](https://ibm-cloud-architecture.github.io/cloudnative-learning-101/).
+Access the learning modules [https://ibm-cloud-architecture.github.io/learning-cloudnative-101/](https://ibm-cloud-architecture.github.io/learning-cloudnative-101/).
 
 ## Contributing
 

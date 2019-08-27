@@ -3,8 +3,8 @@ runtime:
 
 site:
   title: Learning Cloudnative 101
-  url: https://ibm-cloud-architecture.github.io/cloudnative-learning-101/
-  start_page: learning-cloudnative-101::index.adoc
+  url: https://ibm-cloud-architecture.github.io/learning-cloudnative-101/
+  start_page: web::index.adoc
 
 content:
   sources:
