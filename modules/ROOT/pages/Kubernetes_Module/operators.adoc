@@ -80,7 +80,7 @@ NOTE: IBM Cloud Operator Github:
 
 === MongoDB Operator
 
-The MongoDB Enterprise Operator gives users the ability to easily deploy MongoDB into Kubernetes clusters. THe operator allows users to manage, monitor, and perform backups on the different instances of MongoDB within the cluster.  The operator can be installed on any Kubernetes cluster version 1.11 or higher and has been tested on Openshift version 3.11.  The MongoDB operator requires https://docs.opsmanager.mongodb.com/current/[Ops Manager , window="_blank"] and Cloud Manager.
+The MongoDB Enterprise Operator gives users the ability to easily deploy MongoDB into Kubernetes clusters. THe operator allows users to manage, monitor, and perform backups on the different instances of MongoDB within the cluster.  The operator can be installed on any Kubernetes cluster version 1.11 or higher and has been tested on Open Shift version 3.11.  The MongoDB operator requires https://docs.opsmanager.mongodb.com/current/[Ops Manager , window="_blank"] and Cloud Manager.
 
 To install the operator a namespace named "mongodb" must be created first, then the operator can installed one of two ways.
 
