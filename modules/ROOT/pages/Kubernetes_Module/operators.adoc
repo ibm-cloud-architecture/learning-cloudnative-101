@@ -1,5 +1,8 @@
-:imagesdir: ./images
 = Helm & Operators
+Bryan Kribbs <bakribbs@us.ibm.com>
+v1.0, 2019-05-28
+:toc:
+:imagesdir: images
 
 == Helm
 Helm is a package manager built atop of Kubernetes.  Helm is used to steamline installation and management of Kubernetes applications.  Helm is good for sharing built applications across teams, managing kubernetes manifest files, and maintaining consistent builds through each release.  Helm use a tool called a Helm Chart to package together pre-configured Kubernetes resources for a given application.  Helm Charts contain at least two things, a description of the package (Chart.yaml) and the necessary kubernetes manifest files.
@@ -51,7 +54,16 @@ Use the link below to go through a Katacoda course that uses Helm to deploy an a
 NOTE: Helm Deployment Lab:
       https://www.katacoda.com/courses/kubernetes/helm-package-manager[Katacoda, window="_blank"]
 
-== IBM Cloud Operator
+
+== Operators
+
+Operators in Kubernetes is a method of packaging, deploying, and managing a Kubernetes application.  To take full advantage of Kubernetes features, applications need to have an set of API's to help service and manage applications and operators act as a runtime for these types of applications.  Operators are built using the Operator SDK and need kubernetes in order to be deployed.  There is an Operator Framework which includes three main parts: Operator SDK, Operator Lifecycle Manager, and Operator Monitoring.  Check out the link below to learn more about each.
+
+.Read More
+NOTE: Kubernetes Operator Framework:
+      https://github.com/operator-framework/getting-started[Kubernetes Operators, window="_blank"]
+
+=== IBM Cloud Operator
 
 The IBM Cloud Operator provides a Kubernetes CRD-Based API that gives users the ability to provision and manage bindings of IBM public cloud services.  The operator can be installed on any Kubernetes cluster version 1.11 or higher.  The operator means there is no longer a need for out-of-band processes in order to use cloud services within the users applications being hosted on the cluster.  In order to run the IBM Cloud Operator on a cluster the administrator needs the following things:
 
@@ -66,7 +78,7 @@ NOTE: IBM Cloud Operator Github:
     https://github.com/IBM/cloud-operators[IBM Cloud Operator , window="_blank"]
 
 
-== MongoDB Operator
+=== MongoDB Operator
 
 The MongoDB Enterprise Operator gives users the ability to easily deploy MongoDB into Kubernetes clusters. THe operator allows users to manage, monitor, and perform backups on the different instances of MongoDB within the cluster.  The operator can be installed on any Kubernetes cluster version 1.11 or higher and has been tested on Openshift version 3.11.  The MongoDB operator requires https://docs.opsmanager.mongodb.com/current/[Ops Manager , window="_blank"] and Cloud Manager.
 
