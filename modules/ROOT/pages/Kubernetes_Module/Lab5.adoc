@@ -56,10 +56,10 @@ To check the namespace you are deploying your application to run the following c
 
 .View Namespace
 ----
-kubectl config view | grep namespace:
+oc projects
 ----
 
-Always double check the namespace your Kubectl context is set for to make sure you are deploying the application where you would like it to be in your Kubernetes Cluster.
+Always double check the namespace your Kubernetes is set for to make sure you are deploying the application where you would like it to be in your Kubernetes Cluster.
 
 === Application Deploy
 
