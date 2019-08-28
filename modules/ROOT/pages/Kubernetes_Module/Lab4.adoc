@@ -9,6 +9,13 @@ v1.0, 2019-05-28
 In this lab, you will learn about how to scale and rollout updates to an application on kubernetes using OpenShift with no downtime.
 
 == Prerequisites
+- You will need an IBM Account for https://cloud.ibm.com/[IBM Cloud]
+- Downloaded and installed the IBM Cloud CLI at https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started#step1-install-idt[IBM Cloud CLI Installation]. Follow the instructions for your computer's operating system.
+- Downloaded and installed the OpenShift CLI at https://OpenShift.io/docs/tasks/tools/install-kubectl/[OpenShift CLI Installation]. Follow the instructions for your computer's operating system.
+- Downloaded and installed the Kubernetes CLI at https://kubernetes.io/docs/tasks/tools/install-kubectl/[Kubernetes CLI Installation]. Follow the instructions for your computer's operating system.
+
+== Scaling out your app
+In this section we 
 
 
 == Scaling out your app
@@ -18,6 +25,8 @@ TODO:
 == Update your app
 TODO:
 
+
 == Conclusion
 
 Congratulations !!!
+

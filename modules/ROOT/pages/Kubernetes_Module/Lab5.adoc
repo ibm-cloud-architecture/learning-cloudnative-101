@@ -6,13 +6,14 @@ v1.0, 2019-05-28
 
 == Introduction
 
-In this lab, you will learn about how to use docker and how to run applications using docker.
+In this lab, you will learn about how to deploy applications to Kubernetes using Helm. We will be using pre-created helm charts for the deployment.
 
 == Prerequisites
 
-- You need https://www.java.com/en/[Java] installed on your environment. You can download it https://www.java.com/download/[here]. Please install the latest version which is Java Version 8. Make sure you set `JAVA_HOME` environment variable. You can verify the version after installation using `java -version`.
-- Create a https://hub.docker.com/[DockerHub account]. This account is needed to push images to docker registry. Also create a repository following the instructions https://docs.docker.com/docker-hub/repos/[here].
-- You need to install https://www.docker.com/[Docker] in your environment. Follow the instructions https://docs.docker.com/docker-for-mac/install/[here] to install it on Mac and https://docs.docker.com/docker-for-windows/install/[here] to install it on Windows.
+- You will need an IBM Account for https://cloud.ibm.com/[IBM Cloud]
+- Downloaded and installed the IBM Cloud CLI at https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started#step1-install-idt[IBM Cloud CLI Installation]. Follow the instructions for your computer's operating system.
+- Downloaded and installed the Helm CLI at https://github.com/helm/helm#install[Helm CLI Installation].
+- Downloaded and installed the Kubernetes CLI at https://kubernetes.io/docs/tasks/tools/install-kubectl/[Kubernetes CLI Installation]. Follow the instructions for your computer's operating system.
 
 == IBM Cloud Login
 
@@ -20,194 +21,60 @@ Start by opening a web browser and navigating to https://cloud.ibm.com/[IBM Clou
 
 image::Cloud-Login.png[]
 
-Next *_login_* with your IBM Cloud login you created.  After login you will be navigated to your *Cloud Dashboard*.
+Next *_login_* with your IBM Cloud login you created.  After login you will be navigated to your *Cloud Dashboard*. 
 
 image::IBM_Cloud_Dashboard.png[]
 
-On the *Cloud Dashboard* in the resource summary section, select *Open Shift Clusters*.
+On the *Cloud Dashboard* in the resource summary section, select *Kubernetes Clusters*.
 
-image::CL_Dash_Kube.png[]
+image::CL_Dash_Kube.png[][]
 
-In cluster list, select the cluster you would like to access. Make sure the cluster you select has a red circle openshift icon next to it.
+In Kubernetes Cluster list, select the cluster you would like to access. Make sure the cluster you select has a blue square icon next to it.  
 
-== Accessing the Open Shift Cluster
+== Accessing the Kubernetes Cluster
 
-Once on the *Overview* screen of your Open Shift cluster, select the *Connect via CLI* in the upper right hand corner.
+Once on the *Overview* screen of your Kubernetes cluster in the top right corner, select *Connect via CLI* and follow the onscreen instructions.  
 
-image::OS-Connect.png[]
+image::kube-connect.png[]
 
-From this screen there are two options. One is using the *OpenShift Console* and the other is to use the *CLI via the oauth token request page*
-Once logged in to either the *OpenShift Console* or *CLI* we need to get the sample application.
+Once logged in with the *CLI* we need to get the sample application.
 
 == Getting the Sample Application
 
-Download the sample application from Github: https://github.com/ibm-cloud-architecture/cloudnative_sample_app/tree/Basic-Tutorial[Sample App]
+Download the sample application from Github: https://github.com/ibm-cloud-architecture/cloudnative_sample_app[Sample App]
 
-== Deploying the Sample Application
-In this section we will deploy the sample application that you downloaded. You can follow the *Console* section to deploy it via the *OpenShift Console* and the *CLI* section for the command line.
+== Deploying the Sample Application using Helm
 
-=== Via Console
+In this section we will deploy the sample application that you downloaded using the Helm CLI in your terminal or cmd prompt.
+The helm charts are already pre-created in the `/chart` directory of the application directory.  
 
-With the OpenShift Console open, let's *Create a Project* named *deploy-sample*
+=== Looking at the Charts
 
-==== Create Project
 
-In the upper-right corner _click_ on *Create Project*
+=== Checking the Namespace
+To check the namespace you are deploying your application to run the following command:
 
-image::os-console-create.png[]
-
-Next, fill in the name section with *deploy-sample* and _click_ *Create*
-
-image::project-details.png[]
-
-You will see that a new project was created in the list. _Click_ on the *Project Name*(deploy-sample).
-
-Now you will see the project screen and it's time to add the *deployment* and *service*.
-
-==== Create Deployment & Service
-
-In *Finder* or *File Explorer* navigate to the *chart/cloudnativesampleapp* directory of the sample application.
-
-Once there you will see two files: *deployment.yaml* and *service.yaml*
-
-Move back to the Openshift console and find *Add to Project* in the upper-right corner.  _Click_ it and select *Import YAML/JSON*.
-
-image::importYAML.png[]
-
-Next an import screen will open and we need to pull up the *Finder* or *File Explorer* window with the *deployment.yaml* and *service.yaml* files.
-
-_Drag and Drop_ the *deployment.yaml* file first.
-
-image::deployment.png[]
-
-_Click_ *Create* and *Close* and you will see a new *greetings* deployment in the console.
-
-image::newDeployment.png[]
-
-For *Creating a Service* we are going to repeat the steps of *importing a YAML* just like a deployment, but instead of the *deployment.yaml* we will _Drag and Drop_ the *service.yaml*.
-
-image::service.png[]
-
-After Creating the Service let's navigate to the *Services* page to view it.
-
-image::services-page.png[]
-
-On this page you can see your new service named *greeting-service*. You can click on the service to view details about it.
-
-image::newService.png[]
-
-==== Create a Route
-
-Now we need to *Create a Route* for our new service to be reach by users outside of the cluster.
-
-On the service details page, find the *Create Route* button and _Click it_.
-
-image::createRoute.png[]
-
-This will open a form with values prepopulated for *Creating a Route*. No need to change any values so go ahead and _Click_ *Create*.
-
-image::serviceRoute.png[]
-
-A new route has now been created allowing us to access it from the internet. You can see the *Route's Hostname*. That's the new address for your service and we want to _Copy_ it.
-
-Next, _Open a New Tab_ in your web browser and _paste_ the copied address in the search bar.  *BEFORE pressing enter* append */greeting?name=John* to the end of the address.  Then _Press Enter_
-
-You should see the following:
-
-image::applicationAccess.png[]
-
-Congrats! That's you have successfully deployed an application on OpenShift.
-
-=== Via CLI
-
-Next open up a *Terminal* window and follow the steps from the *Accessing the OpenShift Cluster* for the CLI access. (Make sure to append "--sso" after "login" if needed).
-
-Once logged in, we want to create a new project called deploy-sample in your OpenShift Cluster:
-
-.Create A Project
-
-[source, bash]
+.View Namespace
 ----
-$ oc new-project deploy-sample
+oc projects
 ----
 
-After we have created the project we need to create a deployment of our application.  Navigate to the *chart/cloudnativesampleapp* directory of the sample application.
+Always double check the namespace your Kubernetes is set for to make sure you are deploying the application where you would like it to be in your Kubernetes Cluster.
 
-Once there you will see two files: *deployment.yaml* and *service.yaml*
+=== Application Deploy
 
-In next few steps we will deploy each of them. We will start with creating the deployment:
+To deploy your application we are going to use the Helm CLI Commands. First start by making sure the Helm Tiller is properly installed:
 
-.Create A Deployment
-
-[source, bash]
-----
-$ oc create -f deployment.yaml
+.Helm Tiller Install
+---- 
+helm init
 ----
 
-To verify your deployment is created:
+Once installed we can deploy our charts. To do that run the following:
 
-.Verify Deployment
-
-[source, bash]
+.Helm Install
 ----
-$ oc get deployment
+helm install --name cloudnativesample chart/cloudnativesampleapp
 ----
 
-Next, we will create the service:
-
-.Create A Service
-
-[source, bash]
-----
-$ oc create -f service.yaml
-----
-
-To verify your service is created:
-
-.Verify Service
-
-[source, bash]
-----
-$ oc get svc
-----
-
-With everything deployed, we next need to expose the service outside the cluster. To do this we need to *create a route*
-
-.Create a Route
-
-[source, bash]
-----
-$ oc expose svc greeting-service
-----
-
-This creates a route connecting the application to users outside of the cluster.  Now that we have a route created we can access the application from a web browser.
-
-To get the created route run:
-
-.Retrieve the Route
-
-[source, bash]
-----
-$ oc get route
-----
-
-Find the route named *greeting-service* and copy the HOST/PORT. Should start with *greeting-service-deploy-sample*
-
-image::get-route.png[]
-
-Next Open a web browser and paste address in the search bar and append */greeting?name=John* to the end of it and hit Enter. You should see the following:
-
-image::applicationAccess.png[]
-
-Congrats! That's you have successfully deployed an application on OpenShift.
-
-== Conclusion
-
-You have successfully completed this lab! Let's take a look at what you learned and did today:
-
-    - Logged into IBM Cloud
-    - Downloaded a Java Application from Github.
-    - Created a Deployment on Openshift.
-    - Created a Service on Openshift.
-    - Created a Route on Openshift.
-    - Accessed an application through a web browser.
+Make sure when you run this command you are in the home directory of the sample application.
