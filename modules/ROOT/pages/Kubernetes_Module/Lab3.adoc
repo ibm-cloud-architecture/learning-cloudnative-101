@@ -6,6 +6,7 @@ v1.0, 2019-05-28
 
 == Introduction
 
+
 In this lab, you will learn how to get started using Open Shift by deploying a sample application to kubernetes on an OpenShift service hosted by IBM Cloud.  The sample application is built using Java 8.
 
 == Prerequisites

@@ -1,4 +1,4 @@
-= Scaling and Updating
+= Lab 3 - Rollout Updates for Kubernetes Application
 Bryan Kribbs <bakribbs@us.ibm.com>
 v1.0, 2019-05-28
 :toc:
@@ -10,17 +10,20 @@ In this lab, you will learn about how to scale and rollout updates to an applica
 
 == Prerequisites
 
-- Read and understand resource groups: https://cloud.ibm.com/docs/resources?topic=resources-rgs[IBM Cloud Resource Groups]
-- You will need an IBM Account for https://cloud.ibm.com/[IBM Cloud]
-- Downloaded and installed the Open Shift CLI at https://OpenShift.io/docs/tasks/tools/install-kubectl/[Open Shift CLI Installation]. Follow the instructions for your computer's operating system.
-- Downloaded and installed the IBM Cloud CLI at https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started#step1-install-idt[IBM Cloud CLI Installation]. Follow the instructions for your computer's operating system.
+
+== Scaling out your app
+TODO:
 
 
 == Scaling out your app
 TODO:
 
+
 == Update your app
 TODO:
 
 
+== Conclusion
+
 Congratulations !!!
+
