@@ -7,13 +7,13 @@ v1.0, 2019-05-28
 == Introduction
 
 
-In this lab, you will learn how to get started using Open Shift by deploying a sample application to kubernetes on an Open Shift service hosted by IBM Cloud.  The sample application is built using Java 8.
+In this lab, you will learn how to get started using OpenShift by deploying a sample application to kubernetes on an OpenShift service hosted by IBM Cloud.  The sample application is built using Java 8.
 
 == Prerequisites
 
 - Read and understand resource groups: https://cloud.ibm.com/docs/resources?topic=resources-rgs[IBM Cloud Resource Groups]
 - You will need an IBM Account for https://cloud.ibm.com/[IBM Cloud]
-- Downloaded and installed the Open Shift CLI at https://OpenShift.io/docs/tasks/tools/install-kubectl/[Open Shift CLI Installation]. Follow the instructions for your computer's operating system.
+- Downloaded and installed the OpenShift CLI at https://OpenShift.io/docs/tasks/tools/install-kubectl/[OpenShift CLI Installation]. Follow the instructions for your computer's operating system.
 - Downloaded and installed the IBM Cloud CLI at https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started#step1-install-idt[IBM Cloud CLI Installation]. Follow the instructions for your computer's operating system.
 
 
@@ -27,31 +27,31 @@ Next *_login_* with your IBM Cloud login you created.  After login you will be n
 
 image::IBM_Cloud_Dashboard.png[]
 
-On the *Cloud Dashboard* in the resource summary section, select *Open Shift Clusters*.
+On the *Cloud Dashboard* in the resource summary section, select *OpenShift Clusters*.
 
 image::CL_Dash_Kube.png[]
 
-In cluster list, select the cluster you would like to access. Make sure the cluster you select has a red circle open shift icon next to it.
+In cluster list, select the cluster you would like to access. Make sure the cluster you select has a red circle OpenShift icon next to it.
 
-== Accessing the Open Shift Cluster
+== Accessing the OpenShift Cluster
 
-Once on the *Overview* screen of your Open Shift cluster, select the *Connect via CLI* in the upper right hand corner.
+Once on the *Overview* screen of your OpenShift cluster, select the *Connect via CLI* in the upper right hand corner.
 
 image::OS-Connect.png[]
 
-From this screen there are two options. One is using the *Open Shift Console* and the other is to use the *CLI via the oauth token request page*
-Once logged in to either the *Open Shift Console* or *CLI* we need to get the sample application.
+From this screen there are two options. One is using the *OpenShift Console* and the other is to use the *CLI via the oauth token request page*
+Once logged in to either the *OpenShift Console* or *CLI* we need to get the sample application.
 
 == Getting the Sample Application
 
 Download the sample application from Github: https://github.com/ibm-cloud-architecture/cloudnative_sample_app/tree/Basic-Tutorial[Sample App]
 
 == Deploying the Sample Application
-In this section we will deploy the sample application that you downloaded. You can follow the *Console* section to deploy it via the *Open Shift Console* and the *CLI* section for the command line.
+In this section we will deploy the sample application that you downloaded. You can follow the *Console* section to deploy it via the *OpenShift Console* and the *CLI* section for the command line.
 
 === Via Console
 
-With the Open Shift Console open, let's *Create a Project* named *deploy-sample*
+With the OpenShift Console open, let's *Create a Project* named *deploy-sample*
 
 ==== Create Project
 
@@ -73,7 +73,7 @@ In *Finder* or *File Explorer* navigate to the *chart/cloudnativesampleapp* dire
 
 Once there you will see two files: *deployment.yaml* and *service.yaml*
 
-Move back to the Open Shift console and find *Add to Project* in the upper-right corner.  _Click_ it and select *Import YAML/JSON*.
+Move back to the OpenShift console and find *Add to Project* in the upper-right corner.  _Click_ it and select *Import YAML/JSON*.
 
 image::importYAML.png[]
 
@@ -119,13 +119,13 @@ You should see the following:
 
 image::applicationAccess.png[]
 
-Congrats! That's you have successfully deployed an application on Open Shift.
+Congrats! That's you have successfully deployed an application on OpenShift.
 
 === Via CLI
 
-Next open up a *Terminal* window and follow the steps from the *Accessing the Open Shift Cluster* for the CLI access. (Make sure to append "--sso" after "login" if needed).
+Next open up a *Terminal* window and follow the steps from the *Accessing the OpenShift Cluster* for the CLI access. (Make sure to append "--sso" after "login" if needed).
 
-Once logged in, we want to create a new project called deploy-sample in your Open Shift Cluster:
+Once logged in, we want to create a new project called deploy-sample in your OpenShift Cluster:
 
 .Create A Project
 
@@ -202,7 +202,7 @@ Next Open a web browser and paste address in the search bar and append */greetin
 
 image::applicationAccess.png[]
 
-Congrats! That's you have successfully deployed an application on Open Shift.
+Congrats! That's you have successfully deployed an application on OpenShift.
 
 == Conclusion
 
@@ -210,7 +210,7 @@ You have successfully completed this lab! Let's take a look at what you learned 
 
     - Logged into IBM Cloud
     - Downloaded a Java Application from Github.
-    - Created a Deployment on Open Shift.
-    - Created a Service on Open Shift.
-    - Created a Route on Open Shift.
+    - Created a Deployment on OpenShift.
+    - Created a Service on OpenShift.
+    - Created a Route on OpenShift.
     - Accessed an application through a web browser.
