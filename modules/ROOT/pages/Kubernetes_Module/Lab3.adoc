@@ -131,7 +131,7 @@ Once logged in, we want to create a new project called deploy-sample in your Ope
 
 [source, bash]
 ----
-$ oc new-project deploy-sample
+oc new-project deploy-sample
 ----
 
 After we have created the project we need to create a deployment of our application.  Navigate to the *chart/cloudnativesampleapp* directory of the sample application.
@@ -144,7 +144,7 @@ In next few steps we will deploy each of them. We will start with creating the d
 
 [source, bash]
 ----
-$ oc create -f deployment.yaml
+oc create -f deployment.yaml
 ----
 
 To verify your deployment is created:
@@ -153,7 +153,7 @@ To verify your deployment is created:
 
 [source, bash]
 ----
-$ oc get deployment
+oc get deployment
 ----
 
 Next, we will create the service:
@@ -162,7 +162,7 @@ Next, we will create the service:
 
 [source, bash]
 ----
-$ oc create -f service.yaml
+oc create -f service.yaml
 ----
 
 To verify your service is created:
@@ -171,7 +171,7 @@ To verify your service is created:
 
 [source, bash]
 ----
-$ oc get svc
+oc get svc
 ----
 
 With everything deployed, we next need to expose the service outside the cluster. To do this we need to *create a route*
@@ -180,7 +180,7 @@ With everything deployed, we next need to expose the service outside the cluster
 
 [source, bash]
 ----
-$ oc expose svc greeting-service
+oc expose svc greeting-service
 ----
 
 This creates a route connecting the application to users outside of the cluster.  Now that we have a route created we can access the application from a web browser.
@@ -191,7 +191,7 @@ To get the created route run:
 
 [source, bash]
 ----
-$ oc get route
+oc get route
 ----
 
 Find the route named *greeting-service* and copy the HOST/PORT. Should start with *greeting-service-deploy-sample*
