@@ -18,7 +18,7 @@ In this lab, you will learn about how to scale and rollout updates to an applica
 == Scaling out your app
 Now that we have successfully deployed an application on Kubernetes, the next step is to scale up the application to properly handle more traffic and have some redundancy to prevent any downtime.  
 
-Let's first check our current deployment running on OpenShift. (If there is no deployment refer to link:Lab3.adoc[Lab 3:Deploy Kubernetes Application])
+Let's first check our current deployment running on OpenShift. (If there is no deployment refer to xref:Kubernetes_Module/Lab3.adoc[Lab 3:Deploy Kubernetes Application])
 
 .Check Deployment
 ----

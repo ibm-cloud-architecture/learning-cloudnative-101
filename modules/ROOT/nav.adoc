@@ -10,7 +10,7 @@
 ** xref:Kubernetes_Module/Lab3.adoc[Lab 3: Deploy Kubernetes App]
 ** xref:Kubernetes_Module/Lab4.adoc[Lab 4: Update Kubernetes App]
 ** xref:Kubernetes_Module/operators.adoc[Helm/Operator Patterns]
-** xref:Kubernetes_Module/Lab5.adoc[Lab 5: Helm Templates (TODO)]
+** xref:Kubernetes_Module/Lab5.adoc[Lab 5: Helm Templates]
 * Cloud Foundry to Kubernetes
 ** xref:CF_Migrate_Module/Kubernetes-for-CF.adoc[Kubernetes for CF users]
 ** xref:CF_Migrate_Module/CF-migration.adoc[CF Migration Tool]
