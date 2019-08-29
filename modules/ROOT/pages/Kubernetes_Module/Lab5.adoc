@@ -48,9 +48,6 @@ Download the sample application from Github: https://github.com/ibm-cloud-archit
 In this section we will deploy the sample application that you downloaded using the Helm CLI in your terminal or cmd prompt.
 The helm charts are already pre-created in the `/chart` directory of the application directory.  
 
-=== Looking at the Charts
-
-
 === Checking the Namespace
 To check the namespace you are deploying your application to run the following command:
 
@@ -61,5 +58,64 @@ oc projects
 
 Always double check the namespace your Kubernetes is set for to make sure you are deploying the application where you would like it to be in your Kubernetes Cluster.
 
-=== Application Deploy
+=== Application Deployment
 
+To deploy the Application we first want to ensure that we have helm template charts created. In this sample app we won't have to create any templates, but we are going to modify the deployment.yaml using templates. Let's start by doing that.
+
+In the `chart/cloudnativesampleapp` directory in your sample application run:
+
+.Changing Replica Count
+----
+helm template . --set replicaCount=2 > deployment.yaml
+----
+
+That will set the replicaCount in the deployment file to 2. Next we need to deploy the new change by running the following:
+
+.Deploy Deployment
+----
+oc apply -f deployment.yaml
+----
+
+And that's it. You have now deployed using a Helm Template.
+
+To verify your deployment just run:
+
+.Verify Deployment
+---- 
+oc get deployment
+----
+
+=== Accessing the Application
+
+To access the application we need to expose the service.  To do that we will run the following:
+
+.Expose Service
+---- 
+oc expose service cloudnativesampleapp-service
+----
+
+Next, we need to find the route that was exposed for the application. We find that by running:
+
+.Service Route
+----
+oc get route
+----
+
+Next copy the `PATH` it will look similar to `greeting-service-deploy-sample.gse-cloud-native-fa9ee67c9ab6a7791435450358e564cc-0001.us-east.containers.appdomain.cloud`.
+Finally we want to run a `curl` against the copied path with `/greeting` appended on the end to see the response.
+
+.Curl
+----
+curl PATH/greeting
+----
+
+You should get a response similar to:
+
+== Conclusion
+
+You have successfully completed this lab! Let's take a look at what you learned and did today:
+
+    - Modified a Helm Chart value.
+    - Deployed an application using a Helm Chart. 
+    - Exposed the application to the internet.
+    - Accessed the deployed application via a CURL command.

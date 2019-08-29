@@ -8,7 +8,7 @@
 ** xref:Kubernetes_Module/Lab2.adoc[Lab 2: Docker]
 ** xref:Kubernetes_Module/kubernetesPatterns.adoc[Kubernetes Patterns]
 ** xref:Kubernetes_Module/Lab3.adoc[Lab 3: Deploy Kubernetes App]
-** xref:Kubernetes_Module/Lab4.adoc[Lab 4: Update Kubernetes App (TODO)]
+** xref:Kubernetes_Module/Lab4.adoc[Lab 4: Update Kubernetes App]
 ** xref:Kubernetes_Module/operators.adoc[Helm/Operator Patterns]
 ** xref:Kubernetes_Module/Lab5.adoc[Lab 5: Helm Templates (TODO)]
 * Cloud Foundry to Kubernetes
