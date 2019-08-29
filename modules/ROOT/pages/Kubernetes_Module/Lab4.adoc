@@ -86,7 +86,7 @@ Finally we want to run a `curl` against the copied path with `/greeting` appende
 curl PATH/greeting
 ----
 
-You should get a response similar to:
+You should get a response similar to: `Welcome to Version 2 of the Cloud Native Bootcamp Application !!!`
 
 == Conclusion
 
