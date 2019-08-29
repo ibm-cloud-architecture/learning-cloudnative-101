@@ -13,18 +13,68 @@ In this lab, you will learn about how to scale and rollout updates to an applica
 - Downloaded and installed the IBM Cloud CLI at https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started#step1-install-idt[IBM Cloud CLI Installation]. Follow the instructions for your computer's operating system.
 - Downloaded and installed the OpenShift CLI at https://OpenShift.io/docs/tasks/tools/install-kubectl/[OpenShift CLI Installation]. Follow the instructions for your computer's operating system.
 - Downloaded and installed the Kubernetes CLI at https://kubernetes.io/docs/tasks/tools/install-kubectl/[Kubernetes CLI Installation]. Follow the instructions for your computer's operating system.
+- Installing `watch` command - For Mac run `brew install watch`. No install for Windows
 
 == Scaling out your app
-In this section we 
+Now that we have successfully deployed an application on Kubernetes, the next step is to scale up the application to properly handle more traffic and have some redundancy to prevent any downtime.  
 
+Let's first check our current deployment running on OpenShift.
 
-== Scaling out your app
-TODO:
+.Check Deployment
+----
+oc get deployment greetings-deployment
+----
 
+image::current-deployment.png[]
+
+We can see that only 1 replica of the application is currently desired and is all that is running.  Now let's make it to where we have 3 desired replicas and see how Kubernetes automatically deploys more replicas to meet the desired state by using the `oc scale` command.
+
+.More Replicas
+----
+oc scale deployment greetings-deployment --replicas 3
+----
+
+The command above will scale the sample application to 3 replicas and you can verify the replicas by running one of the following:
+
+.Verify Replicas
+----
+oc get deployment greetings-deployment
+----
+
+image::scaled-deploy.png[]
+
+.Verify Replicas
+----
+oc get pods
+----
+
+image::scaled-pods.png[]
+
+Replication is easy with Kubernetes and can be changed with one simple command at any time.  Next lets look at updating the replicas with new verions of code.
 
 == Update your app
-TODO:
+Updating applications with little to no downtime is a huge advantage for using Kubernetes.  In this next section we are going to walkthrough how easy it is.
 
+The first step is changing the docker image to the new version (v2) that we have pushed to Docker Hub and begin the rolling update:
+
+.Updating the Deployment
+----
+oc set image deployment/greetings-deployment greeting=ibmcase/greeting:v2
+----
+
+Next, we want to monitor the rollout and watch as containers are created and deployed.
+
+.Monitor the Rollout
+----
+oc rollout status deployment/greetings-deployment 
+----
+
+Finally, once the rollout is complete we want to recheck our application and see the new changes that were pushed.
+
+.See new changes
+----
+export NODE_PORT=$(oc get services/greeting-service -o go-template='{{(index .spec.ports 0).nodePort}}')
+----
 
 == Conclusion
 

@@ -63,18 +63,3 @@ Always double check the namespace your Kubernetes is set for to make sure you ar
 
 === Application Deploy
 
-To deploy your application we are going to use the Helm CLI Commands. First start by making sure the Helm Tiller is properly installed:
-
-.Helm Tiller Install
----- 
-helm init
-----
-
-Once installed we can deploy our charts. To do that run the following:
-
-.Helm Install
-----
-helm install --name cloudnativesample chart/cloudnativesampleapp
-----
-
-Make sure when you run this command you are in the home directory of the sample application.
