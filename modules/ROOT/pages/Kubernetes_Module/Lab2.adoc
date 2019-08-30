@@ -291,7 +291,7 @@ Also, docker cannot create two containers with the same name. If you try to run 
 
 [source, bash]
 ----
-$ docker run -p 8080:8080 -d --name greeting greeting:v1.0.0
+$ docker run -p 9080:9080 -d --name greeting greeting:v1.0.0
 docker: Error response from daemon: Conflict. The container name "/greeting" is already in use by container "a74b91789b29af6e7be92b30d0e68eef852bfb24336a44ef1485bb58becbd664". You have to remove (or rename) that container to be able to reuse that name.
 See 'docker run --help'.
 ----
@@ -310,8 +310,8 @@ You will see something like below.
 [source, bash]
 ----
 $ docker ps
-CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                    NAMES
-a74b91789b29        greeting:v1.0.0     "sh -c 'java $JAVA_O…"   2 minutes ago       Up 2 minutes        0.0.0.0:8080->8080/tcp   greeting
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                              NAMES
+bc2dc95a6bd1        greeting:v1.0.0     "/opt/ol/helpers/run…"   18 minutes ago      Up 18 minutes       0.0.0.0:9080->9080/tcp, 9443/tcp   greeting
 ----
 
 - To know more about the container, you can inspect the container.
