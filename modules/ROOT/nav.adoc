@@ -8,10 +8,12 @@
 ** xref:Kubernetes_Module/Lab2.adoc[Lab 2: Docker]
 * Kubernetes
 ** xref:Kubernetes_Module/kubernetesPatterns.adoc[Kubernetes Patterns]
-** xref:Kubernetes_Module/Lab3.adoc[Lab 3: Deploy Kubernetes App (TODO)]
-** xref:Kubernetes_Module/Lab4.adoc[Lab 4: Update Kubernetes App (TODO)]
+** xref:Kubernetes_Module/Lab3.adoc[Lab 3: Deploy Kubernetes App]
+*** xref:Kubernetes_Module/Lab3.adoc#_deploy_kubernetes_app_using_openshift_console[Using OCP Console]
+*** xref:Kubernetes_Module/Lab3.adoc#_deploy_kubernetes_app_using_oc_cli[Using oc CLI]
+** xref:Kubernetes_Module/Lab4.adoc[Lab 4: Update Kubernetes App]
 ** xref:Kubernetes_Module/operators.adoc[Helm/Operator Patterns]
-** xref:Kubernetes_Module/Lab5.adoc[Lab 5: Helm Templates (TODO)]
+** xref:Kubernetes_Module/Lab5.adoc[Lab 5: Helm Templates]
 * Cloud Foundry to Kubernetes
 ** xref:CF_Migrate_Module/Kubernetes-for-CF.adoc[Kubernetes for CF users]
 ** xref:CF_Migrate_Module/CF-migration.adoc[CF Migration Tool]
