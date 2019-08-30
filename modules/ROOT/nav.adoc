@@ -17,13 +17,16 @@
 * Cloud Foundry to Kubernetes
 ** xref:CF_Migrate_Module/Kubernetes-for-CF.adoc[Kubernetes for CF users]
 ** xref:CF_Migrate_Module/CF-migration.adoc[CF Migration Tool]
-** xref:CF_Migrate_Module/cf-migrate-exercise-ocp.adoc[Lab 7: CF2K8S - OpenShift]
-** xref:CF_Migrate_Module/cf-migrate-exercise-iks.adoc[Lab 7: CF2K8S - IKS]
+** Lab 7: CF2K8S
+*** xref:CF_Migrate_Module/cf-migrate-exercise-ocp.adoc[Lab 7: CF2K8S - OpenShift]
+*** xref:CF_Migrate_Module/cf-migrate-exercise-iks.adoc[Lab 7: CF2K8S - IKS]
 * DevOps and CICD
 ** xref:DevOps_Module/Devops_Concepts.adoc[DevOps Concepts]
 ** xref:DevOps_Module/cicd.adoc[CI/CD]
 ** xref:DevOps_Module/devops_tooling.adoc[Devops Tooling]
-** xref:DevOps_Module/Lab8_Openshift.adoc[Lab 8: CI - Openshift]
-** xref:DevOps_Module/Lab8_IKS.adoc[Lab 8: CI - IKS]
-** xref:DevOps_Module/Lab9_OpenShift.adoc[Lab 9: CD - Openshift]
-** xref:DevOps_Module/Lab9_IKS.adoc[Lab 9: CD - IKS]
+** Lab 8: CI
+*** xref:DevOps_Module/Lab8_Openshift.adoc[Lab 8: CI - Openshift]
+*** xref:DevOps_Module/Lab8_IKS.adoc[Lab 8: CI - IKS]
+** Lab 9: CD
+*** xref:DevOps_Module/Lab9_OpenShift.adoc[Lab 9: CD - Openshift]
+*** xref:DevOps_Module/Lab9_IKS.adoc[Lab 9: CD - IKS]
