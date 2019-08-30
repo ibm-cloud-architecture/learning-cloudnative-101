@@ -146,13 +146,13 @@ Get the code from the Github repository, and use the branch *Basic-Tutorial*
 
 [source, bash]
 ----
-git clone -b "Basic-Tutorial" https://github.com/ibm-cloud-architecture/learning-cloudnative-101.git
+git clone -b "Basic-Tutorial" https://github.com/ibm-cloud-architecture/cloudnative_sample_app
 ----
 
 Navigate to the *chart/cloudnativesampleapp* directory of the sample application.
 [source, bash]
 ----
-cd learning-cloudnative-101/chart/cloudnativesampleapp
+cd chart/cloudnativesampleapp
 ----
 
 Once there you will see two files: *deployment.yaml* and *service.yaml*
