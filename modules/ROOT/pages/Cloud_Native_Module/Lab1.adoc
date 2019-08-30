@@ -11,7 +11,6 @@ In this lab, you will learn about how to build a cloud native app, its design me
 == Prerequisites
 
 - https://www.java.com/en/[Java]
-- https://maven.apache.org/[Maven]
 
 == Clone the sample app
 
@@ -102,27 +101,21 @@ Maven needs a `pom.xml` file where you can define the application dependencies a
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-    <groupId>projects</groupId>
-    <artifactId>cloudnativesampleapp</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-        <java.version>1.8</java.version>
-        <spring-cloud.version>Dalston.SR4</spring-cloud.version>
-
-        <app.name>cloudnativesampleapp</app.name>
-    </properties>
-
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.5.15.RELEASE</version>
+        <version>2.1.7.RELEASE</version>
+        <relativePath/>
     </parent>
+    <groupId>projects</groupId>
+    <artifactId>cloudnativesampleapp</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>cloudnativesampleapp</name>
+    <description>Cloudnative sample application</description>
+
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
 
     <dependencies>
         <dependency>
@@ -131,7 +124,7 @@ Maven needs a `pom.xml` file where you can define the application dependencies a
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-actuator</artifactId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -167,7 +160,7 @@ Maven needs a `pom.xml` file where you can define the application dependencies a
 When you look at the `pom.xml` file above, you see a few Spring Boot dependencies declared. Spring Boot was created to make the process of writing Spring applications (particularly REST applications) easier. Here is a breakdown of some of the Spring Boot dependencies:
 
 - The `spring-boot-starter-web` dependency configures the dependencies that are needed for a web application.
-- The `spring-boot-actuator` dependency helps you monitor and manage your application.
+- The `spring-boot-starter-actuator` dependency helps you monitor and manage your application.
 - The `spring-boot-starter-test` dependency configures the dependencies that are needed for testing applications with libraries including JUnit, Hamcrest and Mockito.
 
 We also use some other non-spring dependencies like `springfox-swagger2`, and `springfox-swagger-ui`.
@@ -290,7 +283,8 @@ info.app.description=Demo application for bootcamp
 info.app.version=1.0.0
 
 # Enabling all management endpoints
-management.security.enabled=false
+management.endpoints.web.exposure.include=*
+
 ----
 
 If you observe the GreetingController class, we are passing the environmental variable `greetings=Welcome to Cloudnative bootcamp !!!` from `application.properties` as follows in `GreetingController.java`.
@@ -303,35 +297,15 @@ private String welcomeMsg;
 
 == Health check
 
-Spring boot actuator brings us feature which allows us to monitor the health of our application. You can access it at `/health` endpoint. This endpoint is not sensitive by default and you don't need any admin permissions for that.
-
-To access this end point, run `cat src/main/application/rest/HealthEndpoint.java`
-
-[source, java]
-----
-package application.rest;
-
-import org.springframework.boot.actuate.health.Health;
-import org.springframework.boot.actuate.health.HealthIndicator;
-import org.springframework.stereotype.Component;
-
-@Component
-public class HealthEndpoint implements HealthIndicator {
-
-  @Override
-  public Health health() {
-    return Health.up().build();
-  }
-}
-----
+Spring boot actuator brings us feature which allows us to monitor the health of our application. You can access it at `/actuator/health` endpoint. This endpoint is not sensitive by default and you don't need any admin permissions for that.
 
 == Metrics
 
-Spring boot actuator brings us feature which allows us to gather metrics for your application. You can access it at `/metrics` endpoint. This endpoint is sensitive and you need admin permissions for that.
+Spring boot actuator brings us feature which allows us to gather metrics for your application. You can access it at `/actuator/metrics` endpoint. This endpoint is sensitive and you need admin permissions for that.
 
 == Tracing
 
-Spring boot actuator brings us feature which displays trace information. You can access it at `/trace` endpoint. This endpoint is sensitive and you need admin permissions for that.
+Spring boot actuator brings us feature which displays trace information. You can access it at `/actuator/httptrace` endpoint. This endpoint is sensitive and you need admin permissions for that.
 
 == Logging
 
@@ -396,7 +370,7 @@ To run the application, use the below commands.
 
 [source, bash]
 ----
-mvn install
+./mvnw install
 ----
 
 - Run the application.
@@ -426,7 +400,7 @@ You will see something like below.
 
 [source, bash]
 ----
-curl http://localhost:8080/info
+curl http://localhost:8080/actuator/info
 ----
 
 You will see something like below.
@@ -440,7 +414,7 @@ You will see something like below.
 
 [source, bash]
 ----
-curl http://localhost:8080/health
+curl http://localhost:8080/actuator/health
 ----
 
 You will see something like below.
@@ -454,7 +428,7 @@ You will see something like below.
 
 [source, bash]
 ----
-curl http://localhost:8080/metrics
+curl http://localhost:8080/actuator/metrics
 ----
 
 You will see something like below.
@@ -468,7 +442,7 @@ You will see something like below.
 
 [source, bash]
 ----
-curl http://localhost:8080/trace
+curl http://localhost:8080/actuator/httptrace
 ----
 
 You will see something like below.
