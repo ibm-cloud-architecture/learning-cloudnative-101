@@ -49,7 +49,7 @@ Download the sample application from Github: https://github.com/ibm-cloud-archit
 == Deploying the Sample Application
 In this section we will deploy the sample application that you downloaded. You can follow the *Console* section to deploy it via the *OpenShift Console* and the *CLI* section for the command line.
 
-=== Via Console
+=== Deploy Kubernetes App using OpenShift Console
 
 With the OpenShift Console open, let's *Create a Project* named *deploy-sample*
 
@@ -121,30 +121,52 @@ image::applicationAccess.png[]
 
 Congrats! That's you have successfully deployed an application on OpenShift.
 
-=== Via CLI
+=== Deploy Kubernetes App using oc CLI
 
 Next open up a *Terminal* window and follow the steps from the *Accessing the OpenShift Cluster* for the CLI access. (Make sure to append "--sso" after "login" if needed).
 
-Once logged in, we want to create a new project called deploy-sample in your OpenShift Cluster:
 
 .Create A Project
 
+Once logged in, we want to create a new project called deploy-sample in your OpenShift Cluster:
+
 [source, bash]
 ----
-$ oc new-project deploy-sample
+oc new-project deploy-sample
 ----
 
-After we have created the project we need to create a deployment of our application.  Navigate to the *chart/cloudnativesampleapp* directory of the sample application.
+If you already have an existing project, you can select the project using:
+----
+oc project deploy-sample
+----
+
+.Get the Sample Application from Github
+
+Get the code from the Github repository, and use the branch *Basic-Tutorial*
+
+[source, bash]
+----
+git clone -b "Basic-Tutorial" https://github.com/ibm-cloud-architecture/learning-cloudnative-101.git
+----
+
+Navigate to the *chart/cloudnativesampleapp* directory of the sample application.
+[source, bash]
+----
+cd learning-cloudnative-101/chart/cloudnativesampleapp
+----
 
 Once there you will see two files: *deployment.yaml* and *service.yaml*
 
+.Create A Deployment
+
+After we have created the project we need to create a deployment of our application.
+
 In next few steps we will deploy each of them. We will start with creating the deployment:
 
-.Create A Deployment
 
 [source, bash]
 ----
-$ oc create -f deployment.yaml
+oc create -f deployment.yaml
 ----
 
 To verify your deployment is created:
@@ -153,7 +175,14 @@ To verify your deployment is created:
 
 [source, bash]
 ----
-$ oc get deployment
+oc get deployment
+----
+
+You should see the followig output:
+[source, bash]
+----
+NAME                   DESIRED   CURRENT   UP-TO-DATE   AVAILABLE   AGE
+greetings-deployment   1         1         1            1           36s
 ----
 
 Next, we will create the service:
@@ -162,7 +191,7 @@ Next, we will create the service:
 
 [source, bash]
 ----
-$ oc create -f service.yaml
+oc create -f service.yaml
 ----
 
 To verify your service is created:
@@ -171,7 +200,13 @@ To verify your service is created:
 
 [source, bash]
 ----
-$ oc get svc
+oc get svc
+----
+
+You should see the followig output:
+----
+NAME               TYPE        CLUSTER-IP      EXTERNAL-IP   PORT(S)    AGE
+greeting-service   ClusterIP   172.21.203.25   <none>        8080/TCP   16s
 ----
 
 With everything deployed, we next need to expose the service outside the cluster. To do this we need to *create a route*
@@ -180,7 +215,7 @@ With everything deployed, we next need to expose the service outside the cluster
 
 [source, bash]
 ----
-$ oc expose svc greeting-service
+oc expose svc greeting-service
 ----
 
 This creates a route connecting the application to users outside of the cluster.  Now that we have a route created we can access the application from a web browser.
@@ -191,12 +226,17 @@ To get the created route run:
 
 [source, bash]
 ----
-$ oc get route
+oc get route
+----
+
+You should see the followig output:
+----
+NAME               HOST/PORT                                PATH      SERVICES           PORT      TERMINATION   WILDCARD
+greeting-service   greeting-service-{project}.{subdomain}             greeting-service   http                    None
 ----
 
 Find the route named *greeting-service* and copy the HOST/PORT. Should start with *greeting-service-deploy-sample*
 
-image::get-route.png[]
 
 Next Open a web browser and paste address in the search bar and append */greeting?name=John* to the end of it and hit Enter. You should see the following:
 
