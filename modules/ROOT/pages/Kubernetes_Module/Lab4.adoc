@@ -1,4 +1,4 @@
-= Lab 3 - Rollout Updates for Kubernetes Application
+= Lab 4 - Rollout Updates for Kubernetes Application
 Bryan Kribbs <bakribbs@us.ibm.com>
 v1.0, 2019-05-28
 :toc:
@@ -20,7 +20,8 @@ Now that we have successfully deployed an application on Kubernetes, the next st
 
 Let's first check our current deployment running on OpenShift. (If there is no deployment refer to xref:Kubernetes_Module/Lab3.adoc[Lab 3:Deploy Kubernetes Application])
 
-.Check Deployment
+.Check Deployment 
+[source, bash]
 ----
 oc get deployment greetings-deployment
 ----
@@ -30,6 +31,7 @@ image::current-deployment.png[]
 We can see that only 1 replica of the application is currently desired and is all that is running.  Now let's make it to where we have 3 desired replicas and see how Kubernetes automatically deploys more replicas to meet the desired state by using the `oc scale` command.
 
 .More Replicas
+[source, bash]
 ----
 oc scale deployment greetings-deployment --replicas 3
 ----
@@ -37,6 +39,7 @@ oc scale deployment greetings-deployment --replicas 3
 The command above will scale the sample application to 3 replicas and you can verify the replicas by running one of the following:
 
 .Verify Replicas
+[source, bash]
 ----
 oc get deployment greetings-deployment
 ----
@@ -44,6 +47,7 @@ oc get deployment greetings-deployment
 image::scaled-deploy.png[]
 
 .Verify Pods
+[source, bash]
 ----
 oc get pods
 ----
@@ -58,6 +62,7 @@ Updating applications with little to no downtime is a huge advantage for using K
 The first step is changing the docker image to the new version (v2) that we have pushed to Docker Hub and begin the rolling update:
 
 .Updating the Deployment
+[source, bash]
 ----
 oc set image deployment/greetings-deployment greeting=ibmcase/greeting:v2
 ----
@@ -65,6 +70,7 @@ oc set image deployment/greetings-deployment greeting=ibmcase/greeting:v2
 Next, we want to monitor the rollout and watch as containers are created and deployed.
 
 .Monitor the Rollout
+[source, bash]
 ----
 oc rollout status deployment/greetings-deployment 
 ----
@@ -74,6 +80,7 @@ Finally, once the rollout is complete we want to recheck our application and see
 First we need to get the `route` in order to curl the application
 
 .Get Route
+[source, bash]
 ----
 oc get route
 ---- 
@@ -82,6 +89,7 @@ Next copy the `PATH` it will look similar to `greeting-service-deploy-sample.gse
 Finally we want to run a `curl` against the copied path with `/greeting` appended on the end to see the response.
 
 .Curl
+[source, bash]
 ----
 curl PATH/greeting
 ----
