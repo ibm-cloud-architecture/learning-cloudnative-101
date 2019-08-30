@@ -9,7 +9,7 @@ CNCF Cloud Native Definition:
 ## Learning Journey
 Access the learning modules [https://ibm-cloud-architecture.github.io/learning-cloudnative-101/](https://ibm-cloud-architecture.github.io/learning-cloudnative-101/).
 
-This learning journey will get you started into Cloud Native, covering many basic concepts with hands-on labs. The journey takes you through frameworks, programming models, build a 12-factor application, containers, Kubernetes, migrating an application from Cloud Foundry to Kubernetes, Helm templating, DevOps, Continous Integration (CI), and Continues Deployment (CD).
+This learning journey will get you started into Cloud Native, covering many basic concepts with hands-on labs. The journey takes you through frameworks, programming models, building a 12-factor application, containers, Kubernetes, migrating an application from Cloud Foundry to Kubernetes, Helm templating, DevOps, Continous Integration (CI), and Continous Deployment (CD).
 
 ## Contributing
 Please refer to the [how to contribute?](CONTRIBUTING.md) on how you can contribute to the learning documentation.
