@@ -2,7 +2,7 @@
 Hemankita Perabathini <Hemankita.Perabathini@ibm.com>
 v1.0, 2019-07-02
 :toc:
-:imagesdir: images
+:imagesdir: ../../assets/images
 
 In this section, let us explore the concepts of cloud native framework and programming models that are used for building cloud applications.
 
