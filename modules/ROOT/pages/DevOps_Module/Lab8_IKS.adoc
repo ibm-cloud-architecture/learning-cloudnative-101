@@ -2,7 +2,7 @@
 Hemankita Perabathini <Hemankita.Perabathini@ibm.com>
 v1.0, 2019-08-07
 :toc:
-:imagesdir: images
+:imagesdir: ../../assets/images
 
 == Introduction
 

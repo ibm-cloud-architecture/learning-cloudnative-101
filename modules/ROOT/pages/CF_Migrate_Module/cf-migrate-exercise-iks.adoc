@@ -2,7 +2,7 @@
 Budi Darmawan <vbudi@us.ibm.com>
 v1.1 2019-08-21
 :toc:
-:imagesdir: images
+:imagesdir: ../../assets/images
 
 This exercise describes using the migration tool to migrate each of the following example applications to IBM Kubernetes Service:
 

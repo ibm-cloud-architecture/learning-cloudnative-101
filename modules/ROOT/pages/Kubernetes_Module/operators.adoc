@@ -2,7 +2,7 @@
 Bryan Kribbs <bakribbs@us.ibm.com>
 v1.0, 2019-05-28
 :toc:
-:imagesdir: images
+:imagesdir: ../../assets/images
 
 == Helm
 Helm is a package manager built atop of Kubernetes.  Helm is used to steamline installation and management of Kubernetes applications.  Helm is good for sharing built applications across teams, managing kubernetes manifest files, and maintaining consistent builds through each release.  Helm use a tool called a Helm Chart to package together pre-configured Kubernetes resources for a given application.  Helm Charts contain at least two things, a description of the package (Chart.yaml) and the necessary kubernetes manifest files.

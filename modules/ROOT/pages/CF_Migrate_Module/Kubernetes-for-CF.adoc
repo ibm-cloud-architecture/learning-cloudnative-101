@@ -2,7 +2,7 @@
 Budi Darmawan <vbudi@us.ibm.com>
 v1.0 2019-07-10
 :toc:
-:imagesdir: images
+:imagesdir: ../../assets/images
 
 == Overview
 
