@@ -37,7 +37,7 @@ To manage the dependencies, we use Maven as our dependency management tool. `pom
 
 [big maroon]*Config*
 
-To store the config, we use `.properties` file. You can find it https://github.ibm.com/CASE/cloudnative_sample_app/blob/master/src/main/resources/application.properties[here].
+To store the config, we use `.properties` file. You can find it https://github.com/ibm-cloud-architecture/cloudnative_sample_app/blob/master/src/main/resources/application.properties[here].
 
 [big maroon]*Backing services*
 
