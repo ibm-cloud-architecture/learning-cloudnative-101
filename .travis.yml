@@ -1,42 +1,16 @@
-sudo: required
-services:
-  - docker
-addons:
-   apt:
-     sources:
-       - git-core
-     packages:
-       - git
-language: java
-jdk:
-  - openjdk8
-stages:
-- docker build
-jobs:
-  include:
-  - stage: docker build
-    services:
-    - docker
-    install:
-    - true
-    script:
-    - BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
-    - '[ $(git log --format=%B  $TRAVIS_COMMIT_RANGE | grep -i "#doc" | wc -l) -gt 0 ] && FORCE_DOC_GEN=0 || FORCE_DOC_GEN=1'
-    - MODIFIED_DOCS=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep -E '.*.adoc$' | wc -l)
-    - '[ $MODIFIED_DOCS -ge 1 ] && GENERATE_DOC=0 || GENERATE_DOC=1'
-    - 'if [ $FORCE_DOC_GEN == 0 ] || [ $GENERATE_DOC == 0 ]; then
-        git config user.name "Travis CI";
-        git config user.email "travis@travis.ibm.com";
-        git config remote.origin.fetch +refs/heads/*:refs/remotes/origin/*;
-        git fetch origin gh-pages;
-        git worktree add -b gh-pages gh-pages origin/gh-pages;
-        git remote add origin-pages https://${GH_USER}:${GH_TOKEN}@${GH_URL}/${GH_ORG}/${GH_REPO}.git > /dev/null 2>&1;
-        docker pull antora/antora:1.1.1;
-        docker run -v $TRAVIS_BUILD_DIR:/antora --rm -t antora/antora:1.1.1 --pull --stacktrace site.yml;
-        cd gh-pages;
-        sudo touch .nojekyll;
-        git add .;
-        git commit -m "Travis build: $TRAVIS_BUILD_NUMBER Documentation Updated";
-        git fetch;
-        git push --quiet --set-upstream origin-pages gh-pages;
-      fi'
+language: node_js
+node_js:
+  - 11
+script: npm run build
+branches:
+  only:
+  - master
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_url: github.ibm.com
+  github_token: $GITHUB_TOKEN
+  keep_history: false
+  local_dir: public
+  on:
+    branch: master
