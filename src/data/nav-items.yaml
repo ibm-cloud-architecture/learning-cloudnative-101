@@ -1,0 +1,62 @@
+- title: Overview
+  pages:
+    - path: /course-overview/
+- title: Prerequisites
+  pages:
+    - path: /prerequisites/
+- title: Reading
+  pages:
+    - title: Cloud Native
+      path: /cloud-native-overview/read/
+    - title: Cloud Native App Dev
+      path: /cloud-native-overview/appDev/
+    - title: Containers
+      path: /containers/read/
+    - title: Kubernetes
+      path: /kubernetes/read/
+    - title: Migrate Cloud Foundry to K8s
+      path: /cf-to-k8s/
+    - title: DevOps Best Practices
+      path: /devops/
+    - title: Continuous Integration (CI)
+      path: /continuous-integration/read/
+    - title: Continuous Deployment (CD)
+      path: /continuous-deployment/read/
+- title: Lectures
+  pages:
+    - title: Cloud Native
+      path: /cloud-native-overview/
+    - title: Containers
+      path: /containers/
+    - title: K8s Overview
+      path: /kubernetes/
+    - title: K8s Core Concepts
+      path: /kubernetes/core-concepts/
+    - title: K8s Configuration
+      path: /kubernetes/configuration/
+    - title: K8s Multi-Container Pods
+      path: /kubernetes/multi-container-pods/
+    - title: K8s Observability
+      path: /kubernetes/observability/
+    - title: K8s Pod Design
+      path: /kubernetes/pod-design/
+    - title: K8s Services & Networking
+      path: /kubernetes/services-networking/
+    - title: K8s State Persistence
+      path: /kubernetes/state-persistence/
+    - title: K8s Troubleshoot
+      path: /kubernetes/troubleshooting/
+    - title: Continuous Integration (CI)
+      path: /continuous-integration/
+    - title: Continuous Deployment (CD)
+      path: /continuous-deployment/
+- title: Projects
+  pages:
+    - title: CICD Project
+      path: /project-cicd/
+- title: Activities
+  pages:
+    - path: /activities/
+- title: Resources
+  pages:
+    - path: /resources/

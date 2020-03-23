@@ -1,0 +1,11 @@
+---
+title: Kubernetes Lab 7 - Cron Jobs
+---
+
+## Problem
+
+Your company has a simple data cleanup process that is run periodically for maintenance purposes. They would like to stop doing this manually in order to save time, so you have been asked to implement a cron job in the Kubernetes cluster to run this process. 
+ - Create a cron job called cleanup-cronjob using the `linuxacademycontent/data-cleanup:1` image. 
+ - Have the job run every minute with the following cron expression: `*/2 * * * *`.
+
+check `LAST-SCHEDULE` to see last time it ran

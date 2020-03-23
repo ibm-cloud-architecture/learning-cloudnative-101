@@ -1,0 +1,16 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  generateName: test-image-task-run-
+spec:
+  serviceAccountName: pipeline
+  pipelineRef:
+    name: test-build-push
+  serviceAccountName: pipeline
+  resources:
+    - name: source
+      resourceRef:
+        name: source
+    - name: image
+      resourceRef:
+        name: image

@@ -1,0 +1,41 @@
+---
+title: Continuous Integration Lecture
+description: Continuous Integration Lecture
+---
+
+<AnchorLinks>
+  <AnchorLink>Continuous Integration</AnchorLink>
+  <AnchorLink>References</AnchorLink>
+  <AnchorLink>Activities</AnchorLink>
+</AnchorLinks>
+
+## Continuous Integration
+
+Continuous Integration, Delivery, and Deployment are important devOps practices and we often hear a lot about them. These processes are valuable and ensures that the software is up to date timely.
+
+- **Continuous Integration** is an automation process which allows developers to integrate their work into a repository. When a developer pushes his work into the source code repository, it ensures that the software continues to work properly. It helps to enable collaborative development across the teams and also helps to identify the integration bugs sooner.
+- **Continuous Delivery** comes after Continuous Integration. It prepares the code for release. It automates the steps that are needed to deploy a build.
+- **Continuous Deployment** is the final step which succeeds Continuous Delivery. It automatically deploys the code whenever a code change is done. Entire process of deployment is automated.
+
+## Resources
+
+- Presentation: [Tekton Overview](/slides/04-Tekton-Overview.pdf)
+
+## Activities
+
+The continuous integration activities focus around Tekton the integration platform. These labs will show you how to build pipelines and test your code before deployment.
+
+These tasks assume that you have:
+ - Reviewed the continuous integration concept page.
+ - Installed Tekton into your cluster.
+
+| Task                            | Description         | Link        | Time    |
+| --------------------------------| ------------------  |:----------- |---------|
+| *** Walkthroughs ***                         |         |         |     |
+| Deploying Applications From Source |  Using OpenShift 4 | [S2I](https://learn.openshift.com/introduction/deploying-python/) | 20 min |
+| *** Try It Yourself ***                         |         |         |     |
+| Tekton Lab | Using Tekton to test new versions of applications. | [Tekton](../continuous-integration/activities/) | 30 min |
+
+
+
+Once you have completed these tasks, you will have an understanding of continuous integration and how to use Tekton to build a pipeline.

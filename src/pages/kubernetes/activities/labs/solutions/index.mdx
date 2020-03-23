@@ -1,0 +1,374 @@
+---
+title: Lab Solutions
+description: Solutions for Kubernetes Labs
+---
+# Solutions
+<Accordion>
+
+
+<AccordionItem title="Lab 1">
+
+    apiVersion: v1
+    kind: Pod
+    metadata:
+        name: nginx
+        namespace: web
+    spec:
+        containers:
+        - name: nginx
+            image: nginx
+            command: ["nginx"]
+            args: ["-g", "daemon off;", "-q"]
+            ports:
+            - containerPort: 80
+    
+</AccordionItem>
+
+<AccordionItem title="Lab 2">
+
+    
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+        name: candy-service-config
+    data:
+        candy.cfg: |-
+            candy.peppermint.power=100000000
+            candy.nougat-armor.strength=10
+   
+------------------------
+    
+    apiVersion: v1
+    kind: Secret
+    metadata:
+    name: db-password
+    stringData:
+    password: Kub3rn3t3sRul3s!
+    
+------------------------
+    
+    apiVersion: v1
+    kind: Pod
+    metadata:
+        name: candy-service
+    spec:
+        serviceAccountName: candy-svc
+        containers:
+        - name: candy-service
+            image: linuxacademycontent/candy-service:1
+            volumeMounts:
+            - name: config-volume
+                mountPath: /etc/candy-service
+            env:
+            - name: DB_PASSWORD
+            valueFrom:
+                secretKeyRef:
+                name: db-password
+                key: password
+            resources:
+            requests:
+                memory: "64Mi"
+                cpu: "250m"
+            limits:
+                memory: "128Mi"
+                cpu: "500m"
+    volumes:
+    - name: config-volume
+        configMap:
+        name: candy-service-config
+    
+</AccordionItem>
+
+<AccordionItem title="Lab 3">
+
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+    name: fruit-service-ambassador-config
+    data:
+    haproxy.cfg: |-
+        global
+            daemon
+            maxconn 256
+
+        defaults
+            mode http
+            timeout connect 5000ms
+            timeout client 50000ms
+            timeout server 50000ms
+
+        listen http-in
+            bind *:80
+            server server1 127.0.0.1:8775 maxconn 32
+    
+------------------------
+
+    apiVersion: v1
+    kind: Pod
+    metadata:
+    name: fruit-service
+    spec:
+    containers:
+    - name: legacy-fruit-service
+        image: linuxacademycontent/legacy-fruit-service:1
+    - name: haproxy-ambassador
+        image: haproxy:1.7
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: config-volume
+        mountPath: /usr/local/etc/haproxy
+    volumes:
+    - name: config-volume
+        configMap:
+        name: fruit-service-ambassador-config
+    
+------------------------
+    
+    apiVersion: v1
+    kind: Pod
+    metadata:
+    name: busybox
+    spec:
+    containers:
+    - name: myapp-container
+        image: radial/busyboxplus:curl
+        command: ['sh', '-c', 'while true; do sleep 3600; done']
+
+   Check it with
+   
+    kubectl exec busybox -- curl $(kubectl get pod fruit-service -o=jsonpath='{.status.podIP}'):80
+    
+</AccordionItem>
+
+<AccordionItem title="Lab 4">
+
+    apiVersion: v1
+    kind: Pod
+    metadata:
+        name: candy-service
+    spec:
+    containers:
+    - name: candy-service
+        image: linuxacademycontent/candy-service:2
+        livenessProbe:
+        httpGet:
+            path: /healthz
+            port: 8081
+        readinessProbe:
+        httpGet:
+            path: /
+            port: 80
+
+</AccordionItem>
+
+<AccordionItem title="Lab 5">
+
+   Check `STATUS` column for not Ready
+
+    kubectl get pods --all-namespaces
+
+
+   Pod with most cpu on that namespace
+
+    kubectl top pod -n <namespace>
+
+
+   Save broken pod summary in json format
+    
+    kubectl get pod <pod name> -n <namespace> -o json > /home/cloud_user/debug/broken-pod-summary.json
+    
+
+   Save logs for borken pod
+    
+    kubectl logs <pod name> -n <namespace> > /home/cloud_user/debug/broken-pod-logs.log
+    
+
+   Fix broken pod, Check Events
+    
+    kubectl describe pod <pod name> -n <namespace>
+    
+
+   To fix probe, can't kubectl edit, need to delete and recreate pod
+
+    kubectl get pod <pod name> -n <namespace> -o yaml --export > broken-pod.yml
+    
+
+   Delete pod
+    
+    kubectl delete pod <pod name> -n <namespace>
+    
+   Can also use `kubectl replace`
+
+   Edit yaml, and apply
+    
+    kubectl apply -f broken-pod.yml -n <namespace>
+    
+
+   Verify
+
+    kubectl get pod <pod name> -n <namespace>
+</AccordionItem>
+
+<AccordionItem title="Lab 6">
+
+   Update the deployment to the new version like so:
+        
+    kubectl set image deployment/jedi-deployment jedi-ws=bitnamy/nginx:1.18.1 --record
+ 
+   Check the progress of the rolling update:
+        
+    kubectl rollout status deployment/jedi-deployment   
+
+   In another terminal window
+    
+    kubectl get pods -w
+    
+   Get a list of previous revisions.
+        
+    kubectl rollout history deployment/jedi-deployment
+    
+   Undo the last revision.
+
+    kubectl rollout undo deployment/jedi-deployment
+
+   Check the status of the rollout.
+    
+    kubectl rollout status deployment/jedi-deployment
+
+</AccordionItem>
+
+<AccordionItem title="Lab 7">
+
+    apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+        name: cleanup-cronjob
+    spec:
+    schedule: "*/1 * * * *"
+    jobTemplate:
+        spec:
+        template:
+            spec:
+            containers:
+            - name: data-cleanup
+                image: linuxacademycontent/data-cleanup:1
+            restartPolicy: OnFailure
+
+------------------------
+
+    kubectl get cronjob cleanup-cronjob
+
+</AccordionItem>
+
+<AccordionItem title="Lab 8">
+
+    apiVersion: v1
+    kind: Service
+    metadata:
+        name: jedi-svc
+    spec:
+        type: NodePort
+        selector:
+            app: jedi
+        ports:
+        - protocol: TCP
+            port: 80
+            targetPort: 8080
+    
+------------------------
+
+    apiVersion: v1
+    kind: Service
+    metadata:
+    name: yoda-svc
+    spec:
+    type: ClusterIP
+    selector:
+        app: yoda
+    ports:
+    - protocol: TCP
+        port: 80
+        targetPort: 8080
+
+</AccordionItem>
+
+<AccordionItem title="Lab 9">
+
+    apiVersion: networking.k8s.io/v1
+    kind: NetworkPolicy
+    metadata:
+    name: my-network-policy
+    spec:
+    podSelector:
+        matchLabels:
+        app: secure-app
+    policyTypes:
+    - Ingress
+    ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+            allow-access: "true"
+    
+</AccordionItem>
+
+<AccordionItem title="Lab 10">
+
+        kind: PersistentVolume
+        apiVersion: v1
+        metadata:
+        name: mysql-pv
+        spec:
+        storageClassName: localdisk
+        capacity:
+            storage: 1Gi
+        accessModes:
+            - ReadWriteOnce
+        hostPath:
+            path: "/mnt/data"
+
+------------------------
+
+        apiVersion: v1
+        kind: PersistentVolumeClaim
+        metadata:
+        name: mysql-pv-claim
+        spec:
+        storageClassName: localdisk
+        accessModes:
+            - ReadWriteOnce
+        resources:
+            requests:
+            storage: 500Mi
+        
+------------------------
+
+        apiVersion: v1
+        kind: Pod
+        metadata:
+        name: mysql-pod
+        spec:
+        containers:
+        - name: mysql
+            image: mysql:5.6
+            ports:
+            - containerPort: 3306
+            env:
+            - name: MYSQL_ROOT_PASSWORD
+            value: password
+            volumeMounts:
+            - name: mysql-storage
+            mountPath: /var/lib/mysql
+        volumes:
+        - name: mysql-storage
+            persistentVolumeClaim:
+            claimName: mysql-pv-claim
+        
+------------------------
+
+        verify via `ls /mnt/data` on node
+</AccordionItem>
+
+</Accordion>
+

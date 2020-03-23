@@ -1,0 +1,29 @@
+---
+title: Kubernetes Lab 5 - Debugging
+---
+
+## Problem
+
+You recently got a new job at a company that has a robust Kubernetes infrastructure used by multiple teams. Congratulations! However, you were just told by the team that there is a problem with a service they use in the cluster and they want you to fix it. Unfortunately, no one is able to give you much information about the service. You don't even know what it is called or where it is located. All you know is there is likely a pod failing somewhere.
+
+Your team has asked you to take the lead in debugging the issue. They want you to locate the problem and collect some relevant debugging information that will help the team analyze the problem and correct it in the future. They also want you to go ahead and get the broken pod running again.
+
+You will need to do the following:
+
+- Find the broken pod and save the pod name to the file `/home/cloud_user/debug/broken-pod-name.txt`.
+- *In the same namespace as the broken pod*, find out which pod is using the most CPU and output the name of that pod to the file `/home/cloud_user/debug/high-cpu-pod-name.txt`.
+- Get the broken pod's summary data in the JSON format and output it to the file `/home/cloud_user/debug/broken-pod-summary.json`.
+- Get the broken pod's container logs and output them to the file `/home/cloud_user/debug/broken-pod-logs.log`.
+- Fix the problem with the broken pod so that it enters the `Running` state.
+
+Reset the environment:
+```
+minikube delete
+minikube start
+```
+
+Setup the environment:
+```
+kubectl apply -f https://gist.githubusercontent.com/csantanapr/87df4292e94441617707dae5de488cf4/raw/cb515f7bae77a3f0e76fdc7f6aa0f4e89cc5fec7/lab-5-debug-k8s-setup.yaml
+```
+

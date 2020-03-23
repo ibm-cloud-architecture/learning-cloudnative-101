@@ -1,0 +1,27 @@
+---
+title: Kubernetes Lab 7 - Cron Jobs
+---
+
+## Solution
+
+```yaml
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: cleanup-cronjob
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: data-cleanup
+            image: linuxacademycontent/data-cleanup:1
+          restartPolicy: OnFailure
+```
+
+
+```
+kubectl get cronjob cleanup-cronjob
+```

@@ -1,0 +1,29 @@
+---
+title: Kubernetes Lab 8 - Services
+---
+
+## Problem
+
+Our company has just deployed two components of a web application to a Kubernetes cluster, using deployments with multiple replicas. They need a way to provide dynamic network access to these replicas so that there will be uninterrupted access to the components whenever replicas are created, removed, and replaced. One deployment is called `jedi-deployment`, an jedi provider that needs to be accessible from outside the cluster. The other is called `yoda-deployment`, and it is a component designed to be accessed only by other pods within the cluster.
+
+- The team wants you to create two services to expose these two components.
+- Examine the two deployments, and create two services that meet the following criteria:
+
+**jedi-svc**
+ - The service name is `jedi-svc`.
+ - The service exposes the pod replicas managed by the deployment named `jedi-deployment`.
+ - The service listens on port `80` and its targetPort matches the port exposed by the pods.
+ - The service type is `NodePort`.
+
+**yoda-svc**
+ - The service name is `yoda-svc`.
+ - The service exposes the pod replicas managed by the deployment named `yoda-deployment`.
+ - The service listens on port `80` and its targetPort matches the port exposed by the pods.
+ - The service type is `ClusterIP`.
+
+Setup environmet:
+```
+kubectl apply -f https://gist.githubusercontent.com/csantanapr/87df4292e94441617707dae5de488cf4/raw/cb515f7bae77a3f0e76fdc7f6aa0f4e89cc5fec7/lab-8-service-setup.yaml
+```
+
+

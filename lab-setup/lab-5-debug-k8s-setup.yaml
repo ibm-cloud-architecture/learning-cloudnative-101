@@ -1,0 +1,19 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vader
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jedi-service
+  namespace: vader
+spec:
+  containers:
+    - name: the-container
+      image: linuxacademycontent/candy-service:2
+      livenessProbe:
+        httpGet:
+          path: /health
+          port: 8081

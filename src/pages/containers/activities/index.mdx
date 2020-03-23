@@ -1,0 +1,552 @@
+---
+title: Lab - Docker
+description: Lab introducting docker concepts
+---
+
+<AnchorLinks>
+  <AnchorLink>Introduction</AnchorLink>
+  <AnchorLink>Prerequisites</AnchorLink>
+  <AnchorLink>Working with docker</AnchorLink>
+  <AnchorLink>Get the sample application</AnchorLink>
+  <AnchorLink>Run the application on Docker</AnchorLink>
+    <AnchorLinks small>
+      <AnchorLink>Build the application</AnchorLink>
+      <AnchorLink>Build the docker image</AnchorLink>
+      <AnchorLink>Run the docker container</AnchorLink>
+      <AnchorLink>Access the application</AnchorLink>
+      <AnchorLink>Pushing an image to a Registry</AnchorLink>
+      <AnchorLink>Clean Up</AnchorLink>
+      <AnchorLink>Pulling an image from the registry</AnchorLink>
+    </AnchorLinks>
+  <AnchorLink>Run the application on Docker using multi-stage build</AnchorLink>
+    <AnchorLinks small>
+      <AnchorLink>Build the docker image</AnchorLink>
+      <AnchorLink>Run the docker container</AnchorLink>
+      <AnchorLink>Access the application</AnchorLink>
+      <AnchorLink>Clean Up</AnchorLink>
+    </AnchorLinks>
+  <AnchorLink>Conclusion</AnchorLink>
+</AnchorLinks>
+
+## Introduction
+
+In this lab, you will learn about how to use docker and how to run applications using docker.
+
+## Prerequisites
+
+- You need [Java](https://www.java.com/en/) installed on your environment. You can download it [here](https://www.java.com/download/). Please install the latest version which is Java Version 8. Make sure you set `JAVA_HOME` environment variable. You can verify the version after installation using `java -version`.
+- Create a [DockerHub account](https://hub.docker.com/). This account is needed to push images to docker registry. Also create a repository following the instructions [here](https://docs.docker.com/docker-hub/repos/).
+- You need to install [Docker](https://www.docker.com/) in your environment. Follow the instructions [here](https://docs.docker.com/docker-for-mac/install/) to install it on Mac and [here](https://docs.docker.com/docker-for-windows/install/) to install it on Windows.
+
+## Working with docker
+
+Before proceeding, make sure docker is properly installed on your system. 
+
+1. Please verify your Docker by looking up the version.
+
+If it is installed, you will see a version number something similar to below.
+
+```bash
+Docker version 19.03.0-beta3, build c55e026
+```
+
+** Running a hello-world container **
+
+Let us start with a `hello-world` container. 
+
+2. run a `hello-world` container.
+
+If it is successfully run, you will see something like below.
+
+```bash
+$ 
+Unable to find image 'hello-world:latest' locally
+latest: Pulling from library/hello-world
+1b930d010525: Pull complete
+Digest: sha256:41a65640635299bab090f783209c1e3a3f11934cf7756b09cb2f1e02147c6ed8
+Status: Downloaded newer image for hello-world:latest
+
+Hello from Docker!
+This message shows that your installation appears to be working correctly.
+
+To generate this message, Docker took the following steps:
+ 1. The Docker client contacted the Docker daemon.
+ 2. The Docker daemon pulled the "hello-world" image from the Docker Hub.
+    (amd64)
+ 3. The Docker daemon created a new container from that image which runs the
+    executable that produces the output you are currently reading.
+ 4. The Docker daemon streamed that output to the Docker client, which sent it
+    to your terminal.
+
+To try something more ambitious, you can run an Ubuntu container with:
+ $ docker run -it ubuntu bash
+
+Share images, automate workflows, and more with a free Docker ID:
+ https://hub.docker.com/
+
+For more examples and ideas, visit:
+ https://docs.docker.com/get-started/
+```
+
+Since, `hello-world` image is not existing locally, it is pulled from `library/hello-world`. But if it is already existing, docker will not pull it every time but rather use the existing one.
+
+This image is pulled from https://hub.docker.com/_/hello-world. Docker hub is a repository used to store docker images. Similarly, you can use your own registries to store images. For example, IBM Cloud provides you a container registry.
+
+**Verifying the hello-world image**
+
+3. Now verify if an image is existing in your system locally.
+
+You will then see something like below.
+
+```bash
+$ 
+REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
+hello-world         latest              fce289e99eb9        5 months ago        1.84kB
+```
+
+## Get the sample application
+
+To get the sample application, you will need to clone it from github.
+
+```bash
+# Clone the sample app
+git clone https://github.com/ibm-cloud-architecture/cloudnative_sample_app.git
+
+# Go to the project's root folder
+cd cloudnative_sample_app/
+```
+
+## Run the application on Docker
+
+### Build the application
+
+To build the application, use the below command.
+
+```bash
+./mvnw install
+```
+
+You will notice something at the end like below once done.
+
+```bash
+[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ cloudnativesampleapp ---
+[INFO] Installing /Users/user@ibm.com/cloudnative_sample_app/target/cloudnativesampleapp-1.0-SNAPSHOT.jar to /Users/user@ibm.com/.m2/repository/projects/cloudnativesampleapp/1.0-SNAPSHOT/cloudnativesampleapp-1.0-SNAPSHOT.jar
+[INFO] Installing /Users/user@ibm.com/cloudnative_sample_app/pom.xml to /Users/user@ibm.com/.m2/repository/projects/cloudnativesampleapp/1.0-SNAPSHOT/cloudnativesampleapp-1.0-SNAPSHOT.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  34.714 s
+[INFO] Finished at: 2019-06-28T11:11:06-05:00
+[INFO] ------------------------------------------------------------------------
+```
+
+### Build the docker image
+
+Let's take look at the docker file before building it.
+
+```
+FROM openliberty/open-liberty:springBoot2-ubi-min as staging
+USER root
+COPY target/cloudnativesampleapp-1.0-SNAPSHOT.jar /staging/fatClinic.jar
+
+RUN springBootUtility thin \
+ --sourceAppPath=/staging/fatClinic.jar \
+ --targetThinAppPath=/staging/thinClinic.jar \
+ --targetLibCachePath=/staging/lib.index.cache
+
+FROM openliberty/open-liberty:springBoot2-ubi-min
+USER root
+COPY --from=staging /staging/lib.index.cache /opt/ol/wlp/usr/shared/resources/lib.index.cache
+COPY --from=staging /staging/thinClinic.jar /config/dropins/spring/thinClinic.jar
+
+RUN chown -R 1001.0 /config && chmod -R g+rw /config
+RUN chown -R 1001.0 /opt/ol/wlp/usr/shared/resources/lib.index.cache && chmod -R g+rw /opt/ol/wlp/usr/shared/resources/lib.index.cache
+
+USER 1001
+```
+
+- Using the `FROM` instruction, we provide the name and tag of an image that should be used as our base. This must always be the first instruction in the Dockerfile.
+- `USER` instruction sets the username (or UID).
+- Using `COPY` instruction, we copy new contents from the source filesystem to the container filesystem.
+- `RUN` instruction executes the commands.
+
+Once, you have the docker file ready, the next step is to build it. The `build` command allows you to build a docker image which you can later run as a container.
+
+4. Build the docker file with the `image_name` of `greeting` and give it a `image_tag` of `v1.0.0` and build it using the current context.
+
+You will see something like below:
+
+``` bash
+$ <command>
+Sending build context to Docker daemon  22.17MB
+Step 1/11 : FROM openliberty/open-liberty:springBoot2-ubi-min as staging
+springBoot2-ubi-min: Pulling from openliberty/open-liberty
+949de0c45264: Pull complete
+7e9d54341c0e: Pull complete
+.
+.
+.
+Step 6/11 : USER root
+ ---> Using cache
+ ---> 9e891aecf123
+Step 7/11 : COPY --from=staging /staging/lib.index.cache /opt/ol/wlp/usr/shared/resources/lib.index.cache
+ ---> 0e27922ad7a6
+Step 8/11 : COPY --from=staging /staging/thinClinic.jar /config/dropins/spring/thinClinic.jar
+ ---> 93bd8360110b
+Step 9/11 : RUN chown -R 1001.0 /config && chmod -R g+rw /config
+ ---> Running in ea42c7b6f92a
+Removing intermediate container ea42c7b6f92a
+ ---> 764ef4196d1b
+Step 10/11 : RUN chown -R 1001.0 /opt/ol/wlp/usr/shared/resources/lib.index.cache && chmod -R g+rw /opt/ol/wlp/usr/shared/resources/lib.index.cache
+ ---> Running in 2b1738422b89
+Removing intermediate container 2b1738422b89
+ ---> af170c7af294
+Step 11/11 : USER 1001
+ ---> Running in 98fc928c9778
+Removing intermediate container 98fc928c9778
+ ---> 89bd7032fdee
+Successfully built 89bd7032fdee
+Successfully tagged greeting:v1.0.0
+```
+
+5. Next, verify your newly built image
+
+The output will be as follows.
+
+```bash
+$ <command>
+REPOSITORY                           TAG                   IMAGE ID            CREATED             SIZE
+greeting                             v1.0.0                89bd7032fdee        51 seconds ago      402MB
+openliberty/open-liberty             springBoot2-ubi-min   bcfcb2c5ce16        6 days ago          366MB
+hello-world                          latest                f9cad508cb4c        5 months ago        1.84kB
+```
+
+### Run the docker container
+
+Now let's try running the docker container. Run it with the following parameters:
+
+6. Expose port `9080`. Run it in the background in detached mode. Give the container the name of `greeting`.
+
+Once done, you will have something like below.
+
+```bash
+$ <command>
+bc2dc95a6bd1f51a226b291999da9031f4443096c1462cb3fead3df36613b753
+```
+
+Also, docker cannot create two containers with the same name. If you try to run the same container having the same name again, you will see something like below.
+
+```bash
+$ <command>
+docker: Error response from daemon: Conflict. The container name "/greeting" is already in use by container "a74b91789b29af6e7be92b30d0e68eef852bfb24336a44ef1485bb58becbd664". You have to remove (or rename) that container to be able to reuse that name.
+See 'docker run --help'.
+```
+
+It is a good practice to name your containers. Naming helps you to discover your service easily.
+
+7. List all the running containers.
+
+You will see something like below.
+
+```bash
+$ <command>
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                              NAMES
+bc2dc95a6bd1        greeting:v1.0.0     "/opt/ol/helpers/run…"   18 minutes ago      Up 18 minutes       0.0.0.0:9080->9080/tcp, 9443/tcp   greeting
+```
+
+8. Let's inspect the running container.
+
+By inspecting the container, you can access detailed information about the container. By using this command, you get to know the details about network settings, volumes, configs, state etc.
+
+If we consider our container, it is as follows. You can see lot of information about the `greeting` container.
+
+```bash
+$ <command>
+[
+    {
+        "Id": "bc2dc95a6bd1f51a226b291999da9031f4443096c1462cb3fead3df36613b753",
+        "Created": "2019-08-30T16:56:40.2081539Z",
+        "Path": "/opt/ol/helpers/runtime/docker-server.sh",
+        "Args": [
+            "/opt/ol/wlp/bin/server",
+            "run",
+            "defaultServer"
+        ],
+        "State": {
+            "Status": "running",
+            "Running": true,
+            "Paused": false,
+            "Restarting": false,
+            "OOMKilled": false,
+            "Dead": false,
+            "Pid": 27548,
+            "ExitCode": 0,
+            "Error": "",
+            "StartedAt": "2019-08-30T16:56:41.0927889Z",
+            "FinishedAt": "0001-01-01T00:00:00Z"
+        },
+        ..........
+        ..........
+        ..........
+    }
+]
+```
+
+9. Get the logs of the `greeting` container.
+
+It helps you to access the logs of your container. It allows you to debug the container if it fails. It also lets you to know what is happening with your application.
+
+At the end, you will see something like below.
+
+```bash
+.   ____          _            __ _ _
+/\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+\\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+'  |____| .__|_| |_|_| |_\__, | / / / /
+=========|_|==============|___/=/_/_/_/
+:: Spring Boot ::        (v2.1.7.RELEASE)
+2019-08-30 16:57:01.494  INFO 1 --- [ecutor-thread-5] application.SBApplication                : Starting SBApplication on bc2dc95a6bd1 with PID 1 (/opt/ol/wlp/usr/servers/defaultServer/dropins/spring/thinClinic.jar started by default in /opt/ol/wlp/output/defaultServer)
+2019-08-30 16:57:01.601  INFO 1 --- [ecutor-thread-5] application.SBApplication                : No active profile set, falling back to default profiles: default
+[AUDIT   ] CWWKT0016I: Web application available (default_host): http://bc2dc95a6bd1:9080/
+2019-08-30 16:57:09.641  INFO 1 --- [cutor-thread-25] o.s.web.context.ContextLoader            : Root WebApplicationContext: initialization completed in 7672 ms
+2019-08-30 16:57:12.279  INFO 1 --- [ecutor-thread-5] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 15 endpoint(s) beneath base path '/actuator'
+2019-08-30 16:57:12.974  INFO 1 --- [ecutor-thread-5] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2019-08-30 16:57:13.860  INFO 1 --- [ecutor-thread-5] d.s.w.p.DocumentationPluginsBootstrapper : Context refreshed
+2019-08-30 16:57:13.961  INFO 1 --- [ecutor-thread-5] d.s.w.p.DocumentationPluginsBootstrapper : Found 1 custom documentation plugin(s)
+2019-08-30 16:57:14.020  INFO 1 --- [ecutor-thread-5] s.d.s.w.s.ApiListingReferenceScanner     : Scanning for api listing references
+2019-08-30 16:57:14.504  INFO 1 --- [ecutor-thread-5] application.SBApplication                : Started SBApplication in 17.584 seconds (JVM running for 33.368)
+[AUDIT   ] CWWKZ0001I: Application thinClinic started in 21.090 seconds.
+[AUDIT   ] CWWKF0012I: The server installed the following features: [el-3.0, jsp-2.3, servlet-4.0, springBoot-2.0, ssl-1.0, transportSecurity-1.0, websocket-1.1].
+[AUDIT   ] CWWKF0011I: The defaultServer server is ready to run a smarter planet. The defaultServer server started in 33.103 seconds.
+```
+
+This shows that the Spring Boot application is successfully started.
+
+### Access the application
+
+- To access the application, open the browser and access http://localhost:9080/greeting?name=John.
+
+You will see something like below.
+
+```bash
+{"id":2,"content":"Welcome to Cloudnative bootcamp !!! Hello, John :)"}
+```
+
+**Container Image Registry**
+
+Container Image Registry is a place where you can store the container images. They can be public or private registries. They can be hosted by third party as well. In this lab, we are using DockerHub.
+
+### Pushing an image to a Registry
+
+Let us now push the image to docker hub registry. Before pushing the image to the registry, one needs to login.
+
+10. Login to Docker Hub using your credentials.
+
+Once logged in we need to take the image for the registry.
+
+11. Tag your image for the image registry. Using the `same name and tag from before`. (*NOTE: the command has both the source tag and repository destination tag in it.*)
+
+12. Now push the image to the registry. This allows you to share images to a registry.
+
+If everything goes fine, you will see something like below.
+
+```bash
+$ <command>
+The push refers to repository [docker.io/<repository_name>/greeting]
+2e4d09cd03a2: Pushed
+d862b7819235: Pushed
+a9212239031e: Pushed
+4be784548734: Pushed
+a43c287826a1: Mounted from library/ibmjava
+e936f9f1df3e: Mounted from library/ibmjava
+92d3f22d44f3: Mounted from library/ibmjava
+10e46f329a25: Mounted from library/ibmjava
+24ab7de5faec: Mounted from library/ibmjava
+1ea5a27b0484: Mounted from library/ibmjava
+v1.0.0: digest: sha256:21c2034646a31a18b053546df00d9ce2e0871bafcdf764f872a318a54562e6b4 size: 2415
+```
+
+Once the push is successful, your image will be residing in the registry.
+
+### Clean Up
+
+13. Stop the `greeting` container.
+
+14. Remove the container.
+
+15. Remove the image. (*NOTE: You will need the image_id to remove it.*)
+
+### Pulling an image from the registry
+
+Sometimes, you may need the images that are residing on your registry. Or you may want to use some public images out there. Then, we need to pull the image from the registry.
+
+16. Pull the image `greeting` from the registry, 
+
+If it successfully got pulled, we will see something like below.
+
+```bash
+ddcb5f219ce2: Pull complete
+e3371bbd24a0: Pull complete
+49d2efb3c01b: Pull complete
+Digest: sha256:21c2034646a31a18b053546df00d9ce2e0871bafcdf764f872a318a54562e6b4
+Status: Downloaded newer image for <repository_name>/greeting:v1.0.0
+docker.io/<repository_name>/greeting:v1.0.0
+```
+
+## Run the application on Docker using multi-stage build
+
+In this, building the application is a part of the docker image. It automatically does it for you. You need not run `mvn install` explicitly.
+
+### Build the docker image
+
+Let's take look at the docker file before building it.
+
+```
+# Build stage - could use maven or our image
+FROM maven:3.3-jdk-8 as builder
+
+# Creating Work directory
+ENV BUILD_DIR=/usr/src/app/
+RUN mkdir $BUILD_DIR
+WORKDIR $BUILD_DIR
+
+# Reuse local .m2. if not all the dependencies will be always downloaded
+# This can be removed if you want to
+VOLUME ${HOME}/.m2:/root/.m2
+ADD . /usr/src/app
+
+RUN bash -c " mvn clean install"
+
+FROM openliberty/open-liberty:springBoot2-ubi-min as staging
+USER root
+
+# Create app directory
+ENV APP_HOME=/app
+WORKDIR $APP_HOME
+
+# Copy jar file over from builder stage
+COPY --from=builder /usr/src/app/target/cloudnativesampleapp-1.0-SNAPSHOT.jar $APP_HOME
+RUN mv ./cloudnativesampleapp-1.0-SNAPSHOT.jar app.jar
+
+RUN springBootUtility thin \
+ --sourceAppPath=app.jar \
+ --targetThinAppPath=/staging/thinClinic.jar \
+ --targetLibCachePath=/staging/lib.index.cache
+
+FROM openliberty/open-liberty:springBoot2-ubi-min
+USER root
+COPY --from=staging /staging/lib.index.cache /opt/ol/wlp/usr/shared/resources/lib.index.cache
+COPY --from=staging /staging/thinClinic.jar /config/dropins/spring/thinClinic.jar
+
+RUN chown -R 1001.0 /config && chmod -R g+rw /config
+RUN chown -R 1001.0 /opt/ol/wlp/usr/shared/resources/lib.index.cache && chmod -R g+rw /opt/ol/wlp/usr/shared/resources/lib.index.cache
+
+USER 1001
+```
+
+This Dockerfile leverages multi-stage builds, which lets you create multiple stages in your Dockerfile to do certain tasks.
+
+In our case, we have two stages.
+
+- The first one uses `maven:3.3-jdk-8` as its base image to download and build the project and its dependencies using Maven.
+- The second stage uses `openliberty/open-liberty:springBoot2-ubi-min` as its base image to run the compiled code from the previous stage.
+
+The advantage of using the multi-stage builds approach is that the resulting image only uses the base image of the last stage. Meaning that in our case, we will only end up with the `openliberty/open-liberty:springBoot2-ubi-min` as our base image, which is much tinier than having an image that has both Maven and the JRE.
+
+By using the multi-stage builds approach when it makes sense to use it, you will end up with much lighter and easier to maintain images, which can save you space on your Docker Registry. Also, having tinier images usually means less resource consumption on your worker nodes, which can result cost-savings.
+
+To build the docker image, run the below command.
+
+```bash
+$ docker build -f Dockerfile.multistage -t greeting:v2.0.0 .
+```
+
+You will see something like below.
+
+```bash
+$ docker build -f Dockerfile.multistage -t greeting:v2.0.0 .
+Sending build context to Docker daemon  22.17MB
+Step 1/21 : FROM maven:3.3-jdk-8 as builder
+3.3-jdk-8: Pulling from library/maven
+6d827a3ef358: Pull complete
+2726297beaf1: Pull complete
+e4cf3e9f705c: Pull complete
+3733107c5c01: Pull complete
+Digest: sha256:18e8bd367c73c93e29d62571ee235e106b18bf6718aeb235c7a07840328bba71
+Status: Downloaded newer image for maven:3.3-jdk-8
+ ---> 9997d8483b2f
+Step 2/21 : ENV BUILD_DIR=/usr/src/app/
+ ---> Running in 02c2c0bdb8bf
+Removing intermediate container 02c2c0bdb8bf
+ ---> f09a7e2e03e7
+Step 3/21 : RUN mkdir $BUILD_DIR
+ ---> Running in af3141c3e1fc
+Removing intermediate container af3141c3e1fc
+ ---> 98aee6a73219
+[INFO] Scanning for projects...
+Downloading: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/2.1.7.RELEASE/spring-boot-starter-parent-2.1.7.RELEASE.pom
+Downloaded: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/2.1.7.RELEASE/spring-boot-starter-parent-2.1.7.RELEASE.pom (10 KB at 10.4 KB/sec)
+.................
+Step 20/21 : RUN chown -R 1001.0 /opt/ol/wlp/usr/shared/resources/lib.index.cache && chmod -R g+rw /opt/ol/wlp/usr/shared/resources/lib.index.cache
+ ---> Running in ae77279b238c
+Removing intermediate container ae77279b238c
+ ---> 74640a653475
+Step 21/21 : USER 1001
+ ---> Running in 01c24024899a
+Removing intermediate container 01c24024899a
+ ---> 55240d6d8edc
+Successfully built 55240d6d8edc
+Successfully tagged greeting:v2.0.0
+```
+
+17. Verify the image was successfully built with the new tag of `2.0.0`.
+
+18. Run the newly built image in a docker container with the same parameters
+
+19. List all the running containers,
+
+
+You will have something like below.
+
+```bash
+$ <command>
+CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                              NAMES
+baf6f41b3ab7        greeting:v2.0.0     "/opt/ol/helpers/run…"   26 seconds ago      Up 25 seconds       0.0.0.0:9080->9080/tcp, 9443/tcp   greeting_multistage
+```
+
+20. Inspect the running container.
+
+21. Get the Logs of that container.
+
+### Access the application
+
+- To access the application, open the browser and access http://localhost:9080/greeting?name=John.
+
+You will see something like below.
+
+```bash
+{"id":2,"content":"Welcome to Cloudnative bootcamp !!! Hello, John :)"}
+```
+
+### Clean Up
+
+22. Stop the container.
+
+23. Remove the container.
+
+24. Remove the image.
+
+25. Verify the image deletion.
+
+## Conclusion
+
+You have successfully completed this lab! Let's take a look at what you learned and did today:
+
+- Learned about Dockerfile.
+- Learned about docker images.
+- Learned about docker containers.
+- Learned about multi-stage docker builds.
+- Ran the Greetings service on Docker.
+
+Congratulations !!!

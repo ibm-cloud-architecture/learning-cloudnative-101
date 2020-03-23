@@ -1,0 +1,71 @@
+---
+title: Containers Lecture
+description: Containers Lecture
+---
+
+<AnchorLinks>
+  <AnchorLink>Containers</AnchorLink>
+  <AnchorLink>Activities</AnchorLink>
+</AnchorLinks>
+
+# Containers
+
+Containers are a standard way to package an application and all its dependencies so that it can be moved between environments and run without change. They work by hiding the differences between applications inside the container so that everything outside the container can be standardized.
+
+For example, Docker created standard way to create images for Linux Containers.
+
+## Resources
+
+- Presentation: [Containers Basics](/slides/02-Containers-Basics.pdf)
+
+## References
+
+### Docker Commands
+
+Below are some commands we use often on Docker.
+
+```
+# Know docker version
+docker -version
+
+# Run a container
+docker run <image>
+
+# List containers running
+docker ps
+
+# Stop a container
+docker stop <container-name|container-id>
+
+# Remove a container
+docker rm <container-name|container-id>
+
+# Login into registry
+docker login
+
+# Build an image
+docker build <image_name>:<tag> .
+
+# Pull the image
+docker pull <image_name>:<tag>
+
+# Push an image
+docker push <image_name>:<tag>
+
+# List images
+docker images
+```
+
+## Activities
+
+| Task                            | Description         | Link        | Time    |
+| --------------------------------| ------------------  |:----------- |---------|
+| *** Walkthroughs ***                         |         |         |     |
+| What is a Container? | A look under the the covers at what is a Linux Container? | <a href="https://www.katacoda.com/courses/container-runtimes/what-is-a-container" target="_blank">Understand Containers</a> | 10 min |
+| What is an Image? | A look under the the covers at what is a Linux Container Image? | <a href="https://www.katacoda.com/courses/container-runtimes/what-is-a-container-image" target="_blank">Container Images</a> | 10 min |
+| Docker Basics | Set of walkthroughs that cover docker basics | <a href="https://www.katacoda.com/courses/docker" target="_blank">Docker Basics</a> | 10 min |
+| *** Try It Yourself ***                         |         |         |     |
+| Docker Lab | Running a Sample Application on Docker | [Docker Lab](./containers/activities/) | 30 min |
+
+
+Once you have completed these tasks, you should have a base understanding of containers and how to use Docker.

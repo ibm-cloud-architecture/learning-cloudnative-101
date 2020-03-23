@@ -1,0 +1,52 @@
+---
+title: Kubernetes Lab 5 - Debugging
+---
+
+## Solution
+
+Check `STATUS` column for not Ready
+```
+kubectl get pods --all-namespaces
+```
+
+Pod with most cpu on that namespace
+```
+kubectl top pod -n <namespace>
+```
+
+Save broken pod summary in json format
+```
+kubectl get pod <pod name> -n <namespace> -o json > /home/cloud_user/debug/broken-pod-summary.json
+```
+
+Save logs for borken pod
+```
+kubectl logs <pod name> -n <namespace> > /home/cloud_user/debug/broken-pod-logs.log
+```
+
+Fix broken pod, Check Events
+```
+kubectl describe pod <pod name> -n <namespace>
+```
+
+To fix probe, can't kubectl edit, need to delete and recreate pod
+```
+kubectl get pod <pod name> -n <namespace> -o yaml --export > broken-pod.yml
+```
+
+Delete pod
+```
+kubectl delete pod <pod name> -n <namespace>
+```
+
+Can also use `kubectl replace`
+
+Edit yaml, and apply
+```
+kubectl apply -f broken-pod.yml -n <namespace>
+```
+
+Verify
+```
+kubectl get pod <pod name> -n <namespace>
+```

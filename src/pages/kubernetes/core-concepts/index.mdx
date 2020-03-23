@@ -1,0 +1,124 @@
+---
+title: Kubernetes Core Concepts
+description: Core Concepts of Kubernetes
+---
+
+<AnchorLinks>
+  <AnchorLink>Kubernetes API Primitives</AnchorLink>
+  <AnchorLink>Creating Pods</AnchorLink>
+  <AnchorLink>Namespaces</AnchorLink>
+  <AnchorLink>Activities</AnchorLink>
+</AnchorLinks>
+
+
+# Kubernetes API Primitives
+
+Kubernetes API primitive, also known as Kubernetes objects, are the basic building blocks of any application running in Kubernetes
+
+Examples:
+- Pod
+- Node
+- Service
+- ServiceAccount
+
+Two primary members
+- Spec, desired state
+- Status, current state
+
+## Resources
+- https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/
+- https://kubernetes.io/docs/tutorials/kubernetes-basics/
+
+
+## References
+```
+kubectl api-resources
+kubectl api-resources -o wide
+kubectl api-resources -o name
+
+kubectl get nodes,ns,po,deploy,svc
+
+kubectl describe node --all
+```
+
+# Creating Pods
+A Pod is the basic execution unit of a Kubernetes application–the smallest and simplest unit in the Kubernetes object model that you create or deploy. A Pod represents processes running on your Cluster.
+
+A Pod encapsulates an application’s container (or, in some cases, multiple containers), storage resources, a unique network IP, and options that govern how the container(s) should run. A Pod represents a unit of deployment: a single instance of an application in Kubernetes, which might consist of either a single container or a small number of containers that are tightly coupled and that share resources.
+
+## Resources
+- https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/
+
+## References
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox
+    command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
+```
+
+```
+kubectl create -f pod.yaml
+# update label
+kubectl apply -f pod.yaml
+# update label
+kubectl edit pod myapp-pod
+kubectl delete pod myapp-pod
+```
+
+
+# Namespaces
+
+Namespaces are intended for use in environments with many users spread across multiple teams, or projects.
+
+Namespaces provide a scope for names. Names of resources need to be unique within a namespace, but not across namespaces.
+
+Namespaces are a way to divide cluster resources between multiple users (via resource quota).
+
+It is not necessary to use multiple namespaces just to separate slightly different resources, such as different versions of the same software: use labels to distinguish resources within the same namespace. In practice namespaces are used to deploy different versions based on stages of the CICD pipeline (dev, test, stage, prod)
+
+## Resources:
+- https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
+
+## References:
+
+```yaml
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: foo
+```
+
+```
+kubectl get namespaces
+kubectl create ns bar
+kubens
+kubectl set-context --current --namespace=bar
+# Not in a namespace
+kubectl api-resources --namespaced=false
+```
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  namespace: bar
+  labels:
+    app: myapp
+spec:
+  containers:
+  - name: myapp-container
+    image: busybox
+    command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
+```
+
+

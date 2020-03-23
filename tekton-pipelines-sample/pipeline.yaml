@@ -1,0 +1,29 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: test-build-push
+spec:
+  resources:
+    - name: source
+      type: git
+    - name: image
+      type: image
+  tasks:
+    - name: test
+      taskRef:
+        name: java-test
+      resources:
+        inputs:
+          - name: source
+            resource: source
+    - name: build-push
+      taskRef:
+        name: kaniko
+      runAfter: [test]
+      resources:
+        inputs:
+          - name: source
+            resource: source
+        outputs:
+          - name: image
+            resource: image

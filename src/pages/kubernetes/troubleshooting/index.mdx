@@ -1,0 +1,67 @@
+---
+    title: Kubernetes Troubleshooting
+    description: Debugging Kubernetes
+---
+
+<AnchorLinks>
+  <AnchorLink>Debugging Applications</AnchorLink>
+  <AnchorLink>Activities</AnchorLink>
+</AnchorLinks>
+
+
+# Debugging Applications
+
+Kubernetes provides tools to help troubleshoot and debug problems with applications.
+
+Usually is getting familiar with how primitives objects interact with each other, checking the status of objects, and finally checking logs for any last resource clues.
+
+## Resources
+- https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application/
+- https://kubernetes.io/docs/tasks/debug-application-cluster/debug-service/
+- https://kubernetes.io/docs/tasks/debug-application-cluster/debug-pod-replication-controller/
+
+
+## References
+
+
+Broken setup to debug
+```
+curl -s https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/a92550dd499ebefc205fa2cd5c18123409186712/debugk8s.64 | base64 -d | kubectl apply -f -
+```
+
+Expose the service using port-forward
+```
+kubectl port-forward service/my-service 8080:80 -n debug
+```
+Try to access the service
+```
+curl http://localhost:8080
+```
+
+```
+kubectl get pods --all-namespaces
+kubectl describe pod
+kubectl edit pod
+kubectl get pod --export
+kubectl apply -f
+kubectl logs
+kubectl get service
+kubectl get endpoints
+kubectl get pods --show-labels
+```
+
+
+
+### Solution
+- https://gist.github.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091#file-debugk8s-yaml
+
+
+## Activities
+
+The continuous integration activities focus around Tekton the integration platform. These labs will show you how to build pipelines and test your code before deployment.
+
+| Task                            | Description         | Link        |
+| --------------------------------| ------------------  |:----------- |
+| *** Try It Yourself ***                         |         |         | 
+| Debugging | Find which service is breaking in your cluster and find out why.  | [Debugging](../activities/labs/lab5) | 30 min |
+
