@@ -8,7 +8,7 @@ title: Kubernetes Lab 10 - Persistent Volumes
 kind: PersistentVolume
 apiVersion: v1
 metadata:
-  name: mysql-pv
+  name: postgresql-pv
 spec:
   storageClassName: localdisk
   capacity:
@@ -23,7 +23,7 @@ spec:
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: mysql-pv-claim
+  name: postgresql-pv-claim
 spec:
   storageClassName: localdisk
   accessModes:
@@ -37,23 +37,23 @@ spec:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: mysql-pod
+  name: postgresql-pod
 spec:
   containers:
-  - name: mysql
-    image: mysql:5.6
+  - name: postgresql
+    image: bitnami/postgresql
     ports:
-    - containerPort: 3306
+    - containerPort: 5432
     env:
     - name: MYSQL_ROOT_PASSWORD
       value: password
     volumeMounts:
-    - name: mysql-storage
-      mountPath: /var/lib/mysql
+    - name: sql-storage
+      mountPath: /bitnami/postgresql/
   volumes:
-  - name: mysql-storage
+  - name: sql-storage
     persistentVolumeClaim:
-      claimName: mysql-pv-claim
+      claimName: postgresql-pv-claim
 ```
 
 verify via `ls /mnt/data` on node

@@ -5,15 +5,37 @@ metadata:
   name: vader
 ---
 apiVersion: v1
-kind: Pod
+kind: Deployment
 metadata:
-  name: jedi-service
+  name: hyper-drive
   namespace: vader
 spec:
-  containers:
-    - name: the-container
-      image: linuxacademycontent/candy-service:2
-      livenessProbe:
-        httpGet:
-          path: /health
-          port: 8081
+   replicas: 3
+  selector:
+    matchLabels:
+      app: hyper-drive
+  template:
+    metadata:
+      labels:
+        app: hyper-drive
+    spec:
+      containers:
+      - name: vader
+        image: ibmcase/vader:1
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          tcpSocket:
+            path: /healthz
+            port: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: light-speed
+spec:
+  selector:
+    run: hyper-drive 
+  ports:
+    - protocol: TCP
+      port: 80

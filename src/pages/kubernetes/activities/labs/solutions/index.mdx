@@ -6,87 +6,87 @@ description: Solutions for Kubernetes Labs
 <Accordion>
 
 
-<AccordionItem title="Lab 1">
+<AccordionItem title="Lab 1 - Pod Creation">
 
     apiVersion: v1
     kind: Pod
     metadata:
-        name: nginx
-        namespace: web
+      name: nginx
+      namespace: web
     spec:
-        containers:
+      containers:
         - name: nginx
-            image: nginx
-            command: ["nginx"]
-            args: ["-g", "daemon off;", "-q"]
-            ports:
-            - containerPort: 80
+          image: nginx
+          command: ["nginx"]
+          args: ["-g", "daemon off;", "-q"]
+          ports:
+          - containerPort: 80
     
 </AccordionItem>
 
-<AccordionItem title="Lab 2">
+<AccordionItem title="Lab 2 - Pod Configuration">
 
     
     apiVersion: v1
     kind: ConfigMap
     metadata:
-        name: candy-service-config
+      name: yoda-service-config
     data:
-        candy.cfg: |-
-            candy.peppermint.power=100000000
-            candy.nougat-armor.strength=10
+      yoda.cfg: |-
+        yoda.baby.power=100000000
+        yoda.strength=10
    
 ------------------------
     
     apiVersion: v1
     kind: Secret
     metadata:
-    name: db-password
+      name: yoda-db-password
     stringData:
-    password: Kub3rn3t3sRul3s!
+      password: 0penSh1ftRul3s!
     
 ------------------------
     
     apiVersion: v1
     kind: Pod
     metadata:
-        name: candy-service
+      name: yoda-service
     spec:
-        serviceAccountName: candy-svc
-        containers:
-        - name: candy-service
-            image: linuxacademycontent/candy-service:1
-            volumeMounts:
-            - name: config-volume
-                mountPath: /etc/candy-service
-            env:
-            - name: DB_PASSWORD
-            valueFrom:
-                secretKeyRef:
-                name: db-password
-                key: password
-            resources:
-            requests:
-                memory: "64Mi"
-                cpu: "250m"
-            limits:
-                memory: "128Mi"
-                cpu: "500m"
-    volumes:
-    - name: config-volume
-        configMap:
-        name: candy-service-config
+      serviceAccountName: yoda-svc
+      containers:
+      - name: yoda-service
+        image: bitnami/nginx
+        volumeMounts:
+        - name: config-volume
+          mountPath: /etc/yoda-service
+        env:
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: yoda-db-password
+              key: password
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "250m"
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+      volumes:
+      - name: config-volume
+          configMap:
+            name: yoda-service-config
     
 </AccordionItem>
 
-<AccordionItem title="Lab 3">
+<AccordionItem title="Lab 3 - Multiple Containers">
 
     apiVersion: v1
     kind: ConfigMap
     metadata:
-    name: fruit-service-ambassador-config
+      name: vader-service-ambassador-config
     data:
-    haproxy.cfg: |-
+      haproxy.cfg: |-
         global
             daemon
             maxconn 256
@@ -99,29 +99,29 @@ description: Solutions for Kubernetes Labs
 
         listen http-in
             bind *:80
-            server server1 127.0.0.1:8775 maxconn 32
+            server server1 127.0.0.1:8989 maxconn 32
     
 ------------------------
 
     apiVersion: v1
     kind: Pod
     metadata:
-    name: fruit-service
+      name: vader-service
     spec:
-    containers:
-    - name: legacy-fruit-service
-        image: linuxacademycontent/legacy-fruit-service:1
-    - name: haproxy-ambassador
-        image: haproxy:1.7
-        ports:
-        - containerPort: 80
-        volumeMounts:
-        - name: config-volume
-        mountPath: /usr/local/etc/haproxy
-    volumes:
-    - name: config-volume
+      containers:
+        - name: millennium-falcon
+          image: ibmcase/millennium-falcon:1
+        - name: haproxy-ambassador
+          image: haproxy:1.7
+          ports:
+          - containerPort: 80
+          volumeMounts:
+          - name: config-volume
+            mountPath: /usr/local/etc/haproxy
+      volumes:
+      - name: config-volume
         configMap:
-        name: fruit-service-ambassador-config
+          name: vader-service-ambassador-config
     
 ------------------------
     
@@ -141,28 +141,29 @@ description: Solutions for Kubernetes Labs
     
 </AccordionItem>
 
-<AccordionItem title="Lab 4">
+<AccordionItem title="Lab 4 - Probes">
 
     apiVersion: v1
     kind: Pod
     metadata:
-        name: candy-service
+      name: energy-shield-service
     spec:
-    containers:
-    - name: candy-service
-        image: linuxacademycontent/candy-service:2
+      containers:
+      - name: energy-shield
+        image: ibmcase/energy-shield:1
         livenessProbe:
-        httpGet:
+          httpGet:
             path: /healthz
-            port: 8081
+            port: 8080
         readinessProbe:
-        httpGet:
-            path: /
-            port: 80
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
 
 </AccordionItem>
 
-<AccordionItem title="Lab 5">
+<AccordionItem title="Lab 5 - Debugging">
 
    Check `STATUS` column for not Ready
 
@@ -210,35 +211,35 @@ description: Solutions for Kubernetes Labs
     kubectl get pod <pod name> -n <namespace>
 </AccordionItem>
 
-<AccordionItem title="Lab 6">
+<AccordionItem title="Lab 6 - Rolling Updates">
 
-   Update the deployment to the new version like so:
-        
+    Update the deployment to the new version like so:
+
     kubectl set image deployment/jedi-deployment jedi-ws=bitnamy/nginx:1.18.1 --record
- 
-   Check the progress of the rolling update:
-        
-    kubectl rollout status deployment/jedi-deployment   
 
-   In another terminal window
-    
+    Check the progress of the rolling update:
+
+    kubectl rollout status deployment/jedi-deployment
+
+    In another terminal window
+
     kubectl get pods -w
+
+    Get a list of previous revisions.
     
-   Get a list of previous revisions.
-        
     kubectl rollout history deployment/jedi-deployment
-    
-   Undo the last revision.
+
+    Undo the last revision.
 
     kubectl rollout undo deployment/jedi-deployment
 
-   Check the status of the rollout.
-    
+    Check the status of the rollout.
+
     kubectl rollout status deployment/jedi-deployment
 
 </AccordionItem>
 
-<AccordionItem title="Lab 7">
+<AccordionItem title="Lab 7 - Cron Jobs">
 
     apiVersion: batch/v1beta1
     kind: CronJob
@@ -261,7 +262,7 @@ description: Solutions for Kubernetes Labs
 
 </AccordionItem>
 
-<AccordionItem title="Lab 8">
+<AccordionItem title="Lab 8 - Services">
 
     apiVersion: v1
     kind: Service
@@ -293,27 +294,7 @@ description: Solutions for Kubernetes Labs
 
 </AccordionItem>
 
-<AccordionItem title="Lab 9">
-
-    apiVersion: networking.k8s.io/v1
-    kind: NetworkPolicy
-    metadata:
-    name: my-network-policy
-    spec:
-    podSelector:
-        matchLabels:
-        app: secure-app
-    policyTypes:
-    - Ingress
-    ingress:
-    - from:
-        - podSelector:
-            matchLabels:
-            allow-access: "true"
-    
-</AccordionItem>
-
-<AccordionItem title="Lab 10">
+<AccordionItem title="Lab 9 - Persistent Volumes">
 
         kind: PersistentVolume
         apiVersion: v1

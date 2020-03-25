@@ -18,3 +18,6 @@ The specifications are as follows:
  - The container needs access to a database password in order to authenticate with a backend database server. The password is `0penSh1ftRul3s!`. It should be stored as a Kubernetes secret called `yoda-db-password` and passed to the container as an *environment variable* called `DB_PASSWORD`.
  - The container will need to access the Kubernetes API using the ServiceAccount `yoda-svc`. Create the service account if it doesn't already exist, and configure the pod to use it.
 
+## Verification
+
+To verify your setup is complete check `/etc/yoda-service` for the `yoda.cfg` file and use the `cat` command to check it's contents.

@@ -8,7 +8,7 @@ title: Kubernetes Lab 3 - Manage Multiple Containers
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: fruit-service-ambassador-config
+  name: vader-service-ambassador-config
 data:
   haproxy.cfg: |-
     global
@@ -30,11 +30,11 @@ data:
 apiVersion: v1
 kind: Pod
 metadata:
-  name: fruit-service
+  name: vader-service
 spec:
   containers:
-  - name: legacy-fruit-service
-    image: linuxacademycontent/legacy-fruit-service:1
+  - name: millennium-falcon
+    image: ibmcase/millennium-falcon:1
   - name: haproxy-ambassador
     image: haproxy:1.7
     ports:
@@ -45,8 +45,8 @@ spec:
   volumes:
   - name: config-volume
     configMap:
-      name: fruit-service-ambassador-config
-```
+      name: vader-service-ambassador-config
+``` 
 
 ```yaml
 apiVersion: v1
