@@ -1,32 +1,26 @@
 {
-    "name": "learning-cloudnative-101",
-    "description": "Learning Cloudnative 101 Documentation Site",
-    "dependencies": {
-        "@antora/cli": "2.0.0",
-        "@antora/site-generator-default": "2.0.0",
-        "@babel/cli": "^7.5.5",
-        "@babel/core": "^7.5.5",
-        "@babel/polyfill": "^7.4.4",
-        "@babel/preset-env": "^7.5.5",
-        "@babel/register": "^7.5.5",
-        "browser-sync": "^2.26.7",
-        "fs-extra": "^8.1.0",
-        "gulp": "^4.0.0",
-        "yaml-js": "^0.2.3"
-    },
-    "devDependencies": {},
-    "scripts": {
-        "dev": "gulp",
-        "clean": "gulp clean"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/ibm-cloud-architecture/learning-cloudnative-101.git"
-    },
-    "license": "Apache-2.0",
-    "babel": {
-        "presets": [
-            "@babel/preset-env"
-        ]
-    }
+  "name": "ibm-cloud-native-bootcamp",
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d public",
+    "build": "gatsby build --prefix-paths",
+    "dev": "gatsby develop",
+    "dev:clean": "gatsby clean && gatsby develop",
+    "serve": "gatsby serve"
+  },
+  "dependencies": {
+    "gatsby": "^2.18.21",
+    "gatsby-plugin-google-analytics": "^2.1.32",
+    "gatsby-source-filesystem": "^2.1.46",
+    "gatsby-theme-carbon": "^1.19.0",
+    "gatsby-transformer-json": "^2.2.25",
+    "lodash": "latest",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6"
+  },
+  "devDependencies": {
+    "gh-pages": "^2.1.1"
+  }
 }

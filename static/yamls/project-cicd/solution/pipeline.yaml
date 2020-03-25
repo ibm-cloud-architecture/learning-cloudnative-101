@@ -1,0 +1,27 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: project-cicd
+spec:
+  resources:
+    - name: source
+      type: git
+    - name: image
+      type: image
+  tasks:
+    - name: test-build-git
+      taskRef:
+        name: build-git
+      resources:
+        inputs:
+          - name: source
+            resource: source
+          - name: image
+            resource: image
+      params:
+        - name: GIT_REPOSITORY
+          value: $GIT_REPOSITORY
+        - name: GIT_EMAIL
+          value: $GIT_EMAIL
+        - name: GIT_NAME
+          value: $GIT_NAME

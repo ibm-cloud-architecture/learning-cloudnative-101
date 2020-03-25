@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jedi-deployment
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: jedi-deployment
+  template:
+    metadata:
+      labels:
+        app: jedi-deployment
+    spec:
+      containers:
+        - image: bitnami/nginx:1.16.1
+          name: jedi-ws

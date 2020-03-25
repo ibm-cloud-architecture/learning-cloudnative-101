@@ -1,0 +1,12 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TaskRun
+metadata:
+  generateName: test-task-run-
+spec:
+  taskRef:
+    name: java-test
+  inputs:
+    resources:
+      - name: source
+        resourceRef:
+          name: source

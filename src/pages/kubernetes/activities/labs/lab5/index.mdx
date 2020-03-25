@@ -1,0 +1,34 @@
+---
+title: Kubernetes Lab 5 - Debugging
+---
+
+## Problem
+
+The Hyper Drive isn't working and we need to find out why. Let's debug the `hyper-drive` deployment so that we can reach light speed again.
+
+Here are some tips to help you solve the Hyper Drive:
+
+- Check the description of the `deployment`.
+- Get the logs of one of the broken `pods`.
+- Are the correct `ports` assigned.
+- Make sure your `labels` and `selectors` are correct.
+- Check to see if the `Probes` are correctly working.
+
+Reset the environment:
+```
+minikube delete
+minikube start
+```
+
+Setup the environment:
+```
+kubectl apply -f https://gist.githubusercontent.com/csantanapr/87df4292e94441617707dae5de488cf4/raw/cb515f7bae77a3f0e76fdc7f6aa0f4e89cc5fec7/lab-5-debug-k8s-setup.yaml
+```
+
+## Validate
+
+Once you get the Hyper Drive working again. Verify it by checking the endpoints.
+
+```
+kubectl get ep hyper-drive
+```

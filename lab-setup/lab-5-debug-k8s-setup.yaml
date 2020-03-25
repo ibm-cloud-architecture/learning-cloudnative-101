@@ -1,0 +1,41 @@
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vader
+---
+apiVersion: v1
+kind: Deployment
+metadata:
+  name: hyper-drive
+  namespace: vader
+spec:
+   replicas: 3
+  selector:
+    matchLabels:
+      app: hyper-drive
+  template:
+    metadata:
+      labels:
+        app: hyper-drive
+    spec:
+      containers:
+      - name: vader
+        image: ibmcase/vader:1
+        ports:
+        - containerPort: 8080
+        livenessProbe:
+          tcpSocket:
+            path: /healthz
+            port: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: light-speed
+spec:
+  selector:
+    run: hyper-drive 
+  ports:
+    - protocol: TCP
+      port: 80
