@@ -17,11 +17,12 @@ module.exports = {
         isSearchEnabled: true,
         repository: {
           baseUrl:
-            'https://github.ibm.com/CASE/cloudnative-bootcamp',
+
+            'https://github.com/ibm-cloud-architecture/learning-cloudnative-101',
           subDirectory: '/',
         },
       },
 }
 ],
-pathPrefix: "/CASE/cloudnative-bootcamp",
+pathPrefix: "/learning-cloudnative-101",
 };
