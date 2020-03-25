@@ -241,24 +241,26 @@ description: Solutions for Kubernetes Labs
 
 <AccordionItem title="Lab 7 - Cron Jobs">
 
-    apiVersion: batch/v1beta1
-    kind: CronJob
-    metadata:
-        name: cleanup-cronjob
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: xwing-cronjob
+spec:
+  schedule: "*/1 * * * *"
+  jobTemplate:
     spec:
-    schedule: "*/1 * * * *"
-    jobTemplate:
+      template:
         spec:
-        template:
-            spec:
-            containers:
-            - name: data-cleanup
-                image: linuxacademycontent/data-cleanup:1
-            restartPolicy: OnFailure
+          containers:
+          - name: xwing-status
+            image: ibmcase/xwing-status:1.0
+            args:
+            - /usr/sbin/xwing-status.sh
+          restartPolicy: OnFailure
 
 ------------------------
 
-    kubectl get cronjob cleanup-cronjob
+    kubectl get cronjob xwing-cronjob
 
 </AccordionItem>
 
