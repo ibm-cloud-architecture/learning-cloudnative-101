@@ -17,6 +17,7 @@ module.exports = {
         isSearchEnabled: true,
         repository: {
           baseUrl:
+
             'https://github.com/ibm-cloud-architecture/learning-cloudnative-101',
           subDirectory: '/',
         },
