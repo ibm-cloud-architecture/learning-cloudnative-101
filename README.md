@@ -4,9 +4,9 @@ IBM Cloud Native Bootcamp
 </h1>
 
 <p align="left">
-    <a href="https://github.ibm.com/CASE/cloudnative-bootcamp/blob/master/LICENSE">
+    <a href="https://ibm-cloud-architecture.github.io/learning-cloudnative-101/blob/master/LICENSE">
     <img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="The Cloud Native Bootcamp is released under the Apache-2.0 license" />
-    <a href="https://travis.ibm.com/CASE/cloudnative-bootcamp"><img src="https://travis.ibm.com/CASE/cloudnative-bootcamp.svg?token=bsyfqHy4xhMwWSdQvCND&branch=master" alt="Travis"></a>
+    <a href="https://travis-ci.org/github/ibm-cloud-architecture/learning-cloudnative-101"><img src="https://travis-ci.org/ibm-cloud-architecture/learning-cloudnative-101.svg?branch=master" alt="Travis"></a>
   </a>
 </p>
 
@@ -14,7 +14,7 @@ IBM Cloud Native Bootcamp
 
 This course is designed to enable developers with the latest tools and techniques for developing cloud native applications.
 
-The course materials can be viewed at- [https://pages.github.ibm.com/CASE/cloudnative-bootcamp/](https://pages.github.ibm.com/CASE/cloudnative-bootcamp/)
+The course materials can be viewed at- [https://ibm-cloud-architecture.github.io/learning-cloudnative-101/](https://ibm-cloud-architecture.github.io/learning-cloudnative-101/)
 
 
 ```
@@ -47,7 +47,7 @@ the deploy script. The deploy can be run using the following:
 npm run deploy
 ```
 
-The result of the `deploy` can be viewed here - https://pages.github.ibm.com/CASE/cloudnative-bootcamp/
+The result of the `deploy` can be viewed here - https://ibm-cloud-architecture.github.io/learning-cloudnative-101/
 
 **Note:** There is a time delay between when the deploy process completes and when the
 content is available on the published site.
