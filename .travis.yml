@@ -4,7 +4,7 @@ node_js:
 script: npm run build
 branches:
   only:
-  - master
+    - master
 deploy:
   provider: pages
   skip_cleanup: true
@@ -12,5 +12,6 @@ deploy:
   github_token: $GITHUB_TOKEN
   keep_history: false
   local_dir: public
+  fqdn: cloudnative101.dev
   on:
     branch: master
