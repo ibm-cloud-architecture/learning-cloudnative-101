@@ -26,7 +26,6 @@ spec:
         - containerPort: 8080
         livenessProbe:
           tcpSocket:
-            path: /healthz
             port: 80
 ---
 apiVersion: v1
