@@ -20,4 +20,10 @@ The specifications are as follows:
 
 ## Verification
 
-To verify your setup is complete check `/etc/yoda-service` for the `yoda.cfg` file and use the `cat` command to check it's contents.
+To verify your setup is complete, check `/etc/yoda-service` for the `yoda.cfg` file and use the `cat` command to check it's contents.
+
+```
+kubectl exec -it yoda-service /bin/bash
+cd /etc/yoda-service
+cat yoda.cfg
+```
