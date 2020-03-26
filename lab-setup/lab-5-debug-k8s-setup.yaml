@@ -4,13 +4,13 @@ kind: Namespace
 metadata:
   name: vader
 ---
-apiVersion: v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hyper-drive
   namespace: vader
 spec:
-   replicas: 3
+  replicas: 3
   selector:
     matchLabels:
       app: hyper-drive
