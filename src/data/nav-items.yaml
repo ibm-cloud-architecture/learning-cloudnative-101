@@ -4,7 +4,7 @@
 - title: Prerequisites
   pages:
     - path: /prerequisites/
-- title: Reading
+- title: Concepts
   pages:
     - title: Cloud Native
       path: /cloud-native-overview/read/
