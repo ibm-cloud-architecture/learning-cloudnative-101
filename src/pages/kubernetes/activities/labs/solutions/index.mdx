@@ -241,22 +241,22 @@ description: Solutions for Kubernetes Labs
 
 <AccordionItem title="Lab 7 - Cron Jobs">
 
-apiVersion: batch/v1beta1
-kind: CronJob
-metadata:
-  name: xwing-cronjob
-spec:
-  schedule: "*/1 * * * *"
-  jobTemplate:
+    apiVersion: batch/v1beta1
+    kind: CronJob
+    metadata:
+      name: xwing-cronjob
     spec:
-      template:
+      schedule: "*/1 * * * *"
+      jobTemplate:
         spec:
-          containers:
-          - name: xwing-status
-            image: ibmcase/xwing-status:1.0
-            args:
-            - /usr/sbin/xwing-status.sh
-          restartPolicy: OnFailure
+          template:
+            spec:
+              containers:
+              - name: xwing-status
+                image: ibmcase/xwing-status:1.0
+                args:
+                - /usr/sbin/xwing-status.sh
+              restartPolicy: OnFailure
 
 ------------------------
 
