@@ -12,7 +12,7 @@ const FirstRightText = () => (
     Cloud-native is about how we build and run applications taking full advantage of cloud computing rather than worrying about where we deploy it.
     <a
       className={calloutLink}
-      href="/CASE/cloudnative-bootcamp/cloud-native-overview"
+      href="/cloud-native-overview"
     >
       Overview →
     </a>

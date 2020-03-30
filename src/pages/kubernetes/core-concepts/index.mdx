@@ -97,15 +97,6 @@ metadata:
   name: foo
 ```
 
-```
-kubectl get namespaces
-kubectl create ns bar
-kubens
-kubectl set-context --current --namespace=bar
-# Not in a namespace
-kubectl api-resources --namespaced=false
-```
-
 ```yaml
 apiVersion: v1
 kind: Pod
@@ -121,4 +112,31 @@ spec:
     command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
 ```
 
+<Tabs>
 
+<Tab label="OpenShift">
+
+```
+  oc get projects
+```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl get namespaces
+
+  kubectl create ns bar
+
+  kubens
+
+  kubectl set-context --current --namespace=bar
+
+  # Not in a namespace
+  kubectl api-resources --namespaced=false
+```
+
+</Tab>
+
+</Tabs>

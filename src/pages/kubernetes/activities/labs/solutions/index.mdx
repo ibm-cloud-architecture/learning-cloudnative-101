@@ -137,7 +137,7 @@ description: Solutions for Kubernetes Labs
 
    Check it with
    
-    kubectl exec busybox -- curl $(kubectl get pod fruit-service -o=jsonpath='{.status.podIP}'):80
+    kubectl exec busybox -- curl $(kubectl get pod vader-service -o=jsonpath='{.status.podIP}'):80
     
 </AccordionItem>
 
@@ -212,6 +212,34 @@ description: Solutions for Kubernetes Labs
 </AccordionItem>
 
 <AccordionItem title="Rolling Updates">
+  <Tabs>
+
+<Tab label="OpenShift">
+
+```
+  oc get projects
+```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl get namespaces
+
+  kubectl create ns bar
+
+  kubens
+
+  kubectl set-context --current --namespace=bar
+
+  # Not in a namespace
+  kubectl api-resources --namespaced=false
+```
+
+</Tab>
+
+</Tabs>
 
   Update the deployment to the new version like so:
 
