@@ -26,20 +26,47 @@ Two primary members
 - Status, current state
 
 ## Resources
+**OpenShift**
+- https://docs.openshift.com/container-platform/4.3/cli_reference/openshift_cli/getting-started-cli.html
+
+**IKS**
 - https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/
 - https://kubernetes.io/docs/tutorials/kubernetes-basics/
 
 
 ## References
-```
-kubectl api-resources
-kubectl api-resources -o wide
-kubectl api-resources -o name
 
-kubectl get nodes,ns,po,deploy,svc
+<Tabs>
 
-kubectl describe node --all
+<Tab label="OpenShift">
+
 ```
+  oc api-resources
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl api-resources
+  kubectl api-resources -o wide
+  kubectl api-resources -o name
+
+  kubectl get nodes,ns,po,deploy,svc
+
+  kubectl describe node --all
+  ```
+
+</Tab>
+
+</Tabs>
 
 # Creating Pods
 A Pod is the basic execution unit of a Kubernetes application–the smallest and simplest unit in the Kubernetes object model that you create or deploy. A Pod represents processes running on your Cluster.
@@ -64,16 +91,35 @@ spec:
     image: busybox
     command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
 ```
+<Tabs>
+<Tab label="OpenShift">
 
 ```
-kubectl create -f pod.yaml
-# update label
-kubectl apply -f pod.yaml
-# update label
-kubectl edit pod myapp-pod
-kubectl delete pod myapp-pod
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl create -f pod.yaml
+  # update label
+  kubectl apply -f pod.yaml
+  # update label
+  kubectl edit pod myapp-pod
+  kubectl delete pod myapp-pod
 ```
 
+</Tab>
+
+</Tabs>
 
 # Namespaces
 
@@ -96,15 +142,40 @@ kind: Namespace
 metadata:
   name: foo
 ```
+<Tabs>
+
+<Tab label="OpenShift">
 
 ```
-kubectl get namespaces
-kubectl create ns bar
-kubens
-kubectl set-context --current --namespace=bar
-# Not in a namespace
-kubectl api-resources --namespaced=false
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
 ```
+  kubectl get namespaces
+
+  kubectl create ns bar
+
+  kubens
+
+  kubectl set-context --current --namespace=bar
+
+  # Not in a namespace
+  kubectl api-resources --namespaced=false
+```
+
+</Tab>
+
+</Tabs>
 
 ```yaml
 apiVersion: v1
@@ -120,5 +191,3 @@ spec:
     image: busybox
     command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
 ```
-
-

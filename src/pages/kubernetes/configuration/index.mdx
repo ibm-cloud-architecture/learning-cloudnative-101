@@ -295,7 +295,35 @@ A Secret is an object that contains a small amount of sensitive data such as a p
 
 
 ## References
+<Tabs>
+<Tab label="OpenShift">
 
+```
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl create -f pod.yaml
+  # update label
+  kubectl apply -f pod.yaml
+  # update label
+  kubectl edit pod myapp-pod
+  kubectl delete pod myapp-pod
+```
+
+</Tab>
+
+</Tabs>
 ```
 # Create files needed for rest of example.
 echo -n 'admin' > ./username.txt

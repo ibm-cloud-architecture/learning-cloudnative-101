@@ -25,7 +25,35 @@ You can use either labels or annotations to attach metadata to Kubernetes object
 
 
 ## References
+<Tabs>
+<Tab label="OpenShift">
 
+```
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl create -f pod.yaml
+  # update label
+  kubectl apply -f pod.yaml
+  # update label
+  kubectl edit pod myapp-pod
+  kubectl delete pod myapp-pod
+```
+
+</Tab>
+
+</Tabs>
 ```
 kubectl get pods --show-labels
 kubectl get pods -L tier,env
@@ -97,7 +125,35 @@ The following are typical use cases for Deployments:
 
 
 ## References
+<Tabs>
+<Tab label="OpenShift">
 
+```
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl create -f pod.yaml
+  # update label
+  kubectl apply -f pod.yaml
+  # update label
+  kubectl edit pod myapp-pod
+  kubectl delete pod myapp-pod
+```
+
+</Tab>
+
+</Tabs>
 ```
 kubectl get deployments
 kubectl get deployment my-deployment
@@ -153,6 +209,35 @@ A Deployment’s revision is created when a Deployment’s rollout is triggered.
 
 
 ## References
+<Tabs>
+<Tab label="OpenShift">
+
+```
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl create -f pod.yaml
+  # update label
+  kubectl apply -f pod.yaml
+  # update label
+  kubectl edit pod myapp-pod
+  kubectl delete pod myapp-pod
+```
+
+</Tab>
+
+</Tabs>
 ```
 kubectl get deployments
 kubectl set image deployment/nginx-deployment nginx=nginx:1.16.1 --record
@@ -204,7 +289,35 @@ All CronJob schedule: times are based on the timezone of the master where the jo
 - https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/
 
 ## References
+<Tabs>
+<Tab label="OpenShift">
 
+```
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl create -f pod.yaml
+  # update label
+  kubectl apply -f pod.yaml
+  # update label
+  kubectl edit pod myapp-pod
+  kubectl delete pod myapp-pod
+```
+
+</Tab>
+
+</Tabs>
 ```
 kubectl get jobs
 kubectl describe job pi

@@ -68,6 +68,22 @@ spec:
     stdin: true
     tty: true
 ```
+<Tabs>
+<Tab label="OpenShift">
+
+```
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
 
 ```
 kubectl attach -it my-pod -c sidecard
@@ -75,6 +91,10 @@ ps ax
 kill -HUP 7
 ps ax
 ```
+
+</Tab>
+
+</Tabs>
 
 ## Activities
 

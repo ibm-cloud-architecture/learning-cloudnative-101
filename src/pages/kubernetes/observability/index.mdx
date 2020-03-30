@@ -117,7 +117,35 @@ Prometheus, a CNCF project, can natively monitor Kubernetes, nodes, and Promethe
 - https://kubernetes.io/docs/tasks/debug-application-cluster/resource-metrics-pipeline/
 
 ## References
+<Tabs>
+<Tab label="OpenShift">
 
+```
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl create -f pod.yaml
+  # update label
+  kubectl apply -f pod.yaml
+  # update label
+  kubectl edit pod myapp-pod
+  kubectl delete pod myapp-pod
+```
+
+</Tab>
+
+</Tabs>
 ```
 minikube addons enable metrics-server
 ```
@@ -164,7 +192,35 @@ spec:
     image: radial/busyboxplus:curl
     command: [/bin/sh, -c, 'until curl localhost:8080/ConsumeCPU -d "millicores=200&durationSec=3600"; do sleep 5; done && sleep 3700']
 ```
+<Tabs>
+<Tab label="OpenShift">
 
+```
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl create -f pod.yaml
+  # update label
+  kubectl apply -f pod.yaml
+  # update label
+  kubectl edit pod myapp-pod
+  kubectl delete pod myapp-pod
+```
+
+</Tab>
+
+</Tabs>
 ```
 kubectl describe node
 ```
