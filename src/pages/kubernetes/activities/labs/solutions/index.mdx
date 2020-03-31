@@ -137,7 +137,7 @@ description: Solutions for Kubernetes Labs
 
    Check it with
    
-    kubectl exec busybox -- curl $(kubectl get pod fruit-service -o=jsonpath='{.status.podIP}'):80
+    kubectl exec busybox -- curl $(kubectl get pod vader-service -o=jsonpath='{.status.podIP}'):80
     
 </AccordionItem>
 
@@ -170,45 +170,37 @@ description: Solutions for Kubernetes Labs
     kubectl get pods --all-namespaces
 
 
-   Pod with most cpu on that namespace
+   Check the description of the deployment
 
-    kubectl top pod -n <namespace>
-
-
-   Save broken pod summary in json format
-    
-    kubectl get pod <pod name> -n <namespace> -o json > /home/cloud_user/debug/broken-pod-summary.json
-    
+    kubectl describe deployment hyper-drive
 
    Save logs for borken pod
     
     kubectl logs <pod name> -n <namespace> > /home/cloud_user/debug/broken-pod-logs.log
     
+   In the deployment's description you will see the following is wrong:
+   <ul>
+      <li>Selector and Label names do not match.</li>
+      <li>The Probe is TCP instead of HTTP Get.</li>
+      <li>The Service Port is 80 instead of 8080.</li>
+   </ul>
+   To fix probe, can't kubectl edit, need to delete and recreate the deployment
 
-   Fix broken pod, Check Events
-    
-    kubectl describe pod <pod name> -n <namespace>
-    
-
-   To fix probe, can't kubectl edit, need to delete and recreate pod
-
-    kubectl get pod <pod name> -n <namespace> -o yaml --export > broken-pod.yml
+    kubectl get deployment <deployment name> -n <namespace> -o yaml --export > hyper-drive.yml
     
 
    Delete pod
     
-    kubectl delete pod <pod name> -n <namespace>
-    
-   Can also use `kubectl replace`
+    kubectl delete deployment <deployment name> -n <namespace>
 
    Edit yaml, and apply
     
-    kubectl apply -f broken-pod.yml -n <namespace>
+    kubectl apply -f hyper-drive.yml -n <namespace>
     
 
    Verify
 
-    kubectl get pod <pod name> -n <namespace>
+    kubectl get deployment <deployment name> -n <namespace>
 </AccordionItem>
 
 <AccordionItem title="Rolling Updates">
@@ -298,17 +290,17 @@ description: Solutions for Kubernetes Labs
 
 <AccordionItem title="Persistent Volumes">
 
-        kind: PersistentVolume
         apiVersion: v1
+        kind: PersistentVolume
         metadata:
-        name: mysql-pv
+          name: postgresql-pv
         spec:
-        storageClassName: localdisk
-        capacity:
+          storageClassName: localdisk
+          capacity:
             storage: 1Gi
-        accessModes:
+          accessModes:
             - ReadWriteOnce
-        hostPath:
+          hostPath:
             path: "/mnt/data"
 
 ------------------------
@@ -316,41 +308,40 @@ description: Solutions for Kubernetes Labs
         apiVersion: v1
         kind: PersistentVolumeClaim
         metadata:
-        name: mysql-pv-claim
+          name: postgresql-pv-claim
         spec:
-        storageClassName: localdisk
-        accessModes:
+          storageClassName: localdisk
+          accessModes:
             - ReadWriteOnce
-        resources:
+          resources:
             requests:
-            storage: 500Mi
+              storage: 500Mi
         
 ------------------------
 
         apiVersion: v1
         kind: Pod
         metadata:
-        name: mysql-pod
+          name: postgresql-pod
         spec:
-        containers:
-        - name: mysql
-            image: mysql:5.6
+          containers:
+          - name: postgresql
+            image: bitnami/postgresql
             ports:
-            - containerPort: 3306
+            - containerPort: 5432
             env:
             - name: MYSQL_ROOT_PASSWORD
-            value: password
+              value: password
             volumeMounts:
-            - name: mysql-storage
-            mountPath: /var/lib/mysql
-        volumes:
-        - name: mysql-storage
+            - name: sql-storage
+              mountPath: /bitnami/postgresql/
+          volumes:
+          - name: sql-storage
             persistentVolumeClaim:
-            claimName: mysql-pv-claim
+              claimName: postgresql-pv-claim
         
 ------------------------
 
-        verify via `ls /mnt/data` on node
 </AccordionItem>
 
 </Accordion>
