@@ -170,76 +170,40 @@ description: Solutions for Kubernetes Labs
     kubectl get pods --all-namespaces
 
 
-   Pod with most cpu on that namespace
+   Check the description of the deployment
 
-    kubectl top pod -n <namespace>
-
-
-   Save broken pod summary in json format
-    
-    kubectl get pod <pod name> -n <namespace> -o json > /home/cloud_user/debug/broken-pod-summary.json
-    
+    kubectl describe deployment hyper-drive
 
    Save logs for borken pod
     
     kubectl logs <pod name> -n <namespace> > /home/cloud_user/debug/broken-pod-logs.log
     
+   In the deployment's description you will see the following is wrong:
+   <ul>
+      <li>Selector and Label names do not match.</li>
+      <li>The Probe is TCP instead of HTTP Get.</li>
+      <li>The Service Port is 80 instead of 8080.</li>
+   </ul>
+   To fix probe, can't kubectl edit, need to delete and recreate the deployment
 
-   Fix broken pod, Check Events
-    
-    kubectl describe pod <pod name> -n <namespace>
-    
-
-   To fix probe, can't kubectl edit, need to delete and recreate pod
-
-    kubectl get pod <pod name> -n <namespace> -o yaml --export > broken-pod.yml
+    kubectl get deployment <deployment name> -n <namespace> -o yaml --export > hyper-drive.yml
     
 
    Delete pod
     
-    kubectl delete pod <pod name> -n <namespace>
-    
-   Can also use `kubectl replace`
+    kubectl delete deployment <deployment name> -n <namespace>
 
    Edit yaml, and apply
     
-    kubectl apply -f broken-pod.yml -n <namespace>
+    kubectl apply -f hyper-drive.yml -n <namespace>
     
 
    Verify
 
-    kubectl get pod <pod name> -n <namespace>
+    kubectl get deployment <deployment name> -n <namespace>
 </AccordionItem>
 
 <AccordionItem title="Rolling Updates">
-  <Tabs>
-
-<Tab label="OpenShift">
-
-```
-  oc get projects
-```
-
-</Tab>
-
-<Tab label="IKS">
-
-```
-  kubectl get namespaces
-
-  kubectl create ns bar
-
-  kubens
-
-  kubectl set-context --current --namespace=bar
-
-  # Not in a namespace
-  kubectl api-resources --namespaced=false
-```
-
-</Tab>
-
-</Tabs>
 
   Update the deployment to the new version like so:
 
