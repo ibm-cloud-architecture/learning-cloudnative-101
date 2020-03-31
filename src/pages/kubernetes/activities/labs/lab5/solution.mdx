@@ -3,50 +3,41 @@ title: Kubernetes Lab 5 - Debugging
 ---
 
 ## Solution
-
-Check `STATUS` column for not Ready
+   Check `STATUS` column for not Ready
 ```
-kubectl get pods --all-namespaces
-```
-
-Pod with most cpu on that namespace
-```
-kubectl top pod -n <namespace>
+    kubectl get pods --all-namespaces
 ```
 
-Save broken pod summary in json format
-```
-kubectl get pod <pod name> -n <namespace> -o json > /home/cloud_user/debug/broken-pod-summary.json
-```
+   Check the description of the deployment
+    ```
+    kubectl describe deployment hyper-drive
+    ```
+   Save logs for a broken pod
+    
+    kubectl logs <pod name> -n <namespace> > /home/cloud_user/debug/broken-pod-logs.log
+    
+   In the description you will see the following is wrong:
+- Selector and Label names do not match.
+- The Probe is TCP instead of HTTP Get.
+- The Service Port is 80 instead of 8080.
 
-Save logs for broken pod
-```
-kubectl logs <pod name> -n <namespace> > /home/cloud_user/debug/broken-pod-logs.log
-```
+   To fix probe, can't kubectl edit, need to delete and recreate the deployment
+    ```
+    kubectl get deployment <deployment name> -n <namespace> -o yaml --export > hyper-drive.yml
+    ```
 
-Fix broken pod, Check Events
-```
-kubectl describe pod <pod name> -n <namespace>
-```
+   Delete pod
+    ```
+    kubectl delete deployment <deployment name> -n <namespace>
+    ```
+   Can also use `kubectl replace`
 
-To fix probe, can't kubectl edit, need to delete and recreate pod
-```
-kubectl get pod <pod name> -n <namespace> -o yaml --export > broken-pod.yml
-```
+   Edit yaml, and apply
+    ```
+    kubectl apply -f hyper-drive.yml -n <namespace>
+    ```
 
-Delete pod
-```
-kubectl delete pod <pod name> -n <namespace>
-```
-
-Can also use `kubectl replace`
-
-Edit yaml, and apply
-```
-kubectl apply -f broken-pod.yml -n <namespace>
-```
-
-Verify
-```
-kubectl get pod <pod name> -n <namespace>
-```
+   Verify
+    ```
+    kubectl get deployment <deployment name> -n <namespace>
+    ```
