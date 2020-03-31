@@ -24,6 +24,12 @@ module.exports = {
         name: 'data',
         path: './src/data'
       }
+    },
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: "UA-149377589-4",
+      },
     }
   ]
 };
