@@ -1,6 +1,6 @@
 ---
-title: CICD Project
-description: CICD Project
+title: CICD Project Challenge
+description: CICD Project Challenge
 ---
 
 ## Challenge
@@ -8,43 +8,28 @@ description: CICD Project
 You are provided with the challenge to implement a demo that shows best practices for DevOps.
 Implement Continous Integration and Continous Deployment for an Application on Kubernetes.
 
-You are being provided with:
-- OpenShift 4
-- Git repository containing application source code
-- Git repository containing deployment manifests (ie. yamls)
+- Git repository with application code and Dockerfile, Developers have access to this git repository
+- Git repository with pipeline manifest files (ie yamls) files, Operators have access to this repository
+- Git repository with application manifest (ie yaml) files, automation only have access to this repository
 
 ## Specifications
 
-### Access Cluster
-- Ask your instructors on how to gain access to OpenShift cluster
-- Create a new namespace to deploy the application `project-cicd-${userid}`
+![overview-diagram](images/tekton-argocd.png)
 
-### Code Repo
-- Git repository for Code is located https://github.com/ibm-cloud-architecture/cloudnative_sample_app
-- Create a new Git repository on your own public git account using the git repo as a template
-- Use the `Dockerfile` on the root of the repository to build an container image
+### Code Git Repository
+- [Git repository with application code](https://github.com/csantanapr/tutorial-tekton-argocd-code)
+- Create a new git repository using this repo as [template](https://github.com/csantanapr/tutorial-tekton-argocd-code/generate)
+- Use the `Dockerfile` on the root of the repository to build a container image
 
-### Infra Repo
-- Git repository for Manifets (ie Yamls) is located https://github.com/ibm-cloud-architecture/cloudnative_sample_app_deploy
-- Create a new Git repository on your own public git account using the git repo as a template
-- The directory `yamls` on the repository contains the deployment manifests to deploy the app
+### Infra Git Repository
+- [Git repository with application manifest](https://github.com/csantanapr/tutorial-tekton-argocd-infra)
+- Create a new git repository using this repo as [template](https://github.com/csantanapr/tutorial-tekton-argocd-infra/generate)
+- The directory `ocp/yamls` contains the application manifest files
 
-### Argocd
-- Argocd is already installed on the OpenShift cluster using an operator on the namespace `argocd`
-- To login into the Argocd use username `admin` and password the name of the argocd pod
-- Ge the ArgoCD UI URL with the following command
-    ```bash
-    export ARGOCD_URL="https://$(oc get route argocd-server -n argocd -o jsonpath='{.spec.host}')"
-    echo "ARGOCD URL=$ARGOCD_URL"
-    open "$ARGOCD_URL"
-    ```
-- Deploy the application on the new namespace using infra git repositoryurl and configure with autosync when every time there is a change in the Infra repo.
-
-### Tekton
-- Tekton is already installed on the OpenShift cluster using an operator
-- The service account to use to run the pipelines is `pipeline` it automatically gets created on every new namespace
+### Pipeline Git Repository
+- Create new repository to store pipeline resources
+- Use the ServiceAccount `pipeline`
 - Use the following guide to create a Pipeline, Tasks, and secret:
-    ![Tekton Pipeline](images/tekton-pipeline.png)
     - Create a pipeline, tasks, secrets on the target namespace
     - Git clone the source code from the App repo
     - Build a container image using the `Dockerfile` on the repo
@@ -56,10 +41,7 @@ You are being provided with:
     - Git push the changes to the infra git repo, this should trigger argocd to pickup any changes from the infra repo.
 
 ## Hints
-
-- Use [task-git-push.yaml](/yamls/project-cicd/task-git-push.yaml) as an example of Tekton steps to git clone, edit yaml files, and git push
-- Use [git-infra-secret.yaml](/yamls/project-cicd/git-infra-secret.yaml) as an example of Kubernetes secret being reference by the `git-push` task
-- The secret contains the git username and token with permission `repo` that gives write access to repository
+- The secret contains the git username and token with permission `repo` that gives write access to the git infra repository
 - OpenShift 4 comes with an internal image registry you can push from a Tekton task
 - The image registry url contains the service name, port, namespace, image name and tag
     ```
@@ -68,15 +50,10 @@ You are being provided with:
 - The image registry only handles ssl/https connections, but it uses a self sign certificate
 - You need to ignore TLS-Verify to be able to succesfully push and ignore ssl errors for example using buildah set the flag `--tls-verify="false"`
 
-
 ## Extra Credit
 
 - Make the pipeline to run automatically every time new code gets pushed to the Code git repository
   - Configure a Github Webhook using the new [Tekton Triggers](https://github.com/tektoncd/triggers) listener and bindings
-  - You can use the Tekton Getting Started as guide on how to implement the Webhook
-  - [Install](https://github.com/tektoncd/triggers/blob/master/docs/install.md) Triggers, check out the
-    [installation guide](https://github.com/tektoncd/triggers/blob/master/docs/install.md), [examples](https://github.com/tektoncd/triggers/blob/master/examples/README.md) or
-    follow the [getting started guide](https://github.com/tektoncd/triggers/blob/master/docs/getting-started/README.md) to become
-    familiar with the project. The getting started guide walks through setting up an
-    end-to-end image building solution, which will be triggered from GitHub `push`
-    events.
+
+## Solution
+Here is one implementation as a [solution](./solution)
