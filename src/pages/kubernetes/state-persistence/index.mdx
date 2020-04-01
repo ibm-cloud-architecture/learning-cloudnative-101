@@ -19,7 +19,12 @@ A Kubernetes volume, on the other hand, has an explicit lifetime - the same as t
 
 
 ## Resources
-- https://kubernetes.io/docs/concepts/storage/volumes/
+
+**OpenShift**
+- [Volume Lifecycle](https://docs.openshift.com/container-platform/4.3/storage/understanding-persistent-storage.html#lifecycle-volume-claim_understanding-persistent-storage)
+
+**IKS**
+- [Volumes](https://kubernetes.io/docs/concepts/storage/volumes/)
 
 
 ## References
@@ -81,44 +86,17 @@ PersistentVolumes binds are exclusive, and since PersistentVolumeClaims are name
 
 
 ## Resources
-- https://kubernetes.io/docs/concepts/storage/persistent-volumes/
-- https://kubernetes.io/docs/concepts/storage/persistent-volumes/#writing-portable-configuration
-- https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
+**OpenShift**
+- [Persistent Storage](https://docs.openshift.com/container-platform/4.3/storage/understanding-persistent-storage.html)
+- [Persistent Volume Types](https://docs.openshift.com/container-platform/4.3/storage/understanding-persistent-storage.html#types-of-persistent-volumes_understanding-persistent-storage)
+- [Expanding Peristent Volumes](https://docs.openshift.com/container-platform/4.3/storage/expanding-persistent-volumes.html)
+
+**IKS**
+- [Persistent Volumes](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)
+- [Writing Portable Configurations](https://kubernetes.io/docs/concepts/storage/persistent-volumes/#writing-portable-configuration)
+- [Configuring Persistent Volume Storage](https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/)
 
 ## References
-<Tabs>
-<Tab label="OpenShift">
-
-```
-  oc get projects
-  oc api-resources -o wide
-  oc api-resources -o name
-
-  oc get nodes,ns,po,deploy,svc
-
-  oc describe node --all
-  ```
-
-</Tab>
-
-<Tab label="IKS">
-
-```
-  kubectl create -f pod.yaml
-  # update label
-  kubectl apply -f pod.yaml
-  # update label
-  kubectl edit pod myapp-pod
-  kubectl delete pod myapp-pod
-```
-
-</Tab>
-
-</Tabs>
-```
-kubectl get pv
-kubectl get pvc
-```
 
 ```yaml
 kind: PersistentVolume
@@ -167,6 +145,40 @@ spec:
     persistentVolumeClaim:
       claimName: my-pvc
 ```
+
+<Tabs>
+
+  <Tab label="OpenShift">
+
+  **Getting the Persistent Volumes in Project** 
+  ```
+    oc get pv 
+  ```
+  **Getting the Persistent Volume Claims ** 
+  ```
+    oc get pvc
+  ```
+  **Getting a specific Persistent Volume** 
+  ```
+    oc get pv <pv-claim>
+  ```
+
+  </Tab>
+
+  <Tab label="IKS">
+
+  **Getting the PersistentVolume ** 
+  ```
+    kubectl get pv
+  ```
+  **Getting the PersistentVolumeClaims ** 
+  ```
+    kubectl get pvc
+  ```
+
+  </Tab>
+
+</Tabs>
 
 ## Activities
 

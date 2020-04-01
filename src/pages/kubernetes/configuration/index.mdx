@@ -36,6 +36,8 @@ When you create a Pod, you can set environment variables for the containers that
 A Pod can use environment variables to expose information about itself to Containers running in the Pod. Environment variables can expose Pod fields and Container fields
 
 ## Resources
+**OpenShift**
+**IKS**
 - https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/
 - https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
 - https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#exposing-pods-to-the-cluster
@@ -209,6 +211,8 @@ You can data from a ConfigMap in 3 different ways.
 - As a set of files, each key represented by a file on mounted volume
 
 ## Resources
+**OpenShift**
+**IKS**
 - https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/
 
 ## References
@@ -290,6 +294,8 @@ A Secret is an object that contains a small amount of sensitive data such as a p
 
 
 ## Resources
+**OpenShift**
+**IKS**
 - https://kubernetes.io/docs/concepts/configuration/secret/
 - https://kubernetes.io/docs/tasks/inject-data-application/distribute-credentials-secure/
 
@@ -401,6 +407,8 @@ A security context defines privilege and access control settings for a Pod or Co
 To specify security settings for a Pod, include the securityContext field in the Pod specification. The securityContext field is a PodSecurityContext object. The security settings that you specify for a Pod apply to all Containers in the Pod.
 
 ## Resources
+**OpenShift**
+**IKS**
 - https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 
 
@@ -492,6 +500,8 @@ User accounts are for humans. Service accounts are for processes, which run in p
 User accounts are intended to be global. Names must be unique across all namespaces of a cluster, future user resource will not be namespaced. Service accounts are namespaced.
 
 ## Resources
+**OpenShift**
+**IKS**
 https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/
 https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 

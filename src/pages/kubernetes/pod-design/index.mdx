@@ -20,6 +20,8 @@ You can use Kubernetes annotations to attach arbitrary non-identifying metadata 
 You can use either labels or annotations to attach metadata to Kubernetes objects. Labels can be used to select objects and to find collections of objects that satisfy certain conditions. In contrast, annotations are not used to identify and select objects. The metadata in an annotation can be small or large, structured or unstructured, and can include characters not permitted by labels.
 
 ## Resources
+**OpenShift**
+**IKS**
 - https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 - https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 
@@ -119,6 +121,8 @@ The following are typical use cases for Deployments:
 
 
 ## Resources
+**OpenShift**
+**IKS**
 - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#scaling-a-deployment
 
@@ -204,6 +208,8 @@ Sometimes, you may want to rollback a Deployment; for example, when the Deployme
 A Deployment’s revision is created when a Deployment’s rollout is triggered. This means that the new revision is created if and only if the Deployment’s Pod template (.spec.template) is changed, for example if you update the labels or container images of the template. Other updates, such as scaling the Deployment, do not create a Deployment revision, so that you can facilitate simultaneous manual- or auto-scaling. This means that when you roll back to an earlier revision, only the Deployment’s Pod template part is rolled back.
 
 ## Resources
+**OpenShift**
+**IKS**
 - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment
 
@@ -284,6 +290,8 @@ One CronJob object is like one line of a crontab (cron table) file. It runs a jo
 All CronJob schedule: times are based on the timezone of the master where the job is initiated.
 
 ## Resources
+**OpenShift**
+**IKS**
 - https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/
 - https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
 - https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/

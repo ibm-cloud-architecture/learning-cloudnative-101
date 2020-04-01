@@ -112,6 +112,8 @@ To scale an application and provide a reliable service, you need to understand h
 Prometheus, a CNCF project, can natively monitor Kubernetes, nodes, and Prometheus itself.
 
 ## Resources
+**OpenShift**
+**IKS**
 - https://kubernetes.io/docs/tasks/debug-application-cluster/resource-usage-monitoring/
 - https://kubernetes.io/docs/tasks/debug-application-cluster/resource-usage-monitoring/
 - https://kubernetes.io/docs/tasks/debug-application-cluster/resource-metrics-pipeline/
@@ -141,14 +143,13 @@ Prometheus, a CNCF project, can natively monitor Kubernetes, nodes, and Promethe
   # update label
   kubectl edit pod myapp-pod
   kubectl delete pod myapp-pod
+
+  minikube addons enable metrics-server
 ```
 
 </Tab>
 
 </Tabs>
-```
-minikube addons enable metrics-server
-```
 
 Verify
 ```
