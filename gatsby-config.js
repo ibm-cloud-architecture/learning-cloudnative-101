@@ -14,8 +14,8 @@ module.exports = {
         repository: {
           baseUrl:
             'https://github.com/ibm-cloud-architecture/learning-cloudnative-101',
-          subDirectory: '/',
-        },
+          subDirectory: '/'
+        }
       }
     },
     {
@@ -23,6 +23,12 @@ module.exports = {
       options: {
         name: 'data',
         path: './src/data'
+      }
+    },
+    {
+      resolve: `gatsby-plugin-google-analytics`,
+      options: {
+        trackingId: "UA-149377589-4"
       }
     }
   ]
