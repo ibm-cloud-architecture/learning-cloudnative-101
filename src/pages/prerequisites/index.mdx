@@ -92,27 +92,65 @@ The following is a list of desktop tools required to help with installation and 
 
 - [OpenShift CodeReady Containers (CRC)](https://code-ready.github.io/crc/#installing-codeready-containers_gsg)
 
-### Minikube Setup 
+
+
+### Environment Setup 
+<Tabs>
+
+<Tab label="MiniKube">
 
 - Verify your cluster has 4GB+ memory, and kubernetes 1.16+
-    ```bash
+    ```
     minikube config view
     ```
 - Verify your `vm-driver` is set for `hyperkit`
-    ```bash
+    ```
     minikube config set vm-driver hyperkit
     ```
 - In case memory is not set, or need to increase set the memory and recreate the VM
-    ```bash
+    ```
     minikube config set memory 4096
     minikube config set kubernetes-version v1.16.6
     minikube delete
     minikube start
     ```
 - Kubernetes should be v1.15+
-    ```bash
+    ```
     kubectl version
     ```
+
+</Tab>
+
+<Tab label="CRC (MiniShift)">
+
+** Getting API Resources **
+```
+  kubectl api-resources
+```
+** Viewing Resources **
+```
+  kubectl api-resources -o wide
+```
+** Viewing Resources **
+```
+  kubectl api-resources -o name
+```
+** Getting a list of specific objects **
+```
+  kubectl get nodes,ns,po,deploy,svc
+```
+** Describing the resources **
+```
+  kubectl describe node --all
+```
+</Tab>
+<Tab label="IKS">
+
+
+</Tab>
+
+</Tabs>
+
 
 ## Reading Material
 

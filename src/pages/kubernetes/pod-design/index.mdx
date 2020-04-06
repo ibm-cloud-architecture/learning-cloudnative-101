@@ -20,26 +20,16 @@ You can use Kubernetes annotations to attach arbitrary non-identifying metadata 
 You can use either labels or annotations to attach metadata to Kubernetes objects. Labels can be used to select objects and to find collections of objects that satisfy certain conditions. In contrast, annotations are not used to identify and select objects. The metadata in an annotation can be small or large, structured or unstructured, and can include characters not permitted by labels.
 
 ## Resources
-- https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-- https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+
+**OpenShift**
+- [CLI Label Commands](https://docs.openshift.com/enterprise/3.0/cli_reference/basic_cli_operations.html#application-modification-cli-operations)
+
+**IKS**
+- [Labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+- [Annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
 
 
 ## References
-
-```
-kubectl get pods --show-labels
-kubectl get pods -L tier,env
-kubectl get pods -l app
-kubectl get pods -l tier=frontend
-kubectl get pods -l 'env=dev,tier=frontend'
-kubectl get pods -l 'env in (dev, test)'
-kubectl get pods -l 'tier!=backend'
-kubectl get pods -l 'env,env notin (prod)'
-```
-
-```
-kubectl label node minikube disk=ssd
-```
 
 ```yaml
 apiVersion: v1
@@ -74,6 +64,50 @@ spec:
     disk: ssd
 ```
 
+### Commands
+<Tabs>
+<Tab label="OpenShift">
+
+** Change Labels on Objects **
+```
+  oc label <objectname>
+```
+
+</Tab>
+
+<Tab label="IKS">
+
+  **Create the Pod**
+  ```
+  kubectl create -f pod.yaml
+  ```
+  **Update label in the YAML file and reapply it.**
+  ```
+  kubectl apply -f pod.yaml
+  ```
+  **You can edit the labels as well.**
+  ```
+  kubectl edit pod myapp-pod
+  ```
+  **Getting Pods based on their labels.**
+  ```
+  kubectl get pods --show-labels
+  kubectl get pods -L tier,env
+  kubectl get pods -l app
+  kubectl get pods -l tier=frontend
+  kubectl get pods -l 'env=dev,tier=frontend'
+  kubectl get pods -l 'env in (dev, test)'
+  kubectl get pods -l 'tier!=backend'
+  kubectl get pods -l 'env,env notin (prod)'
+  ```
+  **Delete the Pod.**
+  ```
+  kubectl delete pod myapp-pod
+  ```
+</Tab>
+
+</Tabs>
+
 # Deployments
 
 A Deployment provides declarative updates for Pods and ReplicaSets.
@@ -91,13 +125,43 @@ The following are typical use cases for Deployments:
 
 
 ## Resources
+**OpenShift**
+**IKS**
 - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#scaling-a-deployment
 
 
 
 ## References
+<Tabs>
+<Tab label="OpenShift">
 
+```
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl create -f pod.yaml
+  # update label
+  kubectl apply -f pod.yaml
+  # update label
+  kubectl edit pod myapp-pod
+  kubectl delete pod myapp-pod
+```
+
+</Tab>
+
+</Tabs>
 ```
 kubectl get deployments
 kubectl get deployment my-deployment
@@ -148,11 +212,42 @@ Sometimes, you may want to rollback a Deployment; for example, when the Deployme
 A Deployment’s revision is created when a Deployment’s rollout is triggered. This means that the new revision is created if and only if the Deployment’s Pod template (.spec.template) is changed, for example if you update the labels or container images of the template. Other updates, such as scaling the Deployment, do not create a Deployment revision, so that you can facilitate simultaneous manual- or auto-scaling. This means that when you roll back to an earlier revision, only the Deployment’s Pod template part is rolled back.
 
 ## Resources
+**OpenShift**
+**IKS**
 - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 - https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment
 
 
 ## References
+<Tabs>
+<Tab label="OpenShift">
+
+```
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl create -f pod.yaml
+  # update label
+  kubectl apply -f pod.yaml
+  # update label
+  kubectl edit pod myapp-pod
+  kubectl delete pod myapp-pod
+```
+
+</Tab>
+
+</Tabs>
 ```
 kubectl get deployments
 kubectl set image deployment/nginx-deployment nginx=nginx:1.16.1 --record
@@ -199,12 +294,42 @@ One CronJob object is like one line of a crontab (cron table) file. It runs a jo
 All CronJob schedule: times are based on the timezone of the master where the job is initiated.
 
 ## Resources
+**OpenShift**
+**IKS**
 - https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/
 - https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
 - https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/
 
 ## References
+<Tabs>
+<Tab label="OpenShift">
 
+```
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl create -f pod.yaml
+  # update label
+  kubectl apply -f pod.yaml
+  # update label
+  kubectl edit pod myapp-pod
+  kubectl delete pod myapp-pod
+```
+
+</Tab>
+
+</Tabs>
 ```
 kubectl get jobs
 kubectl describe job pi

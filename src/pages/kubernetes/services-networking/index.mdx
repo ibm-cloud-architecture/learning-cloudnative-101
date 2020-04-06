@@ -25,26 +25,14 @@ For non-native applications, Kubernetes offers ways to place a network port or l
 
 
 ## Resources
-- https://kubernetes.io/docs/concepts/services-networking/service/
-- https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/
+
+**IKS & OpenShift**
+- [Services](https://kubernetes.io/docs/concepts/services-networking/service/)
+- [Exposing Services](https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/)
 
 ## References
 
-```
-kubectl get svc
-kubectl describe svc my-service
-kubectl get ep my-service
-kubectl get deployments
-kubect get rs
-kubect get pods
-kubectl get all
-kubectl expose deployment my-deployment --port 80 --target-port=http --selector app=nginx --name my-service-2 --type NodePort
-minikube service --url
-kubectl por-forward
-```
-
 ```yaml
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -82,6 +70,50 @@ spec:
       port: 80
       targetPort: http
 ```
+<Tabs>
+<Tab label="OpenShift">
+
+** Get Service **
+```
+oc get svc
+```
+** Get Service Description **
+```
+oc describe svc my-service
+```
+** Get Route for the Service **
+```  
+oc get route
+```
+** Expose a service **
+```
+oc expose service <service_name>
+```
+
+</Tab>
+
+<Tab label="IKS">
+
+** Get Service **
+```
+kubectl get svc
+```
+** Get Service Description **
+```
+kubectl describe svc my-service
+```
+** Get Service Endpoints **
+```
+kubectl get ep my-service
+```
+** Expose a Deployment via a Service **
+```
+kubectl expose deployment my-deployment --port 80 --target-port=http --selector app=nginx --name my-service-2 --type NodePort
+```
+
+</Tab>
+
+</Tabs>
 
 # Ingress
 
@@ -92,11 +124,32 @@ Ingress can provide load balancing, SSL termination and name-based virtual hosti
 Ingress exposes HTTP and HTTPS routes from outside the cluster to services within the cluster. Traffic routing is controlled by rules defined on the Ingress resource.
 
 ## Resources
-- https://kubernetes.io/docs/concepts/services-networking/ingress/
-- https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/
-- https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/
+
+**OpenShift**
+- [Ingress Operator](https://docs.openshift.com/container-platform/4.3/networking/ingress-operator.html)
+- [Using Ingress Controllers](https://docs.openshift.com/container-platform/4.3/networking/configuring_ingress_cluster_traffic/configuring-ingress-cluster-traffic-ingress-controller.html)
+
+**IKS**
+- [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+- [Ingress Controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/)
+- [Minikube Ingress](https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/)
 
 ## References
+<Tabs>
+<Tab label="OpenShift">
+
+** View Ingress Status **
+```
+  oc describe clusteroperators/ingress
+```
+** Describe default Ingress Controller **
+```
+  oc describe --namespace=openshift-ingress-operator ingresscontroller/default
+```
+
+</Tab>
+
+<Tab label="IKS">
 
 ```
 minikube addons enable ingress
@@ -113,8 +166,11 @@ kubectl get ingress
 kubcetl describe ingress example-ingress
 curl hello-world.info --resolve hello-world.info:80:<ADDRESS>
 ```
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+
+</Tab>
+
+</Tabs>
+
 ```yaml
 apiVersion: networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/v1beta1
 kind: Ingress

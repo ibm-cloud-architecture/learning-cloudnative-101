@@ -16,14 +16,48 @@ Kubernetes provides tools to help troubleshoot and debug problems with applicati
 Usually is getting familiar with how primitives objects interact with each other, checking the status of objects, and finally checking logs for any last resource clues.
 
 ## Resources
-- https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application/
-- https://kubernetes.io/docs/tasks/debug-application-cluster/debug-service/
-- https://kubernetes.io/docs/tasks/debug-application-cluster/debug-pod-replication-controller/
+
+**OpenShift**
+- [Debugging Applications](https://docs.openshift.com/container-platform/4.3/cli_reference/openshift_developer_cli/debugging-applications-in-odo.html)
+- [Debugging Metrics](https://docs.openshift.com/container-platform/4.3/metering/metering-troubleshooting-debugging.html)
+
+**IKS**
+- [Debugging Applications](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-application/)
+- [Debugging Services](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-service/)
+- [Debugging Replication Controllers](https://kubernetes.io/docs/tasks/debug-application-cluster/debug-pod-replication-controller/)
 
 
 ## References
 
+<Tabs>
+<Tab label="OpenShift">
 
+```
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+  kubectl create -f pod.yaml
+  # update label
+  kubectl apply -f pod.yaml
+  # update label
+  kubectl edit pod myapp-pod
+  kubectl delete pod myapp-pod
+```
+
+</Tab>
+
+</Tabs>
 Broken setup to debug
 ```
 curl -s https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/a92550dd499ebefc205fa2cd5c18123409186712/debugk8s.64 | base64 -d | kubectl apply -f -
