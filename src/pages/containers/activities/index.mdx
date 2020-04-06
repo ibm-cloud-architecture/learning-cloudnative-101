@@ -10,20 +10,12 @@ description: Lab introducting docker concepts
   <AnchorLink>Get the sample application</AnchorLink>
   <AnchorLink>Run the application on Docker</AnchorLink>
     <AnchorLinks small>
-      <AnchorLink>Build the application</AnchorLink>
       <AnchorLink>Build the docker image</AnchorLink>
       <AnchorLink>Run the docker container</AnchorLink>
       <AnchorLink>Access the application</AnchorLink>
       <AnchorLink>Pushing an image to a Registry</AnchorLink>
       <AnchorLink>Clean Up</AnchorLink>
       <AnchorLink>Pulling an image from the registry</AnchorLink>
-    </AnchorLinks>
-  <AnchorLink>Run the application on Docker using multi-stage build</AnchorLink>
-    <AnchorLinks small>
-      <AnchorLink>Build the docker image</AnchorLink>
-      <AnchorLink>Run the docker container</AnchorLink>
-      <AnchorLink>Access the application</AnchorLink>
-      <AnchorLink>Clean Up</AnchorLink>
     </AnchorLinks>
   <AnchorLink>Conclusion</AnchorLink>
 </AnchorLinks>
@@ -118,106 +110,96 @@ cd cloudnative_sample_app/
 
 ## Run the application on Docker
 
-### Build the application
-
-To build the application, use the below command.
-
-```bash
-./mvnw install
-```
-
-You will notice something at the end like below once done.
-
-```bash
-[INFO] --- maven-install-plugin:2.5.2:install (default-install) @ cloudnativesampleapp ---
-[INFO] Installing /Users/user@ibm.com/cloudnative_sample_app/target/cloudnativesampleapp-1.0-SNAPSHOT.jar to /Users/user@ibm.com/.m2/repository/projects/cloudnativesampleapp/1.0-SNAPSHOT/cloudnativesampleapp-1.0-SNAPSHOT.jar
-[INFO] Installing /Users/user@ibm.com/cloudnative_sample_app/pom.xml to /Users/user@ibm.com/.m2/repository/projects/cloudnativesampleapp/1.0-SNAPSHOT/cloudnativesampleapp-1.0-SNAPSHOT.pom
-[INFO] ------------------------------------------------------------------------
-[INFO] BUILD SUCCESS
-[INFO] ------------------------------------------------------------------------
-[INFO] Total time:  34.714 s
-[INFO] Finished at: 2019-06-28T11:11:06-05:00
-[INFO] ------------------------------------------------------------------------
-```
-
 ### Build the docker image
 
 Let's take look at the docker file before building it.
 
 ```
+FROM maven:3.3-jdk-8 as builder
+
+COPY . .
+RUN mvn clean install
+
 FROM openliberty/open-liberty:springBoot2-ubi-min as staging
-USER root
-COPY target/cloudnativesampleapp-1.0-SNAPSHOT.jar /staging/fatClinic.jar
 
+COPY --chown=1001:0 --from=builder /target/cloudnativesampleapp-1.0-SNAPSHOT.jar /config/app.jar
 RUN springBootUtility thin \
- --sourceAppPath=/staging/fatClinic.jar \
- --targetThinAppPath=/staging/thinClinic.jar \
- --targetLibCachePath=/staging/lib.index.cache
+    --sourceAppPath=/config/app.jar \
+    --targetThinAppPath=/config/dropins/spring/thinClinic.jar \
+    --targetLibCachePath=/opt/ol/wlp/usr/shared/resources/lib.index.cache
 
-FROM openliberty/open-liberty:springBoot2-ubi-min
-USER root
-COPY --from=staging /staging/lib.index.cache /opt/ol/wlp/usr/shared/resources/lib.index.cache
-COPY --from=staging /staging/thinClinic.jar /config/dropins/spring/thinClinic.jar
-
-RUN chown -R 1001.0 /config && chmod -R g+rw /config
-RUN chown -R 1001.0 /opt/ol/wlp/usr/shared/resources/lib.index.cache && chmod -R g+rw /opt/ol/wlp/usr/shared/resources/lib.index.cache
-
-USER 1001
 ```
 
 - Using the `FROM` instruction, we provide the name and tag of an image that should be used as our base. This must always be the first instruction in the Dockerfile.
-- `USER` instruction sets the username (or UID).
 - Using `COPY` instruction, we copy new contents from the source filesystem to the container filesystem.
 - `RUN` instruction executes the commands.
 
+This Dockerfile leverages multi-stage builds, which lets you create multiple stages in your Dockerfile to do certain tasks.
+
+In our case, we have two stages.
+
+- The first one uses `maven:3.3-jdk-8` as its base image to download and build the project and its dependencies using Maven.
+- The second stage uses `openliberty/open-liberty:springBoot2-ubi-min` as its base image to run the compiled code from the previous stage.
+
+The advantage of using the multi-stage builds approach is that the resulting image only uses the base image of the last stage. Meaning that in our case, we will only end up with the `openliberty/open-liberty:springBoot2-ubi-min` as our base image, which is much tinier than having an image that has both Maven and the JRE.
+
+By using the multi-stage builds approach when it makes sense to use it, you will end up with much lighter and easier to maintain images, which can save you space on your Docker Registry. Also, having tinier images usually means less resource consumption on your worker nodes, which can result cost-savings.
+
+
 Once, you have the docker file ready, the next step is to build it. The `build` command allows you to build a docker image which you can later run as a container.
 
-4. Build the docker file with the `image_name` of `greeting` and give it a `image_tag` of `v1.0.0` and build it using the current context.
+1. Build the docker file with the `image_name` of `greeting` and give it a `image_tag` of `v1.0.0` and build it using the current context.
 
 You will see something like below:
 
 ``` bash
 $ <command>
 Sending build context to Docker daemon  22.17MB
-Step 1/11 : FROM openliberty/open-liberty:springBoot2-ubi-min as staging
-springBoot2-ubi-min: Pulling from openliberty/open-liberty
-949de0c45264: Pull complete
-7e9d54341c0e: Pull complete
+Step 1/6 : FROM maven:3.3-jdk-8 as builder
+ ---> 9997d8483b2f
+Step 2/6 : COPY . .
+ ---> c198e3e54023
+Step 3/6 : RUN mvn clean install
+ ---> Running in 24378df7f87b
+[INFO] Scanning for projects...
 .
 .
 .
-Step 6/11 : USER root
- ---> Using cache
- ---> 9e891aecf123
-Step 7/11 : COPY --from=staging /staging/lib.index.cache /opt/ol/wlp/usr/shared/resources/lib.index.cache
- ---> 0e27922ad7a6
-Step 8/11 : COPY --from=staging /staging/thinClinic.jar /config/dropins/spring/thinClinic.jar
- ---> 93bd8360110b
-Step 9/11 : RUN chown -R 1001.0 /config && chmod -R g+rw /config
- ---> Running in ea42c7b6f92a
-Removing intermediate container ea42c7b6f92a
- ---> 764ef4196d1b
-Step 10/11 : RUN chown -R 1001.0 /opt/ol/wlp/usr/shared/resources/lib.index.cache && chmod -R g+rw /opt/ol/wlp/usr/shared/resources/lib.index.cache
- ---> Running in 2b1738422b89
-Removing intermediate container 2b1738422b89
- ---> af170c7af294
-Step 11/11 : USER 1001
- ---> Running in 98fc928c9778
-Removing intermediate container 98fc928c9778
- ---> 89bd7032fdee
-Successfully built 89bd7032fdee
+[INFO] Installing /target/cloudnativesampleapp-1.0-SNAPSHOT.jar to /root/.m2/repository/projects/cloudnativesampleapp/1.0-SNAPSHOT/cloudnativesampleapp-1.0-SNAPSHOT.jar
+[INFO] Installing /pom.xml to /root/.m2/repository/projects/cloudnativesampleapp/1.0-SNAPSHOT/cloudnativesampleapp-1.0-SNAPSHOT.pom
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 44.619 s
+[INFO] Finished at: 2020-04-06T16:07:04+00:00
+[INFO] Final Memory: 38M/385M
+[INFO] ------------------------------------------------------------------------
+Removing intermediate container 24378df7f87b
+ ---> cc5620334e1b
+Step 4/6 : FROM openliberty/open-liberty:springBoot2-ubi-min as staging
+ ---> 021530b0b3cb
+Step 5/6 : COPY --chown=1001:0 --from=builder /target/cloudnativesampleapp-1.0-SNAPSHOT.jar /config/app.jar
+ ---> dbc81e5f4691
+Step 6/6 : RUN springBootUtility thin     --sourceAppPath=/config/app.jar     --targetThinAppPath=/config/dropins/spring/thinClinic.jar     --targetLibCachePath=/opt/ol/wlp/usr/shared/resources/lib.index.cache
+ ---> Running in 8ea80b5863cb
+Creating a thin application from: /config/app.jar
+Library cache: /opt/ol/wlp/usr/shared/resources/lib.index.cache
+Thin application: /config/dropins/spring/thinClinic.jar
+Removing intermediate container 8ea80b5863cb
+ ---> a935a129dcb2
+Successfully built a935a129dcb2
 Successfully tagged greeting:v1.0.0
 ```
 
-5. Next, verify your newly built image
+2. Next, verify your newly built image
 
 The output will be as follows.
 
 ```bash
 $ <command>
 REPOSITORY                           TAG                   IMAGE ID            CREATED             SIZE
-greeting                             v1.0.0                89bd7032fdee        51 seconds ago      402MB
-openliberty/open-liberty             springBoot2-ubi-min   bcfcb2c5ce16        6 days ago          366MB
+greeting                             v1.0.0                89bd7032fdee        51 seconds ago      537MB
+openliberty/open-liberty             springBoot2-ubi-min   bcfcb2c5ce16        6 days ago          480MB
 hello-world                          latest                f9cad508cb4c        5 months ago        1.84kB
 ```
 
@@ -225,7 +207,7 @@ hello-world                          latest                f9cad508cb4c        5
 
 Now let's try running the docker container. Run it with the following parameters:
 
-6. Expose port `9080`. Run it in the background in detached mode. Give the container the name of `greeting`.
+3. Expose port `9080`. Run it in the background in detached mode. Give the container the name of `greeting`.
 
 Once done, you will have something like below.
 
@@ -244,7 +226,7 @@ See 'docker run --help'.
 
 It is a good practice to name your containers. Naming helps you to discover your service easily.
 
-7. List all the running containers.
+4. List all the running containers.
 
 You will see something like below.
 
@@ -254,7 +236,7 @@ CONTAINER ID        IMAGE               COMMAND                  CREATED        
 bc2dc95a6bd1        greeting:v1.0.0     "/opt/ol/helpers/run…"   18 minutes ago      Up 18 minutes       0.0.0.0:9080->9080/tcp, 9443/tcp   greeting
 ```
 
-8. Let's inspect the running container.
+5. Let's inspect the running container.
 
 By inspecting the container, you can access detailed information about the container. By using this command, you get to know the details about network settings, volumes, configs, state etc.
 
@@ -292,7 +274,7 @@ $ <command>
 ]
 ```
 
-9. Get the logs of the `greeting` container.
+6. Get the logs of the `greeting` container.
 
 It helps you to access the logs of your container. It allows you to debug the container if it fails. It also lets you to know what is happening with your application.
 
@@ -341,13 +323,13 @@ Container Image Registry is a place where you can store the container images. Th
 
 Let us now push the image to docker hub registry. Before pushing the image to the registry, one needs to login.
 
-10. Login to Docker Hub using your credentials.
+7. Login to Docker Hub using your credentials.
 
 Once logged in we need to take the image for the registry.
 
-11. Tag your image for the image registry. Using the `same name and tag from before`. (*NOTE: the command has both the source tag and repository destination tag in it.*)
+8. Tag your image for the image registry. Using the `same name and tag from before`. (*NOTE: the command has both the source tag and repository destination tag in it.*)
 
-12. Now push the image to the registry. This allows you to share images to a registry.
+9. Now push the image to the registry. This allows you to share images to a registry.
 
 If everything goes fine, you will see something like below.
 
@@ -371,17 +353,17 @@ Once the push is successful, your image will be residing in the registry.
 
 ### Clean Up
 
-13. Stop the `greeting` container.
+10. Stop the `greeting` container.
 
-14. Remove the container.
+11. Remove the container.
 
-15. Remove the image. (*NOTE: You will need the image_id to remove it.*)
+12. Remove the image. (*NOTE: You will need the image_id to remove it.*)
 
 ### Pulling an image from the registry
 
 Sometimes, you may need the images that are residing on your registry. Or you may want to use some public images out there. Then, we need to pull the image from the registry.
 
-16. Pull the image `greeting` from the registry, 
+13. Pull the image `greeting` from the registry, 
 
 If it successfully got pulled, we will see something like below.
 
@@ -393,151 +375,6 @@ Digest: sha256:21c2034646a31a18b053546df00d9ce2e0871bafcdf764f872a318a54562e6b4
 Status: Downloaded newer image for <repository_name>/greeting:v1.0.0
 docker.io/<repository_name>/greeting:v1.0.0
 ```
-
-## Run the application on Docker using multi-stage build
-
-In this, building the application is a part of the docker image. It automatically does it for you. You need not run `mvn install` explicitly.
-
-### Build the docker image
-
-Let's take look at the docker file before building it.
-
-```
-# Build stage - could use maven or our image
-FROM maven:3.3-jdk-8 as builder
-
-# Creating Work directory
-ENV BUILD_DIR=/usr/src/app/
-RUN mkdir $BUILD_DIR
-WORKDIR $BUILD_DIR
-
-# Reuse local .m2. if not all the dependencies will be always downloaded
-# This can be removed if you want to
-VOLUME ${HOME}/.m2:/root/.m2
-ADD . /usr/src/app
-
-RUN bash -c " mvn clean install"
-
-FROM openliberty/open-liberty:springBoot2-ubi-min as staging
-USER root
-
-# Create app directory
-ENV APP_HOME=/app
-WORKDIR $APP_HOME
-
-# Copy jar file over from builder stage
-COPY --from=builder /usr/src/app/target/cloudnativesampleapp-1.0-SNAPSHOT.jar $APP_HOME
-RUN mv ./cloudnativesampleapp-1.0-SNAPSHOT.jar app.jar
-
-RUN springBootUtility thin \
- --sourceAppPath=app.jar \
- --targetThinAppPath=/staging/thinClinic.jar \
- --targetLibCachePath=/staging/lib.index.cache
-
-FROM openliberty/open-liberty:springBoot2-ubi-min
-USER root
-COPY --from=staging /staging/lib.index.cache /opt/ol/wlp/usr/shared/resources/lib.index.cache
-COPY --from=staging /staging/thinClinic.jar /config/dropins/spring/thinClinic.jar
-
-RUN chown -R 1001.0 /config && chmod -R g+rw /config
-RUN chown -R 1001.0 /opt/ol/wlp/usr/shared/resources/lib.index.cache && chmod -R g+rw /opt/ol/wlp/usr/shared/resources/lib.index.cache
-
-USER 1001
-```
-
-This Dockerfile leverages multi-stage builds, which lets you create multiple stages in your Dockerfile to do certain tasks.
-
-In our case, we have two stages.
-
-- The first one uses `maven:3.3-jdk-8` as its base image to download and build the project and its dependencies using Maven.
-- The second stage uses `openliberty/open-liberty:springBoot2-ubi-min` as its base image to run the compiled code from the previous stage.
-
-The advantage of using the multi-stage builds approach is that the resulting image only uses the base image of the last stage. Meaning that in our case, we will only end up with the `openliberty/open-liberty:springBoot2-ubi-min` as our base image, which is much tinier than having an image that has both Maven and the JRE.
-
-By using the multi-stage builds approach when it makes sense to use it, you will end up with much lighter and easier to maintain images, which can save you space on your Docker Registry. Also, having tinier images usually means less resource consumption on your worker nodes, which can result cost-savings.
-
-To build the docker image, run the below command.
-
-```bash
-$ docker build -f Dockerfile.multistage -t greeting:v2.0.0 .
-```
-
-You will see something like below.
-
-```bash
-$ docker build -f Dockerfile.multistage -t greeting:v2.0.0 .
-Sending build context to Docker daemon  22.17MB
-Step 1/21 : FROM maven:3.3-jdk-8 as builder
-3.3-jdk-8: Pulling from library/maven
-6d827a3ef358: Pull complete
-2726297beaf1: Pull complete
-e4cf3e9f705c: Pull complete
-3733107c5c01: Pull complete
-Digest: sha256:18e8bd367c73c93e29d62571ee235e106b18bf6718aeb235c7a07840328bba71
-Status: Downloaded newer image for maven:3.3-jdk-8
- ---> 9997d8483b2f
-Step 2/21 : ENV BUILD_DIR=/usr/src/app/
- ---> Running in 02c2c0bdb8bf
-Removing intermediate container 02c2c0bdb8bf
- ---> f09a7e2e03e7
-Step 3/21 : RUN mkdir $BUILD_DIR
- ---> Running in af3141c3e1fc
-Removing intermediate container af3141c3e1fc
- ---> 98aee6a73219
-[INFO] Scanning for projects...
-Downloading: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/2.1.7.RELEASE/spring-boot-starter-parent-2.1.7.RELEASE.pom
-Downloaded: https://repo.maven.apache.org/maven2/org/springframework/boot/spring-boot-starter-parent/2.1.7.RELEASE/spring-boot-starter-parent-2.1.7.RELEASE.pom (10 KB at 10.4 KB/sec)
-.................
-Step 20/21 : RUN chown -R 1001.0 /opt/ol/wlp/usr/shared/resources/lib.index.cache && chmod -R g+rw /opt/ol/wlp/usr/shared/resources/lib.index.cache
- ---> Running in ae77279b238c
-Removing intermediate container ae77279b238c
- ---> 74640a653475
-Step 21/21 : USER 1001
- ---> Running in 01c24024899a
-Removing intermediate container 01c24024899a
- ---> 55240d6d8edc
-Successfully built 55240d6d8edc
-Successfully tagged greeting:v2.0.0
-```
-
-17. Verify the image was successfully built with the new tag of `2.0.0`.
-
-18. Run the newly built image in a docker container with the same parameters
-
-19. List all the running containers,
-
-
-You will have something like below.
-
-```bash
-$ <command>
-CONTAINER ID        IMAGE               COMMAND                  CREATED             STATUS              PORTS                              NAMES
-baf6f41b3ab7        greeting:v2.0.0     "/opt/ol/helpers/run…"   26 seconds ago      Up 25 seconds       0.0.0.0:9080->9080/tcp, 9443/tcp   greeting_multistage
-```
-
-20. Inspect the running container.
-
-21. Get the Logs of that container.
-
-### Access the application
-
-- To access the application, open the browser and access http://localhost:9080/greeting?name=John.
-
-You will see something like below.
-
-```bash
-{"id":2,"content":"Welcome to Cloudnative bootcamp !!! Hello, John :)"}
-```
-
-### Clean Up
-
-22. Stop the container.
-
-23. Remove the container.
-
-24. Remove the image.
-
-25. Verify the image deletion.
 
 ## Conclusion
 
