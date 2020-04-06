@@ -27,11 +27,12 @@ Two primary members
 
 ## Resources
 **OpenShift**
-- https://docs.openshift.com/container-platform/4.3/cli_reference/openshift_cli/getting-started-cli.html
+- [Pods](https://docs.openshift.com/container-platform/4.3/nodes/pods/nodes-pods-using.html)
+- [Nodes](https://docs.openshift.com/container-platform/4.3/nodes/nodes/nodes-nodes-viewing.html)
 
 **IKS**
-- https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/
-- https://kubernetes.io/docs/tutorials/kubernetes-basics/
+- [Objects](https://kubernetes.io/docs/concepts/overview/working-with-objects/kubernetes-objects/)
+- [Kube Basics](https://kubernetes.io/docs/tutorials/kubernetes-basics/)
 
 
 ## References
@@ -40,39 +41,49 @@ Two primary members
 
 <Tab label="OpenShift">
 
-```
-  oc api-resources
-  oc api-resources -o wide
-  oc api-resources -o name
-
-  oc get nodes,ns,po,deploy,svc
-
-  oc describe node --all
+**Prints all API Resources**
   ```
-
+  oc api-resources
+  ```
+**Prints all API Resources with their verbs.**
+  ```
+  oc api-resources -o wide
+  ```
+**Prints all API Resources names only**
+  ```
+  oc api-resources -o name
+  ```
+  **Prints each of the available nodes, projects, services, deployments, and pods ** 
+  ```
+  oc get nodes,ns,po,deploy,svc
+  ```
+**Prints the node's description**
+  ```
+  oc describe node 
+  ```
 </Tab>
 
 <Tab label="IKS">
 
 ** Getting API Resources **
 ```
-  kubectl api-resources
+kubectl api-resources
 ```
 ** Viewing Resources **
 ```
-  kubectl api-resources -o wide
+kubectl api-resources -o wide
 ```
 ** Viewing Resources **
 ```
-  kubectl api-resources -o name
+kubectl api-resources -o name
 ```
 ** Getting a list of specific objects **
 ```
-  kubectl get nodes,ns,po,deploy,svc
+kubectl get nodes,ns,po,deploy,svc
 ```
 ** Describing the resources **
 ```
-  kubectl describe node --all
+kubectl describe node --all
 ```
 </Tab>
 
@@ -86,10 +97,14 @@ A Pod encapsulates an application’s container (or, in some cases, multiple con
 ## Resources
 
 **OpenShift**
-- https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/
+- [About Pods](https://docs.openshift.com/container-platform/4.3/nodes/pods/nodes-pods-using.html)
+- [Cluster Configuration for Pods](https://docs.openshift.com/container-platform/4.3/nodes/pods/nodes-pods-configuring.html)
+- [Pod Autoscaling](https://docs.openshift.com/container-platform/4.3/nodes/pods/nodes-pods-autoscaling.html)
 
 **IKS**
-- https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/
+- [Pod Overview](https://kubernetes.io/docs/concepts/workloads/pods/pod-overview/)
+- [Pod Lifecycle](https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/)
+- [Pod Usage](https://kubernetes.io/docs/concepts/workloads/pods/pod/)
 
 ## References
 
@@ -109,27 +124,41 @@ spec:
 <Tabs>
 <Tab label="OpenShift">
 
+** Get Current Pods in Project **
 ```
-  oc get projects
-  oc api-resources -o wide
-  oc api-resources -o name
-
-  oc get nodes,ns,po,deploy,svc
-
-  oc describe node --all
-  ```
-
+oc get pods
+``` 
+** Get Pod's Description **
+``` 
+oc describe pod <pod-name>
+```
+** Get Pods with their IP and node location **
+```
+oc get pods -o wide
+```
+** Get Pods Stats **
+```
+oc adm top pods
+```
 </Tab>
 
 <Tab label="IKS">
 
+** Get Current Pods in Project **
 ```
-  kubectl create -f pod.yaml
-  # update label
-  kubectl apply -f pod.yaml
-  # update label
-  kubectl edit pod myapp-pod
-  kubectl delete pod myapp-pod
+kubectl get pods
+``` 
+** Get Pod's Description **
+``` 
+kubectl describe pod <pod-name>
+```
+** Delete a Pod **
+```
+kubectl delete pod <pod-name>
+```
+** Edit a Pod **
+```
+kubectl edit pod <pod-name>
 ```
 
 </Tab>
@@ -148,10 +177,12 @@ It is not necessary to use multiple namespaces just to separate slightly differe
 
 ## Resources:
 **OpenShift**
-- https://docs.openshift.com/container-platform/4.3/cli_reference/openshift_cli/getting-started-cli.html#creating-a-project
+- [Working With Projects](https://docs.openshift.com/container-platform/4.3/applications/projects/working-with-projects.html)
+- [Creating Projects](https://docs.openshift.com/container-platform/4.3/cli_reference/openshift_cli/getting-started-cli.html#creating-a-project)
+- [Configure Project Creation](https://docs.openshift.com/container-platform/4.3/applications/projects/configuring-project-creation.html)
 
 **IKS**
-- https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/
+- [Namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/)
 
 ## References:
 
@@ -184,19 +215,19 @@ spec:
 **Create a new Project** 
 
 ```
-  oc new-project my-project
+oc new-project my-project
 ```
 
 **Viewing Current Project**
 
 ```
-  oc project
+oc project
 ```
 
 **Viewing Project Status**
 
 ```
-  oc status
+oc status
 ```
 
 </Tab>
@@ -205,16 +236,16 @@ spec:
 
 **Getting all namespaces in cluster** 
 ```
-  kubectl get namespaces
+kubectl get namespaces
 ```
 
 **Create a new namespace called bar**
 ``` 
-  kubectl create ns bar
+kubectl create ns bar
 ```
 **Setting Namespace in Context**
 ``` 
-  kubectl set-context --current --namespace=bar
+kubectl set-context --current --namespace=bar
 ```
 </Tab>
 

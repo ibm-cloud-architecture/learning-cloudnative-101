@@ -20,56 +20,16 @@ You can use Kubernetes annotations to attach arbitrary non-identifying metadata 
 You can use either labels or annotations to attach metadata to Kubernetes objects. Labels can be used to select objects and to find collections of objects that satisfy certain conditions. In contrast, annotations are not used to identify and select objects. The metadata in an annotation can be small or large, structured or unstructured, and can include characters not permitted by labels.
 
 ## Resources
+
 **OpenShift**
+- [CLI Label Commands](https://docs.openshift.com/enterprise/3.0/cli_reference/basic_cli_operations.html#application-modification-cli-operations)
+
 **IKS**
-- https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-- https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+- [Labels](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+- [Annotations](https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/)
 
 
 ## References
-<Tabs>
-<Tab label="OpenShift">
-
-```
-  oc get projects
-  oc api-resources -o wide
-  oc api-resources -o name
-
-  oc get nodes,ns,po,deploy,svc
-
-  oc describe node --all
-  ```
-
-</Tab>
-
-<Tab label="IKS">
-
-```
-  kubectl create -f pod.yaml
-  # update label
-  kubectl apply -f pod.yaml
-  # update label
-  kubectl edit pod myapp-pod
-  kubectl delete pod myapp-pod
-```
-
-</Tab>
-
-</Tabs>
-```
-kubectl get pods --show-labels
-kubectl get pods -L tier,env
-kubectl get pods -l app
-kubectl get pods -l tier=frontend
-kubectl get pods -l 'env=dev,tier=frontend'
-kubectl get pods -l 'env in (dev, test)'
-kubectl get pods -l 'tier!=backend'
-kubectl get pods -l 'env,env notin (prod)'
-```
-
-```
-kubectl label node minikube disk=ssd
-```
 
 ```yaml
 apiVersion: v1
@@ -103,6 +63,50 @@ spec:
   nodeSelector:
     disk: ssd
 ```
+
+### Commands
+<Tabs>
+<Tab label="OpenShift">
+
+** Change Labels on Objects **
+```
+  oc label <objectname>
+```
+
+</Tab>
+
+<Tab label="IKS">
+
+  **Create the Pod**
+  ```
+  kubectl create -f pod.yaml
+  ```
+  **Update label in the YAML file and reapply it.**
+  ```
+  kubectl apply -f pod.yaml
+  ```
+  **You can edit the labels as well.**
+  ```
+  kubectl edit pod myapp-pod
+  ```
+  **Getting Pods based on their labels.**
+  ```
+  kubectl get pods --show-labels
+  kubectl get pods -L tier,env
+  kubectl get pods -l app
+  kubectl get pods -l tier=frontend
+  kubectl get pods -l 'env=dev,tier=frontend'
+  kubectl get pods -l 'env in (dev, test)'
+  kubectl get pods -l 'tier!=backend'
+  kubectl get pods -l 'env,env notin (prod)'
+  ```
+  **Delete the Pod.**
+  ```
+  kubectl delete pod myapp-pod
+  ```
+</Tab>
+
+</Tabs>
 
 # Deployments
 
