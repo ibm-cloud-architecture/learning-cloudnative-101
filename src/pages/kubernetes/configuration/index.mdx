@@ -37,16 +37,10 @@ A Pod can use environment variables to expose information about itself to Contai
 
 ## Resources
 
-**OpenShift**
-- [](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/)
-
-**IKS**
+**IKS & OpenShift**
 - [Container Commands](https://kubernetes.io/docs/tasks/inject-data-application/define-command-argument-container/)
 - [Environment Variables](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
 - [Pod Exposing](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#exposing-pods-to-the-cluster)
-- [](https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
-
-
 
 ## References
 
@@ -146,10 +140,10 @@ When you specify a Pod, you can optionally specify how much CPU and memory (RAM)
 CPU and memory are each a resource type. A resource type has a base unit. CPU is specified in units of cores, and memory is specified in units of bytes.
 
 ## Resources
-- https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container
-- https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/memory-default-namespace/
 
-
+**IKS & OpenShift**
+- [Compute Resources](https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container)
+- [Memory Management](https://kubernetes.io/docs/tasks/administer-cluster/manage-resources/memory-default-namespace/)
 
 ## References
 
@@ -214,9 +208,12 @@ You can data from a ConfigMap in 3 different ways.
 - As a set of files, each key represented by a file on mounted volume
 
 ## Resources
+
 **OpenShift**
+- [Mapping Volumes](https://docs.openshift.com/container-platform/4.3/nodes/containers/nodes-containers-projected-volumes.html)
+
 **IKS**
-- https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/
+- [ConfigMaps](https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/)
 
 ## References
 
@@ -297,57 +294,16 @@ A Secret is an object that contains a small amount of sensitive data such as a p
 
 
 ## Resources
-**OpenShift**
-**IKS**
-- https://kubernetes.io/docs/concepts/configuration/secret/
-- https://kubernetes.io/docs/tasks/inject-data-application/distribute-credentials-secure/
 
+**OpenShift**
+- [Secrets](https://docs.openshift.com/container-platform/4.3/nodes/containers/nodes-containers-projected-volumes.html)
+- [Secret Commands](https://docs.openshift.com/container-platform/4.3/cli_reference/openshift_cli/developer-cli-commands.html#secrets)
+
+**IKS**
+- [Secrets](https://kubernetes.io/docs/concepts/configuration/secret/)
+- [Secret Distribution](https://kubernetes.io/docs/tasks/inject-data-application/distribute-credentials-secure/)
 
 ## References
-<Tabs>
-<Tab label="OpenShift">
-
-```
-  oc get projects
-  oc api-resources -o wide
-  oc api-resources -o name
-
-  oc get nodes,ns,po,deploy,svc
-
-  oc describe node --all
-  ```
-
-</Tab>
-
-<Tab label="IKS">
-
-```
-  kubectl create -f pod.yaml
-  # update label
-  kubectl apply -f pod.yaml
-  # update label
-  kubectl edit pod myapp-pod
-  kubectl delete pod myapp-pod
-```
-
-</Tab>
-
-</Tabs>
-```
-# Create files needed for rest of example.
-echo -n 'admin' > ./username.txt
-echo -n '1f2d1e2e67df' > ./password.txt
-```
-
-```
-kubectl create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt
-```
-
-```
-kubectl get secrets
-kubectl describe secrets/db-user-pass
-```
-
 
 ```yaml
 apiVersion: v1
@@ -403,6 +359,54 @@ spec:
         secretName: mysecret-config
 ```
 
+<Tabs>
+<Tab label="OpenShift">
+
+** Create files needed for rest of example.**
+```
+echo -n 'admin' > ./username.txt
+echo -n '1f2d1e2e67df' > ./password.txt
+```
+
+** Creating Secret from files. **
+```
+oc create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt
+```
+** Getting Secret **
+```
+oc get secrets
+```
+** Gets the Secret's Description. **
+```
+oc describe secrets/db-user-pass
+```
+
+</Tab>
+
+<Tab label="IKS">
+
+** Create files needed for rest of example. **
+```
+echo -n 'admin' > ./username.txt
+echo -n '1f2d1e2e67df' > ./password.txt
+```
+** Creates the Secret from the files **
+```
+kubectl create secret generic db-user-pass --from-file=./username.txt --from-file=./password.txt
+```
+** Gets the Secret **
+```
+kubectl get secrets
+```
+** Gets the Secret's Description. **
+```
+kubectl describe secrets/db-user-pass
+```
+
+</Tab>
+
+</Tabs>
+
 # SecurityContexts
 
 A security context defines privilege and access control settings for a Pod or Container.
@@ -410,9 +414,13 @@ A security context defines privilege and access control settings for a Pod or Co
 To specify security settings for a Pod, include the securityContext field in the Pod specification. The securityContext field is a PodSecurityContext object. The security settings that you specify for a Pod apply to all Containers in the Pod.
 
 ## Resources
+
 **OpenShift**
+- [Managing Security Contexts](https://docs.openshift.com/container-platform/4.3/authentication/managing-security-context-constraints.html)
+
 **IKS**
-- https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+
+- [Security Contexts](https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
 
 
 ## References
@@ -483,14 +491,35 @@ spec:
       hostPath:
         path: /etc/message
 ```
-Run to see the errors
-```bash
-kubectl logs my-securitycontext-pod
+** Run to see the errors **
+
+<Tabs>
+<Tab label="OpenShift">
+
+** Get Pod Logs **
 ```
+oc logs my-securitycontext-pod
+```
+** Should return **
 ```
 cat: can't open '/message/message.txt': Permission denied
 ```
+</Tab>
 
+<Tab label="IKS">
+
+** Get Pod Logs **
+```
+kubectl logs my-securitycontext-pod
+```
+
+** Should return **
+```
+cat: can't open '/message/message.txt': Permission denied
+```
+</Tab>
+
+</Tabs>
 
 # Service Accounts
 
@@ -503,16 +532,18 @@ User accounts are for humans. Service accounts are for processes, which run in p
 User accounts are intended to be global. Names must be unique across all namespaces of a cluster, future user resource will not be namespaced. Service accounts are namespaced.
 
 ## Resources
+
 **OpenShift**
+
+- [Service Accounts](https://docs.openshift.com/container-platform/4.3/authentication/understanding-and-creating-service-accounts.html)
+- [Using Service Accounts](https://docs.openshift.com/container-platform/4.3/authentication/using-service-accounts-in-applications.html)
+
 **IKS**
-https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/
-https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+
+- [Service Accounts](https://kubernetes.io/docs/reference/access-authn-authz/service-accounts-admin/)
+- [Service Account Configuration](https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/)
 
 ## References
-
-```
-kubectl create sa my-service-account
-```
 
 ```yaml
 apiVersion: v1
@@ -544,6 +575,35 @@ metadata:
     kubernetes.io/service-account.name: my-service-account
 type: kubernetes.io/service-account-token
 ```
+
+<Tabs>
+<Tab label="OpenShift">
+
+** Creating a ServiceAccount**
+```
+oc create sa <service_account_name>
+```
+** View ServiceAccount Details **
+```
+oc describe sa <service_account_name>
+```
+
+</Tab>
+
+<Tab label="IKS">
+
+** Create a ServiceAccount **
+```
+kubectl create sa <service_account_name>
+```
+** View ServiceAccount Details **
+```
+kubectl describe sa <service_account_name>
+```
+
+</Tab>
+
+</Tabs>
 
 ## Activities
 
