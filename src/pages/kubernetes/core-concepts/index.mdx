@@ -26,6 +26,7 @@ Two primary members
 - Status, current state
 
 ## Resources
+
 **OpenShift**
 - [Pods](https://docs.openshift.com/container-platform/4.3/nodes/pods/nodes-pods-using.html)
 - [Nodes](https://docs.openshift.com/container-platform/4.3/nodes/nodes/nodes-nodes-viewing.html)
@@ -121,6 +122,7 @@ spec:
     image: busybox
     command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
 ```
+
 <Tabs>
 <Tab label="OpenShift">
 
@@ -160,7 +162,6 @@ kubectl delete pod <pod-name>
 ```
 kubectl edit pod <pod-name>
 ```
-
 </Tab>
 
 </Tabs>
@@ -175,7 +176,8 @@ Namespaces are a way to divide cluster resources between multiple users (via res
 
 It is not necessary to use multiple namespaces just to separate slightly different resources, such as different versions of the same software: use labels to distinguish resources within the same namespace. In practice namespaces are used to deploy different versions based on stages of the CICD pipeline (dev, test, stage, prod)
 
-## Resources:
+## Resources
+
 **OpenShift**
 - [Working With Projects](https://docs.openshift.com/container-platform/4.3/applications/projects/working-with-projects.html)
 - [Creating Projects](https://docs.openshift.com/container-platform/4.3/cli_reference/openshift_cli/getting-started-cli.html#creating-a-project)

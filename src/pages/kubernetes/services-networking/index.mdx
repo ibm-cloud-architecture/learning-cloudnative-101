@@ -25,56 +25,14 @@ For non-native applications, Kubernetes offers ways to place a network port or l
 
 
 ## Resources
-**OpenShift**
-**IKS**
-- https://kubernetes.io/docs/concepts/services-networking/service/
-- https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/
+
+**IKS & OpenShift**
+- [Services](https://kubernetes.io/docs/concepts/services-networking/service/)
+- [Exposing Services](https://kubernetes.io/docs/tutorials/kubernetes-basics/expose/expose-intro/)
 
 ## References
-<Tabs>
-<Tab label="OpenShift">
-
-```
-  oc get projects
-  oc api-resources -o wide
-  oc api-resources -o name
-
-  oc get nodes,ns,po,deploy,svc
-
-  oc describe node --all
-  ```
-
-</Tab>
-
-<Tab label="IKS">
-
-```
-  kubectl create -f pod.yaml
-  # update label
-  kubectl apply -f pod.yaml
-  # update label
-  kubectl edit pod myapp-pod
-  kubectl delete pod myapp-pod
-```
-
-</Tab>
-
-</Tabs>
-```
-kubectl get svc
-kubectl describe svc my-service
-kubectl get ep my-service
-kubectl get deployments
-kubect get rs
-kubect get pods
-kubectl get all
-kubectl expose deployment my-deployment --port 80 --target-port=http --selector app=nginx --name my-service-2 --type NodePort
-minikube service --url
-kubectl por-forward
-```
 
 ```yaml
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -112,6 +70,39 @@ spec:
       port: 80
       targetPort: http
 ```
+<Tabs>
+<Tab label="OpenShift">
+
+```
+  oc get projects
+  oc api-resources -o wide
+  oc api-resources -o name
+
+  oc get nodes,ns,po,deploy,svc
+
+  oc describe node --all
+  ```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+kubectl get svc
+kubectl describe svc my-service
+kubectl get ep my-service
+kubectl get deployments
+kubect get rs
+kubect get pods
+kubectl get all
+kubectl expose deployment my-deployment --port 80 --target-port=http --selector app=nginx --name my-service-2 --type NodePort
+minikube service --url
+kubectl por-forward
+```
+
+</Tab>
+
+</Tabs>
 
 # Ingress
 
@@ -122,11 +113,15 @@ Ingress can provide load balancing, SSL termination and name-based virtual hosti
 Ingress exposes HTTP and HTTPS routes from outside the cluster to services within the cluster. Traffic routing is controlled by rules defined on the Ingress resource.
 
 ## Resources
+
 **OpenShift**
+- [Ingress Operator](https://docs.openshift.com/container-platform/4.3/networking/ingress-operator.html)
+- [Using Ingress Controllers](https://docs.openshift.com/container-platform/4.3/networking/configuring_ingress_cluster_traffic/configuring-ingress-cluster-traffic-ingress-controller.html)
+
 **IKS**
-- https://kubernetes.io/docs/concepts/services-networking/ingress/
-- https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/
-- https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/
+- [Ingress](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+- [Ingress Controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/)
+- [Minikube Ingress](https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/)
 
 ## References
 <Tabs>
