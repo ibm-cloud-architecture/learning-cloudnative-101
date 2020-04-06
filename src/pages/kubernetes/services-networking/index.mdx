@@ -73,31 +73,42 @@ spec:
 <Tabs>
 <Tab label="OpenShift">
 
+** Get Service **
 ```
-  oc get projects
-  oc api-resources -o wide
-  oc api-resources -o name
-
-  oc get nodes,ns,po,deploy,svc
-
-  oc describe node --all
-  ```
+oc get svc
+```
+** Get Service Description **
+```
+oc describe svc my-service
+```
+** Get Route for the Service **
+```  
+oc get route
+```
+** Expose a service **
+```
+oc expose service <service_name>
+```
 
 </Tab>
 
 <Tab label="IKS">
 
+** Get Service **
 ```
 kubectl get svc
+```
+** Get Service Description **
+```
 kubectl describe svc my-service
+```
+** Get Service Endpoints **
+```
 kubectl get ep my-service
-kubectl get deployments
-kubect get rs
-kubect get pods
-kubectl get all
+```
+** Expose a Deployment via a Service **
+```
 kubectl expose deployment my-deployment --port 80 --target-port=http --selector app=nginx --name my-service-2 --type NodePort
-minikube service --url
-kubectl por-forward
 ```
 
 </Tab>
@@ -127,32 +138,19 @@ Ingress exposes HTTP and HTTPS routes from outside the cluster to services withi
 <Tabs>
 <Tab label="OpenShift">
 
+** View Ingress Status **
 ```
-  oc get projects
-  oc api-resources -o wide
-  oc api-resources -o name
-
-  oc get nodes,ns,po,deploy,svc
-
-  oc describe node --all
-  ```
+  oc describe clusteroperators/ingress
+```
+** Describe default Ingress Controller **
+```
+  oc describe --namespace=openshift-ingress-operator ingresscontroller/default
+```
 
 </Tab>
 
 <Tab label="IKS">
 
-```
-  kubectl create -f pod.yaml
-  # update label
-  kubectl apply -f pod.yaml
-  # update label
-  kubectl edit pod myapp-pod
-  kubectl delete pod myapp-pod
-```
-
-</Tab>
-
-</Tabs>
 ```
 minikube addons enable ingress
 kubectl get pods -n kube-system | grep ingress
@@ -168,8 +166,11 @@ kubectl get ingress
 kubcetl describe ingress example-ingress
 curl hello-world.info --resolve hello-world.info:80:<ADDRESS>
 ```
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
+
+</Tab>
+
+</Tabs>
+
 ```yaml
 apiVersion: networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/v1beta1
 kind: Ingress
