@@ -69,8 +69,33 @@ spec:
 
 ** Change Labels on Objects **
 ```
-  oc label <objectname>
+oc label <objectname>
 ```
+ **Getting Pods based on their labels.**
+```
+  oc get pods --show-labels
+```
+```
+  oc get pods -L tier,env
+```
+```
+  oc get pods -l app
+```
+```
+  oc get pods -l tier=frontend
+```
+```
+  oc get pods -l 'env=dev,tier=frontend'
+```
+```
+  oc get pods -l 'env in (dev, test)'
+```
+```
+  oc get pods -l 'tier!=backend'
+```
+```
+  oc get pods -l 'env,env notin (prod)'
+  ```
 
 </Tab>
 
@@ -91,12 +116,26 @@ spec:
   **Getting Pods based on their labels.**
   ```
   kubectl get pods --show-labels
+  ```
+  ```
   kubectl get pods -L tier,env
+  ```
+  ```
   kubectl get pods -l app
+  ```
+  ```
   kubectl get pods -l tier=frontend
+  ```
+  ```
   kubectl get pods -l 'env=dev,tier=frontend'
+  ```
+  ```
   kubectl get pods -l 'env in (dev, test)'
+  ```
+  ```
   kubectl get pods -l 'tier!=backend'
+  ```
+  ```
   kubectl get pods -l 'env,env notin (prod)'
   ```
   **Delete the Pod.**
@@ -243,7 +282,11 @@ Sometimes, you may want to rollback a Deployment; for example, when the Deployme
 A Deployment’s revision is created when a Deployment’s rollout is triggered. This means that the new revision is created if and only if the Deployment’s Pod template (.spec.template) is changed, for example if you update the labels or container images of the template. Other updates, such as scaling the Deployment, do not create a Deployment revision, so that you can facilitate simultaneous manual- or auto-scaling. This means that when you roll back to an earlier revision, only the Deployment’s Pod template part is rolled back.
 
 ## Resources
+
 **OpenShift**
+
+- [Rollouts](https://docs.openshift.com/container-platform/4.3/applications/deployments/what-deployments-are.html#delpoymentconfigs-specific-features_what-deployments-are)
+- [Rolling Back](https://docs.openshift.com/container-platform/4.3/applications/deployments/managing-deployment-processes.html#deployments-rolling-back_deployment-operations)
 
 **IKS**
 
@@ -360,6 +403,8 @@ All CronJob schedule: times are based on the timezone of the master where the jo
 ## Resources
 
 **OpenShift**
+- [Jobs](https://docs.openshift.com/container-platform/4.3/nodes/jobs/nodes-nodes-jobs.html)
+- [CronJobs](https://docs.openshift.com/container-platform/4.3/nodes/jobs/nodes-nodes-jobs.html#nodes-nodes-jobs-creating-cron_nodes-nodes-jobs)
 
 **IKS**
 - [Jobs to Completion](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/)
