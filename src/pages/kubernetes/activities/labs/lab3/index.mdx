@@ -69,7 +69,7 @@ Use this command to access `vader-service` using port 80 from within the busybox
 kubectl exec busybox -- curl $(kubectl get pod vader-service -o=custom-columns=IP:.status.podIP --no-headers):80
 ```
 
-If the service is working, you should that the millennium falcon needs repair.
+If the service is working, you should get a message that the hyper drive of the millennium falcon needs repair.
 
 *Relevant Documentation:*
 - [Kubernetes Sidecar Logging Agent](https://kubernetes.io/docs/concepts/cluster-administration/logging/#using-a-sidecar-container-with-the-logging-agent)
