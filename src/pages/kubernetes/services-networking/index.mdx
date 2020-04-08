@@ -135,6 +135,22 @@ Ingress exposes HTTP and HTTPS routes from outside the cluster to services withi
 - [Minikube Ingress](https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/)
 
 ## References
+
+```yaml
+apiVersion: networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/v1beta1
+kind: Ingress
+metadata:
+  name: example-ingress
+spec:
+  rules:
+  - host: hello-world.info
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: web
+          servicePort: 8080
+```
 <Tabs>
 <Tab label="OpenShift">
 
@@ -153,40 +169,39 @@ Ingress exposes HTTP and HTTPS routes from outside the cluster to services withi
 
 ```
 minikube addons enable ingress
+```
+```
 kubectl get pods -n kube-system | grep ingress
+```
+```
 kubectl run web --image=bitnami/nginx --port=8080
+```
+```
 kubectl expose deployment web --target-port=8080 --type=NodePort
+```
+```
 kubectl get svc web
+```
+```
 minikube service --url web
 ```
 
 ```
 stern ingress -n kube-system
+```
+```
 kubectl get ingress
+```
+```
 kubcetl describe ingress example-ingress
+```
+```
 curl hello-world.info --resolve hello-world.info:80:<ADDRESS>
 ```
 
 </Tab>
 
 </Tabs>
-
-```yaml
-apiVersion: networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/v1beta1
-kind: Ingress
-metadata:
-  name: example-ingress
-spec:
-  rules:
-  - host: hello-world.info
-    http:
-      paths:
-      - path: /
-        backend:
-          serviceName: web
-          servicePort: 8080
-```
-
 
 ## Activities
 
