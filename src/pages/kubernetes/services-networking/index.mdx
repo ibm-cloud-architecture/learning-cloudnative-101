@@ -135,41 +135,6 @@ Ingress exposes HTTP and HTTPS routes from outside the cluster to services withi
 - [Minikube Ingress](https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/)
 
 ## References
-<Tabs>
-<Tab label="OpenShift">
-
-** View Ingress Status **
-```
-  oc describe clusteroperators/ingress
-```
-** Describe default Ingress Controller **
-```
-  oc describe --namespace=openshift-ingress-operator ingresscontroller/default
-```
-
-</Tab>
-
-<Tab label="IKS">
-
-```
-minikube addons enable ingress
-kubectl get pods -n kube-system | grep ingress
-kubectl run web --image=bitnami/nginx --port=8080
-kubectl expose deployment web --target-port=8080 --type=NodePort
-kubectl get svc web
-minikube service --url web
-```
-
-```
-stern ingress -n kube-system
-kubectl get ingress
-kubcetl describe ingress example-ingress
-curl hello-world.info --resolve hello-world.info:80:<ADDRESS>
-```
-
-</Tab>
-
-</Tabs>
 
 ```yaml
 apiVersion: networking.k8s.io/v1beta1 # for versions before 1.14 use extensions/v1beta1
@@ -186,7 +151,57 @@ spec:
           serviceName: web
           servicePort: 8080
 ```
+<Tabs>
+<Tab label="OpenShift">
 
+** View Ingress Status **
+```
+oc describe clusteroperators/ingress
+```
+** Describe default Ingress Controller **
+```
+oc describe --namespace=openshift-ingress-operator ingresscontroller/default
+```
+
+</Tab>
+
+<Tab label="IKS">
+
+```
+minikube addons enable ingress
+```
+```
+kubectl get pods -n kube-system | grep ingress
+```
+```
+kubectl run web --image=bitnami/nginx --port=8080
+```
+```
+kubectl expose deployment web --target-port=8080 --type=NodePort
+```
+```
+kubectl get svc web
+```
+```
+minikube service --url web
+```
+
+```
+stern ingress -n kube-system
+```
+```
+kubectl get ingress
+```
+```
+kubcetl describe ingress example-ingress
+```
+```
+curl hello-world.info --resolve hello-world.info:80:<ADDRESS>
+```
+
+</Tab>
+
+</Tabs>
 
 ## Activities
 
