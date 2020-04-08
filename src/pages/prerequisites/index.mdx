@@ -149,6 +149,32 @@ The following is a list of desktop tools required to help with installation and 
 
 </Tab>
 
+<Tab label="OpenShift on IBM Cloud (4.x)">
+
+- In this approach you share an OpenShift cluster on IBM Cloud with other bootcamp attendees.
+
+- Considering 10-15 attendees we recommend a cluster with 3 worker nodes (each 8 vCPUs + 32GB RAM - b3c.8x32).
+
+- Ask your IBM cloud account owner to provide access to an OpenShift cluster.
+
+- In addition to the IBM Cloud CLI also install the [OpenShift Origin CLI](https://cloud.ibm.com/docs/openshift?topic=openshift-openshift-cli#cli_oc) to be able to execute all commands.
+
+- Open your OpenShift web console from within your IBM cloud account, select your profile and choose "copy login command" to retrieve an access token for the login.
+
+- Login with your OpenShift Origin CLI.
+    ```
+      oc login --token=<token> --server=<server-url>:<server-port>
+    ```
+
+- Create your own project / namespace in OpenShift that you will leverage across all labs.
+    ```
+      oc new-project <dev-your_initials>
+    ```
+
+- Validate in the OpenShift web console that your project has been created (Administrator view -> Home -> Projects)
+
+</Tab>
+
 </Tabs>
 
 
