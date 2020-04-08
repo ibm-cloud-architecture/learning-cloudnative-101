@@ -64,14 +64,38 @@ spec:
     disk: ssd
 ```
 
-### Commands
 <Tabs>
 <Tab label="OpenShift">
 
 ** Change Labels on Objects **
 ```
-  oc label <objectname>
+oc label <objectname>
 ```
+ **Getting Pods based on their labels.**
+```
+  oc get pods --show-labels
+```
+```
+  oc get pods -L tier,env
+```
+```
+  oc get pods -l app
+```
+```
+  oc get pods -l tier=frontend
+```
+```
+  oc get pods -l 'env=dev,tier=frontend'
+```
+```
+  oc get pods -l 'env in (dev, test)'
+```
+```
+  oc get pods -l 'tier!=backend'
+```
+```
+  oc get pods -l 'env,env notin (prod)'
+  ```
 
 </Tab>
 
@@ -92,18 +116,33 @@ spec:
   **Getting Pods based on their labels.**
   ```
   kubectl get pods --show-labels
+  ```
+  ```
   kubectl get pods -L tier,env
+  ```
+  ```
   kubectl get pods -l app
+  ```
+  ```
   kubectl get pods -l tier=frontend
+  ```
+  ```
   kubectl get pods -l 'env=dev,tier=frontend'
+  ```
+  ```
   kubectl get pods -l 'env in (dev, test)'
+  ```
+  ```
   kubectl get pods -l 'tier!=backend'
+  ```
+  ```
   kubectl get pods -l 'env,env notin (prod)'
   ```
   **Delete the Pod.**
   ```
   kubectl delete pod myapp-pod
   ```
+
 </Tab>
 
 </Tabs>
@@ -125,51 +164,20 @@ The following are typical use cases for Deployments:
 
 
 ## Resources
+
 **OpenShift**
+
+- [Deployments](https://docs.openshift.com/container-platform/4.3/applications/deployments/what-deployments-are.html)
+- [Managing Deployment Processes](https://docs.openshift.com/container-platform/4.3/applications/deployments/managing-deployment-processes.html)
+- [DeploymentConfig Strategies](https://docs.openshift.com/container-platform/4.3/applications/deployments/deployment-strategies.html)
+- [Route Based Deployment Strategies](https://docs.openshift.com/container-platform/4.3/applications/deployments/route-based-deployment-strategies.html)
+
 **IKS**
-- https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
-- https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#scaling-a-deployment
 
-
+- [Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+- [Scaling Deployments](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#scaling-a-deployment)
 
 ## References
-<Tabs>
-<Tab label="OpenShift">
-
-```
-  oc get projects
-  oc api-resources -o wide
-  oc api-resources -o name
-
-  oc get nodes,ns,po,deploy,svc
-
-  oc describe node --all
-  ```
-
-</Tab>
-
-<Tab label="IKS">
-
-```
-  kubectl create -f pod.yaml
-  # update label
-  kubectl apply -f pod.yaml
-  # update label
-  kubectl edit pod myapp-pod
-  kubectl delete pod myapp-pod
-```
-
-</Tab>
-
-</Tabs>
-```
-kubectl get deployments
-kubectl get deployment my-deployment
-kubectl describe deployment my-deployment
-kubectl edit deployent my-deployment
-kubectl scale deployment/my-deployment --replicas=4
-kubectl delete my-deployment
-```
 
 ```yaml
 apiVersion: apps/v1
@@ -194,6 +202,68 @@ spec:
         ports:
         - containerPort: 8080
 ```
+
+<Tabs>
+<Tab label="OpenShift">
+
+** Creates a Deployment **
+```
+oc apply -f <deploymentYAML>
+```
+** Gets Deployments **
+```
+  oc get deploy my-deployment
+```
+** Gets the deployments description **
+```
+oc describe deployment my-deployment
+```
+** Edit the deployment **
+```
+oc edit deployment my-deployment
+```
+** Scale the deployment **
+```
+oc scale deployment/my-deployment --replicas=4
+```
+** Delete the deployment **
+```
+oc delete my-deployment
+```
+</Tab>
+
+<Tab label="IKS">
+
+** Creates a Deployment **
+```
+kubectl apply -f <deploymentYAML>
+```
+
+** Get the deployment **
+```
+kubectl get deployment my-deployment
+```
+** Describe the deployment **
+```
+kubectl describe deployment my-deployment
+```
+** Edit the deployment **
+```
+kubectl edit deployent my-deployment
+```
+** Scale the deployment **
+```
+kubectl scale deployment/my-deployment --replicas=4
+```
+** Delete the deployment **
+```
+kubectl delete my-deployment
+```
+
+</Tab>
+
+</Tabs>
+
 
 # Deployments rolling updates and rollback
 
@@ -212,51 +282,19 @@ Sometimes, you may want to rollback a Deployment; for example, when the Deployme
 A Deployment’s revision is created when a Deployment’s rollout is triggered. This means that the new revision is created if and only if the Deployment’s Pod template (.spec.template) is changed, for example if you update the labels or container images of the template. Other updates, such as scaling the Deployment, do not create a Deployment revision, so that you can facilitate simultaneous manual- or auto-scaling. This means that when you roll back to an earlier revision, only the Deployment’s Pod template part is rolled back.
 
 ## Resources
+
 **OpenShift**
+
+- [Rollouts](https://docs.openshift.com/container-platform/4.3/applications/deployments/what-deployments-are.html#delpoymentconfigs-specific-features_what-deployments-are)
+- [Rolling Back](https://docs.openshift.com/container-platform/4.3/applications/deployments/managing-deployment-processes.html#deployments-rolling-back_deployment-operations)
+
 **IKS**
-- https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
-- https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment
+
+- [Updating a Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment)
+- [Rolling Back a Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#rolling-back-a-deployment)
 
 
 ## References
-<Tabs>
-<Tab label="OpenShift">
-
-```
-  oc get projects
-  oc api-resources -o wide
-  oc api-resources -o name
-
-  oc get nodes,ns,po,deploy,svc
-
-  oc describe node --all
-  ```
-
-</Tab>
-
-<Tab label="IKS">
-
-```
-  kubectl create -f pod.yaml
-  # update label
-  kubectl apply -f pod.yaml
-  # update label
-  kubectl edit pod myapp-pod
-  kubectl delete pod myapp-pod
-```
-
-</Tab>
-
-</Tabs>
-```
-kubectl get deployments
-kubectl set image deployment/nginx-deployment nginx=nginx:1.16.1 --record
-kubectl get rs
-kubectl describe deployment my-deployment
-kubectl rollout deployment my-deployment
-kubectl rollout history deployment my-deployment
-kubectl rollout undo deployment my-deployment
-```
 
 ```yaml
 apiVersion: apps/v1
@@ -282,6 +320,75 @@ spec:
         - containerPort: 8080
 ```
 
+<Tabs>
+<Tab label="OpenShift">
+
+** Get Deployments **
+```
+oc get deployments
+```
+** Sets new image for Deployment **
+```
+oc set image deployment/nginx-deployment nginx=nginx:1.16.1 --record
+```
+** Get ReplicaSets **
+```
+oc get rs
+```
+** Get Deployment Description **
+```
+oc describe deployment my-deployment
+```
+** Rollout updated deployment **
+```
+oc rollout deployment my-deployment
+```
+** Get Rollout History **
+```
+oc rollout history deployment my-deployment
+```
+** Undo Rollout **
+```
+oc rollback my-deployment
+```
+
+</Tab>
+
+<Tab label="IKS">
+
+** Get Deployments **
+```
+kubectl get deployments
+```
+** Sets new image for Deployment **
+```
+kubectl set image deployment/nginx-deployment nginx=nginx:1.16.1 --record
+```
+** Get ReplicaSets **
+```
+kubectl get rs
+```
+** Get Deployment Description **
+```
+kubectl describe deployment my-deployment
+```
+** Rollout updated deployment **
+```
+kubectl rollout deployment my-deployment
+```
+** Get Rollout History **
+```
+kubectl rollout history deployment my-deployment
+```
+** Undo Rollout **
+```
+kubectl rollout undo deployment my-deployment
+```
+
+</Tab>
+
+</Tabs>
+
 # Jobs and CronJobs
 
 **Jobs**
@@ -294,56 +401,17 @@ One CronJob object is like one line of a crontab (cron table) file. It runs a jo
 All CronJob schedule: times are based on the timezone of the master where the job is initiated.
 
 ## Resources
+
 **OpenShift**
+- [Jobs](https://docs.openshift.com/container-platform/4.3/nodes/jobs/nodes-nodes-jobs.html)
+- [CronJobs](https://docs.openshift.com/container-platform/4.3/nodes/jobs/nodes-nodes-jobs.html#nodes-nodes-jobs-creating-cron_nodes-nodes-jobs)
+
 **IKS**
-- https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/
-- https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
-- https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/
+- [Jobs to Completion](https://kubernetes.io/docs/concepts/workloads/controllers/jobs-run-to-completion/)
+- [Cron Jobs](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/)
+- [Automated Tasks with Cron](https://kubernetes.io/docs/tasks/job/automated-tasks-with-cron-jobs/)
 
 ## References
-<Tabs>
-<Tab label="OpenShift">
-
-```
-  oc get projects
-  oc api-resources -o wide
-  oc api-resources -o name
-
-  oc get nodes,ns,po,deploy,svc
-
-  oc describe node --all
-  ```
-
-</Tab>
-
-<Tab label="IKS">
-
-```
-  kubectl create -f pod.yaml
-  # update label
-  kubectl apply -f pod.yaml
-  # update label
-  kubectl edit pod myapp-pod
-  kubectl delete pod myapp-pod
-```
-
-</Tab>
-
-</Tabs>
-```
-kubectl get jobs
-kubectl describe job pi
-kubectl get pods
-kubectl delete job pi
-```
-
-```
-kubectl get cronjobs
-kubectl describe cronjobs pi
-kubectl get pods
-kubectl delete cronjobs pi
-```
-
 
 It computes π to 2000 places and prints it out
 ```yaml
@@ -401,6 +469,85 @@ spec:
             - date; echo Hello from the Kubernetes cluster
           restartPolicy: OnFailure
 ```
+
+<Tabs>
+<Tab label="OpenShift">
+
+** Gets Jobs **
+```
+oc get jobs
+```
+** Gets Job Description **
+```
+oc describe job pi
+```
+** Gets Pods from the Job **
+```
+oc get pods
+```
+** Deletes Job **
+```
+oc delete job pi
+```
+
+** Gets CronJob **
+```
+oc get cronjobs
+```
+** Describes CronJob **
+```
+oc describe cronjobs pi
+```
+** Gets Pods from CronJob **
+```
+oc get pods
+```
+** Deletes CronJob **
+```
+oc delete cronjobs pi
+```
+
+</Tab>
+
+<Tab label="IKS">
+
+** Gets Jobs **
+```
+kubectl get jobs
+```
+** Gets Job Description **
+```
+kubectl describe job pi
+```
+** Gets Pods from the Job **
+```
+kubectl get pods
+```
+** Deletes Job **
+```
+kubectl delete job pi
+```
+
+** Gets CronJob **
+```
+kubectl get cronjobs
+```
+** Describes CronJob **
+```
+kubectl describe cronjobs pi
+```
+** Gets Pods from CronJob **
+```
+kubectl get pods
+```
+** Deletes CronJob **
+```
+kubectl delete cronjobs pi
+```
+
+</Tab>
+
+</Tabs>
 
 ## Activities
 
