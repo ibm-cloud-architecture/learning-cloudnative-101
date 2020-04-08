@@ -32,59 +32,67 @@ Usually is getting familiar with how primitives objects interact with each other
 <Tabs>
 <Tab label="OpenShift">
 
+** Broken setup to debug**
 ```
-  oc get projects
-  oc api-resources -o wide
-  oc api-resources -o name
+curl -s https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/a92550dd499ebefc205fa2cd5c18123409186712/debugk8s.64 | base64 -d | oc apply -f -
+```
 
-  oc get nodes,ns,po,deploy,svc
+** Expose the service using port-forward **
+```
+oc port-forward service/my-service 8080:80 -n debug
+```
+** Try to access the service **
+```
+curl http://localhost:8080
+```
 
-  oc describe node --all
-  ```
+** Try Out these Commands to Debug **
+```
+  oc get pods --all-namespaces
+  oc describe pod
+  oc edit pod
+  oc get pod --export
+  oc apply -f
+  oc logs
+  oc get service
+  oc get routes
+  oc get pods --show-labels
+```
 
 </Tab>
 
 <Tab label="IKS">
 
+** Broken setup to debug**
 ```
-  kubectl create -f pod.yaml
-  # update label
-  kubectl apply -f pod.yaml
-  # update label
-  kubectl edit pod myapp-pod
-  kubectl delete pod myapp-pod
+curl -s https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/a92550dd499ebefc205fa2cd5c18123409186712/debugk8s.64 | base64 -d | kubectl apply -f -
+```
+
+** Expose the service using port-forward **
+```
+kubectl port-forward service/my-service 8080:80 -n debug
+```
+** Try to access the service **
+```
+curl http://localhost:8080
+```
+
+** Try Out these Commands to Debug **
+```
+  kubectl get pods --all-namespaces
+  kubectl describe pod
+  kubectl edit pod
+  kubectl get pod --export
+  kubectl apply -f
+  kubectl logs
+  kubectl get service
+  kubectl get endpoints
+  kubectl get pods --show-labels
 ```
 
 </Tab>
 
 </Tabs>
-Broken setup to debug
-```
-curl -s https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/a92550dd499ebefc205fa2cd5c18123409186712/debugk8s.64 | base64 -d | kubectl apply -f -
-```
-
-Expose the service using port-forward
-```
-kubectl port-forward service/my-service 8080:80 -n debug
-```
-Try to access the service
-```
-curl http://localhost:8080
-```
-
-```
-kubectl get pods --all-namespaces
-kubectl describe pod
-kubectl edit pod
-kubectl get pod --export
-kubectl apply -f
-kubectl logs
-kubectl get service
-kubectl get endpoints
-kubectl get pods --show-labels
-```
-
-
 
 ### Solution
 - https://gist.github.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091#file-debugk8s-yaml
