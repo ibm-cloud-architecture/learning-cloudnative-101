@@ -15,9 +15,12 @@ description: Lab for continuous integration using tekton
 
 ## Pre-requisites
 
-Make sure your minikube environment is properly setup.
+Make sure your environment is properly setup.
 
-Follow the instructions [here](../../prerequisites#minikube-setup)
+Follow the instructions [here](../../prerequisites#environment-setup)
+<Tabs>
+
+<Tab label="OpenShift">
 
 ## SetUp
 
@@ -39,7 +42,92 @@ Follow the instructions [here](../../prerequisites#minikube-setup)
 - The command should show a result like:
     ```bash
     $ tkn version
-    Client version: 0.7.1
+    Client version: 0.8.0
+    ```
+- If you already have the `tkn` install you can upgrade running
+    ```bash
+    brew upgrade tektoncd/tools/tektoncd-cli
+    ```
+
+### Tekton Pipelines Installation
+
+- To deploy the Tekton pipelines:
+    ```bash
+   kubectl apply --filename [tekton](../../)
+    ```
+- ***Note***: It will take few mins for the Tekton pipeline components to be installed, you an watch the status using the command:
+    ```bash
+    kubectl get pods -n tekton-pipelines -w
+    ```
+    You can use `Ctrl+c` to terminate the watch
+- A successful deployment of Tekton pipelines will show the following pods:
+    ```
+    NAME                                         READY   STATUS    RESTARTS   AGE
+    tekton-pipelines-controller-9b8cccff-j6hvr   1/1     Running   0          2m33s
+    tekton-pipelines-webhook-6fc9d4d9b6-kpkp7    1/1     Running   0          2m33s
+    ```
+
+### Tekton Dashboard Installation (Optional)
+
+- To deploy the Tekton dashboard:
+    ```bash
+    kubectl apply --filename https://github.com/tektoncd/dashboard/releases/download/latest/dashboard_latest_release.yaml
+    ```
+- ***Note***: It will take few mins for the Tekton dashboard components to be installed, you an watch the status using the command:
+    ```bash
+    kubectl get pods -n tekton-pipelines -w
+    ```
+    You can use `Ctrl+c` to terminate the watch
+- A successful deployment of Tekton pipelines will show the following pods:
+    ```
+    NAME                                           READY   STATUS    RESTARTS   AGE
+    tekton-dashboard-59c7fbf49f-79f7q              1/1     Running   0          50s
+    tekton-pipelines-controller-6b7f7cf7d8-r65ps   1/1     Running   0          15m
+    tekton-pipelines-webhook-7bbd8fcc45-sfgxs      1/1     Running   0          15m
+    ```
+- Access the dashboard as follows:
+    ```bash
+    kubectl --namespace tekton-pipelines port-forward svc/tekton-dashboard 9097:9097
+    ```
+    You can access the web UI at http://localhost:9097 .
+
+## Create Target Namespace
+
+- Set the environment variable `NAMESPACE` to `tekton-demo`, if you open a new terminal remember to set this environment again
+    ```bash
+    export NAMESPACE=tekton-demo
+    ```
+- Create a the namespace using the variable `NAMESPACE`
+    ```bash
+    kubectl create namespace $NAMESPACE
+    ```
+
+
+</Tab>
+
+<Tab label="IKS">
+
+## SetUp
+
+### Tekton CLI Installation
+
+- [Tekton CLI](https://github.com/tektoncd/cli) is command line utility used to interact with the Tekton resources.
+
+- Follow the instructions on the tekton CLI github repository https://github.com/tektoncd/cli#installing-tkn
+
+- For MacOS for example you can use brew
+    ```bash
+    brew tap tektoncd/tools
+    brew install tektoncd/tools/tektoncd-cli
+    ```
+- Verify the Tekton cli
+    ```bash
+    tkn version
+    ```
+- The command should show a result like:
+    ```bash
+    $ tkn version
+    Client version: 0.8.0
     ```
 - If you already have the `tkn` install you can upgrade running
     ```bash
@@ -68,7 +156,7 @@ Follow the instructions [here](../../prerequisites#minikube-setup)
 
 - To deploy the Tekton dashboard:
     ```bash
-    kubectl apply --filename https://github.com/tektoncd/dashboard/releases/download/v0.4.1/dashboard_latest_release.yaml
+    kubectl apply --filename https://github.com/tektoncd/dashboard/releases/download/latest/dashboard_latest_release.yaml
     ```
 - ***Note***: It will take few mins for the Tekton dashboard components to be installed, you an watch the status using the command:
     ```bash
@@ -694,3 +782,6 @@ Follow the instructions [here](../../prerequisites#minikube-setup)
     open $APP_URL
     ```
 
+</Tab>
+
+</Tabs>
