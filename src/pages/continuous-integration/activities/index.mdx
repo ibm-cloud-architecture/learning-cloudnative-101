@@ -53,77 +53,18 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - To deploy the Tekton pipelines:
     ```
-   kubectl apply --filename https://raw.githubusercontent.com/ibm-cloud-architecture/learning-cloudnative-101/oc-tekton-lab/static/yamls/tekton-lab/tekton-operator.yaml
+   oc apply --filename https://raw.githubusercontent.com/ibm-cloud-architecture/learning-cloudnative-101/oc-tekton-lab/static/yamls/tekton-lab/tekton-operator.yaml
     ```
 - ***Note***: It will take few mins for the Tekton pipeline components to be installed, you an watch the status using the command:
     ```
-    kubectl get pods -n tekton-pipelines -w
+    oc get pods -n openshift-operators
     ```
     You can use `Ctrl+c` to terminate the watch
 - A successful deployment of Tekton pipelines will show the following pods:
     ```
     NAME                                         READY   STATUS    RESTARTS   AGE
-    tekton-pipelines-controller-9b8cccff-j6hvr   1/1     Running   0          2m33s
-    tekton-pipelines-webhook-6fc9d4d9b6-kpkp7    1/1     Running   0          2m33s
+    openshift-pipelines-operator-9cdbbb854-x9tvs   1/1     Running   0          25s
     ```
-
-### Tekton Dashboard Installation (Optional)
-
-- To deploy the Tekton dashboard:
-    ```
-    kubectl apply --filename https://github.com/tektoncd/dashboard/releases/download/latest/dashboard_latest_release.yaml
-    ```
-- ***Note***: It will take few mins for the Tekton dashboard components to be installed, you an watch the status using the command:
-    ```
-    oc get pods -n tekton-pipelines -w
-    ```
-    You can use `Ctrl+c` to terminate the watch
-- A successful deployment of Tekton pipelines will show the following pods:
-    ```
-    NAME                                           READY   STATUS    RESTARTS   AGE
-    tekton-dashboard-59c7fbf49f-79f7q              1/1     Running   0          50s
-    tekton-pipelines-controller-6b7f7cf7d8-r65ps   1/1     Running   0          15m
-    tekton-pipelines-webhook-7bbd8fcc45-sfgxs      1/1     Running   0          15m
-    ```
-- Access the dashboard as follows:
-    ```
-    oc --namespace tekton-pipelines port-forward svc/tekton-dashboard 9097:9097
-    ```
-    You can access the web UI at http://localhost:9097 .
-
-## Create Target Namespace
-
-- Set the environment variable `NAMESPACE` to `tekton-demo`, if you open a new terminal remember to set this environment again
-    ```
-    export NAMESPACE=tekton-demo
-    ```
-- Create a the namespace using the variable `NAMESPACE`
-    ```
-    oc create namespace $NAMESPACE
-    ```
-### Tekton Dashboard Installation (Optional)
-
-- To deploy the Tekton dashboard:
-    ```
-    oc apply --filename https://github.com/tektoncd/dashboard/releases/download/latest/dashboard_latest_release.yaml
-    ```
-- ***Note***: It will take few mins for the Tekton dashboard components to be installed, you an watch the status using the command:
-    ```
-    oc get pods -n tekton-pipelines -w
-    ```
-    You can use `Ctrl+c` to terminate the watch
-- A successful deployment of Tekton pipelines will show the following pods:
-    ```
-    NAME                                           READY   STATUS    RESTARTS   AGE
-    tekton-dashboard-59c7fbf49f-79f7q              1/1     Running   0          50s
-    tekton-pipelines-controller-6b7f7cf7d8-r65ps   1/1     Running   0          15m
-    tekton-pipelines-webhook-7bbd8fcc45-sfgxs      1/1     Running   0          15m
-    ```
-- Access the dashboard as follows:
-    ```
-    oc --namespace tekton-pipelines port-forward svc/tekton-dashboard 9097:9097
-    ```
-    You can access the web UI at http://localhost:9097 .
 
 ## Create Target Namespace
 
@@ -572,8 +513,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - To execute the Tasks in the Pipeline, you must create a PipelineRun. Creation of a PipelineRun will trigger the creation of TaskRuns for each Task in your pipeline.
 - Create the file **pipelinerun.yaml**
-    ```bash
-    cat <<'EOF' >pipelinerun.yaml
+    ```
     apiVersion: tekton.dev/v1alpha1
     kind: PipelineRun
     metadata:
@@ -590,7 +530,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
         - name: image
           resourceRef:
             name: image
-    EOF
     ```
     **serviceAccount** - it is always recommended to have a service account associated with PipelineRun, which can then be used to define fine grained roles.
 - Create the PipelineRun using the command:
@@ -694,14 +633,14 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     In this instance the NodePort assigned is `30632`
 - Get the External Public IP as follows:
     ```bash
-    minikube ip
+    crc ip
     ```
     ```
     192.168.64.30
     ```
 - Now access the compose the URL of the App using IP and NodePort
     ```bash
-    export APP_EXTERNAL_IP=$(minikube ip)
+    export APP_EXTERNAL_IP=$(crc ip)
     export APP_NODEPORT=$(oc get svc cloudnativesampleapp-service -n $NAMESPACE -o jsonpath='{.spec.ports[0].nodePort}')
     export APP_URL="http://${APP_EXTERNAL_IP}:${APP_NODEPORT}/greeting?name=Carlos"
     echo $APP_URL
@@ -809,7 +748,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 #### Create a PipelineResource of type `git`
 - Create the file **git.yaml**
     ```bash
-    cat <<EOF >git.yaml
     apiVersion: tekton.dev/v1alpha1
     kind: PipelineResource
     metadata:
@@ -821,7 +759,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
           value: master
         - name: url
           value: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
-    EOF
     ```
     Verify the file content
     ```bash
@@ -836,7 +773,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```
 - Create the file **image.yaml**
     ```bash
-    cat <<EOF >image.yaml
     apiVersion: tekton.dev/v1alpha1
     kind: PipelineResource
     metadata:
@@ -846,7 +782,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
       params:
         - name: url
           value: index.docker.io/$DOCKER_USERNAME/cloudnative_sample_app
-    EOF
     ```
     Verify the file content, and make sure the `url` value is valid with your dockerhub username replaced
     ```bash
@@ -929,7 +864,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - The following snippet shows what a Tekton Task YAML looks like:
 - Create the file **test_task.yaml**
     ```bash
-    cat <<'EOF' >test_task.yaml
     apiVersion: tekton.dev/v1alpha1
     kind: Task
     metadata:
@@ -960,7 +894,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
       volumes:
         - name: m2-repository
           emptyDir: {}
-    EOF
     ```
 
 - Each Task has the following:
@@ -1015,7 +948,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - The following snippet shows what a Tekton TaskRun YAML looks like:
 - Create the file **test_taskrun.yaml**
     ```bash
-    cat <<EOF >test_taskrun.yaml
     apiVersion: tekton.dev/v1alpha1
     kind: TaskRun
     metadata:
@@ -1028,7 +960,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
           - name: source
             resourceRef:
               name: source
-    EOF
     ```
 - **generateName** - since the TaskRun can be run many times, in order to have unqiue name across the TaskRun ( helpful when checking the TaskRun history) we use this generateName instead of name. When Kubernetes sees generateName it will generate unquie set of characters and suffix the same to build-app-, similar to how pod names are generated
 - **taskRef** - this is used to refer to the Task by its name that will be run as part of this TaskRun. In this example we use build-app Task.
@@ -1120,14 +1051,12 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - Before we run the Task using TaskRun let us create the Kubernetes service account and attach the needed permissions to the service account, the following Kubernetes resource defines a service account called `pipeline` in namespace `$NAMESPACE` who will have administrative role within the `$NAMESPACE` namespace.
 - Create the file **sa.yaml**
     ```bash
-    cat <<EOF >sa.yaml
     apiVersion: v1
     kind: ServiceAccount
     metadata:
       name: pipeline
     secrets:
       - name: regcred
-    EOF
     ```
 - Create sa role as follows:
     ```bash
@@ -1163,7 +1092,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```
 - (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun
     ```bash
-    cat <<'EOF' >taskrun.yaml
     apiVersion: tekton.dev/v1alpha1
     kind: TaskRun
     metadata:
@@ -1180,7 +1108,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
           - name: image
             resourceRef:
               name: image
-    EOF
     ```
     Then create the TaskRun with `generateName`
     ```bash
@@ -1199,7 +1126,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - Create the file **pipeline.yaml**, the Pipeline contains two Tasks
     ```bash
-    cat <<'EOF' >pipeline.yaml
     apiVersion: tekton.dev/v1alpha1
     kind: Pipeline
     metadata:
@@ -1228,7 +1154,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
                 resource: source
               - name: image
                 resource: image
-    EOF
     ```
 
 - Pipeline defines a list of Tasks to execute in order, while also indicating if any outputs should be used as inputs of a following Task by using the from field and also indicating the order of executing (using the runAfter and from fields). The same variable substitution you used in Tasks is also available in a Pipeline.
@@ -1253,7 +1178,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - To execute the Tasks in the Pipeline, you must create a PipelineRun. Creation of a PipelineRun will trigger the creation of TaskRuns for each Task in your pipeline.
 - Create the file **pipelinerun.yaml**
     ```bash
-    cat <<'EOF' >pipelinerun.yaml
     apiVersion: tekton.dev/v1alpha1
     kind: PipelineRun
     metadata:
@@ -1270,7 +1194,6 @@ Follow the instructions [here](../../prerequisites#environment-setup)
         - name: image
           resourceRef:
             name: image
-    EOF
     ```
     **serviceAccount** - it is always recommended to have a service account associated with PipelineRun, which can then be used to define fine grained roles.
 - Create the PipelineRun using the command:
