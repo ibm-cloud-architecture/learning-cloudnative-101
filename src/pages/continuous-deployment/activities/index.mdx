@@ -13,33 +13,26 @@ description: Lab for continuous delivery using ArgoCD
   <AnchorLink>References</AnchorLink>
 </AnchorLinks>
 
+<Tabs>
+<Tab label="OpenShift">
+
+** Get Pod Logs **
+```
+oc logs my-securitycontext-pod
+```
+** Should return **
+```
+cat: can't open '/message/message.txt': Permission denied
+```
+</Tab>
+
+<Tab label="IKS">
+
 ## Pre-requisites
 
-The following checks ensure that each chapter exercises are done with the right environment settings.
+Make sure your environment is setup properly for the lab.
 
-- Verify Kubernetes CLI version, ti should be v1.15+
-    ```bash
-    kubectl version
-    ```
-- Verify your cluster has 4GB+ memory, and kubernetes 1.16+
-    ```bash
-    minikube config view
-    ```
-- In case memory is not set, or need to increase set the memory and recreate the VM
-    ```bash
-    minikube config set memory 4096
-    minikube config set kubernetes-version v1.16.6
-    ```
-- Delete the minikube VM and start a new one
-    ```bash
-    minikube delete
-    minikube start
-    ```
-- In a new terminal run `minikube tunnel` to allow you to access services from your browser or terminal
-    ```bash
-    minikube tunnel
-    ```
-
+Check the [Environment Setup](../prerequisites/#environment-setup) page for your setup.
 
 ## ArgoCD Installation
 
@@ -91,7 +84,7 @@ The following checks ensure that each chapter exercises are done with the right 
     ```
     argocd-server-b54756f69-jncc9
     ```
-  
+
 ![ArgoCD Login](./images/argocd_login.png)
 
 - Now go back to the ArgoCD home and click on `NEW APP`.
@@ -172,6 +165,7 @@ To sync the application, click `SYNC` and then `SYNCHRONIZE`.
     ```bash
     argocd login $ARGOCD_SERVER
     ```
+    
     ```
     WARNING: server certificate had error: x509: cannot validate certificate for 10.97.240.99 because it doesn't contain 
     any IP SANs. Proceed insecurely (y/n)? y
@@ -207,7 +201,7 @@ To sync the application, click `SYNC` and then `SYNCHRONIZE`.
     Health Status:      Healthy
 
     GROUP  KIND        NAMESPACE  NAME                             STATUS  HEALTH   HOOK  MESSAGE
-          Service     default    cloudnativesampleapp-service     Synced  Healthy        service/cloudnativesampleapp-service created
+        Service     default    cloudnativesampleapp-service     Synced  Healthy        service/cloudnativesampleapp-service created
     apps   Deployment  default    cloudnativesampleapp-deployment  Synced  Healthy        deployment.apps/cloudnativesampleapp-deployment created
     ```
 - Show application deployment history
@@ -218,8 +212,10 @@ To sync the application, click `SYNC` and then `SYNCHRONIZE`.
     ID  DATE                           REVISION
     0   2020-02-12 21:10:32 -0500 EST  HEAD (9684037)
     ```
-
-
 ## References
 
 - [ArgoCD](https://argoproj.github.io/argo-cd/)
+
+</Tab>
+
+</Tabs>
