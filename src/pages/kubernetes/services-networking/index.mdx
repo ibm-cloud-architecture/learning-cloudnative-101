@@ -81,13 +81,13 @@ oc get svc
 ```
 oc describe svc my-service
 ```
-** Get Route for the Service **
-```  
-oc get route
-```
 ** Expose a service **
 ```
 oc expose service <service_name>
+```
+** Get Route for the Service **
+```  
+oc get route
 ```
 
 </Tab>
@@ -114,6 +114,52 @@ kubectl expose deployment my-deployment --port 80 --target-port=http --selector 
 </Tab>
 
 </Tabs>
+
+# Routes
+
+(OpenShift Only)
+
+Routes are Openshift objects that expose services for external clients to reach them by name.  
+
+Routes can insecured or secured on creation using certificates.
+
+The new route inherits the name from the service unless you specify one using the --name option.
+
+## Resources
+
+**OpenShift**
+- [Routes](https://docs.openshift.com/online/pro/dev_guide/routes.html)
+- [Route Configuration](https://docs.openshift.com/container-platform/4.3/networking/routes/route-configuration.html)
+- [Secured Routes](https://docs.openshift.com/container-platform/4.3/networking/routes/secured-routes.html)
+
+## References
+
+** Route Creation **
+```
+apiVersion: v1
+kind: Route
+metadata:
+  name: frontend
+spec:
+  to:
+    kind: Service
+    name: frontend
+```
+** Secured Route Creation **
+```
+apiVersion: v1
+kind: Route
+metadata:
+  name: frontend
+spec:
+  to:
+    kind: Service
+    name: frontend
+  tls:
+    termination: edge
+```
+
+### Commands
 
 # Ingress
 
