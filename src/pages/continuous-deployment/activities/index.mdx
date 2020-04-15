@@ -63,7 +63,7 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     ```
 - Use `admin` as the username and get the password with the following command, it's the name of the pod for the argo-server
     ```bash
-    kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
+    oc get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
     ```
     For example the output is similar to this:
     ```
