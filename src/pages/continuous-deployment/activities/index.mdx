@@ -29,30 +29,27 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     oc new-project argocd
     ```
 - Install ArgoCD as follows.
+    ```
+    oc apply --filename https://raw.githubusercontent.com/ibm-cloud-architecture/learning-cloudnative-101/master/static/yamls/argo-lab/argocd-operator.yaml
+    ```
+- When installing the tutorial, make sure you wait until the argocd-operator is finished before installing the argocd-cr..or it will fail. You can do this:
     ```bash
-    oc apply -n argocd -f 
+    oc get ClusterServiceVersion/argocd-operator-helm.v0.0.3 -n argocd
+    NAME                          DISPLAY                   VERSION   REPLACES                      PHASE
+    argocd-operator-helm.v0.0.3   Argo CD Operator (Helm)   0.0.3     argocd-operator-helm.v0.0.2   Succeeded
+    ```
+    and wait for the "succeeded" to come up before proceeding.
+    ```
+    oc apply --filename https://raw.githubusercontent.com/ibm-cloud-architecture/learning-cloudnative-101/master/static/yamls/argo-lab/argocd-cr.yaml
     ```
 - Install the `argocd` CLI, for example on OSX use brew
     ```bash
     brew tap argoproj/tap
     brew install argoproj/tap/argocd
     ```
-- To allow access via LoadBalancer and leverage the `minikube tunnel` running in the background, patch the argocd server service
-    ```bash
-    kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
-    ```
-- List the argocd-server service
-    ```bash
-    kubectl get svc argocd-server -n argocd
-    ```
-    It should have an IP under `EXTERNAL-IP` column
-    ```
-    NAME            TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)                      AGE
-    argocd-server   LoadBalancer   10.97.240.99   10.97.240.99   80:30286/TCP,443:31716/TCP   41s
-    ```
 - Set an environment variable `ARGOCD_URL` using the `EXTERNAL-IP`
     ```bash
-    export ARGOCD_SERVER="$(oc get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
+    export ARGOCD_SERVER="$(oc get route argocd-server -n argocd -o jsonpath='{.status.ingress[0].host}')"
     export ARGOCD_URL="https://$ARGOCD_SERVER"
     echo ARGOCD_URL=$ARGOCD_URL
     echo ARGOCD_SERVER=$ARGOCD_SERVER
