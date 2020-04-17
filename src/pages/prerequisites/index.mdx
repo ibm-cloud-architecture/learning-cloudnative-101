@@ -123,29 +123,31 @@ The following is a list of desktop tools required to help with installation and 
 
 <Tab label="CRC (MiniShift)">
 
-** Getting API Resources **
+Make sure CRC is installed. Check out the [CRC Page](https://access.redhat.com/documentation/en-us/red_hat_codeready_containers/1.0/html/getting_started_guide/getting-started-with-codeready-containers_gsg) 
+
+** Setup CRC **
 ```
-  kubectl api-resources
+  crc setup
 ```
-** Viewing Resources **
+** Start CRC **
 ```
-  kubectl api-resources -o wide
-```
-** Viewing Resources **
-```
-  kubectl api-resources -o name
-```
-** Getting a list of specific objects **
-```
-  kubectl get nodes,ns,po,deploy,svc
-```
-** Describing the resources **
-```
-  kubectl describe node --all
+  crc start
 ```
 </Tab>
 <Tab label="IKS">
 
+- Login to [IBM Cloud](https://cloud.ibm.com) with your IBM ID.
+
+- Click "Create Resource" and search for "kubernetes service".
+
+- Select the tile for "Kubernetes Service" and do the following:
+  - Select the "Free Cluster" plan.
+  - Name your cluster.
+  - Select "Create" at the bottom right of the screen.
+
+- Once the Cluster is provisioned, Click on the "Connect via CLI" in the top right corner.
+
+- Follow the instructions to connect and you are set to go.
 
 </Tab>
 
