@@ -46,6 +46,8 @@
       path: /kubernetes/state-persistence/
     - title: K8s Troubleshoot
       path: /kubernetes/troubleshooting/
+    - title: Event-Driven Architecture
+      path: /eda/
     - title: Continuous Integration (CI)
       path: /continuous-integration/
     - title: Continuous Deployment (CD)
