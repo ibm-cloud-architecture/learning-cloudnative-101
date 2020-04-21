@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "gatsby": "^2.18.21",
-    "gatsby-plugin-google-analytics": "^2.1.32",
+    "gatsby-plugin-google-analytics": "^2.2.4",
     "gatsby-source-filesystem": "^2.1.46",
     "gatsby-theme-carbon": "^1.19.0",
     "gatsby-transformer-json": "^2.2.25",

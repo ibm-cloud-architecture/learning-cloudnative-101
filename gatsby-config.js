@@ -2,7 +2,7 @@ module.exports = {
   siteMetadata: {
     title: 'IBM Cloud Native Bootcamp',
     description: 'IBM Cloud Native Bootcamp',
-    keywords: 'ibm,garage,cloud-native,carbon,cloud-native-101,cloud native 101',
+    keywords: 'ibm,garage,cloud-native,bootcamp,cloud-native-101,cloudnative,native,101,cloud,cp4apps,kubernetes,containers,ci,cd,cicd,tekton,argocd,learning',
   },
   pathPrefix: "/",
   plugins: [
@@ -28,7 +28,8 @@ module.exports = {
     {
       resolve: `gatsby-plugin-google-analytics`,
       options: {
-        trackingId: "UA-149377589-4"
+        trackingId: "UA-149377589-4",
+        head: true
       }
     }
   ]
