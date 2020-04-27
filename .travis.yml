@@ -7,7 +7,7 @@ branches:
     - master
 deploy:
   provider: pages
-  skip_cleanup: true
+  skip_cleanup: false
   github_url: github.com
   github_token: $GITHUB_TOKEN
   keep_history: false
