@@ -26,7 +26,6 @@ In this lab, you will learn about how to use docker and how to run applications 
 
 ## Prerequisites
 
-- You need [Java](https://www.java.com/en/) installed on your environment. You can download it [here](https://www.java.com/download/). Please install the latest version which is Java Version 8. Make sure you set `JAVA_HOME` environment variable. You can verify the version after installation using `java -version`.
 - Create a [DockerHub account](https://hub.docker.com/). This account is needed to push images to docker registry. Also create a repository following the instructions [here](https://docs.docker.com/docker-hub/repos/).
 - You need to install [Docker](https://www.docker.com/) in your environment. Follow the instructions [here](https://docs.docker.com/docker-for-mac/install/) to install it on Mac and [here](https://docs.docker.com/docker-for-windows/install/) to install it on Windows.
 
@@ -39,6 +38,7 @@ Before proceeding, make sure docker is properly installed on your system.
 If it is installed, you will see a version number something similar to below.
 
 ```bash
+$ <command>
 Docker version 19.03.0-beta3, build c55e026
 ```
 
@@ -51,7 +51,7 @@ Let us start with a `hello-world` container.
 If it is successfully run, you will see something like below.
 
 ```bash
-$ 
+$ <command>
 Unable to find image 'hello-world:latest' locally
 latest: Pulling from library/hello-world
 1b930d010525: Pull complete
@@ -91,7 +91,7 @@ This image is pulled from https://hub.docker.com/_/hello-world. Docker hub is a 
 You will then see something like below.
 
 ```bash
-$ 
+$ <command>
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 hello-world         latest              fce289e99eb9        5 months ago        1.84kB
 ```
