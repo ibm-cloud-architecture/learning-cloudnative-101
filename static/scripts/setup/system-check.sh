@@ -59,9 +59,9 @@ else
 fi
 
 
-if hash crc 2>/dev/null
+if hash brew 2>/dev/null
 then
-    printf '\xE2\x9C\x85 CRC CLI \n'
+    printf '\xE2\x9C\x85 Brew CLI \n'
 else
-    printf '\xE2\x9D\x8C CRC CLI \n'
+    printf '\xE2\x9D\x8C Brew CLI \n'
 fi
