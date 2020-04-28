@@ -8,9 +8,8 @@ then
 else
     printf '\xE2\x9D\x8C IBM Cloud CLI \n \n'
 
-    printf 'Download IBM Cloud CLI using the links below: \n'
-    printf 'For Mac: https://brew.sh/ \n'
-    printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n \n'
+    printf 'Download the IBM Cloud CLI using the links below: \n'
+    printf 'For All Users: https://cloud.ibm.com/docs/cli/reference/ibmcloud?topic=cloud-cli-install-ibmcloud-cli \n \n '
 fi
 
 if hash git 2>/dev/null
@@ -19,9 +18,8 @@ then
 else
     printf '\xE2\x9D\x8C Git CLI \n \n'
 
-    printf 'Download Git using the links below: \n'
-    printf 'For Mac: https://brew.sh/ \n'
-    printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n \n'
+    printf 'Download the Git CLI using the links below: \n'
+    printf 'For All Users: https://git-scm.com/book/en/v2/Getting-Started-Installing-Git \n \n'
 fi
 
 if hash crc 2>/dev/null
@@ -30,9 +28,9 @@ then
 else
     printf '\xE2\x9D\x8C CRC \n \n'
 
+    printf '* A RedHat Account is Required * \n'
     printf 'Download CRC using the links below: \n'
-    printf 'For Mac: https://brew.sh/ \n'
-    printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n \n'
+    printf 'For All Users: https://cloud.redhat.com/openshift/install/ \n \n'
 fi
 
 if hash minikube 2>/dev/null
@@ -42,8 +40,7 @@ else
     printf '\xE2\x9D\x8C Minikube \n \n'
 
     printf 'Download Minikube using the links below: \n'
-    printf 'For Mac: https://brew.sh/ \n'
-    printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n \n'
+    printf 'For All Users: https://kubernetes.io/docs/tasks/tools/install-minikube/ \n \n'
 fi
 
 if hash docker 2>/dev/null
@@ -52,9 +49,9 @@ then
 else
     printf '\xE2\x9D\x8C Docker CLI \n \n'
 
-    printf 'Download Docker using the links below: \n'
-    printf 'For Mac: https://brew.sh/ \n'
-    printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n \n'
+    printf 'Download the Docker CLI using the links below: \n'
+    printf 'For Mac: https://docs.docker.com/docker-for-mac/install/ \n'
+    printf 'For Linux Users: https://docs.docker.com/engine/install/ubuntu/ \n \n'
 fi
 
 if hash kubectl 2>/dev/null
@@ -63,9 +60,8 @@ then
 else
     printf '\xE2\x9D\x8C Kubernetes CLI \n \n'
 
-    printf 'Download Kubernetes using the links below: \n'
-    printf 'For Mac: https://brew.sh/ \n'
-    printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n \n'
+    printf 'Download the Kubernetes CLI using the links below: \n'
+    printf 'For All Users: https://kubernetes.io/docs/tasks/tools/install-kubectl/ \n \n'
 fi
 
 if hash oc 2>/dev/null
@@ -95,7 +91,7 @@ then
 else
     printf '\xE2\x9D\x8C Argo CLI \n \n'
 
-    printf 'Download Argo using the links below: \n'
+    printf 'Download the Argo CLI using the links below: \n'
     printf 'For Mac: https://brew.sh/ \n'
     printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n \n'
 fi
@@ -108,17 +104,5 @@ else
 
     printf 'Download Brew using the links below: \n'
     printf 'For Mac: https://brew.sh/ \n'
-    printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n \n'
-fi
-
-if hash dockerhub 2>/dev/null
-then
-    printf '\xE2\x9C\x85 DockerHub CLI \n'
-else
-    printf '\xE2\x9D\x8C DockerHub CLI \n \n'
-    
-    printf 'Download Brew using the links below: \n'
-    printf 'For Mac: https://brew.sh/ \n'
-
     printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n \n'
 fi
