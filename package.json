@@ -11,16 +11,16 @@
     "serve": "gatsby serve"
   },
   "dependencies": {
-    "gatsby": "^2.18.21",
-    "gatsby-plugin-google-analytics": "^2.2.4",
-    "gatsby-source-filesystem": "^2.1.46",
-    "gatsby-theme-carbon": "^1.19.0",
-    "gatsby-transformer-json": "^2.2.25",
+    "gatsby": "^2.21.1",
+    "gatsby-plugin-google-analytics": "^2.3.0",
+    "gatsby-source-filesystem": "^2.3.0",
+    "gatsby-theme-carbon": "^1.24.0",
+    "gatsby-transformer-json": "^2.4.0",
     "lodash": "latest",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "gh-pages": "^2.1.1"
+    "gh-pages": "^2.2.0"
   }
 }
