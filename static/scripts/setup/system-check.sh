@@ -70,9 +70,8 @@ then
 else
     printf '\xE2\x9D\x8C Openshift CLI \n \n'
 
-    printf 'Download Openshift using the links below: \n'
-    printf 'For Mac: https://brew.sh/ \n'
-    printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n \n'
+    printf 'Download the Openshift CLI using the links below: \n'
+    printf 'For All Users: https://docs.openshift.com/container-platform/4.2/cli_reference/openshift_cli/getting-started-cli.html#cli-installing-cli_cli-developer-commands \n \n'
 
 if hash tkn 2>/dev/null
 then
@@ -80,9 +79,8 @@ then
 else
     printf '\xE2\x9D\x8C Tekton CLI \n \n'
 
-    printf 'Download Tekton using the links below: \n'
-    printf 'For Mac: https://brew.sh/ \n'
-    printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n \n'
+    printf 'Download the Tekton CLI using the links below: \n'
+    printf 'For All Users: https://github.com/tektoncd/cli#installing-tkn \n \n'
 fi
 
 if hash argocd 2>/dev/null
@@ -92,8 +90,7 @@ else
     printf '\xE2\x9D\x8C Argo CLI \n \n'
 
     printf 'Download the Argo CLI using the links below: \n'
-    printf 'For Mac: https://brew.sh/ \n'
-    printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n \n'
+    printf 'For All Users: https://argoproj.github.io/argo-cd/cli_installation/ \n \n'
 fi
 
 if hash brew 2>/dev/null
