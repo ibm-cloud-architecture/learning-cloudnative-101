@@ -23,8 +23,6 @@ This activites contained here require you to be proficient in working from the c
 
 Here is a course for learning (or brushing up) on working from the linux command line [Linux Command Line Basics](https://www.udacity.com/course/linux-command-line-basics--ud595)
 
-
-
 ## Create accounts
 
 You'll need these accounts to use the Developer Tools environment.
@@ -37,6 +35,7 @@ You'll need these accounts to use the Developer Tools environment.
 
 - [RedHat Account](https://www.redhat.com/en): Needed for CodeReady Containers.
 
+### Run System Check Script
 
 ### Windows Users
 
@@ -44,7 +43,13 @@ Create [Linux VM](https://www.virtualbox.org/wiki/Downloads) with the following 
 
 ### Mac/Linux Users
 
-Make sure you install [Homebrew](https://brew.sh/) for CLI and tool installation.
+Run the following command in your terminal to check which tools need to be installed.
+
+```
+wget -O - https://github.com/ibm-cloud-architecture/learning-cloudnative-101/blob/master/static/scripts/setup/system-check.sh | bash
+```
+
+After the script is run, make sure to install any missing tools.
 
 ## Install CLIs and tools
 
