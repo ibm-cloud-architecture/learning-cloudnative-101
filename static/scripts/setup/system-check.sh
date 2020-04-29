@@ -72,6 +72,7 @@ else
 
     printf 'Download the Openshift CLI using the links below: \n'
     printf 'For All Users: https://docs.openshift.com/container-platform/4.2/cli_reference/openshift_cli/getting-started-cli.html#cli-installing-cli_cli-developer-commands \n \n'
+fi
 
 if hash tkn 2>/dev/null
 then
@@ -101,5 +102,5 @@ else
 
     printf 'Download Brew using the links below: \n'
     printf 'For Mac: https://brew.sh/ \n'
-    printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n \n'
+    printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n'
 fi
