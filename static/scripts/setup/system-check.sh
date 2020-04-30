@@ -30,7 +30,7 @@ else
 
     printf '* A RedHat Account is Required * \n'
     printf 'Download CRC using the links below: \n'
-    printf 'For All Users: https://cloud.redhat.com/openshift/install/ \n \n'
+    printf 'For All Users: https://cloud.redhat.com/openshift/install/crc/installer-provisioned \n \n'
 fi
 
 if hash minikube 2>/dev/null
@@ -51,7 +51,9 @@ else
 
     printf 'Download the Docker CLI using the links below: \n'
     printf 'For Mac: https://docs.docker.com/docker-for-mac/install/ \n'
-    printf 'For Linux Users: https://docs.docker.com/engine/install/ubuntu/ \n \n'
+    printf 'For Linux Users: https://docs.docker.com/engine/install/ubuntu/ \n'
+    printf 'For Windows: https://docs.docker.com/docker-for-windows/install/ \n \n'
+
 fi
 
 if hash kubectl 2>/dev/null
@@ -71,7 +73,7 @@ else
     printf '\xE2\x9D\x8C Openshift CLI \n \n'
 
     printf 'Download the Openshift CLI using the links below: \n'
-    printf 'For All Users: https://docs.openshift.com/container-platform/4.2/cli_reference/openshift_cli/getting-started-cli.html#cli-installing-cli_cli-developer-commands \n \n'
+    printf 'For All Users: https://mirror.openshift.com/pub/openshift-v4/clients/oc/latest/ \n \n'
 fi
 
 if hash tkn 2>/dev/null
