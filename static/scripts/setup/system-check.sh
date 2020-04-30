@@ -95,14 +95,3 @@ else
     printf 'Download the Argo CLI using the links below: \n'
     printf 'For All Users: https://argoproj.github.io/argo-cd/cli_installation/ \n \n'
 fi
-
-if hash brew 2>/dev/null
-then
-    printf '\xE2\x9C\x85 Brew CLI \n'
-else
-    printf '\xE2\x9D\x8C Brew CLI \n \n'
-
-    printf 'Download Brew using the links below: \n'
-    printf 'For Mac: https://brew.sh/ \n'
-    printf 'For Linux Users: https://docs.brew.sh/Homebrew-on-Linux \n'
-fi
