@@ -1,0 +1,70 @@
+---
+title: Event-Driven Architecture Lab Solution 2 - Working with Spring for Apache Kafka
+description: Lab activities associated with using the spring-kafka project with an IBM Event Streams on Cloud instance, to be used with event-driven architecture enablement.
+---
+
+## Solution - sample-01
+
+1. Create the topics `topic1` and `topic1.DLT` in your IBM Event Streams on Cloud instance.
+1. `git clone https://github.com/spring-projects/spring-kafka.git`
+2. `cd spring-kafka/samples/sample-01`
+3. Include the necessary credentials in the `src/main/resources/application.yml` file by merging the existing contents with the structure below:
+   ```yaml
+spring:
+  kafka:
+    bootstrap-servers: <your-bootstrap-nodes-property-of-your-IBM-Event-Streams-on-Cloud-instance>
+    ssl:
+      protocol: TLSv1.2
+    properties:
+      sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="token" password="<your-api-key-of-your-IBM-Event-Streams-on-Cloud-instance>";
+      sasl.mechanism: PLAIN
+      security.protocol: SASL_SSL
+   ```
+4. `mvn clean package`
+5. `java -jar target/kafka-sample-01-2.4.4.RELEASE.jar`
+6. `curl -X POST http://localhost:8080/send/foo/bar`
+7. `curl -X POST http://localhost:8080/send/foo/fail`
+
+## Solution - sample-02
+
+1. Create the topics `foos` and `bars` in your IBM Event Streams on Cloud instance.
+2. `git clone https://github.com/spring-projects/spring-kafka.git`
+3. `cd spring-kafka/samples/sample-02`
+4. Include the necessary credentials in the `src/main/resources/application.yml` file by merging the existing contents with the structure below:
+   ```yaml
+spring:
+  kafka:
+    bootstrap-servers: <your-bootstrap-nodes-property-of-your-IBM-Event-Streams-on-Cloud-instance>
+    ssl:
+      protocol: TLSv1.2
+    properties:
+      sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="token" password="<your-api-key-of-your-IBM-Event-Streams-on-Cloud-instance>";
+      sasl.mechanism: PLAIN
+      security.protocol: SASL_SSL
+   ```
+5. `mvn clean package`
+6. `java -jar target/kafka-sample-02-2.4.4.RELEASE.jar`
+7. `curl -X POST http://localhost:8080/send/foo/bar`
+8. `curl -X POST http://localhost:8080/send/bar/baz`
+9. `curl -X POST http://localhost:8080/send/unknown/xxx`
+
+## Solution - sample-03
+
+1. Create the topics `topic2` and `topic3` in your IBM Event Streams on Cloud instance.
+2. `git clone https://github.com/spring-projects/spring-kafka.git`
+3. `cd spring-kafka/samples/sample-03`
+4. Include the necessary credentials in the `src/main/resources/application.yml` file by merging the existing contents with the structure below:
+   ```yaml
+spring:
+  kafka:
+    bootstrap-servers: <your-bootstrap-nodes-property-of-your-IBM-Event-Streams-on-Cloud-instance>
+    ssl:
+      protocol: TLSv1.2
+    properties:
+      sasl.jaas.config: org.apache.kafka.common.security.plain.PlainLoginModule required username="token" password="<your-api-key-of-your-IBM-Event-Streams-on-Cloud-instance>";
+      sasl.mechanism: PLAIN
+      security.protocol: SASL_SSL
+   ```
+5. `mvn clean package`
+6. `java -jar target/kafka-sample-03-2.4.4.RELEASE.jar`
+7. `curl -X POST http://localhost:8080/send/foos/a,b,c,d,e`
