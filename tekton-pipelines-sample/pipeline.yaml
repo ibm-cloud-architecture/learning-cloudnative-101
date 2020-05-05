@@ -18,12 +18,11 @@ spec:
             resource: source
     - name: build-push
       taskRef:
-        name: kaniko
+        name: buildah
       runAfter: [test]
       resources:
         inputs:
           - name: source
             resource: source
-        outputs:
           - name: image
             resource: image

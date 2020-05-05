@@ -1,18 +1,16 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TaskRun
 metadata:
-  generateName: kaniko-task-run-
+  generateName: buildah-task-run-
 spec:
   serviceAccountName: pipeline
   taskRef:
-    name: kaniko
+    name: buildah
   inputs:
     resources:
       - name: source
         resourceRef:
           name: source
-  outputs:
-    resources:
       - name: image
         resourceRef:
           name: image

@@ -426,8 +426,8 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```bash
     oc delete taskrun --all -n $NAMESPACE
     ```
-- (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun
-    ```
+- (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun, create a file **taskrun.yaml**
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: TaskRun
     metadata:
@@ -1090,8 +1090,8 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```bash
     kubectl delete taskrun --all -n $NAMESPACE
     ```
-- (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun
-    ```bash
+- (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun, create a file **taskrun.yaml**
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: TaskRun
     metadata:
