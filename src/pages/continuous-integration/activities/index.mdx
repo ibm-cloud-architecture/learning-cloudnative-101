@@ -103,11 +103,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 #### Create a PipelineResource of type `image`
 
-- Set the environment variable `DOCKER_USERNAME` to your dockerhub account, replace `<REPLACEME>` with your docker username, keep the quotes
-    ```
-    export DOCKER_USERNAME='<REPLACEME>'
-    ```
-- Create the file **image.yaml**
+- Create the file **image.yaml** and edit the file by replacing `${DOCKER_USERNAME}` with your docker user name on the image registry
     ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: PipelineResource
@@ -117,7 +113,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
       type: image
       params:
         - name: url
-          value: index.docker.io/$DOCKER_USERNAME/cloudnative_sample_app
+          value: index.docker.io/${DOCKER_USERNAME}/cloudnative_sample_app
     ```
     Verify the file content, and make sure the `url` value is valid with your dockerhub username replaced
     ```bash
@@ -767,11 +763,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 #### Create a PipelineResource of type `image`
 
-- Set the environment variable `DOCKER_USERNAME` to your dockerhub account, replace `<REPLACEME>` with your docker username, keep the quotes
-    ```bash
-    export DOCKER_USERNAME='<REPLACEME>'
-    ```
-- Create the file **image.yaml**
+- Create the file **image.yaml** and edit the file by replacing `${DOCKER_USERNAME}` with your docker user name on the image registry
     ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: PipelineResource
@@ -781,7 +773,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
       type: image
       params:
         - name: url
-          value: index.docker.io/$DOCKER_USERNAME/cloudnative_sample_app
+          value: index.docker.io/${DOCKER_USERNAME}/cloudnative_sample_app
     ```
     Verify the file content, and make sure the `url` value is valid with your dockerhub username replaced
     ```bash
