@@ -57,7 +57,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```
 - ***Note***: It will take few mins for the Tekton pipeline components to be installed, you an watch the status using the command:
     ```
-    oc get pods -n openshift-operators
+    oc get pods -n openshift-operators -w
     ```
     You can use `Ctrl+c` to terminate the watch
 - A successful deployment of Tekton pipelines will show the following pods:
@@ -374,9 +374,14 @@ Follow the instructions [here](../../prerequisites#environment-setup)
       -n ${NAMESPACE}
     ```
     Before creating, replace the values as mentioned above.
-    Note: If your docker password contains special characters in it, please enclose the password in double quotes or place an escape character before each special character.
 
-    - (Optional) Only if you have problems with the credentials you can recreate it, but you have to deleted first
+    <InlineNotification>
+
+    ** Note: ** If your docker password contains special characters in it, please enclose the password in double quotes or place an escape character before each special character.
+
+    </InlineNotification>
+
+- (Optional) Only if you have problems with the credentials you can recreate it, but you have to deleted first
     ```bash
     oc delete secret regcred -n $NAMESPACE
     ```
