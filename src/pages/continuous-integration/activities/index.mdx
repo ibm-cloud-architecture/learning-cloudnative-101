@@ -397,7 +397,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```
 - Create sa role as follows:
     ```bash
-    oc apply -n $NAMESPACE -f sa.yaml
+    oc create -n $NAMESPACE -f sa.yaml
     ```
 
 - Lets create a Task Run for `buildah` Task using the `tkn` CLI passing the inputs, outputs and service account
@@ -1057,7 +1057,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```
 - Create sa role as follows:
     ```bash
-    kubectl apply -n $NAMESPACE -f sa.yaml
+    kubectl create -n $NAMESPACE -f sa.yaml
     ```
 
 - Lets create a Task Run for `buildah` Task using the `tkn` CLI passing the inputs, outputs and service account
