@@ -45,8 +45,14 @@ Create [Linux VM](https://www.virtualbox.org/wiki/Downloads) with the following 
 
 Run the following command in your terminal to check which tools need to be installed.
 
+Using wget:
 ```
-wget -O - https://github.com/ibm-cloud-architecture/learning-cloudnative-101/blob/master/static/scripts/setup/system-check.sh | bash
+wget -O - https://cloudnative101.dev/scripts/setup/system-check.sh | sh
+```
+
+Using curl:
+```
+curl -s https://cloudnative101.dev/scripts/setup/system-check.sh | sh
 ```
 
 After the script is run, make sure to install any missing tools.
