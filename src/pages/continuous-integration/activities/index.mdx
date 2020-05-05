@@ -83,7 +83,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 #### Create a PipelineResource of type `git`
 - Create the file **git.yaml**
-    ```
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: PipelineResource
     metadata:
@@ -103,12 +103,8 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 #### Create a PipelineResource of type `image`
 
-- Set the environment variable `DOCKER_USERNAME` to your dockerhub account, replace `<REPLACEME>` with your docker username, keep the quotes
-    ```
-    export DOCKER_USERNAME='<REPLACEME>'
-    ```
-- Create the file **image.yaml**
-    ```
+- Create the file **image.yaml** and edit the file by replacing `${DOCKER_USERNAME}` with your docker user name on the image registry
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: PipelineResource
     metadata:
@@ -117,7 +113,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
       type: image
       params:
         - name: url
-          value: index.docker.io/$DOCKER_USERNAME/cloudnative_sample_app
+          value: index.docker.io/${DOCKER_USERNAME}/cloudnative_sample_app
     ```
     Verify the file content, and make sure the `url` value is valid with your dockerhub username replaced
     ```bash
@@ -199,7 +195,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - Create the below yaml files.
 - The following snippet shows what a Tekton Task YAML looks like:
 - Create the file **test_task.yaml**
-    ```
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: Task
     metadata:
@@ -283,7 +279,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - The following snippet shows what a Tekton TaskRun YAML looks like:
 - Create the file **test_taskrun.yaml**
-    ```
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: TaskRun
     metadata:
@@ -386,7 +382,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```
 - Before we run the Task using TaskRun let us create the Kubernetes service account and attach the needed permissions to the service account, the following Kubernetes resource defines a service account called `pipeline` in namespace `$NAMESPACE` who will have administrative role within the `$NAMESPACE` namespace.
 - Create the file **sa.yaml**
-    ```
+    ```yaml
     apiVersion: v1
     kind: ServiceAccount
     metadata:
@@ -426,8 +422,8 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```bash
     oc delete taskrun --all -n $NAMESPACE
     ```
-- (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun
-    ```
+- (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun, create a file **taskrun.yaml**
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: TaskRun
     metadata:
@@ -461,7 +457,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - Pipelines allows to start multiple Tasks, in parallel or in a [certain order](https://github.com/tektoncd/pipeline/blob/master/docs/pipelines.md#runafter)
 
 - Create the file **pipeline.yaml**, the Pipeline contains two Tasks
-    ```
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: Pipeline
     metadata:
@@ -513,7 +509,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - To execute the Tasks in the Pipeline, you must create a PipelineRun. Creation of a PipelineRun will trigger the creation of TaskRuns for each Task in your pipeline.
 - Create the file **pipelinerun.yaml**
-    ```
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: PipelineRun
     metadata:
@@ -582,7 +578,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - Deploy the app as follows:
     ```bash
-    export APP_YAML_URL='https://raw.githubusercontent.com/ibm-cloud-architecture/cloudnative_sample_app_deploy/master/yamls/'
+    export APP_YAML_URL='https://raw.githubusercontent.com/ibm-cloud-architecture/cloudnative_sample_app_deploy/master/openshift'
     oc apply -n $NAMESPACE -f $APP_YAML_URL/deployment.yaml
     oc apply -n $NAMESPACE -f $APP_YAML_URL/service.yaml
     ```
@@ -710,7 +706,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - To deploy the Tekton dashboard:
     ```bash
-    kubectl apply --filename https://github.com/tektoncd/dashboard/releases/download/latest/dashboard_latest_release.yaml
+    kubectl apply --filename https://github.com/tektoncd/dashboard/releases/download/v0.6.1/tekton-dashboard-release.yaml
     ```
 - ***Note***: It will take few mins for the Tekton dashboard components to be installed, you an watch the status using the command:
     ```bash
@@ -728,7 +724,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```bash
     kubectl --namespace tekton-pipelines port-forward svc/tekton-dashboard 9097:9097
     ```
-    You can access the web UI at http://localhost:9097 .
+    You can access the web UI at [http://localhost:9097](http://localhost:9097) .
 
 ## Create Target Namespace
 
@@ -747,7 +743,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 #### Create a PipelineResource of type `git`
 - Create the file **git.yaml**
-    ```bash
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: PipelineResource
     metadata:
@@ -767,12 +763,8 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 #### Create a PipelineResource of type `image`
 
-- Set the environment variable `DOCKER_USERNAME` to your dockerhub account, replace `<REPLACEME>` with your docker username, keep the quotes
-    ```bash
-    export DOCKER_USERNAME='<REPLACEME>'
-    ```
-- Create the file **image.yaml**
-    ```bash
+- Create the file **image.yaml** and edit the file by replacing `${DOCKER_USERNAME}` with your docker user name on the image registry
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: PipelineResource
     metadata:
@@ -781,7 +773,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
       type: image
       params:
         - name: url
-          value: index.docker.io/$DOCKER_USERNAME/cloudnative_sample_app
+          value: index.docker.io/${DOCKER_USERNAME}/cloudnative_sample_app
     ```
     Verify the file content, and make sure the `url` value is valid with your dockerhub username replaced
     ```bash
@@ -863,7 +855,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - Create the below yaml files.
 - The following snippet shows what a Tekton Task YAML looks like:
 - Create the file **test_task.yaml**
-    ```bash
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: Task
     metadata:
@@ -947,7 +939,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - The following snippet shows what a Tekton TaskRun YAML looks like:
 - Create the file **test_taskrun.yaml**
-    ```bash
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: TaskRun
     metadata:
@@ -1050,7 +1042,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```
 - Before we run the Task using TaskRun let us create the Kubernetes service account and attach the needed permissions to the service account, the following Kubernetes resource defines a service account called `pipeline` in namespace `$NAMESPACE` who will have administrative role within the `$NAMESPACE` namespace.
 - Create the file **sa.yaml**
-    ```bash
+    ```yaml
     apiVersion: v1
     kind: ServiceAccount
     metadata:
@@ -1090,8 +1082,8 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```bash
     kubectl delete taskrun --all -n $NAMESPACE
     ```
-- (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun
-    ```bash
+- (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun, create a file **taskrun.yaml**
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: TaskRun
     metadata:
@@ -1125,7 +1117,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - Pipelines allows to start multiple Tasks, in parallel or in a [certain order](https://github.com/tektoncd/pipeline/blob/master/docs/pipelines.md#runafter)
 
 - Create the file **pipeline.yaml**, the Pipeline contains two Tasks
-    ```bash
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: Pipeline
     metadata:
@@ -1177,7 +1169,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - To execute the Tasks in the Pipeline, you must create a PipelineRun. Creation of a PipelineRun will trigger the creation of TaskRuns for each Task in your pipeline.
 - Create the file **pipelinerun.yaml**
-    ```bash
+    ```yaml
     apiVersion: tekton.dev/v1alpha1
     kind: PipelineRun
     metadata:
@@ -1246,7 +1238,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - Deploy the app as follows:
     ```bash
-    export APP_YAML_URL='https://raw.githubusercontent.com/ibm-cloud-architecture/cloudnative_sample_app_deploy/master/yamls/'
+    export APP_YAML_URL='https://raw.githubusercontent.com/ibm-cloud-architecture/cloudnative_sample_app_deploy/master/kubernetes'
     kubectl apply -n $NAMESPACE -f $APP_YAML_URL/deployment.yaml
     kubectl apply -n $NAMESPACE -f $APP_YAML_URL/service.yaml
     ```
