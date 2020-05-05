@@ -6,4 +6,4 @@ spec:
   type: image
   params:
     - name: url
-      value: index.docker.io/$DOCKER_USERNAME/cloudnative_sample_app
+      value: index.docker.io/${DOCKER_USERNAME}/cloudnative_sample_app
