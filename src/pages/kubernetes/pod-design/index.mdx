@@ -329,7 +329,7 @@ oc get deployments
 ```
 ** Sets new image for Deployment **
 ```
-oc set image deployment/nginx-deployment nginx=nginx:1.16.1 --record
+oc set image deployment/my-deployment nginx=nginx:1.16.1 --record
 ```
 ** Get ReplicaSets **
 ```
@@ -339,9 +339,9 @@ oc get rs
 ```
 oc describe deployment my-deployment
 ```
-** Rollout updated deployment **
+** Check the status of the rollout **
 ```
-oc rollout deployment my-deployment
+oc rollout status my-deployment
 ```
 ** Get Rollout History **
 ```
@@ -362,7 +362,7 @@ kubectl get deployments
 ```
 ** Sets new image for Deployment **
 ```
-kubectl set image deployment/nginx-deployment nginx=nginx:1.16.1 --record
+kubectl set image deployment/my-deployment nginx=nginx:1.16.1 --record
 ```
 ** Get ReplicaSets **
 ```
@@ -372,9 +372,9 @@ kubectl get rs
 ```
 kubectl describe deployment my-deployment
 ```
-** Rollout updated deployment **
+** Check the status of the rollout **
 ```
-kubectl rollout deployment my-deployment
+oc rollout status my-deployment
 ```
 ** Get Rollout History **
 ```
