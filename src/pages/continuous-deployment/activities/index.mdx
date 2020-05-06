@@ -47,49 +47,53 @@ The following checks ensure that each chapter exercises are done with the right 
     ```bash
     kubectl create namespace argocd
     ```
-- Install ArgoCD as follows.
+
+- With the `argocd` project selected, go to the operator hub and search for `argo`
+
+- Select the Argo CD operator
+
+![step1](./images/operator_hub.png)
+
+*Note: use the ArgoCD-provided operator*
+
+- Select `Continue` and `Install`
+
+- On the `Create Operator Subscription` screen, select the installation namespace to be `argocd` (your newly created project)
+
+![step1](./images/operator_subscription.png)
+
+- To enable full cluster admin access on OpenShift, run the following command. This step is generally optional but recommended for this exercise.
+
     ```bash
-    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+    oc adm policy add-cluster-role-to-user cluster-admin -z argocd-application-controller -n argocd
     ```
-- Install the `argocd` CLI, for example on OSX use brew
+
+- Take the [argo-cd.yaml](/yamls/argocd/argo-cd.yaml file and apply it in the `argocd` namespace
+
     ```bash
-    brew tap argoproj/tap
-    brew install argoproj/tap/argocd
+    oc project argocd
+    oc apply -f ./argo-cd.yaml
     ```
-- To allow access via LoadBalancer and leverage the `minikube tunnel` running in the background, patch the argocd server service
+
+- There will be several Argo CD resources created:
+
     ```bash
-    kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+    oc get cm,secret,deploy
     ```
-- List the argocd-server service
+
+- When everything is installed, you can fetch argocd's URLs:
+
     ```bash
-    kubectl get svc argocd-server -n argocd
-    ```
-    It should have an IP under `EXTERNAL-IP` column
-    ```
-    NAME            TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)                      AGE
-    argocd-server   LoadBalancer   10.97.240.99   10.97.240.99   80:30286/TCP,443:31716/TCP   41s
-    ```
-- Set an environment variable `ARGOCD_URL` using the `EXTERNAL-IP`
-    ```bash
-    export ARGOCD_SERVER="$(kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
-    export ARGOCD_URL="https://$ARGOCD_SERVER"
-    echo ARGOCD_URL=$ARGOCD_URL
-    echo ARGOCD_SERVER=$ARGOCD_SERVER
-    ```
+    oc get routes
+    ``` 
 
 ## Deploying the app
 
 - Login into the UI.
+
+- Use `admin` as the username and get the password with the following command (extracting the password from one of the secrets created) in  the previous step
     ```bash
-    open $ARGOCD_URL
-    ```
-- Use `admin` as the username and get the password with the following command, it's the name of the pod for the argo-server
-    ```bash
-    kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
-    ```
-    For example the output is similar to this:
-    ```
-    argocd-server-b54756f69-jncc9
+    kubectl get secret example-argocd-cluster -o jsonpath='{.data.admin\.password}' | base64 -d
     ```
   
 ![ArgoCD Login](./images/argocd_login.png)
