@@ -69,16 +69,19 @@ oc edit deployment
 oc logs
 ```
 ```
-oc get ep
-```
-```
 oc get service
+```
+```
+oc get ep
 ```
 ```
 oc describe service
 ```
 ```
 oc get pods --show-labels
+```
+```
+oc get deployment --show-labels
 ```
 
 </Tab>
@@ -110,10 +113,10 @@ kubectl get deployments
 kubectl describe pod
 ```
 ```
-oc explain Pod.spec.containers.resources.requests
+kubectl explain Pod.spec.containers.resources.requests
 ```
 ```
-oc explain Pod.spec.containers.livenessProbe
+kubectl explain Pod.spec.containers.livenessProbe
 ```
 ```
 kubectl edit deployment
@@ -125,14 +128,18 @@ kubectl logs
 kubectl get service
 ```
 ```
-kubectl get endpoints
+kubectl get ep
 ```
 ```
-kubectl get deployments --show-labels
+kubectl describe service
 ```
 ```
 kubectl get pods --show-labels
 ```
+```
+kubectl get deployment --show-labels
+```
+
 
 </Tab>
 
