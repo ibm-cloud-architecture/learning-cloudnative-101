@@ -51,25 +51,31 @@ curl http://localhost:8080
 oc get pods --all-namespaces
 ```
 ```
+oc get deployments
+```
+```
 oc describe pod
 ```
 ```
-oc edit pod
+oc explain Pod.spec.containers.resources.requests
 ```
 ```
-oc get pod --export
+oc explain Pod.spec.containers.livenessProbe
 ```
 ```
-oc apply -f
+oc edit deployment
 ```
 ```
 oc logs
 ```
 ```
+oc get ep
+```
+```
 oc get service
 ```
 ```
-oc get routes
+oc describe service
 ```
 ```
 oc get pods --show-labels
@@ -98,16 +104,19 @@ curl http://localhost:8080
 kubectl get pods --all-namespaces
 ```
 ```
+kubectl get deployments
+```
+```
 kubectl describe pod
 ```
 ```
-kubectl edit pod
+oc explain Pod.spec.containers.resources.requests
 ```
 ```
-kubectl get pod --export
+oc explain Pod.spec.containers.livenessProbe
 ```
 ```
-kubectl apply -f
+kubectl edit deployment
 ```
 ```
 kubectl logs
@@ -117,6 +126,9 @@ kubectl get service
 ```
 ```
 kubectl get endpoints
+```
+```
+kubectl get deployments --show-labels
 ```
 ```
 kubectl get pods --show-labels
