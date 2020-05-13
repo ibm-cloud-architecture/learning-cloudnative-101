@@ -1,0 +1,169 @@
+#  Docker introduction lab
+
+## Prerequisites
+This set of instructions requires that docker is already installed and docker commands can be run from a bash shell. You can get more information at the [Docker website](https://www.docker.com/get-docker).
+
+***Note:*** This demo assumes that you are running in a "clean" environment. Clean means that you have not used docker with the images in this demo. This is important for someone who is using docker for the first time, so they can see the activity as images are downloaded.
+
+## Working with docker
+
+1. Launch a shell and confirm that docker is installed. The version number isn't particularly important.
+
+    ```
+    $ docker -v
+    Docker version 19.03.8, build afacb8b
+    ```
+
+2. As with all new computer things, it is obligatory that we start with "hello-world"
+
+    ```
+    $ docker run hello-world
+    Unable to find image 'hello-world:latest' locally
+    latest: Pulling from library/hello-world
+    b04784fba78d: Pull complete
+    Digest: sha256:f3b3b28a45160805bb16542c9531888519430e9e6d6ffc09d72261b0d26ff74f
+    Status: Downloaded newer image for hello-world:latest
+
+    Hello from Docker!
+    This message shows that your installation appears to be working correctly.
+    [...]
+    ```
+
+    Notice the message `Unable to find image 'hello-world:latest' locally` . First, you see that the image was automatically downloaded without any additional commands. Second, the version `:latest` was added to the name of the image. We did not specify a version for this image.
+
+3. Rerun "hello-world" Notice that the image is not pulled down again. It already exists locally, so it is run.
+
+    ```
+    $ docker run hello-world
+
+    Hello from Docker!
+    This message shows that your installation appears to be working correctly.
+    [...]
+    ```
+
+4. It already exists locally and `docker images` will show us that image.
+
+    ```
+    $ docker images
+    REPOSITORY        TAG       IMAGE ID       CREATED        SIZE
+    hello-world       latest    1815c82652c0   2 months ago   1.84kB
+    ```
+
+5. From where was the `hello-world` image pulled? Go to `https://hub.docker.com/_/hello-world/` (that is an underscore `_` character in the URL:) and you can read about this image. Docker-hub is a repository that holds docker images for use. Docker-hub is not the only repository, IBM Cloud can serve as a docker repository.
+
+6. This image is atypical. When an image is run, it usually continues to run. The running image is called a container. Let us run a more typical image; this image contains the noSQL database "couchDB". We use the following parameters in `docker run`: the parameter `-e` allows to set environment variables, `-d` runs the container in detached mode returning only the container ID and `-p <host port>:<container port>` binds the container port to the host port. 
+
+    ```
+    $ docker run -d -p:5984:5984 -e COUCHDB_USER=admin -e COUCHDB_PASSWORD=password apache/couchdb:latest
+    Unable to find image 'couchdb:latest' locally
+    latest: Pulling from library/couchdb
+    ad74af05f5a2: Downloading [==>                       ]  2.702MB/52.61MB
+    ffdd0c835430: Download complete
+    d922980c187f: Downloading [===>                      ]  2.661MB/43.77MB
+    affbf57fdbcf: Verifying Checksum
+    0ddcd7e9244b: Download complete
+    34473f480310: Downloading [=============>           ]   2.26MB/8.236MB
+    78a52d457cb5: Waiting
+    ```
+
+   The output above was captured while the image was still downloading from docker-hub. When the download is down you don't see anything from the container, like with hello-world. Instead you see a long hex id like `2169c6b42e5c590229c5c86f5ed3596b1b56c2366378914b082e5b000752bd34`. This is the id of the container.
+
+6. Here's how you would see the running container. Notice only the first part of that long hex id is displayed. Typically this is more than enough to uniquely identify that container. `docker ps` provides information about when the container was created, how long it has been running, then name of the image as well as the name of the container. Note that each container must have a unique name. You can specify a name for each container as long as it is unique.
+
+    ```
+    $ docker ps
+    CONTAINER ID  IMAGE                   COMMAND                  CREATED         STATUS        PORTS           NAMES
+    2571ba63a89b  apache/couchdb:latest   "tini -- /docker-ent…"   3 seconds ago   Up 2 seconds  4369/tcp [...]  practical_perlman
+    ```
+
+7. To validate CouchDB is up and running run a curl command against the exposed port. You should receive a JSON-based welcome message.
+
+    ```
+    $ curl localhost:5984
+    {"couchdb":"Welcome","version":"3.1.0","git_sha":"ff0feea20","uuid":"b3655279ca2ae82bbedec66884fd85aa","features":["access-ready","partitioned","pluggable-storage-engines","reshard","scheduler"],"vendor":{"name":"The Apache Software Foundation"}}
+    ```
+
+8. Create a new customer database with the following curl command.
+
+    ```
+    $ curl -X PUT http://admin:password@localhost:5984/customer
+    {"ok":true}
+    ```
+
+9. Insert a customer entry to the database leveraging the following HTTP PUT request.
+
+    ```
+    curl -X PUT http://admin:password@localhost:5984/customer/1 -d ' {"firstName": "Hugo", "lastName": "Boss"} '
+    {"ok":true,"id":"1","rev":"1-b8745a7b645d3f29f0b19274bf63707b"}
+    ```
+
+10. To finalize our tests we will retrieve the created document from the customer database
+
+    ```
+    curl -X GET http://admin:password@localhost:5984/customer/1
+    {"_id":"1","_rev":"1-b8745a7b645d3f29f0b19274bf63707b","firstName":"Hugo","lastName":"Boss"}
+    ```
+
+
+11. Now let's clean up the environment. Start with stopping the container.
+
+    ```
+    $ docker stop 2571ba63a89b
+    2571ba63a89b
+
+    $ docker ps | grep couchdb
+    CONTAINER ID  IMAGE     COMMAND                  CREATED         STATUS        PORTS     NAMES
+    ```
+
+12. Notice the image still exists.
+
+    ```
+    $ docker images
+    REPOSITORY        TAG       IMAGE ID       CREATED        SIZE
+    apache/couchdb    latest    7f8923b03b7f   5 weeks ago     225MB
+    hello-world       latest    1815c82652c0   2 months ago   1.84kB
+    ```
+
+13. Did you forget about the hello-world image? Go ahead and delete the couchdb image and double check that it is gone.
+
+    ```
+    docker rmi apache/couchdb
+    Error response from daemon: conflict: unable to remove repository reference "apache/couchdb" (must force) - container 2571ba63a89b is using its referenced image 2653c9bcc4f7
+    ```
+
+14. Oops, we can't delete that image until we delete the "couchdb" container. Note the `docker ps -a` will show us all the containers, not just the ones that are running.
+
+    ```
+    $ docker ps -a
+    CONTAINER ID  IMAGE     COMMAND                  CREATED           STATUS                   NAMES
+    2571ba63a89b  couchdb   "tini -- /docker-ent…"   22 minutes ago    Exited 4 minutes ago     practical_perlman
+    b44146cfad65  hello-world "/hello"               An hour ago       Exited About an hour ago elated_engelbart
+    8d71894c865b  hello-world "/hello"               2 hours ago       Exited 2 hours ago       stoic_lamport
+    ```
+
+15. Delete the couchdb containers, delete the couchdb image, and make sure it is gone. You can leave hello-world.
+
+    ```
+    $ docker rm 2571ba63a89b
+    2571ba63a89b
+
+    $ docker rmi apache/couchdb
+    Untagged: apache/couchdb:latest
+    Untagged: apache/couchdb@sha256:efe621e7a87317e465f336ec89dbba4cd16a44d3a9410750855aef1dd7b1ad30
+    Deleted: sha256:2653c9bcc4f76c95f0f88a6317502f7137e4220891c925d122b557e3419cb344
+    Deleted: sha256:f244eb6dd6c24e5d5721cf5a872cfddc5bb9e3c2dec8342335265070520312d0
+    Deleted: sha256:e5ea5225a6a4df3e19497b9da17c134dfddaed16dcb4916f6a13541d3eea9d41
+    ```
+
+    ```
+    $ docker ps -a
+    CONTAINER ID  IMAGE     COMMAND                  CREATED           STATUS                   NAMES
+    b44146cfad65  hello-world "/hello"               An hour ago       Exited About an hour ago elated_engelbart
+    8d71894c865b  hello-world "/hello"               2 hours ago       Exited 2 hours ago       stoic_lamport
+
+    $ docker images
+    REPOSITORY        TAG       IMAGE ID       CREATED        SIZE
+    hello-world       latest    1815c82652c0   2 months ago   1.84kB
+    ```
+
+  ***Note:*** Docker images and containers can be referenced by name or by id. This demonstration has shown only the rudimentary capabilities of docker.
