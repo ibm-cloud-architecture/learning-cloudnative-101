@@ -42,7 +42,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - The command should show a result like:
     ```
     $ tkn version
-    Client version: 0.8.0
+    Client version: 0.9.0
     ```
 - If you already have the `tkn` install you can upgrade running
     ```
@@ -196,7 +196,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - The following snippet shows what a Tekton Task YAML looks like:
 - Create the file **test_task.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1alpha1
+    apiVersion: tekton.dev/v1beta1
     kind: Task
     metadata:
       name: java-test
@@ -280,18 +280,19 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - The following snippet shows what a Tekton TaskRun YAML looks like:
 - Create the file **test_taskrun.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1alpha1
+    apiVersion: tekton.dev/v1beta1
     kind: TaskRun
     metadata:
-      generateName: test-task-run-
+      name: test-task-run
     spec:
       taskRef:
         name: java-test
-      inputs:
-        resources:
+      resources:
+        inputs:
           - name: source
             resourceRef:
               name: source
+
     ```
 - **generateName** - since the TaskRun can be run many times, in order to have unqiue name across the TaskRun ( helpful when checking the TaskRun history) we use this generateName instead of name. When Kubernetes sees generateName it will generate unquie set of characters and suffix the same to build-app-, similar to how pod names are generated
 - **taskRef** - this is used to refer to the Task by its name that will be run as part of this TaskRun. In this example we use build-app Task.
@@ -429,16 +430,16 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```
 - (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun, create a file **taskrun.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1alpha1
+    apiVersion: tekton.dev/v1beta1
     kind: TaskRun
     metadata:
-      generateName: buildah-task-run-
+      name: buildah-task-run
     spec:
       serviceAccountName: pipeline
       taskRef:
         name: buildah
-      inputs:
-        resources:
+      resources:
+        inputs
           - name: source
             resourceRef:
               name: source
@@ -463,7 +464,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - Create the file **pipeline.yaml**, the Pipeline contains two Tasks
     ```yaml
-    apiVersion: tekton.dev/v1alpha1
+    apiVersion: tekton.dev/v1beta1
     kind: Pipeline
     metadata:
       name: test-build-push
@@ -515,7 +516,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - To execute the Tasks in the Pipeline, you must create a PipelineRun. Creation of a PipelineRun will trigger the creation of TaskRuns for each Task in your pipeline.
 - Create the file **pipelinerun.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1alpha1
+    apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
     metadata:
       generateName: test-build-push-run-
@@ -861,13 +862,13 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - The following snippet shows what a Tekton Task YAML looks like:
 - Create the file **test_task.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1alpha1
+    apiVersion: tekton.dev/v1beta1
     kind: Task
     metadata:
       name: java-test
     spec:
-      inputs:
-        resources:
+      resources:
+        inputs:
           - name: source
             type: git
         params:
@@ -945,18 +946,18 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - The following snippet shows what a Tekton TaskRun YAML looks like:
 - Create the file **test_taskrun.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1alpha1
+    apiVersion: tekton.dev/v1beta1
     kind: TaskRun
     metadata:
-      generateName: test-task-run-
+      name: test-task-run
     spec:
       taskRef:
         name: java-test
-      inputs:
-        resources:
+      resources:
+        inputs:
           - name: source
             resourceRef:
-              name: source
+              name: source  
     ```
 - **generateName** - since the TaskRun can be run many times, in order to have unqiue name across the TaskRun ( helpful when checking the TaskRun history) we use this generateName instead of name. When Kubernetes sees generateName it will generate unquie set of characters and suffix the same to build-app-, similar to how pod names are generated
 - **taskRef** - this is used to refer to the Task by its name that will be run as part of this TaskRun. In this example we use build-app Task.
@@ -1089,16 +1090,16 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```
 - (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun, create a file **taskrun.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1alpha1
+    apiVersion: tekton.dev/v1beta1
     kind: TaskRun
     metadata:
-      generateName: buildah-task-run-
+      name: buildah-task-run
     spec:
       serviceAccountName: pipeline
       taskRef:
         name: buildah
-      inputs:
-        resources:
+      resources:
+        inputs:
           - name: source
             resourceRef:
               name: source
@@ -1123,7 +1124,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - Create the file **pipeline.yaml**, the Pipeline contains two Tasks
     ```yaml
-    apiVersion: tekton.dev/v1alpha1
+    apiVersion: tekton.dev/v1beta1
     kind: Pipeline
     metadata:
       name: test-build-push
@@ -1175,10 +1176,10 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - To execute the Tasks in the Pipeline, you must create a PipelineRun. Creation of a PipelineRun will trigger the creation of TaskRuns for each Task in your pipeline.
 - Create the file **pipelinerun.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1alpha1
+    apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
     metadata:
-      generateName: test-build-push-run-
+      name: test-build-push-run
     spec:
       serviceAccountName: pipeline
       pipelineRef:
