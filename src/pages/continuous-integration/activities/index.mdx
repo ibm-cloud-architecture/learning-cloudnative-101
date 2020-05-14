@@ -196,7 +196,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - The following snippet shows what a Tekton Task YAML looks like:
 - Create the file **test_task.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1beta1
+    apiVersion: tekton.dev/v1alpha1
     kind: Task
     metadata:
       name: java-test
@@ -280,7 +280,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - The following snippet shows what a Tekton TaskRun YAML looks like:
 - Create the file **test_taskrun.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1beta1
+    apiVersion: tekton.dev/v1alpha1
     kind: TaskRun
     metadata:
       name: test-task-run
@@ -430,7 +430,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```
 - (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun, create a file **taskrun.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1beta1
+    apiVersion: tekton.dev/v1alpha1
     kind: TaskRun
     metadata:
       name: buildah-task-run
@@ -464,7 +464,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - Create the file **pipeline.yaml**, the Pipeline contains two Tasks
     ```yaml
-    apiVersion: tekton.dev/v1beta1
+    apiVersion: tekton.dev/v1alpha1
     kind: Pipeline
     metadata:
       name: test-build-push
@@ -516,7 +516,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - To execute the Tasks in the Pipeline, you must create a PipelineRun. Creation of a PipelineRun will trigger the creation of TaskRuns for each Task in your pipeline.
 - Create the file **pipelinerun.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1beta1
+    apiVersion: tekton.dev/v1alpha1
     kind: PipelineRun
     metadata:
       generateName: test-build-push-run-
@@ -683,7 +683,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - The command should show a result like:
     ```bash
     $ tkn version
-    Client version: 0.8.0
+    Client version: 0.9.0
     ```
 - If you already have the `tkn` install you can upgrade running
     ```bash
@@ -867,14 +867,14 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     metadata:
       name: java-test
     spec:
+      params:
+        - name: maven-image
+          type: string
+          default: maven:3.3-jdk-8
       resources:
         inputs:
           - name: source
             type: git
-        params:
-          - name: maven-image
-            type: string
-            default: maven:3.3-jdk-8
       steps:
         - name: test
           image: $(inputs.params.maven-image)
