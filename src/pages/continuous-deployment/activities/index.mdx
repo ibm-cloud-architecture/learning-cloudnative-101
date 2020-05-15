@@ -155,7 +155,6 @@ To sync the application, click `SYNC` and then `SYNCHRONIZE`.
     ```bash
     argocd login --username admin --password $ARGOCD_PASSWORD $ARGOCD_SERVER
     ```
-    
     ```
     WARNING: server certificate had error: x509: cannot validate certificate for 10.97.240.99 because it doesn't contain 
     any IP SANs. Proceed insecurely (y/n)? y
@@ -215,37 +214,105 @@ Make sure your environment is setup properly for the lab.
 
 Check the [Environment Setup](../prerequisites/#environment-setup) page for your setup.
 
+- Remember to have minikube tunnel running in another terminal
+    ```bash
+    minikube tunnel
+    ```
+
 ## ArgoCD Installation
 
 - Create the namespace `argocd` to install argocd
     ```bash
     kubectl create namespace argocd
     ```
-- Install ArgoCD as follows.
+- Create RBAC resources
     ```bash
-    kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+    kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-operator/v0.0.8/deploy/service_account.yaml
+    kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-operator/v0.0.8/deploy/role.yaml
+    kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-operator/v0.0.8/deploy/role_binding.yaml
+    ```
+    Create ClusterRoleBinding for `cluster-admin` role for `sa` `argocd-application-controller` in namespace `argocd`
+    ```bash
+    cat <<'EOF' | kubectl create -f -
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      labels:
+        app.kubernetes.io/component: application-controller
+        app.kubernetes.io/name: argocd-application-controller
+        app.kubernetes.io/part-of: argocd
+      name: argocd-application-controller
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: cluster-admin
+    subjects:
+      - kind: ServiceAccount
+        name: argocd-application-controller
+        namespace: argocd
+    EOF
+    ```
+- Install CRDs
+    ```bash
+    kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-operator/v0.0.8/deploy/argo-cd/argoproj.io_applications_crd.yaml
+    kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-operator/v0.0.8/deploy/argo-cd/argoproj.io_appprojects_crd.yaml
+    kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-operator/v0.0.8/deploy/crds/argoproj.io_argocdexports_crd.yaml
+    kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-operator/v0.0.8/deploy/crds/argoproj.io_argocds_crd.yaml
+    ```
+    Verify CRDs
+    ```bash
+    kubectl get crd -n argocd
+    ```
+    ```
+    NAME                        CREATED AT
+    applications.argoproj.io    2020-05-15T02:05:55Z
+    appprojects.argoproj.io     2020-05-15T02:05:56Z
+    argocdexports.argoproj.io   2020-05-15T02:08:21Z
+    argocds.argoproj.io         2020-05-15T02:08:21Z
+    ```
+- Deploy Operator
+    ```bash
+    kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-operator/v0.0.8/deploy/operator.yaml
+    ```
+- Deploy ArgoCD CO
+    ```bash
+    kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-operator/v0.0.8/examples/argocd-lb.yaml
+    ```
+    Verify that ArgoCD Pods are running
+    ```bash
+    kubectl get pods -n argocd
+    ```
+    ```
+    NAME                                                     READY   STATUS    RESTARTS   AGE
+    argocd-operator-5f7d8cf7d8-486vn                         1/1     Running   0          3m46s
+    example-argocd-application-controller-7dc5fcb75d-xkk5h   1/1     Running   0          2m3s
+    example-argocd-dex-server-bb9df96cb-ndmhl                1/1     Running   0          2m3s
+    example-argocd-redis-756b6764-sb2gt                      1/1     Running   0          2m3s
+    example-argocd-repo-server-75944fcf87-zmh48              1/1     Running   0          2m3s
+    example-argocd-server-747b684c8c-xhgl9                   1/1     Running   0          2m3s
+    ```
+    Verify that the other ArgoCD resources are created
+    ```
+    kubectl get cm,secret,svc,deploy -n argocd
     ```
 - Install the `argocd` CLI, for example on OSX use brew
     ```bash
     brew tap argoproj/tap
     brew install argoproj/tap/argocd
     ```
-- To allow access via LoadBalancer and leverage the `minikube tunnel` running in the background, patch the argocd server service
-    ```bash
-    kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
-    ```
 - List the argocd-server service
     ```bash
-    kubectl get svc argocd-server -n argocd
+    kubectl get svc example-argocd-server -n argocd
     ```
     It should have an IP under `EXTERNAL-IP` column
     ```
-    NAME            TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)                      AGE
-    argocd-server   LoadBalancer   10.97.240.99   10.97.240.99   80:30286/TCP,443:31716/TCP   41s
+    NAME                    TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
+    example-argocd-server   LoadBalancer   10.105.73.245   10.105.73.245   80:31138/TCP,443:31932/TCP   5m3s
     ```
 - Set an environment variable `ARGOCD_URL` using the `EXTERNAL-IP`
     ```bash
-    export ARGOCD_SERVER="$(kubectl get svc argocd-server -n argocd -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
+    export ARGOCD_NAMESPACE=argocd
+    export ARGOCD_SERVER="$(kubectl get svc example-argocd-server -n $ARGOCD_NAMESPACE -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
     export ARGOCD_URL="https://$ARGOCD_SERVER"
     echo ARGOCD_URL=$ARGOCD_URL
     echo ARGOCD_SERVER=$ARGOCD_SERVER
@@ -257,13 +324,13 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     ```bash
     open $ARGOCD_URL
     ```
-- Use `admin` as the username and get the password with the following command, it's the name of the pod for the argo-server
+- Use `admin` as the username and get the password with the following command
     ```bash
-    kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
+    oc get secret example-argocd-cluster -n $ARGOCD_NAMESPACE -o jsonpath='{.data.admin\.password}' | base64 -d
     ```
     For example the output is similar to this:
     ```
-    argocd-server-b54756f69-jncc9
+    tyafMb7BNvO0kP9eizx3CojrK8pYJFQq
     ```
 
 ![ArgoCD Login](./images/argocd_login.png)
@@ -308,10 +375,6 @@ To sync the application, click `SYNC` and then `SYNCHRONIZE`.
 ## Verifying the deployment
 
 - Access the app to verify if it is correctly deployed.
-- To allow access via LoadBalancer and leverage the `minikube tunnel` running in the background, patch the argocd server service
-    ```bash
-    kubectl patch svc cloudnativesampleapp-service -p '{"spec": {"type": "LoadBalancer"}}'
-    ```
 - List the cloudnativesampleapp-service service
     ```bash
     kubectl get svc cloudnativesampleapp-service
@@ -319,11 +382,11 @@ To sync the application, click `SYNC` and then `SYNCHRONIZE`.
     It should have an IP under `EXTERNAL-IP` column
     ```
     NAME                           TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)          AGE
-    cloudnativesampleapp-service   LoadBalancer   10.109.242.212   10.109.242.212   9080:31905/TCP   13m
+    cloudnativesampleapp-service   NodePort       10.109.242.212   10.109.242.212   9080:31905/TCP   13m
     ```
-- Set an environment variable `APP_URL` using the `EXTERNAL-IP`
+- Set an environment variable `APP_URL` using the `EXTERNAL-IP` and `NodePort` values
     ```bash
-    export APP_URL="http://$(kubectl get svc cloudnativesampleapp-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}'):9080"
+    export APP_URL="$(minikube service --url cloudnativesampleapp-service -n default)"
     echo ARGOCD_SERVER=$APP_URL
     ```
 - Access the url using `curl`
@@ -337,23 +400,21 @@ To sync the application, click `SYNC` and then `SYNCHRONIZE`.
 ## Using the ArgoCD CLI
 
 - Login using the cli.
-- Login as the `admin` user.
-- The initial password is autogenerated to be the pod name of the Argo CD API server. This can be retrieved with the following command.
+- Use `admin` as the username and get the password with the following command
     ```bash
-    kubectl get pods -n argocd -l app.kubernetes.io/name=argocd-server -o name | cut -d'/' -f 2
+    export ARGOCD_PASSWORD=$(kubectl get secret example-argocd-cluster -n $ARGOCD_NAMESPACE -o jsonpath='{.data.admin\.password}' | base64 -d)
+    echo $ARGOCD_PASSWORD
     ```
 - Now login as follows.
     ```bash
-    argocd login $ARGOCD_SERVER
+    argocd login --username admin --password $ARGOCD_PASSWORD $ARGOCD_SERVER
     ```
-    
     ```
     WARNING: server certificate had error: x509: cannot validate certificate for 10.97.240.99 because it doesn't contain 
     any IP SANs. Proceed insecurely (y/n)? y
-    Username: admin
-    Password: 
+
     'admin' logged in successfully
-    Context '10.97.240.99' updated
+    Context '10.105.73.245' updated
     ```
 - List the applications
     ```bash
