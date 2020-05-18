@@ -34,7 +34,7 @@ Usually is getting familiar with how primitives objects interact with each other
 
 ** Broken setup to debug**
 ```
-curl -s https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/a92550dd499ebefc205fa2cd5c18123409186712/debugk8s.64 | base64 -d | oc apply -f -
+curl -sL https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/1e2a0cca964c7b54ce3df2fc3fbf33a232511877/debugk8s.64 | base64 -d | oc apply -f -
 ```
 
 ** Expose the service using port-forward **
@@ -51,16 +51,19 @@ curl http://localhost:8080
 oc get pods --all-namespaces
 ```
 ```
+oc get deployments
+```
+```
 oc describe pod
 ```
 ```
-oc edit pod
+oc explain Pod.spec.containers.resources.requests
 ```
 ```
-oc get pod --export
+oc explain Pod.spec.containers.livenessProbe
 ```
 ```
-oc apply -f
+oc edit deployment
 ```
 ```
 oc logs
@@ -69,10 +72,16 @@ oc logs
 oc get service
 ```
 ```
-oc get routes
+oc get ep
+```
+```
+oc describe service
 ```
 ```
 oc get pods --show-labels
+```
+```
+oc get deployment --show-labels
 ```
 
 </Tab>
@@ -98,16 +107,19 @@ curl http://localhost:8080
 kubectl get pods --all-namespaces
 ```
 ```
+kubectl get deployments
+```
+```
 kubectl describe pod
 ```
 ```
-kubectl edit pod
+kubectl explain Pod.spec.containers.resources.requests
 ```
 ```
-kubectl get pod --export
+kubectl explain Pod.spec.containers.livenessProbe
 ```
 ```
-kubectl apply -f
+kubectl edit deployment
 ```
 ```
 kubectl logs
@@ -116,11 +128,18 @@ kubectl logs
 kubectl get service
 ```
 ```
-kubectl get endpoints
+kubectl get ep
+```
+```
+kubectl describe service
 ```
 ```
 kubectl get pods --show-labels
 ```
+```
+kubectl get deployment --show-labels
+```
+
 
 </Tab>
 
