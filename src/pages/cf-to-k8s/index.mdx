@@ -16,7 +16,7 @@ The discussion in this module comes in two sub-sections:
 
 The application execution environment diagram for CloudFoundry below demonstrates the components that runs CloudFoundry applications.
 
-![cf](./images/cf.PNG)
+<img src="./images/cf.PNG" alt="cf"></img>
 
 In CloudFoundry, application runs within a Diego cell (used to be a DEA node) which runs a Garden container.
 The cell is constructed from Droplet image that is stored in CloudFoundry BLOB store.
@@ -25,7 +25,7 @@ For the application to access the backend services, it facilitates an environmen
 
 In Kubernetes application runs in the Kubernetes cluster as demonstrated below:
 
-![Kube](./images/kube.PNG)
+<img src="./images/kube.PNG" alt="Kube"></img>
 
 - Kubernetes applications run in Pods, which are similar to Cloud Foundry Diego cells.
 - There is a Kubernetes Service that performs load balancing for all the pod instances.
@@ -41,7 +41,7 @@ For OpenShift, which is derived from Kubernetes, the architecture is very simila
 - One of the example is OpenShift router, which provides a combined way to develop an Ingress entry with a setting of DNS resources, this function is very similar to CloudFoundry Go Router.
 - OpenShift uses a DeploymentConfig, which has more capabilities than a Kubernetes Deployment, it supports the definition of triggers, which allow the pods to be modified when a certain situation (such as image or configuration is updated).
 
-![oc](./images/oc.PNG)
+<img src="./images/oc.PNG" alt="oc"></img>
 
 ## Application Staging
 
@@ -49,7 +49,7 @@ The staging of application, from the source repository into a runnable image dif
 The staging is performed after the build artifact is collected, this include performing maven, gradle or other build mechanism.
 Application is then staged into the Cloud platform; this staging process is typically split into: application container image creation and application container deployment.
 
-![staging](./images/staging.PNG)
+<img src="./images/staging.PNG" alt="staging"></img>
 
 In CloudFoundry, Droplet images are built by the CloudFoundry buildpacks.
 
@@ -76,7 +76,7 @@ In OpenShift the staging of application is perfomed using BuildConfig, Deploymen
 - You deploy the application using the command:
 
 ```bash
- oc new-app -f template.yaml)
+ oc new-app -f template.yaml
 ```
 In Kubernetes, staging is performed as follows:
 
@@ -91,7 +91,10 @@ In Kubernetes, staging is performed as follows:
  kubectl apply -f (template)
 ```
 
-## Check out the Hands On Activities
+## Activities
 
-### [Migrating to OpenShift](./oc-migration/)
-### [Migrating to Kubernetes](./iks-migration/)
+| Task                            | Description         | Link        |
+| --------------------------------| ------------------  |:----------- |
+| *** Try It Yourself ***                         |         |         |
+| Migrating to IKS | Migrating from Cloud Foundry to IKS | [IKS](../cf-to-k8s/iks-migration/) |
+| Migrating to OpenShift | Migrating from Cloud Foundry to OpenShift | [OCP](../cf-to-k8s/oc-migration/) |
