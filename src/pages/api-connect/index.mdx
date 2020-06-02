@@ -6,7 +6,7 @@ title: API Connect
 
 API Connect is a way to quickly create API's and microservices using Node.js and Java runtimes. API Connect allows you to easily create, run, manage and secure API's in one offering.  
 
-<iframe width="640" height="350" src="https://www.youtube.com/embed/lmxyiNMER5Y" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/qE6Waf0zaP4" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 
 ## Architecture
@@ -28,15 +28,29 @@ The Cloud Manager is used for on-premise API Connect instances.  The Cloud Admin
 
 **The Developer Toolkit**
 
-The developer toolkit provides the tools for modeling, developing, and testing APIs and LoopBack® applications. The developer toolkit includes a command line interface (CLI) and a corresponding graphical user interface, the API Designer. It incorporates LoopBack, an open source Node.js framework.
+The developer toolkit provides the tools for modeling, developing, and testing APIs and LoopBack® applications. The developer toolkit includes a command line interface (CLI). It also incorporates LoopBack, an open source Node.js framework.
+
+API developers use the API management functions in the API Manager or the CLI to create draft API definitions for REST and SOAP APIs, or for OAuth provider endpoints that are used for OAuth 2.0 authentication. The API definitions can be configured to add the API to a Product, add a policy assembly flow (to manipulate requests/responses), and to define security options and other settings. APIs can then be tested locally prior to publishing, to ensure they are defined and implemented correctly.
 
 **API Manager**
 
 The API Manager provides a user interface that facilitates promotion and tracking of APIs that are packaged within Products and Plans. API providers can move the Products through their lifecycle, and manage the availability and visibility of APIs and Plans.
 
+Catalogs and Spaces are created in the API Manager to act as staging targets through which APIs, Plans, and Products are published to consumer organizations. API providers can stage their Products to Catalogs or Spaces, and then publish them to make the APIs in those Products visible on a Developer Portal for external discovery.
+
+To control access to the available API management functions, users in the provider organization can be set up in the API Manager UI with assigned roles and permissions. API providers can also use the UI to manage the consumer organizations that sign up to access their APIs and Plans. Developer communities can additionally be created as a way of grouping together a collection of consumer organizations to whom a particular set of Products and Plans can be made available.
+
+The API Manager UI also includes functions to manage the security of the API environment, and provides access to analytics information about API invocation metrics within customizable dashboard views.
+
 **API Gateways**
 
+Gateways enforce runtime policies to secure and control API traffic, provide the endpoints that expose APIs to the calling applications, and provide assembly functions that enable APIs to integrate with various endpoints. They also log and report all API interactions to the API Connect analytics engine, for real-time and historical analytics and reporting
+
 **Developer Portal**
+
+The Developer Portal provides a customizable self-service web-based portal to application developers to explore, discover, and subscribe to APIs.
+
+When API providers publish APIs in the API Manager, those APIs are exposed in the Developer Portal for discovery and usage by application developers in consumer organizations. Application developers can access the Developer Portal UI to register their applications, discover APIs, use the required APIs in their applications (with access approval where necessary), and subsequently deploy those applications.
 
 ## Use Cases
 
@@ -54,7 +68,7 @@ Access to social media
 
 #### Internal Scenarios
 
-Internal auditing, compliance can benefit using API connect.
+There are multiple internal scenarios where apis are beneficial, but we will only cover two of them.  The first one is Regulatory Requirements and Industry Standards.  Using APIs gives you the ability to build your business processes to conform with the business regulations for the industry.  Not only is it an internal benefit, but an external one as well for any clients or business partners.  
 
 ## Presentations
 
@@ -69,13 +83,14 @@ Internal auditing, compliance can benefit using API connect.
 | Working with the API Connect Toolkit | Covers the differences between traditional messaging architectures and event-driven architectures. | See [Docs](https://www.ibm.com/support/knowledgecenter/SSMNED_5.0.0/com.ibm.apic.toolkit.doc/capim_cli_working_with.html) |
 | Working with Catalogs | Details about working with Catalogs in API Connect. | See [Docs](https://www.ibm.com/support/knowledgecenter/SSMNED_5.0.0/com.ibm.apic.apionprem.doc/conref_working_with_env.html) |
 | Creating APIs | Covers a deep-dive of Apache Kafka and IBM Event Streams, IBM's Enterprise-grade event-streaming platform. | See [Docs](https://www.ibm.com/support/knowledgecenter/SSMNED_5.0.0/com.ibm.apic.apionprem.doc/task_apionprem_creating_apis_apimgr.html) |
-| Data Patterns | Covers multiple data patterns used to implement event-driven architectures. | See [Presentation](#resources) |
+| Managing APIs | Covers multiple data patterns used to implement event-driven architectures. | See [Presentation](#resources) |
+| API Analytics| Covers multiple data patterns used to implement event-driven architectures. | See [Presentation](#resources) |
 
 ## Activities
 
 | Topics                            | Description         | Link        |
 | --------------------------------| ------------------  |:----------- |
-| Console Samples | Getting Started with Producing & Consuming | [EDA Lab 1](../eda/activities/labs/lab1/) |
-| Spring for Apache Kafka | Getting Started with the Spring for Apache Kafka project | [EDA Lab 2](../eda/activities/labs/lab2/) |
-| Reactive Messaging | Getting Started with Reactive Messaging, MicroProfile, and Quarkus | [EDA Lab 3](../eda/activities/labs/lab3/) |
-| Choose Your Own Adventure! | Utilizing what you have learned in the bootcamp, take a look at some real-world event-driven scenarios and implementations. | [EDA Lab 4](../eda/activities/labs/lab4/)  |
+| Creating a Proxy Rest API | Create a REST API definition that proxies an existing service. | [Create a Proxy API](https://www.ibm.com/support/knowledgecenter/SSMNED_beta/com.ibm.apic.apionprem.doc/tutorial_apionprem_apiproxy.html) |
+| Mapping JSON Content | Use API Connect to map message content from one format or schema to another. | [Mapping JSON Content](https://www.ibm.com/support/knowledgecenter/SSMNED_beta/com.ibm.apic.apionprem.doc/tutorial_apionprem_mapping.html) |
+| Importing an API | Import an existing OpenAPI 2.0 definition. | [Importing APIs](https://www.ibm.com/support/knowledgecenter/SSMNED_beta/com.ibm.apic.apionprem.doc/tutorial_apionprem_import_api.html) |
+| Creating a Client Application | Create a client application using API Manager. | [Application Creation](https://www.ibm.com/support/knowledgecenter/SSMNED_beta/com.ibm.apic.apionprem.doc/tutorial_apionprem_create_application.html)  |
