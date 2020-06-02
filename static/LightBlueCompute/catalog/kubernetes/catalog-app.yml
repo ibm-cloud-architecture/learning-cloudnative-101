@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: catalog-lightblue-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: catalog
+  template:
+    metadata:
+      name: pod-catalog
+      labels:
+        app: catalog
+    spec:
+      containers:
+        - name: catalog
+          image: "moberlin8/catalog:1.0"
+          imagePullPolicy: Always
+          livenessProbe:
+            tcpSocket:
+              port: 8081
+            initialDelaySeconds: 20
+            periodSeconds: 60
+          env:
+          - name: "spring_datasource_url"
+            value: "jdbc:mysql://mysql-lightblue-service:3306/inventorydb" 
+          - name: "spring_datasource_username"
+            value: "dbuser" 
+          - name: "spring_datasource_password"
+            value: "Pass4dbUs3R" 
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: catalog-lightblue-service
+  labels:
+    app: catalog
+spec:
+  type: NodePort
+  selector:
+    app: catalog
+  ports:
+   - protocol: TCP
+     port: 8081
+     nodePort: 30111
