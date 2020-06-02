@@ -52,6 +52,8 @@
       path: /continuous-deployment/
 - title: Electives
   pages:
+    - title: API Connect
+      path: /api-connect/
     - title: Event-Driven Architecture
       path: /eda/
     - title: Monitoring - Sysdig
