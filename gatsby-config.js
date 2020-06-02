@@ -7,6 +7,7 @@ module.exports = {
   pathPrefix: "/",
   plugins: [
     'gatsby-transformer-json',
+    `gatsby-plugin-sharp`,
     {
       resolve: 'gatsby-theme-carbon',
       options: {
@@ -31,6 +32,15 @@ module.exports = {
         trackingId: "UA-149377589-4",
         head: true
       }
-    }
+    },
+    {
+      resolve: `gatsby-transformer-remark`,
+      options: {
+        plugins: [
+          `gatsby-remark-images`,
+          `gatsby-remark-images-zoom`,
+        ],
+      },
+    },
   ]
 };
