@@ -1,5 +1,5 @@
 ---
-title: Integrate Prometheus Metrics
+title: Integrate Prometheus Java Metrics
 description: Lab to show how to work with prometheus metrics
 ---
 
@@ -61,13 +61,11 @@ kubectl -n dev port-forward service/prometheus-java-app 9080:8080
 
 - Send http request to the web service
 ```shell
-curl -si http://localhost:8000
+while true; do sleep 1; curl http://localhost:8000 -si | head -1 ; done
 ```
 Output looks like this
 ```
 HTTP/1.1 200 OK
-Date: Wed, 03 Jun 2020 03:14:52 GMT
-Transfer-encoding: chunked
 ```
 
 - Query prometheus endpoint
