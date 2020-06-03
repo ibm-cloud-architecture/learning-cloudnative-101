@@ -116,5 +116,27 @@ Next, configure a metric source by adding a Sysdig agent. This agent is responsi
 <Accordion>
   <AccordionItem title="Access the Dashboards">
 
+- Open Sysdig 
+- Select Overview
+- Explore the Kubernetes Dashboards, select Explore->Kubernetes
+
+- [Cluster](https://docs.sysdig.com/en/clusters-data.html)
+
+![clusters](./images/overview-clusters.png)
+
+- [Nodes](https://docs.sysdig.com/en/nodes-data.html)
+
+![nodes](./images/overview-nodes.png)
+
+- [Namespaces](https://docs.sysdig.com/en/namespaces-data.html)
+
+![namespaces](./images/overview-namespaces.png)
+
+- [Workloads](https://docs.sysdig.com/en/workloads-data.html)
+
+![workloads](./images/overview-workloads.png)
+
+
+
   </AccordionItem>
 </Accordion>
