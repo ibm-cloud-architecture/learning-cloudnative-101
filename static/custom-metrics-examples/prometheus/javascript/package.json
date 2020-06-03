@@ -1,0 +1,13 @@
+{
+  "name": "nodepromexample",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./app"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "prom-client": "^11.5.3",
+    "prometheus-gc-stats": "^0.6.2"
+  }
+}

@@ -56,7 +56,7 @@
       path: /api-connect/
     - title: Event-Driven Architecture
       path: /eda/
-    - title: Monitoring - Sysdig
+    - title: Monitoring
       path: /monitoring/sysdig/
 - title: Projects
   pages:
