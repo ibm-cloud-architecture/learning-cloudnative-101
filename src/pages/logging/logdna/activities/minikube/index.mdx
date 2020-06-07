@@ -100,18 +100,6 @@ Next, configure a metric source by adding a LogDNA agent. This agent is responsi
 - Open LogDNA
 - Select Views
 - Kubernetes messages should show up
-- To test simple log messages create a Pod with bash prompt
-    ```
-    kubectl run my-logs --rm -it --image=busybox -- bash
-    ```
-- Send a message to stdout
-    ```bash
-    echo "this is log message on stdout"
-    ```
-- Send a message to stderr
-    ```bash
-    echo "this is a log message on stderr" >&2
-    ```
 - [Navigating the Dashboard](https://docs.logdna.com/docs/how-to-use-the-dashboard)
 
 ![logdna](./images/overview-dashboard.png)
