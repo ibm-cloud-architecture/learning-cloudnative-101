@@ -5,10 +5,9 @@ description: Lab to show how to get started with LogDNA Dashboard
 
 
 ### Prerequisite
-
 - Configure the LogDNA Agent on a kubernetes cluster, you can use one of the labs in this bootcamp located [here](/monitoring/logdna/#activities)
 
-## Setup Environment
+## Deploy sample App
 
 - Open LogDNA
 - Select Views
@@ -25,6 +24,9 @@ description: Lab to show how to get started with LogDNA Dashboard
     ```bash
     echo "This is my log message"
     ```
+
+## Filtering Logs
+
 - Identify your message at the bottom of the screen
 
 ![identify-line](./images/identify-line.png)
@@ -57,6 +59,26 @@ description: Lab to show how to get started with LogDNA Dashboard
 - Now you can use select the view `My App` from the sidebar to filter the messages only to your app.
 
 - See [Filtering Logs](https://docs.logdna.com/docs/filters)
+- See [Creating Views](https://docs.logdna.com/docs/views)
+
+## Creating Boards Boards and Graphs
+
+**Boards** are a collection of graphs. Typically you use this to aggregate metrics about your log lines or query or plots over time.
+
+- Click `Boards`
+- Click `NEW BOARDS`
+- Name your Board `My Board`
+- Click `Add Graph`
+- Select query like `pod` = `my-logs`
+
+![add-graph](./images/board-create.png)
+
+- Click `Live` to see the graph for the current time
+
+![live-board](./images/live-board.png)
 
 
 
+
+
+- See [Creating Boards and Graphs](https://docs.logdna.com/docs/graphs)
