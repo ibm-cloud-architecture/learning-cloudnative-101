@@ -1,0 +1,22 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "npm run development",
+    "production": "node app.js",
+    "development": "nodemon app.js",
+    "lint": "standard --fix"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "nodemon": "^2.0.3",
+    "pino-http": "^5.2.0",
+    "pino-pretty": "^4.0.0"
+  },
+  "license": "Apache-2.0",
+  "devDependencies": {
+    "standard": "^14.3.4"
+  }
+}

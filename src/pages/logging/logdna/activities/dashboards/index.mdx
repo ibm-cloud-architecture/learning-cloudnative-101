@@ -1,0 +1,62 @@
+---
+title: Using LogDNA Dashboard
+description: Lab to show how to get started with LogDNA Dashboard
+---
+
+
+### Prerequisite
+
+- Configure the LogDNA Agent on a kubernetes cluster, you can use one of the labs in this bootcamp located [here](/monitoring/logdna/#activities)
+
+## Setup Environment
+
+- Open LogDNA
+- Select Views
+- Kubernetes messages should show up
+- To test simple log messages create a Pod with bash prompt
+    ```
+    kubectl run my-logs \
+      --rm -it \
+      -l "app=my-app,tier=production" \
+      --image=busybox \
+      -- sh
+    ```
+- Print a log message
+    ```bash
+    echo "This is my log message"
+    ```
+- Identify your message at the bottom of the screen
+
+![identify-line](./images/identify-line.png)
+
+- Click the log line to expand
+
+![expand-line](./images/expand-line.png)
+
+- The message has details that could be use to create views, alerts, or boards
+    1. The message was identified as `TEXT`
+    2. Contains the message
+    3. LogDNA fields `Source` and `App`
+    4. Location of filed parsed, in kubernetes this is `var/log`
+    5. Kubernetes data `Pod`, `Container`, `Namespace`, and `ContainerID`
+    6. LogDNA tagging as kubernetes `k8s`
+    7. Pod labels are captured in this case `app` and `tier`
+
+![expand-line](./images/details-line.png)
+
+- You can use free form text to search or filter log lines, or you can click on on values from a message to filter. For example to filter to only get the message for the namespace `default`, tier `production` and app `my-app
+
+![expand-line](./images/filtering-line.png)
+
+- When you hit enter only the log lines for your app will show up
+
+- You can create a filtered view for your search query, click on `Unsaved View` and click `Save as new view`, enter the name `My App`
+
+![expand-line](./images/new-view.png)
+
+- Now you can use select the view `My App` from the sidebar to filter the messages only to your app.
+
+- See [Filtering Logs](https://docs.logdna.com/docs/filters)
+
+
+
