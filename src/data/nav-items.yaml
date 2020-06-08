@@ -58,6 +58,8 @@
       path: /eda/
     - title: Monitoring
       path: /monitoring/sysdig/
+    - title: Logging
+      path: /logging/logdna/
 - title: Projects
   pages:
     - title: CICD Project
