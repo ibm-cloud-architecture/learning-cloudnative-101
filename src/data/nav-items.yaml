@@ -46,12 +46,22 @@
       path: /kubernetes/state-persistence/
     - title: K8s Troubleshoot
       path: /kubernetes/troubleshooting/
-    - title: Event-Driven Architecture
-      path: /eda/
     - title: Continuous Integration (CI)
       path: /continuous-integration/
     - title: Continuous Deployment (CD)
       path: /continuous-deployment/
+- title: Electives
+  pages:
+    - title: API Connect
+      path: /api-connect/
+    - title: Cloud Data Services
+      path: /cloud-data/
+    - title: Event-Driven Architecture
+      path: /eda/
+    - title: Monitoring
+      path: /monitoring/sysdig/
+    - title: Logging
+      path: /logging/logdna/
 - title: Projects
   pages:
     - title: CICD Project
