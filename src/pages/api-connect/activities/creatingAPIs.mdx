@@ -41,7 +41,7 @@ To setup API Connect follow the instructions for [API Connect Access](./accessAP
 
 ![apidev](../images/product-details.png)
 
-- Now a new Product named `Weather` has been created. On the `Design` page all the details about the product can be changed.
+- Now a new Product named `Test` has been created. On the `Design` page all the details about the product can be changed.
 
 ## Create a New API
 
@@ -59,8 +59,98 @@ To setup API Connect follow the instructions for [API Connect Access](./accessAP
 
 - Once on the `Drafts` page, Click on the `API's` tab in the top left.
 
-![drafts](../images/apiconnect-drafts.png)
+![drafts](../images/draft-apis.png)
 
 - Click `Add` -> `New API` 
 
+- Fill in the `API` info with the following:
+    - Title: `nodejs-test`
+    - Name: `nodejs-test`
+    - Base Path: `/`
+    - Version : `1.0.0`
+    Additional Properties
+    - API Template: `Default`
+    - Target Endpoint: ``
+    - Security: `None`
+    - Enabled CORS: `Checked`
+    - Gateway: `Micro and DataPower Gateways`
+
+- Click `Create API` and you will be on the API `Design` screen.
+
+![api](../images/new-api.png)
+
+
+- On the Left side of the design page, you will see all the attributes for your new API.
+
+- Next, Click on `Paths` on the left side. There will not be any paths defined yet.
+
+![paths](../images/paths.png)
+
+- There are 3 paths that we need to define for our application. Add each using the + on the right side of the `paths` section.
+
+![paths](../images/paths-add.png)
+
+- The paths we need to define are the following:
+    - `/`
+    - `/students`
+    - `/testers`
+
+- With each new `path` you will get a box with 3 options. `Path`, `Parameters`, and `Operations`.
+
+- For this tutorial we only need to modify the `Path` section.
+
+! Note - Each new path automatically creates a `GET` method, that can be modified if needed based on the endpoint.
+
+![options](../images/path-options.png)
+
+![details](../images/path-details.png)
+
+- Now that we have the `Paths` created we can move to the `Assemble` page.
+
+![assemble](../images/assemble.png)
+
+- On the `Assemble` page, everything is drag and drop. Let's start by dragging and dropping an `Operation-Switch` in front of the `invoke` node.
+
+![operation](../images/operation-switch.png)
+
+- This will put the `invoke` statement in the `operation-switch`.
+
+- We need to create an `invoke` statement for each `Path` we created before.
+
+![invoke](../images/invokes.png)
+
+- Now, Click on the first `invoke` statement and the details for the `invoke` will appear on the right side.
+
+![invoke-details](../images/invoke-details.png)
+
+- Let's name each `invoke` after the name of the `path` and we need to modify the `URL` for each as well.
+
+- For each `URL` use `http://169.51.194.50:30758/` plus the `Path`. So for `/students` it would be:
+    - Title: `\students`
+    - Description: `Students endpoint`
+    - URL: `http://169.51.194.50:30758/students`
+
+![invoke-stu](../images/invoke-stu.png)
+
+- Repeat that process for `/` and `/testers`. Once finished, Save your changes by hitting the floppy disk icon in the top left corner.
+
+![save](../images/floppy.png)
+
+- This will save all your changes. Now we can test it.
+
 ## Testing the API
+
+- To test the API, Click on the `Test` button next to the search bar. (Looks like a play button)
+
+![save](../images/test.png)
+
+- This will pop up the `Setup` screen on the left side.
+
+- You will see the `Catalog` which is `Dev`. Then the `Product` section. Click the drop-down for `Product` and select your `Product`.
+
+- The API is not currently in the product, so we need to add it by clicking the `Add API` button.
+
+![add](../images/add-api.png)
+
+- The API is now added to the `Product` and we need to Republish the Product by clicking `Republish product`.
+
