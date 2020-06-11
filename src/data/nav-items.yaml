@@ -55,7 +55,7 @@
     - title: API Connect
       path: /api-connect/
     - title: Cloud Data Services
-      path: /cloud-data/
+      path: /data-services/
     - title: Event-Driven Architecture
       path: /eda/
     - title: Monitoring
