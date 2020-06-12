@@ -68,8 +68,10 @@
       path: /logging/logdna/
 - title: Projects
   pages:
-    - title: CICD Project
-      path: /project-cicd/
+    - title: OpenShift CICD
+      path: /projects/project-cicd/
+    - title: Cloud Native Starter
+      path: /projects/project-cn-starter/
 - title: Activities
   pages:
     - path: /activities/
