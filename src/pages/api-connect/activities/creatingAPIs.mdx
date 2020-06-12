@@ -66,11 +66,10 @@ To setup API Connect follow the instructions for [API Connect Access](./accessAP
 - Fill in the `API` info with the following:
     - Title: `nodejs-test`
     - Name: `nodejs-test`
-    - Base Path: `/`
+    - Base Path: `/v1`
     - Version : `1.0.0`
     Additional Properties
     - API Template: `Default`
-    - Target Endpoint: ``
     - Security: `None`
     - Enabled CORS: `Checked`
     - Gateway: `Micro and DataPower Gateways`
@@ -79,14 +78,13 @@ To setup API Connect follow the instructions for [API Connect Access](./accessAP
 
 ![api](../images/new-api.png)
 
-
 - On the Left side of the design page, you will see all the attributes for your new API.
 
 - Next, Click on `Paths` on the left side. There will not be any paths defined yet.
 
 ![paths](../images/paths.png)
 
-- There are 3 paths that we need to define for our application. Add each using the + on the right side of the `paths` section.
+- There are 2 paths that we need to define for our application. Add each using the + on the right side of the `paths` section.
 
 ![paths](../images/paths-add.png)
 
@@ -101,8 +99,6 @@ To setup API Connect follow the instructions for [API Connect Access](./accessAP
 
 ! Note - Each new path automatically creates a `GET` method, that can be modified if needed based on the endpoint.
 
-![options](../images/path-options.png)
-
 ![details](../images/path-details.png)
 
 - Now that we have the `Paths` created we can move to the `Assemble` page.
@@ -113,11 +109,19 @@ To setup API Connect follow the instructions for [API Connect Access](./accessAP
 
 ![operation](../images/operation-switch.png)
 
-- This will put the `invoke` statement in the `operation-switch`.
+- This will put the `invoke` statement in the `operation-switch` to bring up the cases for the switch.  
+
+- Make 3 cases for each of the endpoints as seen below.
+
+![switch](../images/switch.png)
 
 - We need to create an `invoke` statement for each `Path` we created before.
 
 ![invoke](../images/invokes.png)
+
+- Once the `invokes` are created, Click on the operation-switch and 
+
+![switch](../images/switch.png)
 
 - Now, Click on the first `invoke` statement and the details for the `invoke` will appear on the right side.
 
@@ -126,7 +130,7 @@ To setup API Connect follow the instructions for [API Connect Access](./accessAP
 - Let's name each `invoke` after the name of the `path` and we need to modify the `URL` for each as well.
 
 - For each `URL` use `http://169.51.194.50:30758/` plus the `Path`. So for `/students` it would be:
-    - Title: `\students`
+    - Title: `/students`
     - Description: `Students endpoint`
     - URL: `http://169.51.194.50:30758/students`
 
@@ -153,4 +157,6 @@ To setup API Connect follow the instructions for [API Connect Access](./accessAP
 ![add](../images/add-api.png)
 
 - The API is now added to the `Product` and we need to Republish the Product by clicking `Republish product`.
+
+- Now we can choose an `Operation` to invoke. 
 
