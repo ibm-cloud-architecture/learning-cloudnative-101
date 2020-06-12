@@ -7,13 +7,22 @@ const links = [
     href: 'https://cloud.ibm.com/',
   },
   {
-    title: 'Kubernetes',
-    href: 'https://kubernetes.io/',
+    title: 'IBM Garage',
+    href: 'https://www.ibm.com/garage/',
   },
   {
-    title: 'IBM Cloud Native',
-    href: 'https://ibm-cloud-architecture.github.io/deliverables/cloud-native.html',
+    title: 'Attend Bootcamp remotely',
+    href: 'https://cloud.ibm.com/catalog/services/consult-with-ibm-garage',
+  },
+  {
+    title: 'OpenShift',
+    href: 'https://learn.openshift.com/',
+  },
+  {
+    title: 'Kubernetes',
+    href: 'https://kubernetes.io/',
   }
+
 ];
 
 // shouldOpenNewTabs: true if outbound links should open in a new tab
