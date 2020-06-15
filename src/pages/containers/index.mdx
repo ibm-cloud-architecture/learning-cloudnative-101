@@ -56,6 +56,44 @@ docker push <image_name>:<tag>
 docker images
 ```
 
+Reference during live demo
+```
+docker --version
+docker version
+docker run hello-world
+docker run --name nginx bitnami/nginx
+docker ps
+docker ps -a
+docker exec -it nginx bash
+docker stop nginx
+docker start nginx
+docker stop nginx
+docker rm nginx
+docker run --name nginx bitnami/nginx
+docker kill nginx
+docker run --rm --name nginx -p 8080:8080 bitnami/nginx
+curl http://localhost:8080
+docker run --rm --name nginx -e USERNAME=Carlos -e PASSWORD=IlikeYAML -e LOG_LEVEL=ERROR -p 8080:8080 bitnami/nginx
+docker exec -it nginx sh -c "env | grep 'USERNAME\|PASSWORD\|LOG_LEVEL'"
+mkdir -p assets; echo "Welcome to the Cloud Native BootCamp" > assets/index.html
+docker run --rm --name nginx -p 8080:8080 -v $PWD/assets:/app bitnami/nginx
+docker exec -it nginx sh -c "cat /app/index.html"
+curl http://localhost:8080
+docker inspect nginx
+echo "FROM bitnami/nginx" > Dockerfile
+echo "COPY assets/index.html /app/index.html" >> Dockerfile
+docker build -t webserver:1.0 .
+docker run --rm -p 8000:8080 webserver:1.0
+curl http://localhost:8000
+DOCKERHUB_USER=csantanapr
+docker tag webserver:1.0 $DOCKERHUB_USER/webserver:1.0
+docker push $DOCKERHUB_USER/webserver:1.0
+docker pull $DOCKERHUB_USER/webserver:1.0
+docker run --rm -p 8000:8080 $DOCKERHUB_USER/webserver:1.0
+curl http://localhost:8000
+```
+
+
 ## Activities
 
 | Task                            | Description         | Link        | Time    |
