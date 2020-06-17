@@ -1,16 +1,14 @@
 apiVersion: tekton.dev/v1alpha1
 kind: PipelineRun
 metadata:
-  generateName: test-build-push-run-
+  generateName: test-build-run-
 spec:
   serviceAccountName: pipeline
   pipelineRef:
-    name: test-build-push
+    name: test-build
   serviceAccountName: pipeline
-  resources:
-    - name: source
-      resourceRef:
-        name: source
-    - name: image
-      resourceRef:
-        name: image
+  params:
+  - name: image-server
+    value: us.icr.io
+  - name: image-namespace
+    value: student01-registry

@@ -5,8 +5,6 @@ metadata:
 spec:
   taskRef:
     name: java-test
-  inputs:
-    resources:
-      - name: source
-        resourceRef:
-          name: source
+  params:
+    - name: url
+      value: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
