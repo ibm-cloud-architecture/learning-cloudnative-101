@@ -10,4 +10,4 @@ spec:
     - name: url
       value: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
     - name: image
-      value: docker.io/csantanapr/cloudnative_sample_app
+      value: image-registry.openshift-image-registry.svc:5000/tekton-demo/cloudnative_sample_app

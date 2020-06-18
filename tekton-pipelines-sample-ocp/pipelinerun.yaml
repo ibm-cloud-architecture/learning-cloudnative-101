@@ -8,6 +8,6 @@ spec:
     name: test-build
   params:
     - name: image-server
-      value: us.icr.io
+      value: image-registry.openshift-image-registry.svc:5000
     - name: image-namespace
-      value: student01-registry
+      value: tekton-demo
