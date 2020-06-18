@@ -249,7 +249,7 @@ kubectl describe deployment my-deployment
 ```
 ** Edit the deployment **
 ```
-kubectl edit deployent my-deployment
+kubectl edit deployment my-deployment
 ```
 ** Scale the deployment **
 ```
@@ -329,7 +329,7 @@ oc get deployments
 ```
 ** Sets new image for Deployment **
 ```
-oc set image deployment/my-deployment nginx=nginx:1.16.1 --record
+oc set image deployment/my-deployment nginx=bitnami/nginx:1.16.1 --record
 ```
 ** Get ReplicaSets **
 ```
@@ -374,7 +374,7 @@ kubectl describe deployment my-deployment
 ```
 ** Check the status of the rollout **
 ```
-oc rollout status my-deployment
+kubectl rollout status deployment my-deployment
 ```
 ** Get Rollout History **
 ```
