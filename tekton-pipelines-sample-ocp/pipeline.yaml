@@ -9,9 +9,9 @@ spec:
     - name: revision
       default: master
     - name: image-server
-      default: docker.io
+      default: image-registry.openshift-image-registry.svc:5000
     - name: image-namespace
-      default: csantanapr
+      default: tekton-demo
     - name: image-repository
       default: cloudnative_sample_app
   tasks:

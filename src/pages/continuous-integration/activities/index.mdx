@@ -7,7 +7,6 @@ description: Lab for continuous integration using tekton
   <AnchorLink>Pre-requisites</AnchorLink>
   <AnchorLink>SetUp</AnchorLink>
   <AnchorLink>Create Target Namespace</AnchorLink>
-  <AnchorLink>Pipeline Resources</AnchorLink>
   <AnchorLink>Tasks</AnchorLink>
   <AnchorLink>Pipelines</AnchorLink>
   <AnchorLink>Deploy Application</AnchorLink>
@@ -42,7 +41,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - The command should show a result like:
     ```
     $ tkn version
-    Client version: 0.9.0
+    Client version: 0.10.0
     ```
 - If you already have the `tkn` install you can upgrade running
     ```
@@ -74,118 +73,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```
 - Create a the namespace using the variable `NAMESPACE`
     ```
-    oc create namespace $NAMESPACE
-    ```
-
-## Pipeline Resources
-
-### Pipeline Resource Creation
-
-#### Create a PipelineResource of type `git`
-- Create the file **git.yaml**
-    ```yaml
-    apiVersion: tekton.dev/v1alpha1
-    kind: PipelineResource
-    metadata:
-      name: source
-    spec:
-      type: git
-      params:
-        - name: revision
-          value: master
-        - name: url
-          value: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
-    ```
-    Verify the file content
-    ```bash
-    cat git.yaml
-    ```
-
-#### Create a PipelineResource of type `image`
-
-- Create the file **image.yaml** and edit the file by replacing `${DOCKER_USERNAME}` with your docker user name on the image registry
-    ```yaml
-    apiVersion: tekton.dev/v1alpha1
-    kind: PipelineResource
-    metadata:
-      name: image
-    spec:
-      type: image
-      params:
-        - name: url
-          value: index.docker.io/${DOCKER_USERNAME}/cloudnative_sample_app
-    ```
-    Verify the file content, and make sure the `url` value is valid with your dockerhub username replaced
-    ```bash
-    cat image.yaml
-    ```
-
-
-### Pipeline Resources deployment
-
-- Each pipeline resource has:
-  - **name**: the name using which it will be referred in other places
-  - **type**: the type of the pipeline resource, in this example we have two types
-    - ***git*** - this type of resource refers to a GitHub repository
-    - ***image*** - this type of resource is linux container image
-  - **params**: each type can have one or more parameters that will be used to configure the underlying type. In the above example for the git-source pipeline resource, the parameters url and revision are used to identify the GitHub repository url and revision of the sources respectively.
-
-- More details on other types of pipeline resource types is available [here](https://github.com/tektoncd/pipeline/blob/master/docs/resources.md#resource-types).
-
-- Create the pipeline resources using the command:
-    ```
-    oc apply -f git.yaml -n $NAMESPACE
-    oc apply -f image.yaml -n $NAMESPACE
-    ```
-
-### Verify the deployed resource
-
-- Use the Tekton cli to list the created resources
-    ```
-    tkn res ls -n $NAMESPACE
-    ```
-
-- The above command should list two resources as shown below:
-    ```
-    NAME                        TYPE    DETAILS
-    source                      git     url: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
-    image                       image   url: index.docker.io/yourdockerhubusername/cloudnative_sample_app
-    ```
-    Use the command help via `tkn res --help`
-- Use the Tekton cli to describe the git resource
-    ```
-    tkn res describe source -n $NAMESPACE
-    ```
-    The output should look like this:
-    ```
-    Name:                    source
-    Namespace:               tekton-demo
-    PipelineResource Type:   git
-
-    Params
-    NAME       VALUE
-    revision   master
-    url        https://github.com/ibm-cloud-architecture/cloudnative_sample_app
-
-    Secret Params
-    No secret params
-    ```
-- Use the Tekton cli to describe the git resource
-    ```
-    tkn res describe image -n $NAMESPACE
-    ```
-    The output should look like this:
-    ```
-    Name:                    image
-    Namespace:               tekton-demo
-    PipelineResource Type:   image
-
-    Params
-    NAME   VALUE
-    url    index.docker.io/myusername/cloudnative_sample_app
-
-    Secret Params
-    No secret params
+    oc new-project $NAMESPACE
     ```
 
 ## Tasks
@@ -194,69 +82,60 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - Create the below yaml files.
 - The following snippet shows what a Tekton Task YAML looks like:
-- Create the file **test_task.yaml**
+- Create the file **task-test.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1alpha1
+    apiVersion: tekton.dev/v1beta1
     kind: Task
     metadata:
       name: java-test
     spec:
-      inputs:
-        resources:
-          - name: source
-            type: git
-        params:
-          - name: maven-image
-            type: string
-            default: maven:3.3-jdk-8
+      params:
+        - name: url
+          default: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
+        - name: revision
+          default: master
       steps:
+        - name: git-clone
+          image: alpine/git
+          script: |
+            git clone -b $(params.revision) --depth 1 $(params.url) /source
+          volumeMounts:
+            - name: source
+              mountPath: /source
         - name: test
-          image: $(inputs.params.maven-image)
-          workingdir: $(inputs.resources.source.path)
-          command: ["/bin/bash"]
-          args:
-            - -c
-            - |
-              set -e
-              mvn test
-              echo "tests passed with rc=$?"
+          image: maven:3.3-jdk-8
+          workingdir: /source
+          script: |
+            mvn test
+            echo "tests passed with rc=$?"
           volumeMounts:
             - name: m2-repository
-              mountPath: /.m2
+              mountPath: /root/.m2
+            - name: source
+              mountPath: /source
       volumes:
         - name: m2-repository
+          emptyDir: {}
+        - name: source
           emptyDir: {}
     ```
 
 - Each Task has the following:
-
 - **name** - the unique name using which the task can be referred
-- **inputs** - the inputs to the task
-  - ***resources*** - the pipeline resources that will be used in the task e.g. git-source
-    - name - the name of the input resource using which it can be referenced and bound via TaskRun
-    - type - the type of the input resource, typically the pipeline resource type
-  - ***params*** - the parameters that will be used in the task steps. Each parameter has
     - name - the name of the parameter
     - description - the description of the parameter
     - default - the default value of parameter
-
 - **Note**: The `TaskRun` or `PipelineRun` could override the parameter values, if no parameter value is passed then the default value will be used.
 
-- **outputs** the pipeline resource that will end artifact of the task. In the above example the build will produce a container image artifact.
-  - ***resources*** - the pipeline resources that will be used in the task e.g. builtImage
-    - name - the name of the input resource using which it can be referenced and bound via TaskRun
-    - type - the type of the input resource, typically the pipeline resource type
 - **steps** - One or more sub-tasks that will be executed in the defined order. The step has all the attributes like a Pod spec
-- **stepTemplate** - when there is a need to have similar container configuration across all steps of a the task, we can have them defined in the stepTemplate, the task steps will inherit them implicitly in all steps. In the example above we define the resources and securityContext for all the steps
 - **volumes** - the task can also mount external volumes using the volumes attribute.
-
-- The parameters that were part of the spec inputs  params can be used in the steps using the notation `$(<variable-name>)`.
+- The parameters that were part of the spec inputs params can be used in the steps using the notation `$(<variable-name>)`.
 
 ### Task Deploy
 
 - The application test task could be created using the command:
     ```
-    oc apply -f test_task.yaml -n $NAMESPACE
+    oc apply -f task-test.yaml -n $NAMESPACE
     ```
 
 - We will use the Tekton cli to inspect the created resources
@@ -278,60 +157,57 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 #### TaskRun Creation
 
 - The following snippet shows what a Tekton TaskRun YAML looks like:
-- Create the file **test_taskrun.yaml**
+- Create the file **taskrun-test.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1alpha1
+    apiVersion: tekton.dev/v1beta1
     kind: TaskRun
     metadata:
-      name: test-task-run
+      generateName: test-task-run-
     spec:
       taskRef:
         name: java-test
-      resources:
-        inputs:
-          - name: source
-            resourceRef:
-              name: source
-
+      params:
+        - name: url
+          value: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
     ```
 - **generateName** - since the TaskRun can be run many times, in order to have unqiue name across the TaskRun ( helpful when checking the TaskRun history) we use this generateName instead of name. When Kubernetes sees generateName it will generate unquie set of characters and suffix the same to build-app-, similar to how pod names are generated
 - **taskRef** - this is used to refer to the Task by its name that will be run as part of this TaskRun. In this example we use build-app Task.
 - As described in the earlier section that the Task inputs and outputs could be overridden via TaskRun.
-- In this example we make the Task Run `spec > inputs > resources > source` to refer to pipeline resource `source` via the `resourceRef`.
+- **params** - this are the parameter values that are passed to the task
 - The application test task(java-maven-test) could be run using the command:
+    ```bash
+    kubectl create -f taskrun-test.yaml -n $NAMESPACE 
     ```
-    oc create -n $NAMESPACE -f test_taskrun.yaml
-    ```
-- **Note** - As tasks will use generated name, never use `oc apply -f test_taskrun.yaml`
+- **Note** - As tasks will use generated name, never use `oc apply -f taskrun-test.yaml`
 - We will use the Tekton cli to inspect the created resources:
-    ```
+    ```bash
     tkn tr ls -n $NAMESPACE
     ```
     The above command should list one TaskRun as shown below:
-    ```
+    ```bash
     NAME                       STARTED        DURATION   STATUS
     test-task-run-q6s8c        1 minute ago   ---        Running(Pending)
     ```
     **Note** - It will take few seconds for the TaskRun to show status as Running as it needs to download the container images.
 
 - To check the logs of the Task Run using the `tkn`:
-  ```
-  tkn tr logs -f -a -n $NAMESPACE
+  ```bash
+  tkn tr logs -f --last -n $NAMESPACE
   ```
   **Note** - Each task step will be run within a container of its own.
   The -f or -a allows to tail the logs from all the containers of the task. For more options run `tkn tr logs --help`
 - If you see the TaskRun status as Failed or Error use the following command to check the reason for error:
-    ```
-    tkn tr describe <taskrun-name> -n $NAMESPACE
+    ```bash
+    tkn tr describe --last -n $NAMESPACE
     ```
 - If it is successful, you will see something like below.
-    ```
+    ```bash
     tkn tr ls -n $NAMESPACE
     ```
     The above command should list one TaskRun as shown below:
-    ```
+    ```bash
     NAME                  STARTED          DURATION     STATUS
-    test-task-run-q6s8c   47 seconds ago   34 seconds   Succeeded
+    test-task-run   47 seconds ago   34 seconds   Succeeded
     ```
 
 ### Creating additional tasks and deploying them
@@ -354,58 +230,18 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     java-test         46 minutes ago
     ```
 
-- To access the docker registry, create the required secret as follows.
-- Create the environment variables to be use, replace with real values and include the single quotes:
-    ```
-    export DOCKER_USERNAME='<DOCKER_USERNAME>'
-    ```
-    ```
-    export DOCKER_PASSWORD='<DOCKER_PASSWORD>'
-    ```
-    ```
-    export DOCKER_EMAIL='<DOCKER_EMAIL>'
-    ```
-- Run the following command to create a secret `regcred` in the namespace `NAMESPACE`
-    ```
-    oc create secret docker-registry regcred \
-      --docker-server=https://index.docker.io/v1/ \
-      --docker-username=${DOCKER_USERNAME} \
-      --docker-password=${DOCKER_PASSWORD} \
-      --docker-email=${DOCKER_EMAIL} \
-      -n ${NAMESPACE}
-    ```
-    Before creating, replace the values as mentioned above.
 
-    <InlineNotification>
-
-    ** Note: ** If your docker password contains special characters in it, please enclose the password in double quotes or place an escape character before each special character.
-
-    </InlineNotification>
-
-- (Optional) Only if you have problems with the credentials you can recreate it, but you have to deleted first
+- Create an environment variable for location to push the image to be build. Replace `NAMESPACE` for the dockerhub username, or IBM CR Namespace
     ```bash
-    oc delete secret regcred -n $NAMESPACE
+    export REGISTRY_SERVER=image-registry.openshift-image-registry.svc:5000
+    export IMAGE_URL=${REGISTRY_SERVER}/${NAMESPACE}/cloudnative_sample_app
+    echo IMAGE_URL=${IMAGE_URL}
     ```
-- Before we run the Task using TaskRun let us create the Kubernetes service account and attach the needed permissions to the service account, the following Kubernetes resource defines a service account called `pipeline` in namespace `$NAMESPACE` who will have administrative role within the `$NAMESPACE` namespace.
-- Create the file **sa.yaml**
-    ```yaml
-    apiVersion: v1
-    kind: ServiceAccount
-    metadata:
-      name: pipeline
-    secrets:
-      - name: regcred
-    ```
-- Create sa role as follows:
+- Lets create a Task Run for `buildah` Task using the `tkn` CLI passing the inputs, outputs and service account.
     ```bash
-    oc create -n $NAMESPACE -f sa.yaml
-    ```
-
-- Lets create a Task Run for `buildah` Task using the `tkn` CLI passing the inputs, outputs and service account
-    ```bash
-    tkn task start buildah \
-      -i source=source \
-      -i image=image \
+    tkn task start buildah --showlog \
+      -p image=${IMAGE_URL} \
+      -p url=https://github.com/ibm-cloud-architecture/cloudnative_sample_app \
       -s pipeline \
       -n $NAMESPACE
     ```
@@ -430,26 +266,23 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```
 - (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun, create a file **taskrun.yaml**
     ```yaml
-    apiVersion: tekton.dev/v1alpha1
+    apiVersion: tekton.dev/v1beta1
     kind: TaskRun
     metadata:
-      name: buildah-task-run
+      generateName: buildah-task-run-
     spec:
       serviceAccountName: pipeline
       taskRef:
         name: buildah
-      resources:
-        inputs
-          - name: source
-            resourceRef:
-              name: source
-          - name: image
-            resourceRef:
-              name: image
+      params:
+        - name: url
+          value: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
+        - name: image
+          value: image-registry.openshift-image-registry.svc:5000/tekton-demo/cloudnative_sample_app
     ```
-    Then create the TaskRun with `generateName`
+    Then create the TaskRun with 
     ```bash
-    oc create -f taskrun.yaml -n $NAMESPACE
+    oc create -f taskrun-buildah.yaml -n $NAMESPACE
     ```
     Follow the logs with:
     ```
@@ -464,34 +297,42 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - Create the file **pipeline.yaml**, the Pipeline contains two Tasks
     ```yaml
-    apiVersion: tekton.dev/v1alpha1
+    apiVersion: tekton.dev/v1beta1
     kind: Pipeline
     metadata:
-      name: test-build-push
+      name: test-build
     spec:
-      resources:
-        - name: source
-          type: git
-        - name: image
-          type: image
+      params:
+        - name: repo-url
+          default: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
+        - name: revision
+          default: master
+        - name: image-server
+          default: image-registry.openshift-image-registry.svc:5000
+        - name: image-namespace
+          default: tekton-demo
+        - name: image-repository
+          default: cloudnative_sample_app
       tasks:
         - name: test
           taskRef:
             name: java-test
-          resources:
-            inputs:
-              - name: source
-                resource: source
-        - name: build-push
+          params:
+            - name: url
+              value: $(params.repo-url)
+            - name: revision
+              value: $(params.revision)
+        - name: build
+          runAfter: [test]
           taskRef:
             name: buildah
-          runAfter: [test]
-          resources:
-            inputs:
-              - name: source
-                resource: source
-              - name: image
-                resource: image
+          params:
+            - name: image
+              value: $(params.image-server)/$(params.image-namespace)/$(params.image-repository)
+            - name: url
+              value: $(params.repo-url)
+            - name: revision
+              value: $(params.revision)
     ```
 
 - Pipeline defines a list of Tasks to execute in order, while also indicating if any outputs should be used as inputs of a following Task by using the from field and also indicating the order of executing (using the runAfter and from fields). The same variable substitution you used in Tasks is also available in a Pipeline.
@@ -519,19 +360,16 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     apiVersion: tekton.dev/v1alpha1
     kind: PipelineRun
     metadata:
-      generateName: test-build-push-run-
+      generateName: test-build-run-
     spec:
       serviceAccountName: pipeline
       pipelineRef:
-        name: test-build-push
-      serviceAccountName: pipeline
-      resources:
-        - name: source
-          resourceRef:
-            name: source
-        - name: image
-          resourceRef:
-            name: image
+        name: test-build
+      params:
+        - name: image-server
+          value: image-registry.openshift-image-registry.svc:5000
+        - name: image-namespace
+          value: tekton-demo
     ```
     **serviceAccount** - it is always recommended to have a service account associated with PipelineRun, which can then be used to define fine grained roles.
 - Create the PipelineRun using the command:
@@ -569,9 +407,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - (Optional) Run the pipeline again using the `tkn` CLI
     ```bash
-    tkn pipeline start test-build-push \
-      -r source=source \
-      -r image=image \
+    tkn pipeline start test-build --showlog \
       -s pipeline \
       -n $NAMESPACE
     ```
@@ -582,77 +418,37 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 ## Deploy Application
 
-- Deploy the app as follows:
-    ```bash
-    export APP_YAML_URL='https://raw.githubusercontent.com/ibm-cloud-architecture/cloudnative_sample_app_deploy/master/openshift'
-    oc apply -n $NAMESPACE -f $APP_YAML_URL/deployment.yaml
-    oc apply -n $NAMESPACE -f $APP_YAML_URL/service.yaml
-    ```
-- Replace the default image with the new image you deployed using Tekton
-- Replace `<DOCKER_USERNAME>` with your username
-    ```bash
-    export DOCKER_USERNAME='<DOCKER_USERNAME>'
-    ```
-- Replace `<SHORT_GIT_HASH>` with the tag of the image you push to the registry, you can go the registry Web UI and verify the tag value.
-    ```bash
-    export SHORT_GIT_HASH='<SHORT_GIT_HASH>'
-    ```
-- Set the environment variable `IMAGE_URL` to the new image url value sing the two previous environment variables `DOCKER_USERNAME` and `SHORT_GIT_HASH`
-    ```bash
-    export IMAGE_URL=docker.io/${DOCKER_USERNAME}/cloudnative_sample_app:${SHORT_GIT_HASH}
-    echo $IMAGE_URL
-    ```
-- Replace the image on the deployment
-    ```bash
-    oc set image \
-      deployment/cloudnativesampleapp-deployment \
-      \*=${IMAGE_URL} \
-      -n $NAMESPACE --record
-    ```
-- Verify the image is set
-    ```bash
-    oc get deploy \
-      cloudnativesampleapp-deployment \
-      -o jsonpath='{.spec.template.spec.containers[0].image}' \
-      -n $NAMESPACE
-    ```
+- Create a deployment
+  ```bash
+  oc create deployment cloudnative --image=${IMAGE_URL} -n $NAMESPACE
+  ```
 - Verify if the pods are running:
-    ```bash
-    oc get pods -n $NAMESPACE -l app=cloudnativesampleapp-selector
-    ```
-    ```
-    NAME                          READY   STATUS      RESTARTS   AGE
-    cloudnativesampleapp...       1/1     Running     0          82s
-    ```
-- Retrieve the service NodePort:
-    ```bash
-    oc describe svc cloudnativesampleapp-service -n $NAMESPACE | grep NodePort
-    ```
-    ```
-    Type:                     NodePort
-    NodePort:                 http  30632/TCP
-    ```
-    In this instance the NodePort assigned is `30632`
-- Get the External Public IP as follows:
-    ```bash
-    crc ip
-    ```
-    ```
-    192.168.64.30
-    ```
+  ```bash
+  oc get pods -l app=cloudnative -n $NAMESPACE
+  ```
+- Expose the deployment as a service
+  ```bash
+  oc expose deployment cloudnative --port=9080 -n $NAMESPACE
+  ```
+- Expose the service as a route
+  ```bash
+  oc expose service cloudnative -n $NAMESPACE
+  ```
 - Now access the compose the URL of the App using IP and NodePort
     ```bash
-    export APP_EXTERNAL_IP=$(crc ip)
-    export APP_NODEPORT=$(oc get svc cloudnativesampleapp-service -n $NAMESPACE -o jsonpath='{.spec.ports[0].nodePort}')
-    export APP_URL="http://${APP_EXTERNAL_IP}:${APP_NODEPORT}/greeting?name=Carlos"
-    echo $APP_URL
+    export APP_URL="$(oc get route cloudnative --template 'http://{{.spec.host}}')/greeting?name=Carlos"
+    echo APP_URL=$APP_URL
     ```
     ```
-    http://192.168.64.30:30632//greeting?name=Carlos
+    http://cloudnative-tekton-demo.apps-crc.testing/greeting?name=Carlos
     ```
 - Now access the app from terminal or browser
     ```bash
     curl $APP_URL
+    ```
+    Output should be
+    ```json
+    {"id":4,"content":"Welcome to Cloudnative bootcamp !!! Hello, Carlos :)"}
     ```
     ```bash
     open $APP_URL
@@ -683,7 +479,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - The command should show a result like:
     ```bash
     $ tkn version
-    Client version: 0.9.0
+    Client version: 0.10.0
     ```
 - If you already have the `tkn` install you can upgrade running
     ```bash
@@ -712,7 +508,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - To deploy the Tekton dashboard:
     ```bash
-    kubectl apply --filename https://github.com/tektoncd/dashboard/releases/download/v0.6.1/tekton-dashboard-release.yaml
+    kubectl apply --filename https://github.com/tektoncd/dashboard/releases/download/v0.7.0/tekton-dashboard-release.yaml
     ```
 - ***Note***: It will take few mins for the Tekton dashboard components to be installed, you an watch the status using the command:
     ```bash
@@ -743,124 +539,13 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     kubectl create namespace $NAMESPACE
     ```
 
-## Pipeline Resources
-
-### Pipeline Resource Creation
-
-#### Create a PipelineResource of type `git`
-- Create the file **git.yaml**
-    ```yaml
-    apiVersion: tekton.dev/v1alpha1
-    kind: PipelineResource
-    metadata:
-      name: source
-    spec:
-      type: git
-      params:
-        - name: revision
-          value: master
-        - name: url
-          value: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
-    ```
-    Verify the file content
-    ```bash
-    cat git.yaml
-    ```
-
-#### Create a PipelineResource of type `image`
-
-- Create the file **image.yaml** and edit the file by replacing `${DOCKER_USERNAME}` with your docker user name on the image registry
-    ```yaml
-    apiVersion: tekton.dev/v1alpha1
-    kind: PipelineResource
-    metadata:
-      name: image
-    spec:
-      type: image
-      params:
-        - name: url
-          value: index.docker.io/${DOCKER_USERNAME}/cloudnative_sample_app
-    ```
-    Verify the file content, and make sure the `url` value is valid with your dockerhub username replaced
-    ```bash
-    cat image.yaml
-    ```
-
-
-### Pipeline Resources deployment
-
-- Each pipeline resource has:
-  - **name**: the name using which it will be referred in other places
-  - **type**: the type of the pipeline resource, in this example we have two types
-    - ***git*** - this type of resource refers to a GitHub repository
-    - ***image*** - this type of resource is linux container image
-  - **params**: each type can have one or more parameters that will be used to configure the underlying type. In the above example for the git-source pipeline resource, the parameters url and revision are used to identify the GitHub repository url and revision of the sources respectively.
-
-- More details on other types of pipeline resource types is available [here](https://github.com/tektoncd/pipeline/blob/master/docs/resources.md#resource-types).
-
-- Create the pipeline resources using the command:
-    ```bash
-    kubectl apply -f git.yaml -n $NAMESPACE
-    kubectl apply -f image.yaml -n $NAMESPACE
-    ```
-
-### Verify the deployed resource
-
-- Use the Tekton cli to list the created resources
-    ```bash
-    tkn res ls -n $NAMESPACE
-    ```
-
-- The above command should list two resources as shown below:
-    ```
-    NAME                        TYPE    DETAILS
-    source                      git     url: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
-    image                       image   url: index.docker.io/yourdockerhubusername/cloudnative_sample_app
-    ```
-    Use the command help via `tkn res --help`
-- Use the Tekton cli to describe the git resource
-    ```bash
-    tkn res describe source -n $NAMESPACE
-    ```
-    The output should look like this:
-    ```
-    Name:                    source
-    Namespace:               tekton-demo
-    PipelineResource Type:   git
-
-    Params
-    NAME       VALUE
-    revision   master
-    url        https://github.com/ibm-cloud-architecture/cloudnative_sample_app
-
-    Secret Params
-    No secret params
-    ```
-- Use the Tekton cli to describe the git resource
-    ```bash
-    tkn res describe image -n $NAMESPACE
-    ```
-    The output should look like this:
-    ```
-    Name:                    image
-    Namespace:               tekton-demo
-    PipelineResource Type:   image
-
-    Params
-    NAME   VALUE
-    url    index.docker.io/myusername/cloudnative_sample_app
-
-    Secret Params
-    No secret params
-    ```
-
 ## Tasks
 
 ### Task Creation
 
 - Create the below yaml files.
 - The following snippet shows what a Tekton Task YAML looks like:
-- Create the file **test_task.yaml**
+- Create the file **task-test.yaml**
     ```yaml
     apiVersion: tekton.dev/v1beta1
     kind: Task
@@ -868,61 +553,51 @@ Follow the instructions [here](../../prerequisites#environment-setup)
       name: java-test
     spec:
       params:
-        - name: maven-image
-          type: string
-          default: maven:3.3-jdk-8
-      resources:
-        inputs:
-          - name: source
-            type: git
+        - name: url
+        - name: revision
+          default: master
       steps:
+        - name: git-clone
+          image: alpine/git
+          script: |
+            git clone -b $(params.revision) --depth 1 $(params.url) /source
+          volumeMounts:
+            - name: source
+              mountPath: /source
         - name: test
-          image: $(inputs.params.maven-image)
-          workingdir: $(inputs.resources.source.path)
-          command: ["/bin/bash"]
-          args:
-            - -c
-            - |
-              set -e
-              mvn test
-              echo "tests passed with rc=$?"
+          image: maven:3.3-jdk-8
+          workingdir: /source
+          script: |
+            mvn test
+            echo "tests passed with rc=$?"
           volumeMounts:
             - name: m2-repository
-              mountPath: /.m2
+              mountPath: /root/.m2
+            - name: source
+              mountPath: /source
       volumes:
         - name: m2-repository
+          emptyDir: {}
+        - name: source
           emptyDir: {}
     ```
 
 - Each Task has the following:
-
 - **name** - the unique name using which the task can be referred
-- **inputs** - the inputs to the task
-  - ***resources*** - the pipeline resources that will be used in the task e.g. git-source
-    - name - the name of the input resource using which it can be referenced and bound via TaskRun
-    - type - the type of the input resource, typically the pipeline resource type
-  - ***params*** - the parameters that will be used in the task steps. Each parameter has
     - name - the name of the parameter
     - description - the description of the parameter
     - default - the default value of parameter
-
 - **Note**: The `TaskRun` or `PipelineRun` could override the parameter values, if no parameter value is passed then the default value will be used.
 
-- **outputs** the pipeline resource that will end artifact of the task. In the above example the build will produce a container image artifact.
-  - ***resources*** - the pipeline resources that will be used in the task e.g. builtImage
-    - name - the name of the input resource using which it can be referenced and bound via TaskRun
-    - type - the type of the input resource, typically the pipeline resource type
 - **steps** - One or more sub-tasks that will be executed in the defined order. The step has all the attributes like a Pod spec
-- **stepTemplate** - when there is a need to have similar container configuration across all steps of a the task, we can have them defined in the stepTemplate, the task steps will inherit them implicitly in all steps. In the example above we define the resources and securityContext for all the steps
 - **volumes** - the task can also mount external volumes using the volumes attribute.
-
-- The parameters that were part of the spec inputs  params can be used in the steps using the notation `$(<variable-name>)`.
+- The parameters that were part of the spec inputs params can be used in the steps using the notation `$(<variable-name>)`.
 
 ### Task Deploy
 
 - The application test task could be created using the command:
     ```bash
-    kubectl apply -f test_task.yaml -n $NAMESPACE
+    kubectl apply -f task-test.yaml -n $NAMESPACE
     ```
 
 - We will use the Tekton cli to inspect the created resources
@@ -944,30 +619,28 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 #### TaskRun Creation
 
 - The following snippet shows what a Tekton TaskRun YAML looks like:
-- Create the file **test_taskrun.yaml**
+- Create the file **taskrun-test.yaml**
     ```yaml
     apiVersion: tekton.dev/v1beta1
     kind: TaskRun
     metadata:
-      name: test-task-run
+      generateName: test-task-run-
     spec:
       taskRef:
         name: java-test
-      resources:
-        inputs:
-          - name: source
-            resourceRef:
-              name: source  
+      params:
+        - name: url
+          value: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
     ```
 - **generateName** - since the TaskRun can be run many times, in order to have unqiue name across the TaskRun ( helpful when checking the TaskRun history) we use this generateName instead of name. When Kubernetes sees generateName it will generate unquie set of characters and suffix the same to build-app-, similar to how pod names are generated
 - **taskRef** - this is used to refer to the Task by its name that will be run as part of this TaskRun. In this example we use build-app Task.
 - As described in the earlier section that the Task inputs and outputs could be overridden via TaskRun.
-- In this example we make the Task Run `spec > inputs > resources > source` to refer to pipeline resource `source` via the `resourceRef`.
+- **params** - this are the parameter values that are passed to the task
 - The application test task(java-maven-test) could be run using the command:
     ```bash
-    kubectl create -n $NAMESPACE -f test_taskrun.yaml
+    kubectl create -n $NAMESPACE -f taskrun-test.yaml
     ```
-- **Note** - As tasks will use generated name, never use `kubectl apply -f test_taskrun.yaml`
+- **Note** - As tasks will use generated name, never use `kubectl apply -f taskrun-test.yaml`
 - We will use the Tekton cli to inspect the created resources:
     ```bash
     tkn tr ls -n $NAMESPACE
@@ -987,7 +660,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
   The -f or -a allows to tail the logs from all the containers of the task. For more options run `tkn tr logs --help`
 - If you see the TaskRun status as Failed or Error use the following command to check the reason for error:
     ```bash
-    tkn tr describe <taskrun-name> -n $NAMESPACE
+    tkn tr describe --last -n $NAMESPACE
     ```
 - If it is successful, you will see something like below.
     ```bash
@@ -1004,6 +677,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - Create a Task to build a container image and push to the registry
 - This task will be later used by the pipeline.
 - Download the task file [task-buildah.yaml](/yamls/tekton-lab/task-buildah.yaml) to build the image, push the image to the registy:
+- Create task buildah
 - Create the `buildah` Task using the file and the command:
     ```bash
     kubectl apply -f task-buildah.yaml -n $NAMESPACE
@@ -1019,28 +693,32 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     java-test         46 minutes ago
     ```
 
-- To access the docker registry, create the required secret as follows.
+- To access the container registry, create the required secret as follows.
+- If using IBM Container registry use `iamapikey` for `REGISTRY_USERNAME` and get a API Key for `REGISTRY_PASSWORD`, use the domain name for the region IBM CR service like `us.icr.io`
 - Create the environment variables to be use, replace with real values and include the single quotes:
     ```bash
-    export DOCKER_USERNAME='<DOCKER_USERNAME>'
+    export REGISTRY_USERNAME='<REGISTRY_USERNAME>'
     ```
     ```bash
-    export DOCKER_PASSWORD='<DOCKER_PASSWORD>'
+    export REGISTRY_PASSWORD='<REGISTRY_PASSWORD>'
     ```
     ```bash
-    export DOCKER_EMAIL='<DOCKER_EMAIL>'
+    export REGISTRY_SERVER='docker.io'
     ```
+
 - Run the following command to create a secret `regcred` in the namespace `NAMESPACE`
     ```bash
     kubectl create secret docker-registry regcred \
-      --docker-server=https://index.docker.io/v1/ \
-      --docker-username=${DOCKER_USERNAME} \
-      --docker-password=${DOCKER_PASSWORD} \
-      --docker-email=${DOCKER_EMAIL} \
+      --docker-server=${REGISTRY_SERVER} \
+      --docker-username=${REGISTRY_USERNAME} \
+      --docker-password=${REGISTRY_PASSWORD} \
       -n ${NAMESPACE}
     ```
+
+    <InlineNotification>
     Before creating, replace the values as mentioned above.
     Note: If your docker password contains special characters in it, please enclose the password in double quotes or place an escape character before each special character.
+    </InlineNotification>
 
     - (Optional) Only if you have problems with the credentials you can recreate it, but you have to deleted first
     ```bash
@@ -1061,14 +739,20 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     kubectl create -n $NAMESPACE -f sa.yaml
     ```
 
-- Lets create a Task Run for `buildah` Task using the `tkn` CLI passing the inputs, outputs and service account
+- Create an environment variable for location to push the image to be build. Replace `NAMESPACE` for the dockerhub username, or IBM CR Namespace
     ```bash
-    tkn task start buildah \
-      -i source=source \
-      -i image=image \
+    export NAMESPACE='<REGISTRY_NAMESPACE>'
+    export IMAGE_URL=${REGISTRY_SERVER}/${REGISTRY_NAMESPACE}/cloudnative_sample_app
+    ```
+- Lets create a Task Run for `buildah` Task using the `tkn` CLI passing the inputs, outputs and service account.
+    ```bash
+    tkn task start buildah --showlog \
+      -p url=https://github.com/ibm-cloud-architecture/cloudnative_sample_app \
+      -p image=${IMAGE_URL} \
       -s pipeline \
       -n $NAMESPACE
     ```
+    
     The task will start and logs will start printing automatically
     ```
     Taskrun started: buildah-run-vvrg2
@@ -1080,7 +764,7 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     tkn tr ls -n $NAMESPACE
     ```
     Output should look like this
-    ```
+    ```bash
     NAME                  STARTED          DURATION     STATUS
     buildah-run-zbsrv      2 minutes ago    1 minute     Succeeded
     ```
@@ -1088,32 +772,29 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     ```bash
     kubectl delete taskrun --all -n $NAMESPACE
     ```
-- (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun, create a file **taskrun.yaml**
+- (Optional) Instead of starting the Task via `tkn task start` you could also use yaml TaskRun, create a file **taskrun-buildah.yaml** Make sure update value for parameter `image` with your registry info.
     ```yaml
     apiVersion: tekton.dev/v1beta1
     kind: TaskRun
     metadata:
-      name: buildah-task-run
+      generateName: buildah-task-run-
     spec:
       serviceAccountName: pipeline
       taskRef:
         name: buildah
-      resources:
-        inputs:
-          - name: source
-            resourceRef:
-              name: source
-          - name: image
-            resourceRef:
-              name: image
+      params:
+        - name: url
+          value: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
+        - name: image
+          value: docker.io/csantanapr/cloudnative_sample_app
     ```
     Then create the TaskRun with `generateName`
     ```bash
-    kubectl create -f taskrun.yaml -n $NAMESPACE
+    kubectl create -f taskrun-buildah.yaml -n $NAMESPACE
     ```
     Follow the logs with:
     ```
-    tkn tr logs -f -n $NAMESPACE
+    tkn tr logs --last -f -n $NAMESPACE
     ```
 
 ## Pipelines
@@ -1127,31 +808,37 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     apiVersion: tekton.dev/v1beta1
     kind: Pipeline
     metadata:
-      name: test-build-push
+      name: test-build
     spec:
-      resources:
-        - name: source
-          type: git
-        - name: image
-          type: image
+      params:
+        - name: repo-url
+          default: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
+        - name: revision
+          default: master
+        - name: image-server
+        - name: image-namespace
+        - name: image-repository
+          default: cloudnative_sample_app
       tasks:
         - name: test
           taskRef:
             name: java-test
-          resources:
-            inputs:
-              - name: source
-                resource: source
-        - name: build-push
+          params:
+            - name: url
+              value: $(params.repo-url)
+            - name: revision
+              value: $(params.revision)
+        - name: build
+          runAfter: [test]
           taskRef:
             name: buildah
-          runAfter: [test]
-          resources:
-            inputs:
-              - name: source
-                resource: source
-              - name: image
-                resource: image
+          params:
+            - name: image
+              value: $(params.image-server)/$(params.image-namespace)/$(params.image-repository)
+            - name: url
+              value: $(params.repo-url)
+            - name: revision
+              value: $(params.revision)
     ```
 
 - Pipeline defines a list of Tasks to execute in order, while also indicating if any outputs should be used as inputs of a following Task by using the from field and also indicating the order of executing (using the runAfter and from fields). The same variable substitution you used in Tasks is also available in a Pipeline.
@@ -1174,26 +861,24 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 #### PipelineRun Creation
 
 - To execute the Tasks in the Pipeline, you must create a PipelineRun. Creation of a PipelineRun will trigger the creation of TaskRuns for each Task in your pipeline.
-- Create the file **pipelinerun.yaml**
+- Create the file **pipelinerun.yaml** replace the values for `image-server` and `image-namespace` with your own.
     ```yaml
     apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
     metadata:
-      name: test-build-push-run
+      generateName: test-build-run-
     spec:
       serviceAccountName: pipeline
       pipelineRef:
-        name: test-build-push
-      serviceAccountName: pipeline
-      resources:
-        - name: source
-          resourceRef:
-            name: source
-        - name: image
-          resourceRef:
-            name: image
+        name: test-build
+      params:
+        - name: image-server
+          value: us.icr.io
+        - name: image-namespace
+          value: student01-registry
     ```
     **serviceAccount** - it is always recommended to have a service account associated with PipelineRun, which can then be used to define fine grained roles.
+    Replace the values for `image-server` and `image-namespace`
 - Create the PipelineRun using the command:
     ```bash
     kubectl create -f pipelinerun.yaml -n $NAMESPACE
@@ -1209,6 +894,10 @@ Follow the instructions [here](../../prerequisites#environment-setup)
     test-build-push-run-c7zgv   8 seconds ago   ---        Running
     ```
 
+- Get the logs of the pipeline using the following command
+    ```bash
+    tkn pipelinerun logs --last -f
+    ```
 - Wait for few minutes for your pipeline to complete all the tasks. If it is successful, you will see something like below.
     ```bash
     tkn pipeline ls -n $NAMESPACE
@@ -1229,83 +918,37 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 
 - (Optional) Run the pipeline again using the `tkn` CLI
     ```bash
-    tkn pipeline start test-build-push \
-      -r source=source \
-      -r image=image \
-      -s pipeline \
-      -n $NAMESPACE
+    tkn pipeline start test-build --last -n $NAMESPACE
     ```
 - (Optional) Re-run the pipeline using last pipelinerun values
     ```bash
-    tkn pipeline start test-build-push --last -n $NAMESPACE
+    tkn pipeline start test-build-push --last -f -n $NAMESPACE
     ```
 
 ## Deploy Application
 
-- Deploy the app as follows:
-    ```bash
-    export APP_YAML_URL='https://raw.githubusercontent.com/ibm-cloud-architecture/cloudnative_sample_app_deploy/master/kubernetes'
-    kubectl apply -n $NAMESPACE -f $APP_YAML_URL/deployment.yaml
-    kubectl apply -n $NAMESPACE -f $APP_YAML_URL/service.yaml
-    ```
-- Replace the default image with the new image you deployed using Tekton
-- Replace `<DOCKER_USERNAME>` with your username
-    ```bash
-    export DOCKER_USERNAME='<DOCKER_USERNAME>'
-    ```
-- Replace `<SHORT_GIT_HASH>` with the tag of the image you push to the registry, you can go the registry Web UI and verify the tag value.
-    ```bash
-    export SHORT_GIT_HASH='<SHORT_GIT_HASH>'
-    ```
-- Set the environment variable `IMAGE_URL` to the new image url value sing the two previous environment variables `DOCKER_USERNAME` and `SHORT_GIT_HASH`
-    ```bash
-    export IMAGE_URL=docker.io/${DOCKER_USERNAME}/cloudnative_sample_app:${SHORT_GIT_HASH}
-    echo $IMAGE_URL
-    ```
-- Replace the image on the deployment
-    ```bash
-    kubectl set image \
-      deployment/cloudnativesampleapp-deployment \
-      \*=${IMAGE_URL} \
-      -n $NAMESPACE --record
-    ```
-- Verify the image is set
-    ```bash
-    kubectl get deploy \
-      cloudnativesampleapp-deployment \
-      -o jsonpath='{.spec.template.spec.containers[0].image}' \
-      -n $NAMESPACE
-    ```
+- Add the `imagePullSecret` to the `default` Service Account
+  ```bash
+  kubectl patch sa default -p '"imagePullSecrets": [{"name": "regcred" }]' -n $NAMESPACE
+  ```
+- Create a deployment
+  ```bash
+  kubectl create deployment cloudnative --image=${IMAGE_URL} -n $NAMESPACE
+  ```
 - Verify if the pods are running:
-    ```bash
-    kubectl get pods -n $NAMESPACE -l app=cloudnativesampleapp-selector
-    ```
-    ```
-    NAME                          READY   STATUS      RESTARTS   AGE
-    cloudnativesampleapp...       1/1     Running     0          82s
-    ```
-- Retrieve the service NodePort:
-    ```bash
-    kubectl describe svc cloudnativesampleapp-service -n $NAMESPACE | grep NodePort
-    ```
-    ```
-    Type:                     NodePort
-    NodePort:                 http  30632/TCP
-    ```
-    In this instance the NodePort assigned is `30632`
-- Get the External Public IP as follows:
-    ```bash
-    minikube ip
-    ```
-    ```
-    192.168.64.30
-    ```
+  ```bash
+  kubectl get pods -l app=cloudnative -n $NAMESPACE
+  ```
+- Expose the deployment
+  ```bash
+  kubectl expose deployment cloudnative --type=NodePort --port=9080 -n $NAMESPACE
+  ```
 - Now access the compose the URL of the App using IP and NodePort
     ```bash
-    export APP_EXTERNAL_IP=$(minikube ip)
-    export APP_NODEPORT=$(kubectl get svc cloudnativesampleapp-service -n $NAMESPACE -o jsonpath='{.spec.ports[0].nodePort}')
+    export APP_EXTERNAL_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
+    export APP_NODEPORT=$(kubectl get svc cloudnative -n $NAMESPACE -o jsonpath='{.spec.ports[0].nodePort}')
     export APP_URL="http://${APP_EXTERNAL_IP}:${APP_NODEPORT}/greeting?name=Carlos"
-    echo $APP_URL
+    echo APP_URL=$APP_URL
     ```
     ```
     http://192.168.64.30:30632//greeting?name=Carlos
@@ -1313,6 +956,10 @@ Follow the instructions [here](../../prerequisites#environment-setup)
 - Now access the app from terminal or browser
     ```bash
     curl $APP_URL
+    ```
+    Output should be
+    ```json
+    {"id":4,"content":"Welcome to Cloudnative bootcamp !!! Hello, Carlos :)"}
     ```
     ```bash
     open $APP_URL
