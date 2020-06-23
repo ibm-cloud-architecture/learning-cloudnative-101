@@ -24,11 +24,11 @@ spec:
             periodSeconds: 60
           env:
           - name: "spring_datasource_url"
-            value: "jdbc:mysql://mysql-lightblue-service:3306/inventorydb" 
+            value: "jdbc:postgres://postgres-lightblue-service:5423/inventorydb" 
           - name: "spring_datasource_username"
-            value: "dbuser" 
+            value: "postgres" 
           - name: "spring_datasource_password"
-            value: "Pass4dbUs3R" 
+            value: "postgres" 
 ---
 apiVersion: v1
 kind: Service

@@ -1,8 +1,7 @@
 FROM library/postgres
 COPY scripts/load-data.sql /docker-entrypoint-initdb.d/
 
-ADD scripts/load-data.sh load-data.sh
-ADD scripts/load-data.sql load-data.sql
-RUN chmod u+x load-data.sh
+EXPOSE 5432:5432
+ENV POSTGRES_USER postgres
+ENV POSTGRES_PASSWORD postgres
 
-CMD ["mysqld"]
