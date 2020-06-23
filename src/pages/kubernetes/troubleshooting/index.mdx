@@ -32,9 +32,11 @@ Usually is getting familiar with how primitives objects interact with each other
 <Tabs>
 <Tab label="OpenShift">
 
-** Broken setup to debug**
-```
-curl -sL https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/1e2a0cca964c7b54ce3df2fc3fbf33a232511877/debugk8s.64 | base64 -d | oc apply -f -
+**Broken setup to debug**
+
+MacOS/Linux/Windows command:
+```bash
+curl -sL https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/1e2a0cca964c7b54ce3df2fc3fbf33a232511877/debugk8s-bad.yaml | oc apply -f -
 ```
 
 ** Expose the service using port-forward **
@@ -88,9 +90,11 @@ oc get deployment --show-labels
 
 <Tab label="IKS">
 
-** Broken setup to debug**
-```
-curl -s https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/a92550dd499ebefc205fa2cd5c18123409186712/debugk8s.64 | base64 -d | kubectl apply -f -
+**Broken setup to debug**
+
+MacOS/Linux/Windows command:
+```bash
+curl -sL https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/1e2a0cca964c7b54ce3df2fc3fbf33a232511877/debugk8s-bad.yaml | kubectl apply -f -
 ```
 
 ** Expose the service using port-forward **

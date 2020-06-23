@@ -1,28 +1,36 @@
-apiVersion: tekton.dev/v1alpha1
+apiVersion: tekton.dev/v1beta1
 kind: Pipeline
 metadata:
-  name: test-build-push
+  name: test-build
 spec:
-  resources:
-    - name: source
-      type: git
-    - name: image
-      type: image
+  params:
+    - name: repo-url
+      default: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
+    - name: revision
+      default: master
+    - name: image-server
+      default: docker.io
+    - name: image-namespace
+      default: csantanapr
+    - name: image-repository
+      default: cloudnative_sample_app
   tasks:
     - name: test
       taskRef:
         name: java-test
-      resources:
-        inputs:
-          - name: source
-            resource: source
-    - name: build-push
+      params:
+        - name: url
+          value: $(params.repo-url)
+        - name: revision
+          value: $(params.revision)
+    - name: build
+      runAfter: [test]
       taskRef:
         name: buildah
-      runAfter: [test]
-      resources:
-        inputs:
-          - name: source
-            resource: source
-          - name: image
-            resource: image
+      params:
+        - name: image
+          value: $(params.image-server)/$(params.image-namespace)/$(params.image-repository)
+        - name: url
+          value: $(params.repo-url)
+        - name: revision
+          value: $(params.revision)

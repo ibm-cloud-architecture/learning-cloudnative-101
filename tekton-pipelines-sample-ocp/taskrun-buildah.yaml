@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: buildah-task-run-
+spec:
+  serviceAccountName: pipeline
+  taskRef:
+    name: buildah
+  params:
+    - name: url
+      value: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
+    - name: image
+      value: image-registry.openshift-image-registry.svc:5000/tekton-demo/cloudnative_sample_app

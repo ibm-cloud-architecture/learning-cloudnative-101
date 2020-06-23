@@ -1,0 +1,13 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: test-build-run-
+spec:
+  serviceAccountName: pipeline
+  pipelineRef:
+    name: test-build
+  params:
+    - name: image-server
+      value: image-registry.openshift-image-registry.svc:5000
+    - name: image-namespace
+      value: tekton-demo

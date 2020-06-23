@@ -1,0 +1,58 @@
+> docker build -t ibmcase/mysql-catalog:1.1 .
+
+> docker build -t ibmcase/catalog-app:1.1 .
+
+> kubectl apply -f mysql-cataog.yml
+deployment.apps/mysql-lightblue-deployment created
+service/mysql-lightblue-service created
+
+> kubectl get pods
+NAME                                          READY   STATUS    RESTARTS   AGE
+mysql-lightblue-deployment-5f554b9bdd-xkkw8   1/1     Running   0          38s
+
+❯ kubectl apply -f catalog-app.yml
+deployment.apps/catalog-lightblue-deployment created
+service/catalog-lightblue-service created
+
+❯ kubectl get pods
+NAME                                           READY   STATUS    RESTARTS   AGE
+catalog-lightblue-deployment-7b575b847-r6xkl   1/1     Running   0          72s
+mysql-lightblue-deployment-5f554b9bdd-xkkw8    1/1     Running   0          3m34s
+
+> kubectl exec -it mysql-lightblue-deployment-5f554b9bdd-xkkw8   -- /bin/bash
+
+root@mysql-lightb[...]:/#  mysql -udbuser -p${MYSQL_PASSWORD}
+
+mysql> SHOW DATABASES; 
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| inventorydb        |
++--------------------+
+2 rows in set (0.00 sec)
+
+mysql> USE inventorydb;
+Database changed
+
+mysql> SELECT * FROM items;
++-------+-----------------------
+12 rows in set (0.00 sec)
+
+mysql> exit
+root@mysql-lightb[...]:/#  exit
+
+❯ kubectl exec -it catalog-lightblue-deployment-7b575b847-r6xkl /bin/bash
+
+bash-4.4# wget -O/dev/null -q localhost:8081
+wget: server returned error: HTTP/1.1 404 Not Found
+
+bash-4.4# wget -qO - localhost:8081/micro/items/13401
+{"id":13401,"name":"Dayton Meat Chopper","description":"Punched-card tabulating machines 
+and time clocks were not the only products offered by the young IBM. Seen here in 1930, 
+manufacturing employees of IBM's Dayton Scale Company are assembling Dayton Safety 
+Electric Meat Choppers. These devices, which won th","price":4600,
+"img":"meat-chopper.jpg","stock":1000,"imgAlt":"Dayton Meat Chopper"}
+
+
+

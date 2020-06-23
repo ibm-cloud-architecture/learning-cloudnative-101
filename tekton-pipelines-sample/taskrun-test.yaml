@@ -1,0 +1,10 @@
+apiVersion: tekton.dev/v1beta1
+kind: TaskRun
+metadata:
+  generateName: test-task-run-
+spec:
+  taskRef:
+    name: java-test
+  params:
+    - name: url
+      value: https://github.com/ibm-cloud-architecture/cloudnative_sample_app
