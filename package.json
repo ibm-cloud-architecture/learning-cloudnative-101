@@ -4,7 +4,6 @@
   "license": "Apache-2.0",
   "scripts": {
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d public",
     "build": "gatsby build --prefix-paths",
     "dev": "gatsby develop",
     "dev:clean": "gatsby clean && gatsby develop",
