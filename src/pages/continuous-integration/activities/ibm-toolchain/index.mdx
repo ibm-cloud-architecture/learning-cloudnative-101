@@ -12,13 +12,13 @@ After you create the cluster and the toolchain, you change your app's code and p
 ## Prerequisites
 
 1. You must have an IBM Cloud account. If you don't have one, sign up for a trial. The account requires an IBMid. If you don't have an IBMid, you can create one when you register.
-1. Verify the [toolchains and tool integrations that are available](https://cloud.ibm.com/docs/ContinuousDelivery?topic=ContinuousDelivery-cd_about) in your region and IBM Cloud environment. A toolchain is a set of tool integrations that support development, deployment, and operations tasks.
+2. Verify the [toolchains and tool integrations that are available](https://cloud.ibm.com/docs/ContinuousDelivery?topic=ContinuousDelivery-cd_about) in your region and IBM Cloud environment. A toolchain is a set of tool integrations that support development, deployment, and operations tasks.
 
-1. You need a Kubernetes cluster and an API key. You can create them by using either the UI or the CLI. You can create from the [IBM Cloud Catalog](https://cloud.ibm.com/kubernetes/catalog/create)
+3. You need a Kubernetes cluster and an API key. You can create them by using either the UI or the CLI. You can create from the [IBM Cloud Catalog](https://cloud.ibm.com/kubernetes/catalog/create)
 
-1. Create a container registry namespace to deploy the container we are goign to build. Youc an create from the [Container Registry UI](https://cloud.ibm.com/kubernetes/registry/main/namespaces)
+4. Create a container registry namespace to deploy the container we are goign to build. Youc an create from the [Container Registry UI](https://cloud.ibm.com/kubernetes/registry/main/namespaces)
 
-1.  Create the API key by using the string that is provided for your key name.
+5.  Create the API key by using the string that is provided for your key name.
     ```bash
     ibmcloud iam api-key-create my-api-key
     ```
@@ -65,20 +65,20 @@ In this task, you create a toolchain and add the tools that you need for this tu
   - Specify the directory path to your pipeline definition within the Git repo. You can reference a specific definition within the same repo. For this tutorial, use the default value.
   ![Pipeline window](./images/Tekton_Repo_Definition.png)
   - Click **Save**
-1. Click the **Worker** tab and select the private worker that you want to use to run your Tekton pipeline on the associated cluster. Either select the private worker you set up in the previous steps, or select the **IBM Managed workers in DALLAS** option.
+8. Click the **Worker** tab and select the private worker that you want to use to run your Tekton pipeline on the associated cluster. Either select the private worker you set up in the previous steps, or select the **IBM Managed workers in DALLAS** option.
   ![Worker tab](./images/Tekton_Worker.png)
    - Click **Save**
-8. Click the **Triggers** tab, click **Add trigger**, and click **Git Repository**. Associate the trigger with an event listener: 
+9. Click the **Triggers** tab, click **Add trigger**, and click **Git Repository**. Associate the trigger with an event listener: 
 - From the **Repository** list, select your repo.
 - Select the **When a commit is pushed** checkbox, and in the **EventListener** field, make sure that **listener** is selected.
 ![Git Repository trigger](./images/Tekton_Trigger.png)
 - Click **Save**
-9. On the **Triggers** tab, click **Add trigger** and click **Manual**. Associate that trigger with an event listener:
+10. On the **Triggers** tab, click **Add trigger** and click **Manual**. Associate that trigger with an event listener:
   - In the **EventListener** field, make sure that **listener** is selected.
   - Click **Save**.
   ![Manual trigger](./images/Tekton_Manual_Trigger.png)
    **Note:** Manual triggers run when you click **Run pipeline** and select the trigger. Git repository triggers run when the specified Git event type occurs for the specified Git repo and branch. The list of available event listeners is populated with the listeners that are defined in the pipeline code repo. 
-10. Click the **Environment properties** tab and define the environment properties for this tutorial. To add each property, click **Add property** and click **Text property**. Add these properties:
+11. Click the **Environment properties** tab and define the environment properties for this tutorial. To add each property, click **Add property** and click **Text property**. Add these properties:
    - `apikey`: Type the API key that you created earlier in this tutorial.
    - `cluster`: Type the name of the {{>productName key="ibmCloudContainerSvc"}} cluster that you created.
    - `clusterNamespace`: Type the namespace in your cluster where the app will be deployed. The default is prod.
@@ -88,7 +88,7 @@ In this task, you create a toolchain and add the tools that you need for this tu
    - `repository`: Type the source Git repository where your resources are stored. This value is the URL of the Git repository that you created earlier in this tutorial. To find your repo URL, return to your toolchain and click the **Git** tile. When the repository is shown, copy the URL.
    - `revision`: The branch, tag  or Git commitfor the Git repository. 
   ![Environment properties](./images/Tekton_Environment.png)
-11. Click **Save**
+12. Click **Save**
 
 
 ## Explore the pipeline
@@ -178,10 +178,3 @@ You created a toolchain with a Tekton-based delivery pipeline that deploys a "He
 - Read more about the [IBM Cloud Kubernetes Service](https://www.ibm.com/garage/method/practices/run/tool_ibm_container)
 - Read more about [Tekton](https://www.ibm.com/cloud/blog/tekton-a-modern-approach-to-continuous-delivery)
 - Explore the [DevOps reference architecture](https://www.ibm.com/cloud/architecture/architectures/devOpsArchitecture).
-
-
-
-
-
-
-
