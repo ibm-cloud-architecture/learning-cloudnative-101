@@ -463,6 +463,12 @@ Make sure your environment is setup properly for the lab.
 
 Check the [Environment Setup](../prerequisites/#environment-setup) page for your setup.
 
+- Install the `argocd` CLI, for example on OSX use brew
+    ```bash
+    brew tap argoproj/tap
+    brew install argoproj/tap/argocd
+    ```
+
 - Remember to have minikube tunnel running in another terminal
     ```bash
     minikube tunnel
@@ -544,10 +550,9 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     ```
     kubectl get cm,secret,svc,deploy -n argocd
     ```
-- Install the `argocd` CLI, for example on OSX use brew
+- Expose the ArgoCD Server service as a NodePort.
     ```bash
-    brew tap argoproj/tap
-    brew install argoproj/tap/argocd
+    kubectl expose deployment.apps/example-argocd-server --type="NodePort" --port 8080 --name=argo-nodeport -n argocd  
     ```
 - List the argocd-server service
     ```bash
@@ -555,8 +560,8 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     ```
     It should have an IP under `EXTERNAL-IP` column
     ```
-    NAME                    TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
-    example-argocd-server   LoadBalancer   10.105.73.245   10.105.73.245   80:31138/TCP,443:31932/TCP   5m3s
+    NAME                    TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+    example-argocd-server   LoadBalancer   172.21.106.88   <pending>     80:32010/TCP,443:31861/TCP   111m
     ```
 - Set an environment variable `ARGOCD_URL` using the `EXTERNAL-IP`
     ```bash
