@@ -214,11 +214,6 @@ Make sure your environment is setup properly for the lab.
 
 Check the [Environment Setup](../prerequisites/#environment-setup) page for your setup.
 
-- Remember to have minikube tunnel running in another terminal
-    ```bash
-    minikube tunnel
-    ```
-
 ## ArgoCD Installation
 
 - Create the namespace `argocd` to install argocd
@@ -241,7 +236,7 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
         app.kubernetes.io/component: application-controller
         app.kubernetes.io/name: argocd-application-controller
         app.kubernetes.io/part-of: argocd
-      name: argocd-application-controller
+      name: argocd-application-controller-cluster-admin
     roleRef:
       apiGroup: rbac.authorization.k8s.io
       kind: ClusterRole
@@ -312,10 +307,10 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
 - Set an environment variable `ARGOCD_URL` using the `EXTERNAL-IP`
     ```bash
     export ARGOCD_NAMESPACE=argocd
-    export ARGOCD_SERVER="$(kubectl get svc example-argocd-server -n $ARGOCD_NAMESPACE -o jsonpath='{.status.loadBalancer.ingress[0].ip}')"
-    export ARGOCD_URL="https://$ARGOCD_SERVER"
+    export ARGOCD_SERVER="$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[1].address}')"
+    export ARGOCD_NODEPORT="$(kubectl get svc example-argocd-server -n $ARGOCD_NAMESPACE -o jsonpath='{.spec.ports[0].nodePort}')"
+    export ARGOCD_URL="https://$ARGOCD_SERVER:$ARGOCD_NODEPORT"
     echo ARGOCD_URL=$ARGOCD_URL
-    echo ARGOCD_SERVER=$ARGOCD_SERVER
     ```
 
 ## Deploying the app
@@ -326,7 +321,7 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     ```
 - Use `admin` as the username and get the password with the following command
     ```bash
-    oc get secret example-argocd-cluster -n $ARGOCD_NAMESPACE -o jsonpath='{.data.admin\.password}' | base64 -d
+    kubectl get secret example-argocd-cluster -n $ARGOCD_NAMESPACE -o jsonpath='{.data.admin\.password}' | base64 -d
     ```
     For example the output is similar to this:
     ```
@@ -468,6 +463,12 @@ Make sure your environment is setup properly for the lab.
 
 Check the [Environment Setup](../prerequisites/#environment-setup) page for your setup.
 
+- Install the `argocd` CLI, for example on OSX use brew
+    ```bash
+    brew tap argoproj/tap
+    brew install argoproj/tap/argocd
+    ```
+
 - Remember to have minikube tunnel running in another terminal
     ```bash
     minikube tunnel
@@ -549,10 +550,9 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     ```
     kubectl get cm,secret,svc,deploy -n argocd
     ```
-- Install the `argocd` CLI, for example on OSX use brew
+- Expose the ArgoCD Server service as a NodePort.
     ```bash
-    brew tap argoproj/tap
-    brew install argoproj/tap/argocd
+    kubectl expose deployment.apps/example-argocd-server --type="NodePort" --port 8080 --name=argo-nodeport -n argocd  
     ```
 - List the argocd-server service
     ```bash
@@ -560,8 +560,8 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     ```
     It should have an IP under `EXTERNAL-IP` column
     ```
-    NAME                    TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
-    example-argocd-server   LoadBalancer   10.105.73.245   10.105.73.245   80:31138/TCP,443:31932/TCP   5m3s
+    NAME                    TYPE           CLUSTER-IP      EXTERNAL-IP   PORT(S)                      AGE
+    example-argocd-server   LoadBalancer   172.21.106.88   <pending>     80:32010/TCP,443:31861/TCP   111m
     ```
 - Set an environment variable `ARGOCD_URL` using the `EXTERNAL-IP`
     ```bash
@@ -580,7 +580,7 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     ```
 - Use `admin` as the username and get the password with the following command
     ```bash
-    oc get secret example-argocd-cluster -n $ARGOCD_NAMESPACE -o jsonpath='{.data.admin\.password}' | base64 -d
+    kubectl get secret example-argocd-cluster -n $ARGOCD_NAMESPACE -o jsonpath='{.data.admin\.password}' | base64 -d
     ```
     For example the output is similar to this:
     ```
