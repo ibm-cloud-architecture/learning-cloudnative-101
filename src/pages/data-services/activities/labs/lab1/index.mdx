@@ -50,12 +50,14 @@ Follow the instructions for downloading and installing the Kubernetes CLI (kubec
 ## Information required to complete this lab
 
 Write down each of these before you begin this exercise. You must know these values to complete this lab.
-1. IBM Kubernetes (IKS) cluster name: <br/>[cluster_name]<hr/>
-1. Postgres database name: <br/>[database_name]<hr/>
-1. Target resource group for the cluster: <br/>[resource_group_name]<hr/>
-1. Credentials (key) to access the database: <br/>[credentials_name]<hr/>
-1. Kubernetes secret to access the database: <br/>[secret_name]<hr/>
-
+1. IBM Kubernetes (IKS) cluster name: 
+   <br/>[cluster_name]<hr/>
+1. Postgres database name:  
+   <br/>[database_name]<hr/>
+1. Target resource group for the cluster: 
+   <br/>[resource_group_name]<hr/>
+1. The location of a yaml file that is used to access the database: 
+   <br/>[path]/postgress-secret.yaml<hr/>
 
 ## Activity
 
@@ -93,14 +95,14 @@ You can see a list of all namespaces with:
 ibmcloud cr namespaces
 ```
 
-### Add the IBM Cloud Databases for PostgreSQL service to your cluster using "service bind"
+### Add the IBM Cloud Databases for PostgreSQL service to your cluster 
 
 **Note:** If your database uses both public and private endpoints, your public endpoint will be used by default. Therefore, if you want to select the private endpoint, first you will need to create a service key for your database so Kubernetes can use it when binding to the database.
 
-For this lab the key has been created. (Check your notes above in the section "Information required to complete this Lab") Once the key exists, you'll bind the database to the Kubernetes cluster using the command:
+For this lab the key has been created. You'll bind the database to the Kubernetes cluster by applying a yaml file:
 
 ```
-ibmcloud ks cluster service bind [cluster_name] default [database_name] --key [credentials_name]
+kubectl apply -f postgress-secret.yaml
 ```
 
 This will create a secret in your Kubernetes cluster using the database's private endpoint from the key you've created above.
@@ -110,8 +112,6 @@ Verify that the Kubernetes secret was created in your cluster namespace. Kuberne
 ```
 kubectl get secrets --namespace=default
 ```
-
-**Note:** save the name of the secret that was generated when you bound [database_name] to your Kubernetes service.
 
 Clone the app to your local environment from your terminal using the following command:
 
@@ -164,7 +164,7 @@ spec:
         - name: BINDING
           valueFrom:
             secretKeyRef:
-              name: [postgres-secret-name] # Edit me
+              name: binding-postgressql-cloudnative-bootcamp
               key: binding
 ---
 apiVersion: v1
@@ -188,11 +188,11 @@ Change the image name to have the namespace that you used in a previous step:
 image: "icr.io/[namespace]/icdpg" # Edit me
 ```
 
-Under `secretKeyRef` section, change the name of `[postgres-secret-name]` to match the name of the secret that was generated when the IBM Cloud Databases for PostgreSQL was bound to the Kubernetes cluster. **Note:** If you did not bind the database service to the cluster then this secret will be provided to you.
+Under `secretKeyRef` section, notice the name `binding-postgressql-cloudnative-bootcamp` this matches the name of the secret that was generated for the IBM Cloud Databases for PostgreSQL This secret was provided to you in the `postgress-secret.yaml` file.
 
 ```
 secretKeyRef:
-  name: [postgres-secret-name] # Edit me
+  name: binding-postgressql-cloudnative-bootcamp 
 ```
 
 As for the service configuration at the bottom of the file, nodePort indicates the port that the application can be accessed from. You have a range from 30000 - 32767 that you can use, but we've chosen 30081. As for the TCP port, it's set to 8080, which is the port that the Node.js application runs on in the container. 
@@ -223,16 +223,13 @@ The result will be something like:
 ```
 ID                                                       Public IP        Private IP      Flavor               State    Status   Zone    Version
 kube-brhugogd0clno4mkrdq0-iksbootcamp-default-000001c6   169.62.243.241   10.186.26.80    b3c.4x16.encrypted   normal   Ready    dal13   1.17.6_1527*
-kube-brhugogd0clno4mkrdq0-iksbootcamp-default-00000243   169.62.243.238   10.186.26.121   b3c.4x16.encrypted   normal   Ready    dal13   1.17.6_1527*
-kube-brhugogd0clno4mkrdq0-iksbootcamp-default-00000347   169.62.243.242   10.186.26.86    b3c.4x16.encrypted   normal   Ready    dal13   1.17.6_1527*
 ```
 
-Now you can access the application from any of the Public IPs shown on port 30081.  (**Note:** The example above is a cluster of 3 nodes, so you can use any of the three Public IP Addresses.)
-
-![Postgress App](./images/postgressApp.png)
-
+Now you can access the application from the Public IP with a port of 30081. From your browser, go to: `http://[Cluster_Public_IP]:30081`
 
 The clouddatabases-postgresql-helloworld app displays the contents of an examples database. To demonstrate that the app is connected to your service, add some words to the database. The words are displayed as you add them, with the most recently added words displayed first.
+
+![Postgress App](./images/postgressApp.png)
 
 ## Code Structure
 
