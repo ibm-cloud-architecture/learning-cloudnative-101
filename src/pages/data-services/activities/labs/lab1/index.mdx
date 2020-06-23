@@ -1,0 +1,260 @@
+---
+title: Postgress cloud Lab
+---
+
+## Activity description
+
+In this excercise, you will configure an application to write data to a PostgreSQL database running in the IBM Cloud. This activity will use three items created on the IBM Cloud.
+
+1. An instance of a postgress database
+1. The IBM image registry
+1. An IBM Kubernetes cluster (also known as IKS)
+
+**Note:** This lab is based on code from [https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples](https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples)
+
+## Prerequisites
+
+### IBM Cloud account
+
+If you do not already have an IBM Cloud account, sign up at [https://cloud.ibm.com/registration](https://cloud.ibm.com/registration)
+
+### Download and install IBM Cloud CLI
+
+The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
+
+### Install the IBM Cloud Kubernetes Service plugin.
+
+```
+ibmcloud plugin install container-service -r Bluemix
+```
+
+### Install the Container Registry plug-in.
+
+Install the Container Registry plug-in with the command:
+```
+ibmcloud plugin install container-registry -r 'IBM Cloud'
+```
+
+To verify the plug-ins that are installed, use the command:
+
+```
+ibmcloud plugin list
+```
+
+
+### Download and install the Kubernetes CLI
+
+Follow the instructions for downloading and installing the Kubernetes CLI (kubectl) for the platform you're using at [https://kubernetes.io/docs/tasks/tools/install-kubectl/](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+
+### Download and install the Docker desktop
+
+Follow the instructions for downloading and installing Docker desktop for the platform you're using at [https://www.docker.com/products/docker-desktop](https://www.docker.com/products/docker-desktop)
+
+## Information required to complete this lab
+
+Write down each of these before you begin this exercise. You must know these values to complete this lab.
+1. IBM Kubernetes (IKS) cluster name: <br/>[cluster_name]<hr/>
+1. Postgres database name: <br/>[database_name]<hr/>
+1. Target resource group for the cluster: <br/>[resource_group_name]<hr/>
+1. Credentials (key) to access the database: <br/>[credentials_name]<hr/>
+1. Kubernetes secret to access the database: <br/>[secret_name]<hr/>
+
+
+## Activity
+
+### Login in to the IBM Cloud from the command line
+
+Connect to IBM Cloud in the command line tool and follow the prompts to log in.
+
+```
+ibmcloud login
+```
+
+**Note:** If you have a federated user ID, use the `ibmcloud login --sso` command to log in with your single sign on ID.
+
+Make sure you are targeting the correct IBM Cloud resource group of your IBM Cloud Kubernetes Service.
+
+Use the following command to target your cluster resource group if your resource group is other than default.
+
+```
+ibmcloud target -g [resource_group_name]
+```
+
+### Create a namespace to store your image
+
+Create your own private image repository in IBM Cloud Container Registry to store your application's Docker image. Since we want the images to be private, we need to create a namespace, which will create a unique URL to your image repository. **Note:** Use your initials to make the namespace unique and easier to find.
+
+You can create a namespace with the command: 
+
+```
+ibmcloud cr namespace-add [your-initials]-cloud-native
+```
+
+You can see a list of all namespaces with:
+
+```
+ibmcloud cr namespaces
+```
+
+### Add the IBM Cloud Databases for PostgreSQL service to your cluster using "service bind"
+
+**Note:** If your database uses both public and private endpoints, your public endpoint will be used by default. Therefore, if you want to select the private endpoint, first you will need to create a service key for your database so Kubernetes can use it when binding to the database.
+
+For this lab the key has been created. (Check your notes above in the section "Information required to complete this Lab") Once the key exists, you'll bind the database to the Kubernetes cluster using the command:
+
+```
+ibmcloud ks cluster service bind [cluster_name] default [database_name] --key [credentials_name]
+```
+
+This will create a secret in your Kubernetes cluster using the database's private endpoint from the key you've created above.
+
+Verify that the Kubernetes secret was created in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the API key for accessing the instance of your Databases for PostgreSQL service that's provisioned in your account.
+
+```
+kubectl get secrets --namespace=default
+```
+
+**Note:** save the name of the secret that was generated when you bound [database_name] to your Kubernetes service.
+
+Clone the app to your local environment from your terminal using the following command:
+
+```
+git clone -b node git@github.com:IBM-Cloud/clouddatabases-helloworld-kubernetes-examples.git
+```
+
+`cd` into this newly created directory `clouddatabases-helloworld-kubernetes-examples`, and `cd` into the `postgresql` folder. The code for connecting to the service, and reading from and updating the database can be found in server.js. See Code Structure and the code comments for information on the app's functions. There's also a public directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
+
+Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container icdpg. **Note:** There is a period (dot) at the end of the following command.
+
+```
+ibmcloud cr build -t icr.io/[your_namespace]/icdpg .
+```
+
+After it's built, you can view the image in container registry using:
+
+```
+ibmcloud cr images
+```
+
+You'll get something like the following response:
+```
+REPOSITORY                       TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
+icr.io/[namespace]/icdpg         latest   81c3959ea657   [namespace] 4 hours ago   28 MB   No Issues
+```
+
+Update the Kubernetes deployment configuration file clouddb-deployment.yaml see below:
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: icdpostgres-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: clouddb-demo
+  template:
+    metadata:
+      name: icdpostgres-app
+      labels:
+        run: clouddb-demo
+    spec:
+      containers:
+      - name: cloudpostgres-nodejs-app
+        image: "us.icr.io/[namespace]/icdpg" # Edit me
+        imagePullPolicy: Always
+        env:
+        - name: BINDING
+          valueFrom:
+            secretKeyRef:
+              name: [postgres-secret-name] # Edit me
+              key: binding
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudpostgres-service
+  labels:
+    run: clouddb-demo
+spec:
+  type: NodePort
+  selector:
+    run: clouddb-demo
+  ports:
+  - protocol: TCP
+    port: 8080
+    nodePort: 30082
+```
+
+Change the image name to have the namespace that you used in a previous step:
+```
+image: "icr.io/[namespace]/icdpg" # Edit me
+```
+
+Under `secretKeyRef` section, change the name of `[postgres-secret-name]` to match the name of the secret that was generated when the IBM Cloud Databases for PostgreSQL was bound to the Kubernetes cluster. **Note:** If you did not bind the database service to the cluster then this secret will be provided to you.
+
+```
+secretKeyRef:
+  name: [postgres-secret-name] # Edit me
+```
+**Note:** You may need to add your initial to the name of the deployemnt, if several students will be deploying the same app into the same cluster.
+
+```
+kind: Deployment
+metadata:
+  name: [your-initials]-icdpostgres-app
+```
+
+As for the service configuration at the bottom of the file, nodePort indicates the port that the application can be accessed from. You have a range from 30000 - 32767 that you can use, but we've chosen 30081. As for the TCP port, it's set to 8080, which is the port that the Node.js application runs on in the container. **Note:** If there are several students deploying to the same cluster, each node port must be unique.
+
+Deploy the application to IBM Cloud Kubernetes Service. When you deploy the application, it will automatically be bound to your Kubernetes cluster.
+
+```
+kubectl apply -f clouddb-deployment.yaml
+```
+
+Check on the pod that was created:
+```
+kubectl get pods
+
+kubectl describe pod icdpostgres-app-[your-pod]
+
+
+```
+
+Get the IP for the application.
+
+```
+ibmcloud ks workers [cluster_name]
+```
+
+The result will be something like:
+
+```
+ID                                                       Public IP        Private IP      Flavor               State    Status   Zone    Version
+kube-brhugogd0clno4mkrdq0-iksbootcamp-default-000001c6   169.62.243.241   10.186.26.80    b3c.4x16.encrypted   normal   Ready    dal13   1.17.6_1527*
+kube-brhugogd0clno4mkrdq0-iksbootcamp-default-00000243   169.62.243.238   10.186.26.121   b3c.4x16.encrypted   normal   Ready    dal13   1.17.6_1527*
+kube-brhugogd0clno4mkrdq0-iksbootcamp-default-00000347   169.62.243.242   10.186.26.86    b3c.4x16.encrypted   normal   Ready    dal13   1.17.6_1527*
+```
+
+Now you can access the application from any of the Public IPs shown on port 30081.  (**Note:** The example above is a cluster of 3 nodes, so you can use any of the three Public IP Addresses.)
+
+The clouddatabases-postgresql-helloworld app displays the contents of an examples database. To demonstrate that the app is connected to your service, add some words to the database. The words are displayed as you add them, with the most recently added words displayed first.
+
+## Code Structure
+
+### File	Description
+
+- server.js	Establishes a connection to the PostgreSQL database using credentials from BINDING (the name we created in the Kubernetes deployment file to expose the PostgreSQL credentials) and handles create and read operations on the database.
+- main.js	Handles user input for a PUT command and parses the results of a GET command to output the contents of the PostgreSQL database.
+
+## REST - The app uses a PUT and a GET operation:
+
+- PUT
+
+-- takes user input from main.js
+-- uses the client.query method to add the user input to the words table
+- GET
+
+-- uses client.query method to retrieve the contents of the words table
+-- returns the response of the database command to main.js
