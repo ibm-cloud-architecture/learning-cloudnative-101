@@ -162,6 +162,53 @@ The clouddatabases-postgresql-helloworld app displays the contents of an example
 
 ![Postgress App](./images/postgressApp.png)
 
+## Extra credit
+
+In this section you will use the IBM Cloud Registry to store the image. You will build the image but you do not need Docker Desktop. The build will happen on the IBM Cloud.
+
+### Create a namespace to store your image
+
+Create your own private image repository in IBM Cloud Container Registry to store your application's Docker image. Since we want the images to be private, we need to create a namespace, which will create a unique URL to your image repository. **Note:** Use your initials to make the namespace unique and easier to find.
+
+You can create a namespace with the command: 
+
+```
+ibmcloud cr namespace-add [your-initials]-cloud-native
+```
+
+You can see a list of all namespaces with:
+
+```
+ibmcloud cr namespaces
+```
+
+Clone the app to your local environment from your terminal using the following command:
+
+```
+git clone -b node git@github.com:IBM-Cloud/clouddatabases-helloworld-kubernetes-examples.git
+```
+
+`cd` into this newly created directory `clouddatabases-helloworld-kubernetes-examples`, and `cd` into the `postgresql` folder. The code for connecting to the service, and reading from and updating the database can be found in server.js. See Code Structure and the code comments for information on the app's functions. There's also a public directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
+
+Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container icdpg. **Note:** There is a period (dot) at the end of the following command.
+
+```
+ibmcloud cr build -t icr.io/[your_namespace]/icdpg .
+```
+
+After it's built, you can view the image in container registry using:
+
+```
+ibmcloud cr images
+```
+
+You'll get something like the following response:
+```
+REPOSITORY                       TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
+icr.io/[namespace]/icdpg         latest   81c3959ea657   [namespace] 4 hours ago   28 MB   No Issues
+```
+
+
 ## Code Structure
 
 ### File	Description
