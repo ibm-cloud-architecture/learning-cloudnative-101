@@ -10,86 +10,20 @@ In this excercise, you will configure an application to write data to a PostgreS
 1. The IBM image registry
 1. An IBM Kubernetes cluster (also known as IKS)
 
-**Note:** This lab is based on code from [https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples](https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples)
+**Note:** This lab is based on code from [https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples](https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples) We are using the pode from the 
 
 ## Prerequisites
 
-### IBM Cloud account
-
-If you do not already have an IBM Cloud account, sign up at [https://cloud.ibm.com/registration](https://cloud.ibm.com/registration)
-
-### Download and install IBM Cloud CLI
-
-The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
-
-### Install the IBM Cloud Kubernetes Service plugin.
-
-```
-ibmcloud plugin install container-service -r Bluemix
-```
-
-### Install the Container Registry plug-in.
-
-Install the Container Registry plug-in with the command:
-```
-ibmcloud plugin install container-registry -r 'IBM Cloud'
-```
-
-To verify the plug-ins that are installed, use the command:
-
-```
-ibmcloud plugin list
-```
-
-
-### Download and install the Kubernetes CLI
-
-Follow the instructions for downloading and installing the Kubernetes CLI (kubectl) for the platform you're using at [https://kubernetes.io/docs/tasks/tools/install-kubectl/](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+See the [Prerequisites section](/prerequisites) for the prerequisites for this lab.
 
 ## Information required to complete this lab
 
 Write down each of these before you begin this exercise. You must know these values to complete this lab.
-1. IBM Kubernetes (IKS) cluster name: <br/>[cluster_name]<hr/>
+1. Kubernetes cluster name: <br/>[cluster_name]<hr/>
 1. Postgres database name: <br/>[database_name]<hr/>
-1. Target resource group for the cluster: <br/>[resource_group_name]<hr/>
-1. Credentials (key) to access the database: <br/>[credentials_name]<hr/>
-1. Kubernetes secret to access the database: <br/>[secret_name]<hr/>
+1. Kubernetes secret to access the database: <br/>[path-to-secret_name]<hr/>
 
 ## Activity
-
-### Login in to the IBM Cloud from the command line
-
-Connect to IBM Cloud in the command line tool and follow the prompts to log in.
-
-```
-ibmcloud login
-```
-
-**Note:** If you have a federated user ID, use the `ibmcloud login --sso` command to log in with your single sign on ID.
-
-Make sure you are targeting the correct IBM Cloud resource group of your IBM Cloud Kubernetes Service.
-
-Use the following command to target your cluster resource group if your resource group is other than default.
-
-```
-ibmcloud target -g [resource_group_name]
-```
-
-### Create a namespace to store your image
-
-Create your own private image repository in IBM Cloud Container Registry to store your application's Docker image. Since we want the images to be private, we need to create a namespace, which will create a unique URL to your image repository. **Note:** Use your initials to make the namespace unique and easier to find.
-
-You can create a namespace with the command: 
-
-```
-ibmcloud cr namespace-add [your-initials]-cloud-native
-```
-
-You can see a list of all namespaces with:
-
-```
-ibmcloud cr namespaces
-```
 
 ### Add the IBM Cloud Databases for PostgreSQL service to your cluster 
 
@@ -99,7 +33,7 @@ For this lab the key has been created. You'll bind the database to the Kubernete
 
 ```
 kubectl apply -f postgress-secret.yaml
-
+```
 
 This will create a secret in your Kubernetes cluster using the database's private endpoint from the key you've created above.
 
