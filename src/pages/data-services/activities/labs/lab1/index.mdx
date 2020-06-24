@@ -14,6 +14,7 @@ In this excercise, you will configure an application to write data to a PostgreS
 In the extra credit part of this excercise, you will build an image for the application, push it to the IBM Container Registry, and define your yaml so it pulls the image from the IBM Container Registry. For this activity you will also need:
 
 1. An IBM Cloud login
+1. The resource group for your access to the IBM Container Registry
 1. Access to the IBM Container Registry
 
 **Note:** This lab is based on code from [https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples](https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples) We are using the code from the [postgres section.](https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples/tree/node/postgresql)
@@ -31,7 +32,7 @@ Write down each of these before you begin this exercise. You must know these val
 
 ## Activity
 
-### Add the IBM Cloud Databases for PostgreSQL service to your cluster 
+### Add the Kubernetes secret to your cluster 
 
 **Note:** If your database uses both public and private endpoints, your public endpoint will be used by default. Therefore, if you want to select the private endpoint, first you will need to create a service key for your database so Kubernetes can use it when binding to the database.
 
@@ -48,34 +49,9 @@ Verify that the Kubernetes secret was created in your cluster namespace. Kuberne
 ```
 kubectl get secrets --namespace=default
 ```
--=-=-=-=-=-=-=- Here -=-=-=-=-=-=-=-
-Clone the app to your local environment from your terminal using the following command:
+### Create a yaml file to deploy the application
 
-```
-git clone -b node git@github.com:IBM-Cloud/clouddatabases-helloworld-kubernetes-examples.git
-```
-
-`cd` into this newly created directory `clouddatabases-helloworld-kubernetes-examples`, and `cd` into the `postgresql` folder. The code for connecting to the service, and reading from and updating the database can be found in server.js. See Code Structure and the code comments for information on the app's functions. There's also a public directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
-
-Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container icdpg. **Note:** There is a period (dot) at the end of the following command.
-
-```
-ibmcloud cr build -t icr.io/[your_namespace]/icdpg .
-```
-
-After it's built, you can view the image in container registry using:
-
-```
-ibmcloud cr images
-```
-
-You'll get something like the following response:
-```
-REPOSITORY                       TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
-icr.io/[namespace]/icdpg         latest   81c3959ea657   [namespace] 4 hours ago   28 MB   No Issues
-```
-
-Update the Kubernetes deployment configuration file clouddb-deployment.yaml see below:
+Take a look at the yaml file below. Save this file as `clouddb-deployment.yaml`
 ```
 apiVersion: apps/v1
 kind: Deployment
@@ -93,15 +69,15 @@ spec:
         run: clouddb-demo
     spec:
       containers:
-      - name: cloudpostgres-nodejs-app
-        image: "us.icr.io/[namespace]/icdpg" # Edit me
-        imagePullPolicy: Always
-        env:
-        - name: BINDING
-          valueFrom:
-            secretKeyRef:
-              name: binding-postgressql-cloudnative-bootcamp
-              key: binding
+        - name: cloudpostgres-nodejs-app
+          image: docker.io/ibmcase/icdpg
+          imagePullPolicy: Always
+          env:
+            - name: BINDING
+              valueFrom:
+                secretKeyRef:
+                  name: binding-postgressql-cloudnative-bootcamp
+                  key: binding
 ---
 apiVersion: v1
 kind: Service
@@ -114,15 +90,22 @@ spec:
   selector:
     run: clouddb-demo
   ports:
-  - protocol: TCP
-    port: 8080
-    nodePort: 30081
+    - protocol: TCP
+      port: 8080
+```
+### Examine the yaml file
+
+You should notice several things in this yaml file.
+
+The image is pulled from [docker hub](https://hub.docker.com/repository/docker/ibmcase/icdpg) Notice the `spec` section contains the name of the image:
+
+```
+    spec:
+      containers:
+      - name: cloudpostgres-nodejs-app
+        image: docker.io/ibmcase/icdpg 
 ```
 
-Change the image name to have the namespace that you used in a previous step:
-```
-image: "icr.io/[namespace]/icdpg" # Edit me
-```
 
 Under `secretKeyRef` section, notice the name `binding-postgressql-cloudnative-bootcamp` this matches the name of the secret that was generated for the IBM Cloud Databases for PostgreSQL This secret was provided to you in the `postgress-secret.yaml` file.
 
@@ -131,10 +114,10 @@ secretKeyRef:
   name: binding-postgressql-cloudnative-bootcamp 
 ```
 
-As for the service configuration at the bottom of the file, nodePort indicates the port that the application can be accessed from. You have a range from 30000 - 32767 that you can use, but we've chosen 30081. As for the TCP port, it's set to 8080, which is the port that the Node.js application runs on in the container. 
 
+### Apply the yaml file
 
-Deploy the application to IBM Cloud Kubernetes Service. When you deploy the application, it will automatically be bound to your Kubernetes cluster.
+Deploy the application to your Kubernetes cluster. When you deploy the application, it will automatically be bound to your Kubernetes cluster.
 
 ```
 kubectl apply -f clouddb-deployment.yaml
@@ -149,28 +132,43 @@ kubectl describe pod icdpostgres-app-[your-pod]
 
 ```
 
-Get the IP for the application.
+Get the URL for the application. Use the code below to get the URL for the apllication:
 
 ```
-ibmcloud ks workers [cluster_name]
+EXTERNAL_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
+NODEPORT="$(kubectl get svc cloudpostgres-service -o jsonpath='{.spec.ports[0].nodePort}')"
+echo URL=http://$EXTERNAL_IP:$NODEPORT
 ```
 
-The result will be something like:
 
-```
-ID                                                       Public IP        Private IP      Flavor               State    Status   Zone    Version
-kube-brhugogd0clno4mkrdq0-iksbootcamp-default-000001c6   169.62.243.241   10.186.26.80    b3c.4x16.encrypted   normal   Ready    dal13   1.17.6_1527*
-```
-
-Now you can access the application from the Public IP with a port of 30081. From your browser, go to: `http://[Cluster_Public_IP]:30081`
+Now you can access the application from the Public IP and NodePort of the app. Try the URL from your browser.
 
 The clouddatabases-postgresql-helloworld app displays the contents of an examples database. To demonstrate that the app is connected to your service, add some words to the database. The words are displayed as you add them, with the most recently added words displayed first.
 
 ![Postgress App](./images/postgressApp.png)
 
+
 ## Extra credit
 
 In this section you will use the IBM Cloud Registry to store the image. You will build the image but you do not need Docker Desktop. The build will happen on the IBM Cloud.
+
+### Login in to the IBM Cloud from the command line
+
+Connect to IBM Cloud in the command line tool and follow the prompts to log in.
+
+```
+ibmcloud login
+```
+
+**Note:** If you have a federated user ID, use the `ibmcloud login --sso` command to log in with your single sign on ID.
+
+Make sure you are targeting the correct IBM Cloud resource group of your IBM Cloud Kubernetes Service.
+
+Use the following command to target your cluster resource group if your resource group is other than default.
+
+```
+ibmcloud target -g [resource_group_name]
+```
 
 ### Create a namespace to store your image
 
