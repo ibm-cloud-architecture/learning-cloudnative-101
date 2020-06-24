@@ -4,13 +4,19 @@ title: Postgress cloud Lab
 
 ## Activity description
 
-In this excercise, you will configure an application to write data to a PostgreSQL database running in the IBM Cloud. This activity will use three items created on the IBM Cloud.
+In this excercise, you will configure an application to write data to a PostgreSQL database running in the IBM Cloud. This activity will use the following items:
 
 1. An instance of a postgress database
-1. The IBM image registry
-1. An IBM Kubernetes cluster (also known as IKS)
+1. A Kubernetes cluster
 
-**Note:** This lab is based on code from [https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples](https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples) We are using the pode from the 
+### Extra credit
+
+In the extra credit part of this excercise, you will build an image for the application, push it to the IBM Container Registry, and define your yaml so it pulls the image from the IBM Container Registry. For this activity you will also need:
+
+1. An IBM Cloud login
+1. Access to the IBM Container Registry
+
+**Note:** This lab is based on code from [https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples](https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples) We are using the code from the [postgres section.](https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples/tree/node/postgresql)
 
 ## Prerequisites
 
@@ -29,7 +35,7 @@ Write down each of these before you begin this exercise. You must know these val
 
 **Note:** If your database uses both public and private endpoints, your public endpoint will be used by default. Therefore, if you want to select the private endpoint, first you will need to create a service key for your database so Kubernetes can use it when binding to the database.
 
-For this lab the key has been created. You'll bind the database to the Kubernetes cluster by applying a yaml file:
+For this lab the key has been created. **Note:** You should download the `postgress-secret.yaml` file to the current directory. You'll bind the database to the Kubernetes cluster by applying a yaml file. Apply the secrets yaml file with the command:
 
 ```
 kubectl apply -f postgress-secret.yaml
@@ -42,7 +48,7 @@ Verify that the Kubernetes secret was created in your cluster namespace. Kuberne
 ```
 kubectl get secrets --namespace=default
 ```
-
+-=-=-=-=-=-=-=- Here -=-=-=-=-=-=-=-
 Clone the app to your local environment from your terminal using the following command:
 
 ```
