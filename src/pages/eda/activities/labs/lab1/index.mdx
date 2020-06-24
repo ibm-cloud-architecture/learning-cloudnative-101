@@ -14,6 +14,8 @@ To complete this lab scenario, you will need to perform the following steps:
 - Make use of the NodeJS project located at https://github.com/ibm-messaging/event-streams-samples/tree/master/kafka-nodejs-console-sample
 - Acquire the necessary connection information to your IBM Event Streams on Cloud instance
 - Build the Docker image
+  - _**NOTE:**_ If the Docker image fails to build, you may need to update the Dockerfile to use a specific, non-latest base image from Ubuntu. This is due to underlying packaging changes between Ubuntu versions.
+  - Change `FROM ubuntu` to `FROM ubuntu:18.04` in the [Dockerfile](https://github.com/ibm-messaging/event-streams-samples/blob/master/kafka-nodejs-console-sample/Dockerfile) and the image build should complete successfully.
 - Run the Docker image, while passing in the IBM Event Streams on Cloud boostrap server and API key information as command-line parameters
 
 ### Use the Java sample
