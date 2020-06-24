@@ -4,58 +4,153 @@ title: Postgress cloud Lab
 
 ## Activity description
 
-In this excercise, you will configure an application to write data to a PostgreSQL database running in the IBM Cloud. This activity will use three items created on the IBM Cloud.
+In this excercise, you will configure an application to write data to a PostgreSQL database running in the IBM Cloud. This activity will use the following items:
 
 1. An instance of a postgress database
-1. The IBM image registry
-1. An IBM Kubernetes cluster (also known as IKS)
+1. A Kubernetes cluster
 
-**Note:** This lab is based on code from [https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples](https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples)
+### Extra credit
+
+In the extra credit part of this excercise, you will build an image for the application, push it to the IBM Container Registry, and define your yaml so it pulls the image from the IBM Container Registry. For this activity you will also need:
+
+1. An IBM Cloud login
+1. The resource group for your access to the IBM Container Registry
+1. Access to the IBM Container Registry
+
+**Note:** This lab is based on code from [https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples](https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples) We are using the code from the [postgres section.](https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples/tree/node/postgresql)
 
 ## Prerequisites
 
-### IBM Cloud account
-
-If you do not already have an IBM Cloud account, sign up at [https://cloud.ibm.com/registration](https://cloud.ibm.com/registration)
-
-### Download and install IBM Cloud CLI
-
-The IBM Cloud CLI tool tool is what you'll use to communicate with IBM Cloud from your terminal or command line.
-
-### Install the IBM Cloud Kubernetes Service plugin.
-
-```
-ibmcloud plugin install container-service -r Bluemix
-```
-
-### Install the Container Registry plug-in.
-
-Install the Container Registry plug-in with the command:
-```
-ibmcloud plugin install container-registry -r 'IBM Cloud'
-```
-
-To verify the plug-ins that are installed, use the command:
-
-```
-ibmcloud plugin list
-```
-
-
-### Download and install the Kubernetes CLI
-
-Follow the instructions for downloading and installing the Kubernetes CLI (kubectl) for the platform you're using at [https://kubernetes.io/docs/tasks/tools/install-kubectl/](https://kubernetes.io/docs/tasks/tools/install-kubectl/)
+See the [Prerequisites section](/prerequisites) for the prerequisites for this lab.
 
 ## Information required to complete this lab
 
 Write down each of these before you begin this exercise. You must know these values to complete this lab.
-1. IBM Kubernetes (IKS) cluster name: <br/>[cluster_name]<hr/>
+1. Kubernetes cluster name: <br/>[cluster_name]<hr/>
 1. Postgres database name: <br/>[database_name]<hr/>
-1. Target resource group for the cluster: <br/>[resource_group_name]<hr/>
-1. Credentials (key) to access the database: <br/>[credentials_name]<hr/>
-1. Kubernetes secret to access the database: <br/>[secret_name]<hr/>
+1. Kubernetes secret to access the database: <br/>[path-to-secret_name]<hr/>
 
 ## Activity
+
+### Add the Kubernetes secret to your cluster 
+
+**Note:** If your database uses both public and private endpoints, your public endpoint will be used by default. Therefore, if you want to select the private endpoint, first you will need to create a service key for your database so Kubernetes can use it when binding to the database.
+
+For this lab the key has been created. **Note:** You should download the `postgress-secret.yaml` file to the current directory. You'll bind the database to the Kubernetes cluster by applying a yaml file. Apply the secrets yaml file with the command:
+
+```
+kubectl apply -f postgress-secret.yaml
+```
+
+This will create a secret in your Kubernetes cluster using the database's private endpoint from the key you've created above.
+
+Verify that the Kubernetes secret was created in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the API key for accessing the instance of your Databases for PostgreSQL service that's provisioned in your account.
+
+```
+kubectl get secrets --namespace=default
+```
+### Create a yaml file to deploy the application
+
+Take a look at the yaml file below. Save this file as `clouddb-deployment.yaml`
+```
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: icdpostgres-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: clouddb-demo
+  template:
+    metadata:
+      name: icdpostgres-app
+      labels:
+        run: clouddb-demo
+    spec:
+      containers:
+        - name: cloudpostgres-nodejs-app
+          image: docker.io/ibmcase/icdpg
+          imagePullPolicy: Always
+          env:
+            - name: BINDING
+              valueFrom:
+                secretKeyRef:
+                  name: binding-postgressql-cloudnative-bootcamp
+                  key: binding
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudpostgres-service
+  labels:
+    run: clouddb-demo
+spec:
+  type: NodePort
+  selector:
+    run: clouddb-demo
+  ports:
+    - protocol: TCP
+      port: 8080
+```
+### Examine the yaml file
+
+You should notice several things in this yaml file.
+
+The image is pulled from [docker hub](https://hub.docker.com/repository/docker/ibmcase/icdpg) Notice the `spec` section contains the name of the image:
+
+```
+    spec:
+      containers:
+      - name: cloudpostgres-nodejs-app
+        image: docker.io/ibmcase/icdpg 
+```
+
+
+Under `secretKeyRef` section, notice the name `binding-postgressql-cloudnative-bootcamp` this matches the name of the secret that was generated for the IBM Cloud Databases for PostgreSQL This secret was provided to you in the `postgress-secret.yaml` file.
+
+```
+secretKeyRef:
+  name: binding-postgressql-cloudnative-bootcamp 
+```
+
+
+### Apply the yaml file
+
+Deploy the application to your Kubernetes cluster. When you deploy the application, it will automatically be bound to your Kubernetes cluster.
+
+```
+kubectl apply -f clouddb-deployment.yaml
+```
+
+Check on the pod that was created:
+```
+kubectl get pods
+
+kubectl describe pod icdpostgres-app-[your-pod]
+
+
+```
+
+Get the URL for the application. Use the code below to get the URL for the apllication:
+
+```
+EXTERNAL_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
+NODEPORT="$(kubectl get svc cloudpostgres-service -o jsonpath='{.spec.ports[0].nodePort}')"
+echo URL=http://$EXTERNAL_IP:$NODEPORT
+```
+
+
+Now you can access the application from the Public IP and NodePort of the app. Try the URL from your browser.
+
+The clouddatabases-postgresql-helloworld app displays the contents of an examples database. To demonstrate that the app is connected to your service, add some words to the database. The words are displayed as you add them, with the most recently added words displayed first.
+
+![Postgress App](./images/postgressApp.png)
+
+
+## Extra credit
+
+In this section you will use the IBM Cloud Registry to store the image. You will build the image but you do not need Docker Desktop. The build will happen on the IBM Cloud.
 
 ### Login in to the IBM Cloud from the command line
 
@@ -91,24 +186,6 @@ You can see a list of all namespaces with:
 ibmcloud cr namespaces
 ```
 
-### Add the IBM Cloud Databases for PostgreSQL service to your cluster 
-
-**Note:** If your database uses both public and private endpoints, your public endpoint will be used by default. Therefore, if you want to select the private endpoint, first you will need to create a service key for your database so Kubernetes can use it when binding to the database.
-
-For this lab the key has been created. You'll bind the database to the Kubernetes cluster by applying a yaml file:
-
-```
-kubectl apply -f postgress-secret.yaml
-
-
-This will create a secret in your Kubernetes cluster using the database's private endpoint from the key you've created above.
-
-Verify that the Kubernetes secret was created in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the API key for accessing the instance of your Databases for PostgreSQL service that's provisioned in your account.
-
-```
-kubectl get secrets --namespace=default
-```
-
 Clone the app to your local environment from your terminal using the following command:
 
 ```
@@ -135,98 +212,6 @@ REPOSITORY                       TAG      DIGEST         NAMESPACE   CREATED    
 icr.io/[namespace]/icdpg         latest   81c3959ea657   [namespace] 4 hours ago   28 MB   No Issues
 ```
 
-Update the Kubernetes deployment configuration file clouddb-deployment.yaml see below:
-```
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: icdpostgres-app
-spec:
-  replicas: 1
-  selector:
-    matchLabels:
-      run: clouddb-demo
-  template:
-    metadata:
-      name: icdpostgres-app
-      labels:
-        run: clouddb-demo
-    spec:
-      containers:
-      - name: cloudpostgres-nodejs-app
-        image: "us.icr.io/[namespace]/icdpg" # Edit me
-        imagePullPolicy: Always
-        env:
-        - name: BINDING
-          valueFrom:
-            secretKeyRef:
-              name: binding-postgressql-cloudnative-bootcamp
-              key: binding
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: cloudpostgres-service
-  labels:
-    run: clouddb-demo
-spec:
-  type: NodePort
-  selector:
-    run: clouddb-demo
-  ports:
-  - protocol: TCP
-    port: 8080
-    nodePort: 30081
-```
-
-Change the image name to have the namespace that you used in a previous step:
-```
-image: "icr.io/[namespace]/icdpg" # Edit me
-```
-
-Under `secretKeyRef` section, notice the name `binding-postgressql-cloudnative-bootcamp` this matches the name of the secret that was generated for the IBM Cloud Databases for PostgreSQL This secret was provided to you in the `postgress-secret.yaml` file.
-
-```
-secretKeyRef:
-  name: binding-postgressql-cloudnative-bootcamp 
-```
-
-As for the service configuration at the bottom of the file, nodePort indicates the port that the application can be accessed from. You have a range from 30000 - 32767 that you can use, but we've chosen 30081. As for the TCP port, it's set to 8080, which is the port that the Node.js application runs on in the container. 
-
-
-Deploy the application to IBM Cloud Kubernetes Service. When you deploy the application, it will automatically be bound to your Kubernetes cluster.
-
-```
-kubectl apply -f clouddb-deployment.yaml
-```
-
-Check on the pod that was created:
-```
-kubectl get pods
-
-kubectl describe pod icdpostgres-app-[your-pod]
-
-
-```
-
-Get the IP for the application.
-
-```
-ibmcloud ks workers [cluster_name]
-```
-
-The result will be something like:
-
-```
-ID                                                       Public IP        Private IP      Flavor               State    Status   Zone    Version
-kube-brhugogd0clno4mkrdq0-iksbootcamp-default-000001c6   169.62.243.241   10.186.26.80    b3c.4x16.encrypted   normal   Ready    dal13   1.17.6_1527*
-```
-
-Now you can access the application from the Public IP with a port of 30081. From your browser, go to: `http://[Cluster_Public_IP]:30081`
-
-The clouddatabases-postgresql-helloworld app displays the contents of an examples database. To demonstrate that the app is connected to your service, add some words to the database. The words are displayed as you add them, with the most recently added words displayed first.
-
-![Postgress App](./images/postgressApp.png)
 
 ## Code Structure
 
