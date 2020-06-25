@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: icdpostgres-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: clouddb-demo
+  template:
+    metadata:
+      name: icdpostgres-app
+      labels:
+        run: clouddb-demo
+    spec:
+      containers:
+        - name: cloudpostgres-nodejs-app
+          image: docker.io/ibmcase/icdpg:1.0
+          imagePullPolicy: Always
+          env:
+            - name: BINDING
+              valueFrom:
+                secretKeyRef:
+                  name: binding-postgressql-cloudnative-bootcamp
+                  key: binding
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloudpostgres-service
+  labels:
+    run: clouddb-demo
+spec:
+  type: NodePort
+  selector:
+    run: clouddb-demo
+  ports:
+    - protocol: TCP
+      port: 8080

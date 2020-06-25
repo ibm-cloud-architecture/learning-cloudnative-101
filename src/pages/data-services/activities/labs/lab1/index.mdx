@@ -47,7 +47,7 @@ This will create a secret in your Kubernetes cluster using the database's privat
 Verify that the Kubernetes secret was created in your cluster namespace. Kubernetes uses secrets to store confidential information like the IBM Cloud Identity and Access Management (IAM) API key and the URL that the container uses to gain access. Running the following command, you'll get the API key for accessing the instance of your Databases for PostgreSQL service that's provisioned in your account.
 
 ```
-kubectl get secrets --namespace=default
+kubectl get secrets
 ```
 ### Create a yaml file to deploy the application
 
@@ -123,13 +123,14 @@ Deploy the application to your Kubernetes cluster. When you deploy the applicati
 kubectl apply -f clouddb-deployment.yaml
 ```
 
+Describe the deployment
+```
+kubectl describe deployment icdpostgres-app
+```
+
 Check on the pod that was created:
 ```
-kubectl get pods
-
-kubectl describe pod icdpostgres-app-[your-pod]
-
-
+kubectl get pod -l run=clouddb-demo
 ```
 
 Get the URL for the application. Use the code below to get the URL for the apllication:
@@ -189,15 +190,18 @@ ibmcloud cr namespaces
 Clone the app to your local environment from your terminal using the following command:
 
 ```
-git clone -b node git@github.com:IBM-Cloud/clouddatabases-helloworld-kubernetes-examples.git
+git clone -b node https://github.com/IBM-Cloud/clouddatabases-helloworld-kubernetes-examples.git
+cd clouddatabases-helloworld-kubernetes-examples/postgresql
 ```
 
 `cd` into this newly created directory `clouddatabases-helloworld-kubernetes-examples`, and `cd` into the `postgresql` folder. The code for connecting to the service, and reading from and updating the database can be found in server.js. See Code Structure and the code comments for information on the app's functions. There's also a public directory, which contains the html, style sheets and JavaScript for the web app. But, to get the application working, we'll first need to push the Docker image of this application to our IBM Cloud Container Registry.
 
 Build and push the application's Docker image to your IBM Cloud Container Registry. We're calling this container icdpg. **Note:** There is a period (dot) at the end of the following command.
 
+Check the region where you registry is located in our example we use `us-south` and the registry hostname is `us.icr.io`
+
 ```
-ibmcloud cr build -t icr.io/[your_namespace]/icdpg .
+ibmcloud cr build -t us.icr.io/[your_namespace]/icdpg .
 ```
 
 After it's built, you can view the image in container registry using:
@@ -209,7 +213,7 @@ ibmcloud cr images
 You'll get something like the following response:
 ```
 REPOSITORY                       TAG      DIGEST         NAMESPACE   CREATED       SIZE    SECURITY STATUS
-icr.io/[namespace]/icdpg         latest   81c3959ea657   [namespace] 4 hours ago   28 MB   No Issues
+us.icr.io/[namespace]/icdpg         latest   81c3959ea657   [namespace] 4 hours ago   28 MB   No Issues
 ```
 
 
