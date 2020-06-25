@@ -561,7 +561,7 @@ To sync the application, click `SYNC` and then `SYNCHRONIZE`.
 - Set an environment variable `APP_URL` using the `EXTERNAL-IP` and `NodePort` values
     ```bash
     export APP_URL="$(minikube service --url cloudnativesampleapp-service -n default)"
-    echo ARGOCD_SERVER=$APP_URL
+    echo APP_URL=$APP_URL
     ```
 - Access the url using `curl`
     ```bash
