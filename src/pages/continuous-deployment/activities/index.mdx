@@ -225,28 +225,9 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-operator/v0.0.8/deploy/service_account.yaml
     kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-operator/v0.0.8/deploy/role.yaml
     kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-operator/v0.0.8/deploy/role_binding.yaml
+    kubectl create -n argocd -f https://raw.githubusercontent.com/ibm-cloud-architecture/learning-cloudnative-101/master/static/yamls/argo-lab/argo-clusteradmin.yaml
     ```
-    Create ClusterRoleBinding for `cluster-admin` role for `sa` `argocd-application-controller` in namespace `argocd`
-    ```bash
-    cat <<'EOF' | kubectl create -f -
-    apiVersion: rbac.authorization.k8s.io/v1
-    kind: ClusterRoleBinding
-    metadata:
-      labels:
-        app.kubernetes.io/component: application-controller
-        app.kubernetes.io/name: argocd-application-controller
-        app.kubernetes.io/part-of: argocd
-      name: argocd-application-controller-cluster-admin
-    roleRef:
-      apiGroup: rbac.authorization.k8s.io
-      kind: ClusterRole
-      name: cluster-admin
-    subjects:
-      - kind: ServiceAccount
-        name: argocd-application-controller
-        namespace: argocd
-    EOF
-    ```
+
 - Install CRDs
     ```bash
     kubectl create -n argocd -f https://raw.githubusercontent.com/argoproj-labs/argocd-operator/v0.0.8/deploy/argo-cd/argoproj.io_applications_crd.yaml
