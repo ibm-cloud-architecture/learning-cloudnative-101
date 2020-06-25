@@ -276,24 +276,10 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     ```bash
     kubectl get svc example-argocd-server -n argocd
     ```
-- From the script, the Argo Server service has a `type` of `LoadBalancer`. If the `ExternalIP` is in a `pending` state, then there is no loadBalancer for your cluster, so we need to expose the ArgoCD server as a `NodePort`.
+- From the script, the Argo Server service has a `type` of `LoadBalancer`. If the `ExternalIP` is in a `pending` state, then there is no loadBalancer for your cluster, so we only need the the ArgoCD server's `NodePort`. Otherwise use the `ExternalIP` and `NodePort` to access Argo.
     ```
     NAME                    TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
-    example-argocd-server   LoadBalancer   10.105.73.245   10.105.73.245   80:31138/TCP,443:31932/TCP   5m3s
-    ```
-- To expose expose the Argo server as a NodePort, we need to run a `expose` command.
-    ``` bash
-    kubectl expose deployment/example-argocd-server --type=NodePort --port=80 --name=argoservice -n argocd
-    ```
-
-- List the new argo service. 
-    ```bash
-    kubectl get svc argoservice -n argocd
-    ```
-- You will see that there is no `ExternalIP`, but we have a `NodePort`.
-    ```
-    NAME          TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
-    argoservice   NodePort   172.21.40.105   <none>        80:32265/TCP   7m44s
+    example-argocd-server   LoadBalancer   10.105.73.245   <pending>   80:31138/TCP,443:31932/TCP   5m3s
     ```
 - To access the service we need the `Node's External IP` and the `NodePort`. Let's set an environment variable `ARGOCD_URL` with `NODE_EXTERNAL_IP`:`NodePort`.
     ```bash
