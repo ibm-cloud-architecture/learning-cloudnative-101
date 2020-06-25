@@ -219,6 +219,7 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
 - Create the namespace `argocd` to install argocd
     ```bash
     kubectl create namespace argocd
+    export ARGOCD_NAMESPACE=argocd
     ```
 - Create RBAC resources
     ```bash
@@ -271,26 +272,34 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     ```
     kubectl get cm,secret,svc,deploy -n argocd
     ```
-- Install the `argocd` CLI, for example on OSX use brew
-    ```bash
-    brew tap argoproj/tap
-    brew install argoproj/tap/argocd
-    ```
 - List the argocd-server service
     ```bash
     kubectl get svc example-argocd-server -n argocd
     ```
-    It should have an IP under `EXTERNAL-IP` column
+- From the script, the Argo Server service has a `type` of `LoadBalancer`. If the `ExternalIP` is in a `pending` state, then there is no loadBalancer for your cluster, so we need to expose the ArgoCD server as a `NodePort`.
     ```
     NAME                    TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
     example-argocd-server   LoadBalancer   10.105.73.245   10.105.73.245   80:31138/TCP,443:31932/TCP   5m3s
     ```
-- Set an environment variable `ARGOCD_URL` using the `EXTERNAL-IP`
+- To expose expose the Argo server as a NodePort, we need to run a `expose` command.
+    ``` bash
+    kubectl expose deployment/example-argocd-server --type=NodePort --port=80 --name=argoservice -n argocd
+    ```
+
+- List the new argo service. 
     ```bash
-    export ARGOCD_NAMESPACE=argocd
-    export ARGOCD_SERVER="$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[1].address}')"
+    kubectl get svc argoservice -n argocd
+    ```
+- You will see that there is no `ExternalIP`, but we have a `NodePort`.
+    ```
+    NAME          TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
+    argoservice   NodePort   172.21.40.105   <none>        80:32265/TCP   7m44s
+    ```
+- To access the service we need the `Node's External IP` and the `NodePort`. Let's set an environment variable `ARGOCD_URL` with `NODE_EXTERNAL_IP`:`NodePort`.
+    ```bash
+    export NODE_EXTERNAL_IP="$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')"
     export ARGOCD_NODEPORT="$(kubectl get svc example-argocd-server -n $ARGOCD_NAMESPACE -o jsonpath='{.spec.ports[0].nodePort}')"
-    export ARGOCD_URL="https://$ARGOCD_SERVER:$ARGOCD_NODEPORT"
+    export ARGOCD_URL="https://$EXTERNAL_IP:$ARGOCD_NODEPORT"
     echo ARGOCD_URL=$ARGOCD_URL
     ```
 
@@ -355,14 +364,15 @@ To sync the application, click `SYNC` and then `SYNCHRONIZE`.
     ```bash
     kubectl get svc cloudnativesampleapp-service
     ```
-    It should have an IP under `EXTERNAL-IP` column
+    It will have the `NodePort` for the application. In this case, it is `30499`. 
     ```
-    NAME                           TYPE           CLUSTER-IP       EXTERNAL-IP      PORT(S)          AGE
-    cloudnativesampleapp-service   NodePort       10.109.242.212   10.109.242.212   9080:31905/TCP   13m
+    NAME                           TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+    cloudnativesampleapp-service   NodePort   172.21.118.165   <none>        9080:30499/TCP   20s
     ```
-- Set an environment variable `APP_URL` using the `EXTERNAL-IP` and `NodePort` values
+- Set an environment variable `APP_URL` using the `Node's IP` and `NodePort` values
     ```bash
-    export APP_URL="$(minikube service --url cloudnativesampleapp-service -n default)"
+    export APP_NODE_PORT="$(kubectl get svc cloudnativesampleapp-service -n default -o jsonpath='{.spec.ports[0].nodePort}')"
+    export APP_URL="$NODE_EXTERNAL_IP:$APP_NODE_PORT"
     echo ARGOCD_SERVER=$APP_URL
     ```
 - Access the url using `curl`
