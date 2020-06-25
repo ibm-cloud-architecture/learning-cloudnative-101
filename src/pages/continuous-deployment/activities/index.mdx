@@ -276,25 +276,13 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     ```bash
     kubectl get svc example-argocd-server -n argocd
     ```
-- From the script, the Argo Server service has a `type` of `LoadBalancer`. If the `ExternalIP` is in a `pending` state, then there is no loadBalancer for your cluster, so we need to expose the ArgoCD server as a `NodePort`.
+
+- From the script, the Argo Server service has a `type` of `LoadBalancer`. If the `ExternalIP` is in a `pending` state, then there is no loadBalancer for your cluster, so we only need the the ArgoCD server's `NodePort`. Otherwise use the `ExternalIP` and `NodePort` to access Argo.
     ```
     NAME                    TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)                      AGE
-    example-argocd-server   LoadBalancer   10.105.73.245   10.105.73.245   80:31138/TCP,443:31932/TCP   5m3s
-    ```
-- To expose expose the Argo server as a NodePort, we need to run a `expose` command.
-    ``` bash
-    kubectl expose deployment/example-argocd-server --type=NodePort --port=80 --name=argoservice -n argocd
+    example-argocd-server   LoadBalancer   10.105.73.245   <pending>   80:31138/TCP,443:31932/TCP   5m3s
     ```
 
-- List the new argo service. 
-    ```bash
-    kubectl get svc argoservice -n argocd
-    ```
-- You will see that there is no `ExternalIP`, but we have a `NodePort`.
-    ```
-    NAME          TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)        AGE
-    argoservice   NodePort   172.21.40.105   <none>        80:32265/TCP   7m44s
-    ```
 - To access the service we need the `Node's External IP` and the `NodePort`. Let's set an environment variable `ARGOCD_URL` with `NODE_EXTERNAL_IP`:`NodePort`.
     ```bash
     export NODE_EXTERNAL_IP="$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')"
@@ -383,63 +371,6 @@ To sync the application, click `SYNC` and then `SYNCHRONIZE`.
     {"id":2,"content":"Welcome to Cloudnative bootcamp !!! Hello, Carlos :)"}
     ```
 
-## Using the ArgoCD CLI
-
-- Login using the cli.
-- Use `admin` as the username and get the password with the following command
-    ```bash
-    export ARGOCD_PASSWORD=$(kubectl get secret example-argocd-cluster -n $ARGOCD_NAMESPACE -o jsonpath='{.data.admin\.password}' | base64 -d)
-    echo $ARGOCD_PASSWORD
-    ```
-- Now login as follows.
-    ```bash
-    argocd login --username admin --password $ARGOCD_PASSWORD $ARGOCD_SERVER
-    ```
-    ```
-    WARNING: server certificate had error: x509: cannot validate certificate for 10.97.240.99 because it doesn't contain 
-    any IP SANs. Proceed insecurely (y/n)? y
-
-    'admin' logged in successfully
-    Context '10.105.73.245' updated
-    ```
-- List the applications
-    ```bash
-    argocd app list
-    ```
-    ```
-    NAME    CLUSTER                         NAMESPACE  PROJECT  STATUS  HEALTH   SYNCPOLICY  CONDITIONS  REPO                                                                     PATH   TARGET
-    sample  https://kubernetes.default.svc  default    default  Synced  Healthy  <none>      <none>      https://github.com/ibm-cloud-architecture/cloudnative_sample_app_deploy  kubernetes  HEAD
-    ```
-- Get application details
-    ```bash
-    argocd app get sample
-    ```
-    ```
-    Name:               sample
-    Project:            default
-    Server:             https://kubernetes.default.svc
-    Namespace:          default
-    URL:                https://10.97.240.99/applications/sample
-    Repo:               https://github.com/ibm-cloud-architecture/cloudnative_sample_app_deploy
-    Target:             HEAD
-    Path:               kubernetes
-    SyncWindow:         Sync Allowed
-    Sync Policy:        <none>
-    Sync Status:        Synced to HEAD (9684037)
-    Health Status:      Healthy
-
-    GROUP  KIND        NAMESPACE  NAME                             STATUS  HEALTH   HOOK  MESSAGE
-        Service     default    cloudnativesampleapp-service     Synced  Healthy        service/cloudnativesampleapp-service created
-    apps   Deployment  default    cloudnativesampleapp-deployment  Synced  Healthy        deployment.apps/cloudnativesampleapp-deployment created
-    ```
-- Show application deployment history
-    ```bash
-    argocd app history sample
-    ```
-    ```
-    ID  DATE                           REVISION
-    0   2020-02-12 21:10:32 -0500 EST  HEAD (9684037)
-    ```
 ## References
 
 - [ArgoCD](https://argoproj.github.io/argo-cd/)
@@ -632,7 +563,7 @@ To sync the application, click `SYNC` and then `SYNCHRONIZE`.
 - Set an environment variable `APP_URL` using the `EXTERNAL-IP` and `NodePort` values
     ```bash
     export APP_URL="$(minikube service --url cloudnativesampleapp-service -n default)"
-    echo ARGOCD_SERVER=$APP_URL
+    echo APP_URL=$APP_URL
     ```
 - Access the url using `curl`
     ```bash
