@@ -1,0 +1,22 @@
+---
+title: Install LogDNA agent on IBM Kubernetes Service (IKS)
+description: Lab to show how to connect IKS Cluster to LogDNA
+---
+
+
+### Prerequisite
+- Create an IBM Kubernetes Cluster, it can be a Cluster using the Free plan
+
+### Connecting a LogDNA agent to a standard Kubernetes cluster
+
+1. Open you Kubernetes Cluster Overview, in the Summary find _Loggin__ row and click **Connect**
+    ![iks cluster overview](./images/iks-connect-logdna.png)
+1. Click **Create and connect**
+    ![create and connect](./images/create-connect.png)
+1. Select a LogDNA plan such as **Free** and click **Create**
+1. Verify Cluster is connected to logDNA service instance by clicking the button **Launch** next to __Logging__
+    ![launch](./images/connected-logdna.png)
+
+- For more information on configuring the logDNA Agent on your Cluster:
+    -  [Connecting a LogDNA agent to a standard Kubernetes cluster](https://cloud.ibm.com/docs/Log-Analysis-with-LogDNA?topic=Log-Analysis-with-LogDNA-config_agent_kube_cluster) or
+    - [Connecting a LogDNA agent to an OpenShift Kubernetes cluster](https://cloud.ibm.com/docs/Log-Analysis-with-LogDNA?topic=Log-Analysis-with-LogDNA-config_agent_os_cluster)
