@@ -61,7 +61,7 @@ kubectl -n dev port-forward service/prometheus-java-app 9080:8080
 
 - Send http request to the web service
 ```shell
-while true; do sleep 1; curl http://localhost:8000 -si | head -1 ; done
+while true; do sleep 1; curl http://localhost:9080 -si | head -1 ; done
 ```
 Output looks like this
 ```
