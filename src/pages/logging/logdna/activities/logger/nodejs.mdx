@@ -46,7 +46,7 @@ app.listen(PORT, () => {
 })
 ```
 
-## Deploy the sameple application
+## Deploy the sample application
 
 - Create a namespace
     ```bash
@@ -62,7 +62,7 @@ app.listen(PORT, () => {
 
 - Send http request to the web service
     ```shell
-    while true; do sleep 1; curl http://localhost:8080 -s -w "\n"; done
+    while true; do sleep 1; curl http://localhost:8080/error -s -w "\n"; done
     ```
     Output looks like this
     ```
