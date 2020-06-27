@@ -30,6 +30,10 @@ In this lab we are going to create a Container Image and store it in the [IBM Cl
     ```
     ibmcloud cr namespace-add <my_namespace>
     ```
+    Now set the environment `NAMESPACE` to be use for the rest of the lab
+    ```
+    export NAMESPACE=<my_namespace>
+    ```
 
 ### Building and Pusing a Container Image
 1. Clone the folowwing git repository and change directory to `1-containers`
@@ -80,9 +84,9 @@ In this lab we are going to create a Container Image and store it in the [IBM Cl
     ENV NODE_VERSION $NODEJS_VERSION
     CMD npm run $NODE_ENV
     ```
-1. Build and push the image, in the following command replace `<my_namespace>` wit the namespace you added previously, replace `us.icr.io` if using a different region.
+1. Build and push the image, if not already set replace `$NAMESPACE` with the namespace you added previously, replace `us.icr.io` if using a different region.
     ```
-    ibmcloud cr build --tag us.icr.io/<my_namespace>/my-app:1.0 ./
+    ibmcloud cr build --tag us.icr.io/$NAMESPACE/my-app:1.0 ./
     ```
 
 ### Explore the Container Registry on the IBM Cloud Console
@@ -101,9 +105,9 @@ If you have a Kubernetes Cluster you can run your application image
     ```
     ibmcloud ks cluster config -c mycluster
     ```
-1. Run the following commands to create a deployment using the image we just build. Replace `<my_namespace>` with your IBM Container Registry Namespace we stored the image.
+1. Run the following commands to create a deployment using the image we just build. If not already set replace `$NAMESPACE` with your IBM Container Registry Namespace we stored the image.
     ```
-    kubectl create deployment my-app --image us.icr.io/<my_namespace>/my-app:1.0
+    kubectl create deployment my-app --image us.icr.io/$NAMESPACE/my-app:1.0
     kubectl rollout status deployment/my-app
     kubectl port-forward deployment/my-app 8080:8080
     ```
@@ -132,7 +136,7 @@ If you have a Kubernetes Cluster you can run your application image
     ```
     kubectl delete deployment my-app
     ```
-1. Delete the container image, replace `<my_namespace>`
+1. Delete the container image, if not already set replace `$NAMESPACE` with the registry namespace
     ```
-    ibmcloud cr image-rm us.icr.io/<my_namespace>/my-app:1.0
+    ibmcloud cr image-rm us.icr.io/$NAMESPACE/my-app:1.0
     ```
