@@ -49,7 +49,7 @@ while true; do sleep 1; curl http://localhost:8081/status/200 -si | head -1 ; do
 ![golden-dashboard](./images/golden-signals.png)
 
 ## Create Dashboard "Kubernetes Pod Overview" 
-- Select Dashboards -> Default Dashboards -> Application -> Kubernetes Pod Overview
+- Select Dashboards -> Default Dashboards -> Kubernetes -> Kubernetes Pod Overview
 - On the top right menu select "Copy Dashboard", name the new dashboard "Kubernetes Pod Overview - My Web Service"
 - Click Edit Scope
 - Select `kubernetes.namespace.name` `in` `staging` `production`
