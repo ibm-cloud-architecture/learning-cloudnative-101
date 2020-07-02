@@ -233,6 +233,7 @@ kind: Pod
 metadata:
   name: my-pod
 spec:
+  restartPolicy: Never
   containers:
     - name: myapp
       image: busybox
@@ -252,6 +253,7 @@ kind: Pod
 metadata:
   name: my-pod
 spec:
+  restartPolicy: Never
   containers:
     - name: myapp
       image: busybox
@@ -276,6 +278,7 @@ kind: Pod
 metadata:
   name: my-pod
 spec:
+  restartPolicy: Never
   containers:
     - name: myapp
       image: busybox
@@ -451,6 +454,7 @@ kind: Pod
 metadata:
   name: my-securitycontext-pod
 spec:
+  restartPolicy: Never
   securityContext:
     runAsUser: 2000
     runAsGroup: 3000
@@ -475,6 +479,7 @@ kind: Pod
 metadata:
   name: my-securitycontext-pod
 spec:
+  restartPolicy: Never
   securityContext:
     runAsUser: 2001
     runAsGroup: 3001
