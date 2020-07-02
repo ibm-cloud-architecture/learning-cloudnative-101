@@ -242,20 +242,16 @@ minikube addons enable ingress
 kubectl get pods -n kube-system | grep ingress
 ```
 ```
-kubectl run web --image=bitnami/nginx --port=8080
+kubectl create deployment web --image=bitnami/nginx
 ```
 ```
-kubectl expose deployment web --target-port=8080 --type=NodePort
+kubectl expose deployment web --name=web --port 8080
 ```
 ```
 kubectl get svc web
 ```
 ```
 minikube service --url web
-```
-
-```
-stern ingress -n kube-system
 ```
 ```
 kubectl get ingress
