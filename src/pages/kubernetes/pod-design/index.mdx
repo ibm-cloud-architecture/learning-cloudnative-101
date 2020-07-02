@@ -50,98 +50,80 @@ spec:
 ```
 
 
-```yaml
-apiVersion: v1
-kind: Pod
-metadata:
-  name: my-pod
-spec:
-  restartPolicy: Never
-  containers:
-    - name: app
-      image: busybox
-  nodeSelector:
-    disk: ssd
-```
-
 <Tabs>
 <Tab label="OpenShift">
 
 ** Change Labels on Objects **
 ```
-oc label <objectname>
+oc label pod my-pod boot=camp
 ```
  **Getting Pods based on their labels.**
 ```
-  oc get pods --show-labels
+oc get pods --show-labels
 ```
 ```
-  oc get pods -L tier,env
+oc get pods -L tier,env
 ```
 ```
-  oc get pods -l app
+oc get pods -l app
 ```
 ```
-  oc get pods -l tier=frontend
+oc get pods -l tier=frontend
 ```
 ```
-  oc get pods -l 'env=dev,tier=frontend'
+oc get pods -l 'env=dev,tier=frontend'
 ```
 ```
-  oc get pods -l 'env in (dev, test)'
+oc get pods -l 'env in (dev, test)'
 ```
 ```
-  oc get pods -l 'tier!=backend'
+oc get pods -l 'tier!=backend'
 ```
 ```
-  oc get pods -l 'env,env notin (prod)'
-  ```
+oc get pods -l 'env,env notin (prod)'
+```
+**Delete the Pod.**
+```
+oc delete pod my-pod
+```
 
 </Tab>
 
 <Tab label="IKS">
 
-  **Create the Pod**
-  ```
-  kubectl create -f pod.yaml
-  ```
-  **Update label in the YAML file and reapply it.**
-  ```
-  kubectl apply -f pod.yaml
-  ```
-  **You can edit the labels as well.**
-  ```
-  kubectl edit pod myapp-pod
-  ```
-  **Getting Pods based on their labels.**
-  ```
-  kubectl get pods --show-labels
-  ```
-  ```
-  kubectl get pods -L tier,env
-  ```
-  ```
-  kubectl get pods -l app
-  ```
-  ```
-  kubectl get pods -l tier=frontend
-  ```
-  ```
-  kubectl get pods -l 'env=dev,tier=frontend'
-  ```
-  ```
-  kubectl get pods -l 'env in (dev, test)'
-  ```
-  ```
-  kubectl get pods -l 'tier!=backend'
-  ```
-  ```
-  kubectl get pods -l 'env,env notin (prod)'
-  ```
-  **Delete the Pod.**
-  ```
-  kubectl delete pod myapp-pod
-  ```
+** Change Labels on Objects **
+```
+kubectl label pod my-pod boot=camp
+```
+ **Getting Pods based on their labels.**
+```
+kubectl get pods --show-labels
+```
+```
+kubectl get pods -L tier,env
+```
+```
+kubectl get pods -l app
+```
+```
+kubectl get pods -l tier=frontend
+```
+```
+kubectl get pods -l 'env=dev,tier=frontend'
+```
+```
+kubectl get pods -l 'env in (dev, test)'
+```
+```
+kubectl get pods -l 'tier!=backend'
+```
+```
+kubectl get pods -l 'env,env notin (prod)'
+```
+**Delete the Pod.**
+```
+kubectl delete pod my-pod
+```
 
 </Tab>
 
@@ -187,7 +169,7 @@ metadata:
   labels:
     app: nginx
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: nginx
@@ -208,11 +190,11 @@ spec:
 
 ** Creates a Deployment **
 ```
-oc apply -f <deploymentYAML>
+oc apply -f deployment.yaml
 ```
 ** Gets Deployments **
 ```
-oc get deploy my-deployment
+oc get deployment my-deployment
 ```
 ** Gets the deployments description **
 ```
@@ -224,11 +206,11 @@ oc edit deployment my-deployment
 ```
 ** Scale the deployment **
 ```
-oc scale deployment/my-deployment --replicas=4
+oc scale deployment/my-deployment --replicas=3
 ```
 ** Delete the deployment **
 ```
-oc delete my-deployment
+oc delete deployment my-deployment
 ```
 </Tab>
 
@@ -238,7 +220,6 @@ oc delete my-deployment
 ```
 kubectl apply -f <deploymentYAML>
 ```
-
 ** Get the deployment **
 ```
 kubectl get deployment my-deployment
@@ -257,7 +238,7 @@ kubectl scale deployment/my-deployment --replicas=4
 ```
 ** Delete the deployment **
 ```
-kubectl delete my-deployment
+kubectl delete deployment my-deployment
 ```
 
 </Tab>
@@ -304,7 +285,7 @@ metadata:
   labels:
     app: nginx
 spec:
-  replicas: 3
+  replicas: 2
   selector:
     matchLabels:
       app: nginx
@@ -323,6 +304,10 @@ spec:
 <Tabs>
 <Tab label="OpenShift">
 
+** Creates a Deployment **
+```
+oc apply -f deployment.yaml
+```
 ** Get Deployments **
 ```
 oc get deployments
@@ -330,6 +315,10 @@ oc get deployments
 ** Sets new image for Deployment **
 ```
 oc set image deployment/my-deployment nginx=bitnami/nginx:1.16.1 --record
+```
+** Check the status of the rollout **
+```
+oc rollout status deployment my-deployment
 ```
 ** Get ReplicaSets **
 ```
@@ -339,10 +328,6 @@ oc get rs
 ```
 oc describe deployment my-deployment
 ```
-** Check the status of the rollout **
-```
-oc rollout status my-deployment
-```
 ** Get Rollout History **
 ```
 oc rollout history deployment my-deployment
@@ -351,18 +336,30 @@ oc rollout history deployment my-deployment
 ```
 oc rollback my-deployment
 ```
+** Delete the deployment **
+```
+oc delete deployment my-deployment
+```
 
 </Tab>
 
 <Tab label="IKS">
 
+** Creates a Deployment **
+```
+kubectl apply -f deployment.yaml
+```
 ** Get Deployments **
 ```
 kubectl get deployments
 ```
 ** Sets new image for Deployment **
 ```
-kubectl set image deployment/my-deployment nginx=nginx:1.16.1 --record
+kubectl set image deployment/my-deployment nginx=bitnami/nginx:1.16.1 --record
+```
+** Check the status of the rollout **
+```
+kubectl rollout status deployment my-deployment
 ```
 ** Get ReplicaSets **
 ```
@@ -372,10 +369,6 @@ kubectl get rs
 ```
 kubectl describe deployment my-deployment
 ```
-** Check the status of the rollout **
-```
-kubectl rollout status deployment my-deployment
-```
 ** Get Rollout History **
 ```
 kubectl rollout history deployment my-deployment
@@ -383,6 +376,10 @@ kubectl rollout history deployment my-deployment
 ** Undo Rollout **
 ```
 kubectl rollout undo deployment my-deployment
+```
+** Delete the deployment **
+```
+kubectl delete deployment my-deployment
 ```
 
 </Tab>
