@@ -42,49 +42,59 @@ Two primary members
 <Tab label="OpenShift">
 
 **Prints all API Resources**
-  ```
-  oc api-resources
-  ```
+```
+oc api-resources
+```
 **Prints all API Resources with their verbs.**
-  ```
-  oc api-resources -o wide
-  ```
+```
+oc api-resources -o wide
+```
 **Prints all API Resources names only**
-  ```
-  oc api-resources -o name
-  ```
-  **Prints each of the available nodes, projects, services, deployments, and pods ** 
-  ```
-  oc get nodes,ns,po,deploy,svc
-  ```
-**Prints the node's description**
-  ```
-  oc describe node 
-  ```
+```
+oc api-resources -o name
+```
+**Explain the Resource specification**
+```
+oc explain Pod.spec
+```
+**Getting a list of specific objects**
+```
+oc get nodes,ns,po,deploy,svc
+```
+**Describing the resources**
+```
+oc describe node 
+```
+
 </Tab>
 
 <Tab label="IKS">
 
-** Getting API Resources **
+**Prints all API Resources**
 ```
 kubectl api-resources
 ```
-** Viewing Resources **
+**Prints all API Resources with their verbs.**
 ```
 kubectl api-resources -o wide
 ```
-** Viewing Resources **
+**Prints all API Resources names only**
 ```
 kubectl api-resources -o name
 ```
-** Getting a list of specific objects **
+**Explain the Resource specification**
+```
+kubectl explain Pod.spec
+```
+**Getting a list of specific objects**
 ```
 kubectl get nodes,ns,po,deploy,svc
 ```
-** Describing the resources **
+**Describing the resources**
 ```
-kubectl describe node --all
+kubectl describe node
 ```
+
 </Tab>
 
 </Tabs>
@@ -117,50 +127,67 @@ metadata:
     app: myapp
 spec:
   containers:
-  - name: myapp-container
-    image: busybox
-    command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
+    - name: myapp-container
+      image: busybox
+      command: ["sh", "-c", "echo Hello Kubernetes! && sleep 3600"]
 ```
 
 <Tabs>
 <Tab label="OpenShift">
 
+** Create Pod using yaml file **
+```
+oc apply -f myapp-pod
+``` 
 ** Get Current Pods in Project **
 ```
 oc get pods
-``` 
-** Get Pod's Description **
-``` 
-oc describe pod <pod-name>
 ```
 ** Get Pods with their IP and node location **
 ```
 oc get pods -o wide
 ```
-** Get Pods Stats **
+** Get Pod's Description **
+``` 
+oc describe pod myapp-pod
 ```
-oc adm top pods
+** Get the logs  **
+```
+oc logs myapp-pod
+```
+** Delete a Pod **
+```
+oc delete pod myapp-pod
 ```
 </Tab>
 
 <Tab label="IKS">
 
+** Create Pod using yaml file **
+```
+kubectl apply -f myapp-pod
+```
 ** Get Current Pods in Project **
 ```
 kubectl get pods
 ``` 
+** Get Pods with their IP and node location **
+```
+oc get pods -o wide
+```
 ** Get Pod's Description **
 ``` 
-kubectl describe pod <pod-name>
+oc describe pod myapp-pod
+```
+** Get the logs  **
+```
+oc logs myapp-pod
 ```
 ** Delete a Pod **
 ```
-kubectl delete pod <pod-name>
+oc delete pod myapp-pod
 ```
-** Edit a Pod **
-```
-kubectl edit pod <pod-name>
-```
+
 </Tab>
 
 </Tabs>
@@ -191,7 +218,7 @@ It is not necessary to use multiple namespaces just to separate slightly differe
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: foo
+  name: dev
 ```
 
 ```yaml
@@ -199,34 +226,35 @@ apiVersion: v1
 kind: Pod
 metadata:
   name: myapp-pod
-  namespace: bar
-  labels:
-    app: myapp
+  namespace: dev
 spec:
   containers:
-  - name: myapp-container
-    image: busybox
-    command: ['sh', '-c', 'echo Hello Kubernetes! && sleep 3600']
+    - name: myapp-container
+      image: busybox
+      command: ["sh", "-c", "echo Hello Kubernetes! && sleep 3600"]
 ```
 
 <Tabs>
 
 <Tab label="OpenShift">
 
+**Getting all namespaces/projects** 
+```
+oc projects
+```
 **Create a new Project** 
-
 ```
-oc new-project my-project
+oc new-project dev
 ```
-
 **Viewing Current Project**
-
 ```
 oc project
 ```
-
+**Setting Namespace in Context**
+```
+oc project dev
+```
 **Viewing Project Status**
-
 ```
 oc status
 ```
@@ -235,18 +263,17 @@ oc status
 
 <Tab label="IKS">
 
-**Getting all namespaces in cluster** 
+**Getting all namespaces** 
 ```
 kubectl get namespaces
 ```
-
 **Create a new namespace called bar**
 ``` 
-kubectl create ns bar
+kubectl create ns dev
 ```
 **Setting Namespace in Context**
 ``` 
-kubectl config set-context --current --namespace=bar
+kubectl config set-context --current --namespace=dev
 ```
 </Tab>
 
