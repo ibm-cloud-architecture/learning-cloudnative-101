@@ -36,7 +36,7 @@ Usually is getting familiar with how primitives objects interact with each other
 
 MacOS/Linux/Windows command:
 ```bash
-curl -sL https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/1e2a0cca964c7b54ce3df2fc3fbf33a232511877/debugk8s-bad.yaml | oc apply -f -
+oc apply -f https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/1e2a0cca964c7b54ce3df2fc3fbf33a232511877/debugk8s-bad.yaml
 ```
 
 ** Expose the service using port-forward **
@@ -51,6 +51,9 @@ curl http://localhost:8080
 ** Try Out these Commands to Debug **
 ```
 oc get pods --all-namespaces
+```
+```
+oc project debug
 ```
 ```
 oc get deployments
@@ -94,7 +97,7 @@ oc get deployment --show-labels
 
 MacOS/Linux/Windows command:
 ```bash
-curl -sL https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/1e2a0cca964c7b54ce3df2fc3fbf33a232511877/debugk8s-bad.yaml | kubectl apply -f -
+kubectl apply -f https://gist.githubusercontent.com/csantanapr/e823b1bfab24186a26ae4f9ec1ff6091/raw/1e2a0cca964c7b54ce3df2fc3fbf33a232511877/debugk8s-bad.yaml
 ```
 
 ** Expose the service using port-forward **
@@ -109,6 +112,9 @@ curl http://localhost:8080
 ** Try Out these Commands to Debug **
 ```
 kubectl get pods --all-namespaces
+```
+```
+kubectl config set-context --current --namespace=debug
 ```
 ```
 kubectl get deployments
