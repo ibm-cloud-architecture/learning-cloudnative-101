@@ -136,7 +136,7 @@ spec:
   containers:
   - name: nginx
     image: busybox
-    command: ['sh', '-c', 'echo Hello Kubernetes! > /mnt/data/message.txt && sleep 3600']
+    command: ['sh', '-c', 'echo $(date):$HOSTNAME Hello Kubernetes! >> /mnt/data/message.txt && sleep 3600']
     volumeMounts:
     - mountPath: "/mnt/data"
       name: my-data
