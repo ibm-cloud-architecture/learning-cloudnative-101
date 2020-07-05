@@ -22,11 +22,10 @@ A Probe is a diagnostic performed periodically by the kubelet on a Container. To
 
 The kubelet can optionally perform and react to three kinds of probes on running Containers:
 
-***livenessProbe***: Indicates whether the Container is running.
+***livenessProbe***: Indicates whether the Container is running. Runs for the lifetime of the Container.
 
-***readinessProbe***: Indicates whether the Container is ready to service requests.
+***readinessProbe***: Indicates whether the Container is ready to service requests. Only runs at start.
 
-***startupProbe***: Indicates whether the application within the Container is started.
 
 ## Resources
 
