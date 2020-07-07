@@ -89,7 +89,6 @@ To setup API Connect follow the instructions for [API Connect Access](./accessAP
 ![paths](../images/paths-add.png)
 
 - The paths we need to define are the following:
-    - `/`
     - `/students`
     - `/testers`
 
@@ -97,7 +96,11 @@ To setup API Connect follow the instructions for [API Connect Access](./accessAP
 
 - For this tutorial we only need to modify the `Path` section.
 
-! Note - Each new path automatically creates a `GET` method, that can be modified if needed based on the endpoint.
+<InlineNotification>
+
+** Note: ** Each new path automatically creates a `GET` method, that can be modified if needed based on the endpoint.
+
+</InlineNotification>
 
 ![details](../images/path-details.png)
 
@@ -117,7 +120,7 @@ To setup API Connect follow the instructions for [API Connect Access](./accessAP
 
 - Once the `invokes` are created, Click on the operation-switch to see the `cases` for each of the invoke statements.
 
-- Make 3 cases for each of the endpoints as seen below.
+- Make 2 cases for each of the endpoints as seen below.
 
 ![switch](../images/switch.png)
 
@@ -127,10 +130,10 @@ To setup API Connect follow the instructions for [API Connect Access](./accessAP
 
 - Let's name each `invoke` after the name of the `path` and we need to modify the `URL` for each as well.
 
-- For each `URL` use `http://169.51.194.50:30758/` plus the `Path`. So for `/students` it would be:
+- For each `URL` use `http://169.51.204.16:32693/` plus the `Path`. So for `/students` it would be:
     - Title: `/students`
     - Description: `Students endpoint`
-    - URL: `http://169.51.194.50:30758/students`
+    - URL: `http://169.51.204.16:32693/students`
 
 ![invoke-stu](../images/invoke-stu.png)
 

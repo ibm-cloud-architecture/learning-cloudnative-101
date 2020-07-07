@@ -3,16 +3,6 @@ title: ArgoCD Lab
 description: Lab for continuous delivery using ArgoCD
 ---
 
-<AnchorLinks>
-  <AnchorLink>Pre-requisites</AnchorLink>
-  <AnchorLink>Introduction</AnchorLink>
-  <AnchorLink>ArgoCD Installation</AnchorLink>
-  <AnchorLink>Deploying the Application</AnchorLink>
-  <AnchorLink>Verifying the deployment</AnchorLink>
-  <AnchorLink>Using the ArgoCD CLI</AnchorLink>
-  <AnchorLink>References</AnchorLink>
-</AnchorLinks>
-
 <Tabs>
 <Tab label="OpenShift">
 
@@ -361,7 +351,7 @@ To sync the application, click `SYNC` and then `SYNCHRONIZE`.
     ```bash
     export APP_NODE_PORT="$(kubectl get svc cloudnativesampleapp-service -n default -o jsonpath='{.spec.ports[0].nodePort}')"
     export APP_URL="$NODE_EXTERNAL_IP:$APP_NODE_PORT"
-    echo ARGOCD_SERVER=$APP_URL
+    echo Application=$APP_URL
     ```
 - Access the url using `curl`
     ```bash
