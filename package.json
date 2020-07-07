@@ -20,7 +20,7 @@
     "gatsby-remark-images-modal": "0.0.4",
     "gatsby-remark-images-zoom": "^1.1.0",
     "gatsby-source-filesystem": "^2.3.1",
-    "gatsby-theme-carbon": "^1.25.0",
+    "gatsby-theme-carbon": "^1.25.1",
     "gatsby-transformer-json": "^2.4.1",
     "gatsby-transformer-remark": "^2.8.13",
     "lodash": "latest",
