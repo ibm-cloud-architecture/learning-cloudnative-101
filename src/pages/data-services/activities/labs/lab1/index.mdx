@@ -52,7 +52,7 @@ kubectl get secrets
 ### Create a yaml file to deploy the application
 
 Take a look at the yaml file below. Save this file as `clouddb-deployment.yaml`
-```
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -136,13 +136,11 @@ kubectl get pod -l run=clouddb-demo
 Get the URL for the application. Use the code below to get the URL for the apllication:
 
 ```
-EXTERNAL_IP=$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')
-NODEPORT="$(kubectl get svc cloudpostgres-service -o jsonpath='{.spec.ports[0].nodePort}')"
-echo URL=http://$EXTERNAL_IP:$NODEPORT
+kubectl port-forward service/cloudpostgres-service 8080:8080
 ```
 
+Try the URL from your browser on http://localhost:8080
 
-Now you can access the application from the Public IP and NodePort of the app. Try the URL from your browser.
 
 The clouddatabases-postgresql-helloworld app displays the contents of an examples database. To demonstrate that the app is connected to your service, add some words to the database. The words are displayed as you add them, with the most recently added words displayed first.
 
