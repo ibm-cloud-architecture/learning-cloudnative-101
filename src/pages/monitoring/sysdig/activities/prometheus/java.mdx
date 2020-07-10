@@ -47,21 +47,21 @@ EOF
 kubectl -n dev create svc nodeport prometheus-java-app --tcp=80:80 --tcp 8080:8080
 ```
 
-- Deploy the following nodej.js application
+- Deploy the following java application
 
 
 ### Test the application
-- Expose application web service on local port 8000, and prometheus on 9080, each command on a new terminal
+- Expose application web service on local port 8000, and prometheus on 8080, each command on a new terminal
 ```shell
 kubectl -n dev port-forward service/prometheus-java-app 8000:80
 ```
 ```shell
-kubectl -n dev port-forward service/prometheus-java-app 9080:8080
+kubectl -n dev port-forward service/prometheus-java-app 8080:8080
 ```
 
 - Send http request to the web service
 ```shell
-while true; do sleep 1; curl http://localhost:9080 -si | head -1 ; done
+while true; do sleep 1; curl http://localhost:8000 -si | head -1 ; done
 ```
 Output looks like this
 ```
@@ -70,7 +70,7 @@ HTTP/1.1 200 OK
 
 - Query prometheus endpoint
 ```shell
-curl http://localhost:8000/prometheus
+curl http://localhost:8080/prometheus
 ```
 Output looks like this
 ```
