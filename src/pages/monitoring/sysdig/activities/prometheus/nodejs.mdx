@@ -51,14 +51,14 @@ kubectl -n dev create svc nodeport prometheus-nodejs-app --tcp 8080:8080
 
 
 ### Test the application
-- Expose application web service on local port 9080
+- Expose application web service on local port 8081
 ```shell
-kubectl -n dev port-forward service/prometheus-nodejs-app 9080:8080
+kubectl -n dev port-forward service/prometheus-nodejs-app 8081:8080
 ```
 
 - Send http request to the web service
 ```shell
-while true; do sleep 1; curl http://localhost:9080 -si | head -1 ; done
+while true; do sleep 1; curl http://localhost:8081 -si | head -1 ; done
 ```
 Output looks like this
 ```
@@ -67,7 +67,7 @@ HTTP/1.1 200 OK
 
 - Query prometheus endpoint
 ```shell
-curl http://localhost:9080/metrics
+curl http://localhost:8081/metrics
 ```
 Output looks like this
 ```
