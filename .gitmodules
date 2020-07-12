@@ -1,0 +1,3 @@
+[submodule "static/cloudnative-bootcamp-examples"]
+	path = static/cloudnative-bootcamp-examples
+	url = https://github.com/ibm-cloud-architecture/cloudnative-bootcamp-examples
