@@ -66,6 +66,8 @@
       path: /monitoring/sysdig/
     - title: Logging
       path: /logging/logdna/
+    - title: Distributed Tracing
+      path: /dist-trace/
 - title: Projects
   pages:
     - title: OpenShift CICD
