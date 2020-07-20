@@ -13,13 +13,13 @@ title: Open Liberty
 
 ### General Instructions
 
-. Clone the git repository
+1. Clone the git repository
 
 ```
 git clone https://github.com/ibm-cloud-architecture/learning-distributed-tracing-101.git
 ```
 
-. Change to the lab directory
+2. Change to the lab directory
 
 ```
 cd lab-jaeger-ol
@@ -33,35 +33,35 @@ In case that stopping docker-compose doesn't work with `Ctrl-C` you can stop usi
 
 ## Test your environment
 
-. Change directory to the lab:
+1. Change directory to the lab:
 
 ```
 cd lab-jaeger-ol
 ```
 
 
-. Test the service without tracing enable
+2. Test the service without tracing enable
 
 ```
 docker-compose build
 docker-compose up
 ```
 
-. Try the service
+3. Try the service
 
 ```
 curl http://localhost:9080/sayHello/Carlos
 Hello Carlos!
 ```
 
-. End the service
+4. End the service
 
 Use `Ctrl-C` on the window where you started `docker-compose` or use `docker-compose stop` .
 
 
 ## Add client libraries
 
-. Add the tracing client library for the java `service-a`, editing the file `service-a/pom.xml` and adding the dependency for `jaeger-client`.
+1. Add the tracing client library for the java `service-a`, editing the file `service-a/pom.xml` and adding the dependency for `jaeger-client`.
 
 The `pom.xml` section should look like the following:
 
@@ -75,7 +75,7 @@ The `pom.xml` section should look like the following:
 
 ## Tracing every HTTP request
 
-. Inspect the following environment variables already added to the `services->service-a->environment` and `services->service-b->environment` blocks of the Docker Composer file `docker-compose.yaml`:
+1. Inspect the following environment variables already added to the `services->service-a->environment` and `services->service-b->environment` blocks of the Docker Composer file `docker-compose.yaml`:
 
 ```
 JAEGER_REPORTER_LOG_SPANS: "true"
@@ -83,7 +83,7 @@ JAEGER_SAMPLER_TYPE: const
 JAEGER_SAMPLER_PARAM: 1
 ```
 
-. Add the `<feature>mpOpenTracing-1.3</feature>` element to the `<featureManager>` block of the Open Liberty server configuration file `service-a/src/main/liberty/config/server.xml`. The `<featureManager>` element should look exactly like this:
+2. Add the `<feature>mpOpenTracing-1.3</feature>` element to the `<featureManager>` block of the Open Liberty server configuration file `service-a/src/main/liberty/config/server.xml`. The `<featureManager>` element should look exactly like this:
 
 ```
     <featureManager>
@@ -92,7 +92,7 @@ JAEGER_SAMPLER_PARAM: 1
     </featureManager>
 ```
 
-. Modify the `<webApplication>` element of the Open Liberty server configuration file `service-a/src/main/liberty/config/server.xml` to instruct Open Liberty to use the OpenTracing dependencies included in the application WAR file. The `<webApplication>` element should look exactly like this:
+3. Modify the `<webApplication>` element of the Open Liberty server configuration file `service-a/src/main/liberty/config/server.xml` to instruct Open Liberty to use the OpenTracing dependencies included in the application WAR file. The `<webApplication>` element should look exactly like this:
 
 ```
    <webApplication location="service-a.war" contextRoot="/" >
@@ -101,35 +101,35 @@ JAEGER_SAMPLER_PARAM: 1
 ```
 
 
-. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
+4. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
 ```
 docker-compose build
 docker-compose up
 ```
 
-. Call the same API endpoint, but now is instrumented with tracing
+5. Call the same API endpoint, but now is instrumented with tracing
 
 ```
 curl http://localhost:9080/sayHello/Carlos
 Hello Carlos!
 ```
 
-. Open the Jaeger UI using the web browser
+6. Open the Jaeger UI using the web browser
 
 ```
 open http://localhost:16686/jaeger
 ```
 
-. Select the Service `service-a` from the drop-down options and click `Find Traces`
+7. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
 ![find-trace](../../images/ol-service-a-find-trace.png)
 
-. Click on one of the traces, then expand the trace's `Tags` and `Process`. You should see information about the HTTP request such as `http.method` set to `GET` and `http.status_code` set to `200`. The `Process` section shows information about the process generating the entry, such as its hostname, IP address, and the version of the Jaeger client library. 
+8. Click on one of the traces, then expand the trace's `Tags` and `Process`. You should see information about the HTTP request such as `http.method` set to `GET` and `http.status_code` set to `200`. The `Process` section shows information about the process generating the entry, such as its hostname, IP address, and the version of the Jaeger client library. 
 
 ![trace-details](../../images/ol-service-a-trace-details.png)
 
-. Force an error in the service by calling the `/error` endpoint.
+9. Force an error in the service by calling the `/error` endpoint.
 
 ```
 curl http://localhost:9080/error -I -s | head -n 1
@@ -137,12 +137,12 @@ HTTP/1.1 500 Internal Server Error
 ```
 
 
-. Click `Find Traces` now it should show a trace with the error endpoint.
+10. Click `Find Traces` now it should show a trace with the error endpoint.
 
 ![serv-err](../../images/ol-service-a-error.png)
 
 
-. Click on the trace with the `/error`, then expand the trace's `Tags` and `Process`. You should see information about the trace such as the `http.status_code` set to `500`.
+11. Click on the trace with the `/error`, then expand the trace's `Tags` and `Process`. You should see information about the trace such as the `http.status_code` set to `500`.
 
 ![err-details](../../images/ol-service-a-error-details.png)
 
@@ -150,15 +150,13 @@ HTTP/1.1 500 Internal Server Error
 
 In the `service-a` we have the API endpoint `/sayHello`, we used this endpoint in the previous section but called it only once. This endpoint has some strange behavior that not all responses are fast, very often the response is slower than 100ms.
 
-. Stop docker-compose with `Ctrl+C` and start it again.
-[source, bash]
-+
+1. Stop docker-compose with `Ctrl+C` and start it again.
+
 ```
 docker-compose up
 ```
 
-
-. Run the following code to call the API multiple times or open the URL endpoint \http://localhost:9080/sayHello/Carlos on the web browser and click refresh multiple times.
+2. Run the following code to call the API multiple times or open the URL endpoint \http://localhost:9080/sayHello/Carlos on the web browser and click refresh multiple times.
 
 ```
 for i in {1..20}
@@ -168,13 +166,13 @@ do
 done
 ```
 
-. Open the Jaeger UI using the web browser
+3. Open the Jaeger UI using the web browser
 
 ```
 open http://localhost:16686/jaeger
 ```
 
-. Select the Service `service-a` from the drop-down options and click `Find Traces`
+4. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
 ![slow-a](../../images/ol-service-a-slow.png)
 
@@ -184,11 +182,11 @@ Some traces are taking approximately 100ms and others are taking approximately 2
 You can see the pattern that only every 3rd request the response is slow.
 When troubleshooting we are interested first on the slowest requests, you can click on one of the traces on the graph, or you can sort in the table by `Longest First`.
 
-. Select the trace that took the longest time 103ms, expand all the information for the single-span operation `/sayHello` including tags and logs.
+5. Select the trace that took the longest time 103ms, expand all the information for the single-span operation `/sayHello` including tags and logs.
 
 ![slow-details](../../images/ol-service-a-slow-details.png)
 
-. The handler has a sleep step in the method `sayHello` that delays the response every 3rd request. Open the file `src/main/java/com/example/servicea/HelloController.java` and locate the culprit code.
+6. The handler has a sleep step in the method `sayHello` that delays the response every 3rd request. Open the file `src/main/java/com/example/servicea/HelloController.java` and locate the culprit code.
 
 ```
 // simulate a slow request every 3 requests
@@ -202,16 +200,16 @@ try {
 }
 ```
 
-. Remove the `try/catch` block and save the file `HelloController.java`.
+7. Remove the `try/catch` block and save the file `HelloController.java`.
 
-. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
+8. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
 ```
 docker-compose build
 docker-compose up
 ```
 
-. Run again the following code to call the API multiple times or open the URL endpoint \http://localhost:9080/sayHello/Carlos on the web browser and click refresh multiple times.
+9. Run again the following code to call the API multiple times or open the URL endpoint \http://localhost:9080/sayHello/Carlos on the web browser and click refresh multiple times.
 
 ```
 for i in {1..20}
@@ -221,13 +219,13 @@ do
 done
 ```
 
-. Open the Jaeger UI using the web browser
+10. Open the Jaeger UI using the web browser
 
 ```
 open http://localhost:16686/jaeger
 ```
 
-. Select the Service `service-a` from the drop-down options and click `Find Traces`
+11. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
 ![serv-fast](../../images/ol-service-a-fast.png)
 
@@ -239,7 +237,7 @@ Cloud Native applications can be composed of microservices and each microservice
 
 In the previous example, we were able to identify the endpoint `/sayHello` as one of interest in our service. Let's see how can we add tracing instrumentation to the function that is handling this endpoint.
 
-. Add the following imports at the top of the file `HelloController.java`
+1. Add the following imports at the top of the file `HelloController.java`
 
 ```
 import java.util.LinkedHashMap;
@@ -252,14 +250,14 @@ import io.opentracing.Span;
 import io.opentracing.Tracer;
 ```
 
-. In the class `HelloController` add the following Autowire to have access to the global tracer
+2. In the class `HelloController` add the following Autowire to have access to the global tracer
 
 ```
     @Inject
     private Tracer tracer;
 ```
 
-. Locate the method `sayHello` and wrap the code in a try with a scope, this will create a new child span.
+3. Locate the method `sayHello` and wrap the code in a try with a scope, this will create a new child span.
 
 ```
 public String sayHello(@PathParam("name") String name) {
@@ -270,7 +268,7 @@ public String sayHello(@PathParam("name") String name) {
 }
 ```
 
-. Get a reference to the new child span `say-hello-handler` using the method `scope.span()`
+4. Get a reference to the new child span `say-hello-handler` using the method `scope.span()`
 
 ```
 public String sayHello(@PathParam("name") String name) {
@@ -282,7 +280,7 @@ public String sayHello(@PathParam("name") String name) {
 }
 ```
 
-. The OpenTracing API supports the method `log` you can log an event with a name and an object. Add a log to the span with a message that contains the value of the name.
+5. The OpenTracing API supports the method `log` you can log an event with a name and an object. Add a log to the span with a message that contains the value of the name.
 
 ```
 public String sayHello(@PathParam("name") String name) {
@@ -300,7 +298,7 @@ public String sayHello(@PathParam("name") String name) {
 }
 ```
 
-. The OpenTracing API supports the method `setTag` you can tag the span with a key and any value. Add a tag that contains the response, in normal use cases you would not log the entire response and instead key values that are useful for later searching for spans. Since we are initiating the scope within a `try` statement there is no need to call explicit `span.finish()`. 
+6. The OpenTracing API supports the method `setTag` you can tag the span with a key and any value. Add a tag that contains the response, in normal use cases you would not log the entire response and instead key values that are useful for later searching for spans. Since we are initiating the scope within a `try` statement there is no need to call explicit `span.finish()`. 
 
 ```
 public String sayHello(@PathParam("name") String name) {
@@ -319,7 +317,7 @@ public String sayHello(@PathParam("name") String name) {
 }
 ```
 
-. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
+7. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
 ```
 docker-compose build
@@ -327,7 +325,7 @@ docker-compose up
 ```
 
 
-. Call the API endpoint.
+8. Call the API endpoint.
 
 ```
 curl http://localhost:9080/sayHello/Carlos
@@ -335,19 +333,19 @@ Hello Carlos!
 ```
 
 
-. Open the Jaeger UI using the web browser
+9. Open the Jaeger UI using the web browser
 
 ```
 open http://localhost:16686/jaeger
 ```
 
-. Select the Service `service-a` from the drop-down options and click `Find Traces`
+10. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
 ![2-span](../../images/ol-service-a-2-spans.png)
 
 Notice in the result items table, for the trace item that the trace indicates that there are a total of two spans `2 Spans` and that service-a contains two spans `service-a (2)`
 
-. Click the trace, expand the spans `say-hello`, and then expand the `Tags` and `Logs` sections.
+11. Click the trace, expand the spans `say-hello`, and then expand the `Tags` and `Logs` sections.
 
 ![span-details](../../images/ol-service-a-2-span-details.png)
 
@@ -358,7 +356,7 @@ Notice in the Logs section the log event with the name `name` and the message `t
 
 The HTTP handler usually calls other functions to perform the business logic, when calling another function within the same service you can create a child span.
 
-. The `sayHello` handler calls the function `formatGreeting` to process the input `name`. In the method `formatGreeting` create a new span using `tracer.buildSpan` and name the span `format-greeting`. 
+1. The `sayHello` handler calls the function `formatGreeting` to process the input `name`. In the method `formatGreeting` create a new span using `tracer.buildSpan` and name the span `format-greeting`. 
 
 ```
 private String formatGreeting(String name) {
@@ -371,33 +369,33 @@ private String formatGreeting(String name) {
 }
 ```
 
-. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
+2. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
 ```
 docker-compose build
 docker-compose up
 ```
 
-. Call the API endpoint.
+3. Call the API endpoint.
 
 ```
 curl http://localhost:9080/sayHello/Carlos
 Hello Carlos!
 ```
 
-. Open the Jaeger UI using the web browser
+4. Open the Jaeger UI using the web browser
 
 ```
 open http://localhost:16686/jaeger
 ```
 
-. Select the Service `service-a` from the drop-down options and click `Find Traces`
+5. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
 ![3-span](../../images/ol-service-a-3-spans.png)
 
 Notice that the trace now contains three spans.
 
-. Click the trace, expand the spans `say-hello` and `format-greeting`, and then expand the `Logs` sections.
+6. Click the trace, expand the spans `say-hello` and `format-greeting`, and then expand the `Logs` sections.
 
 ![span-form](../../images/ol-service-a-span-formatter.png)
 
@@ -411,7 +409,7 @@ In the previous example, we instrumented a single service `service-a`, and creat
 
 For the following example, we are going to use a remote service `service-b` to format the message, and returning the formatted greeting message to the HTTP client.
 
-. In the file `HelloController.java` locate the handler function `sayHello` and replace the function call `formatGreeting(name)` with `formatGreetingRemote(name)`.
+1. In the file `HelloController.java` locate the handler function `sayHello` and replace the function call `formatGreeting(name)` with `formatGreetingRemote(name)`.
 
 ```
 public String sayHello(@PathParam("name") String name) {
@@ -428,7 +426,7 @@ public String sayHello(@PathParam("name") String name) {
 }
 ```
 
-. In the method `formatGreetingRemote` the HTTP request is automatically instrumented, and the tracing headers inserted when calling the remote service `service-b` endpoint `/formatGreeting`.
+2. In the method `formatGreetingRemote` the HTTP request is automatically instrumented, and the tracing headers inserted when calling the remote service `service-b` endpoint `/formatGreeting`.
 
 ```
 private String formatGreetingRemote(String name) {
@@ -452,9 +450,9 @@ private String formatGreetingRemote(String name) {
 }
 ```
 
-. The service `service-b` is already instrumented to trace every HTTP request using the same procedure <<tracing-every-http-request, Trace every HTTP request>> that we did for service `service-a`.
+3. The service `service-b` is already instrumented to trace every HTTP request using the same procedure <<tracing-every-http-request, Trace every HTTP request>> that we did for service `service-a`.
 
-. Import at the top of the file `service-b/src/main/java/com/example/serviceb/FormatController.java` the OpenTracing libraries.
+4. Import at the top of the file `service-b/src/main/java/com/example/serviceb/FormatController.java` the OpenTracing libraries.
 
 ```
 import javax.inject.Inject;
@@ -464,14 +462,14 @@ import io.opentracing.Span;
 import io.opentracing.Tracer;
 ```
 
-. In the class `FormatController` add the following Autowire to have access to the global tracer
+5. In the class `FormatController` add the following Autowire to have access to the global tracer
 
 ```
     @Inject
     private Tracer tracer;
 ```
 
-. Located the HTTP handler function `formatGreeting` in the file `FormatController.java`
+6. Located the HTTP handler function `formatGreeting` in the file `FormatController.java`
 
 ```
 public String formatGreeting(@QueryParam("name") String name) {
@@ -480,7 +478,7 @@ public String formatGreeting(@QueryParam("name") String name) {
 }
 ```
 
-. Create a new child span using the parent span located in the `req` object as context.
+7. Create a new child span using the parent span located in the `req` object as context.
 This will allow the trace to have an additional child span. Use the function `tracer.startSpan` and name the span `format-greeting`.
 
 ```
@@ -493,7 +491,7 @@ public String formatGreeting(@QueryParam("name") String name) {
 }
 ```
 
-. Add a log event to the new span using the method `span.log`.
+8. Add a log event to the new span using the method `span.log`.
 
 ```
 public String formatGreeting(@QueryParam("name") String name) {
@@ -507,7 +505,7 @@ public String formatGreeting(@QueryParam("name") String name) {
 ```
 
 
-. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
+9. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
 ```
 docker-compose build
@@ -515,7 +513,7 @@ docker-compose up
 ```
 
 
-. Call the API endpoint.
+10. Call the API endpoint.
 
 ```
 curl http://localhost:9080/sayHello/Carlos
@@ -523,20 +521,20 @@ Hello Carlos!
 ```
 
 
-. Open the Jaeger UI using the web browser
+11. Open the Jaeger UI using the web browser
 
 ```
 open http://localhost:16686/jaeger
 ```
 
-. Select the Service `service-a` from the drop-down options and click `Find Traces`
+12. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
 ![b-trace](../../images/ol-services-b-trace.png)
 
 
 Notice that the trace contains a total of four spans `5 Spans` two for `service-a(3)` and two for `service-b(2)`
 
-. Click the trace to drill down to get more details.
+13. Click the trace to drill down to get more details.
 
 ![b-span](../../images/ol-services-b-spans.png)
 
@@ -544,7 +542,7 @@ Notice in the top section, the summary which includes the `Trace Start`, `Durati
 
 Notice the bottom section on how the total duration of 117.81ms is broken down per span, and at which time each span started and ended. You can see that the time spent in `service-b` was 3.36ms, meaning that for this single HTTP request `service-a` spent the difference (117.81-3.36) 114.45ms and `service-b` spent 3.36ms.
 
-. Expand the `Logs` sections for both spans `say-hello` from `service-a` and  `format-greeting` from `service-b`.
+14. Expand the `Logs` sections for both spans `say-hello` from `service-a` and  `format-greeting` from `service-b`.
 
 ![b-logs](../../images/ol-services-b-logs.png)
 
@@ -567,7 +565,7 @@ Baggage items enable powerful functionality given a full-stack OpenTracing integ
 
 Use this feature thoughtfully and with care. Every key and value is copied into every local and remote child of the associated Span, and that can add up to a lot of network and CPU overhead.
 
-. Locate the HTTP handler `sayHello` in the file `HelloController.java`. Use the method `span.setBaggageItem('my-baggage', name)` before the method call `formatGreetingRemote(name)` to set the baggage with key `my-baggage` to the value of the `name` parameter.
+1. Locate the HTTP handler `sayHello` in the file `HelloController.java`. Use the method `span.setBaggageItem('my-baggage', name)` before the method call `formatGreetingRemote(name)` to set the baggage with key `my-baggage` to the value of the `name` parameter.
 
 ```
 public String sayHello(@PathParam("name") String name) {
@@ -585,7 +583,7 @@ public String sayHello(@PathParam("name") String name) {
 }
 ```
 
-. Locate the HTTP handler `formatGreeting` in the file `FormatController.java`. Use the method `span.getBaggageItem('my-baggage')` to get the value of the name parameter at `service-a`. For convenience log the value using `span.log` to see the value in the Jaeger UI.
+2. Locate the HTTP handler `formatGreeting` in the file `FormatController.java`. Use the method `span.getBaggageItem('my-baggage')` to get the value of the name parameter at `service-a`. For convenience log the value using `span.log` to see the value in the Jaeger UI.
 
 ```
 public String formatGreeting(@QueryParam("name") String name) {
@@ -600,31 +598,30 @@ public String formatGreeting(@QueryParam("name") String name) {
 }
 ```
 
-. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
+3. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
 ```
 docker-compose build
 docker-compose up
 ```
 
-. Call the same API endpoint, but now is instrumented with tracing
+4. Call the same API endpoint, but now is instrumented with tracing
 
 ```
 curl http://localhost:9080/sayHello/Carlos
 Hello Carlos!
 ```
 
-. Open the Jaeger UI using the web browser
+5. Open the Jaeger UI using the web browser
 
 ```
 open http://localhost:16686/jaeger
 ```
 
-. Select the Service `service-a` from the drop-down options and click `Find Traces`. Expand the section `Logs` for the spans `say-hello` and `format-greeting`
+6. Select the Service `service-a` from the drop-down options and click `Find Traces`. Expand the section `Logs` for the spans `say-hello` and `format-greeting`
 
 ![serv-bag](../../images/ol-service-b-baggage.png)
 
-+
 Notice that the baggage is set in the `service-a` with the value `Carlos` this baggage is propagated to all spans local or remote. In the `server-b` span you can see the baggage value `Carlos` is propagated.
 
 
@@ -634,7 +631,7 @@ If you have a specific trace id you can search for it by putting the trace id on
 
 You can also use a tag to search for example searching traces that have a specific HTTP status code, or one of the custom tags we added to a span.
 
-. To search for traces using HTTP method `GET` and status code `200`, enter `http.status_code=200  http.method=GET` on the `Tags` field in the search form, and then click `Find Traces`.
+1. To search for traces using HTTP method `GET` and status code `200`, enter `http.status_code=200  http.method=GET` on the `Tags` field in the search form, and then click `Find Traces`.
 
 ![ui-search](../../images/ol-ui-search.png)
 
@@ -643,7 +640,7 @@ You can also use a tag to search for example searching traces that have a specif
 
 The Jaeger UI has a view for service dependencies, it shows a visual Directed acyclic graph (DAG).
 
-Click the tab `Dependencies` (this tab is renamed `System Architecture` starting with Jaeger 1.17), then click the `DAG` tab.
+1. Click the tab `Dependencies` (this tab is renamed `System Architecture` starting with Jaeger 1.17), then click the `DAG` tab.
 
 ![ui-dep](../../images/jaeger-ui-dependencies-dag-1.jpg)
 

@@ -4,13 +4,13 @@ title: Using Jaeger in Service Mesh(Istio) with Java
 
 ### General Instructions
 
-. Clone the git repository
+1. Clone the git repository
 
 ```
 git clone https://github.com/ibm-cloud-architecture/learning-distributed-tracing-101.git
 ```
 
-. Change to the lab directory for **Java**
+2. Change to the lab directory for **Java**
 
 ```
 cd learning-distributed-tracing-101.git/lab-jaeger-istio-java
@@ -37,7 +37,7 @@ With OpenShift 4, you can use the https://cloud.redhat.com/openshift/install/crc
 
 ## Verify Service Mesh installation
 
-. Verify that istio components are installed in the namespace `istio-system`
+3. Verify that istio components are installed in the namespace `istio-system`
 
 ```
 oc get pods -n istio-system
@@ -61,7 +61,7 @@ kiali-597c76cc67-5qs2d                  1/1     Running   0          52s
 prometheus-685bdbdc45-rljkq             2/2     Running   0          5m23s
 ```
 
-. Verify services in the namespace `istio-system`
+4. Verify services in the namespace `istio-system`
 
 ```
 oc get services -n istio-system
@@ -89,7 +89,7 @@ prometheus                  ClusterIP   172.30.5.101     <none>        9090/TCP 
 zipkin                      ClusterIP   172.30.62.142    <none>        9411/TCP                                 21h
 ```
 
-. Verify that the ServiceMeshMemberRoll includes the target namespace for example `default` as one of the `MEMBERS`
+5. Verify that the ServiceMeshMemberRoll includes the target namespace for example `default` as one of the `MEMBERS`
 
 ```
 oc get ServiceMeshMemberRoll -n istio-system
@@ -97,7 +97,7 @@ NAME      MEMBERS
 default   [default bookinfo]
 ```
 
-. Verify routes in to the different UI dashboards for Jaeger, Grafana, and Kiali
+6. Verify routes in to the different UI dashboards for Jaeger, Grafana, and Kiali
 
 ```
 oc get route -n istio-system
@@ -121,7 +121,7 @@ prometheus             prometheus-istio-system.apps-crc.testing                 
 
 ## Deploy the Application
 
-. Deploy the services `service-a` and `service-b`
+1. Deploy the services `service-a` and `service-b`
 
 Use the file `istio-java.yaml` for Java
 
@@ -245,7 +245,7 @@ In the yaml deployment manifest there are few items to point out:
 *** The Pod template should have the following labels defined `app` and `version`
 
 
-. The `pom.xml` for each service contains the dependency for Zipkin to handle the B3 headers that Istio Envoy proxy forwards, this way allowing for end to end propagation. The source code is available in their respective directories `service-a` and `service-b`, the dependencies related to opentracing in the file `pom.xml` for the service looks like this:
+2. The `pom.xml` for each service contains the dependency for Zipkin to handle the B3 headers that Istio Envoy proxy forwards, this way allowing for end to end propagation. The source code is available in their respective directories `service-a` and `service-b`, the dependencies related to opentracing in the file `pom.xml` for the service looks like this:
 
 ```
 <dependency>
@@ -273,12 +273,12 @@ In the yaml deployment manifest there are few items to point out:
 </dependency>
 ```
 
-. Deploy the Istio Gateway and VirtualService
+3. Deploy the Istio Gateway and VirtualService
 
 ```
 oc apply -f gateway.yaml -n default
 ```
-+
+
 Here is the content of `gateway.yaml`
 
 ```
@@ -317,7 +317,7 @@ spec:
               number: 8080
 ```
 
-. Verify services are deployed and running:
+4. Verify services are deployed and running:
 
 ```
 oc get all -l app=service-a -n default
@@ -337,7 +337,7 @@ deployment.apps/service-b   1/1       1            1           6m44s
 
 Notice that under the `READY` column for pods, it shows that there are two (2/2) containers running, one of them is the istio side card proxy.
 
-. Get the hostname for the Istio ingress gateway
+5. Get the hostname for the Istio ingress gateway
 
 ```
 oc get route -n istio-system istio-ingressgateway 
@@ -345,7 +345,7 @@ NAME                   HOST/PORT                                            PATH
 istio-ingressgateway   istio-ingressgateway-istio-system.apps-crc.testing          istio-ingressgateway   8080                 None
 ```
 
-. Use curl or open a browser with the endpoint URL using the HOST/PORT of the route
+6. Use curl or open a browser with the endpoint URL using the HOST/PORT of the route
 
 ```
 curl http://istio-ingressgateway-istio-system.apps-crc.testing/sayHello/Carlos
@@ -359,22 +359,22 @@ Hello, from service-b Carlos!
 
 From the result, you can see that `service-a` calls `service-b` and replies back.
 
-. In the Jaeger UI select `istio-ingressgateway` or `service-a` and click **Find Traces**
+7. In the Jaeger UI select `istio-ingressgateway` or `service-a` and click **Find Traces**
 
 ![istio-trace](../../images/istio-java-jaeger-traces.png)
 
 You can see 7 Spans in a single trace starting from the `istio-ingressgateway` ending in `service-b.default`
 
-. Click on one of the traces and expand the spans in the trace
+8. Click on one of the traces and expand the spans in the trace
 
 ![istio-spans](../../images/istio-java-jaeger-spans.png)
 
 Check one of the labs xref:lab-jaeger-nodejs.adoc[Lab Jaeger - Node.js] or xref:lab-java-jaeger-java.adoc[Lab Jaeger - Java] for a more in-depth lab for Opentracing with Jaeger.
 
-. In the Kiali UI select Graph to see a topology view of the services, you can enable traffic animation under Display to see the flow of HTTP requests
+9. In the Kiali UI select Graph to see a topology view of the services, you can enable traffic animation under Display to see the flow of HTTP requests
 
 ![istio-kiali](../../images/istio-java-kiali.png)
 
-. In the Grafana UI select the Dashboard *Istio Workload Dashboard* or *Istio Service Dashboard* to see monitoring and metrics data for your services
+10. In the Grafana UI select the Dashboard *Istio Workload Dashboard* or *Istio Service Dashboard* to see monitoring and metrics data for your services
 
 ![istio-grafana](../../images/istio-java-grafana.png)
