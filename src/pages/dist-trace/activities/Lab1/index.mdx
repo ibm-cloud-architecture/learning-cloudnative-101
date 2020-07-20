@@ -272,21 +272,21 @@ setTimeout(async () => {
 }, counter++ % 3 === 0 ? 100 : 0)
 ```
 
-. Remove the `setTimeout` function and replace it with the two functions `formatGreeting` and `res.send`.
+19. Remove the `setTimeout` function and replace it with the two functions `formatGreeting` and `res.send`.
 
 ```
 const response = await formatGreeting(name);
 res.send(response)
 ```
 
-. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
+20. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
 ```
 docker-compose build
 docker-compose up
 ```
 
-. Run again the following code to call the API multiple times or open the URL endpoint http://localhost:8080/sayHello/Carlos on the web browser and click refresh multiple time.
+21. Run again the following code to call the API multiple times or open the URL endpoint http://localhost:8080/sayHello/Carlos on the web browser and click refresh multiple time.
 
 ```
 i=0;
@@ -295,13 +295,13 @@ do curl http://localhost:8080/sayHello/Carlos -I -s | head -n 1; i=$((i+1));
 done;
 ```
 
-. Open the Jaeger UI using the web browser.
+22. Open the Jaeger UI using the web browser.
 
 ```
 open http://localhost:16686/jaeger
 ```
 
-. Select the Service `service-a` from the drop-down options and click `Find Traces`.
+23. Select the Service `service-a` from the drop-down options and click `Find Traces`.
 
 ![node-service](../../images/nodejs-service-a-fast.jpg)
 
@@ -316,14 +316,14 @@ As demonstrated in this exercise, you can increase the observability of your app
 
 In the previous example, we were able to identify the endpoint `/sayHello` as one of interest in our service. Let's see how can we add tracing instrumentation to the function that is handling this endpoint.
 
-. Import at the top of the file `service-a/hello.js` the `opentracing` module, and get the global tracer
+24. Import at the top of the file `service-a/hello.js` the `opentracing` module, and get the global tracer
 
 ```
 const opentracing = require('opentracing')
 const tracer = opentracing.globalTracer()
 ```
 
-. Open the file `service-a/hello.js` and locate the function `sayHello`
+25. Open the file `service-a/hello.js` and locate the function `sayHello`
 
 ```
 const sayHello = async (req, res) => {
@@ -333,7 +333,7 @@ const sayHello = async (req, res) => {
 }
 ```
 
-. Create a new child span using the parent span located in the `req` object as context.
+26. Create a new child span using the parent span located in the `req` object as context.
 This will allow the trace to have an additional child span. Use the function `tracer.startSpan` and name the span `say-hello`.
 
 ```
@@ -345,7 +345,7 @@ const sayHello = async (req, res) => {
 }
 ```
 
-. The OpenTracing API supports the method `log`. You can log an event with a name and an object. Add a log to the span with a message that contains the value of the name.
+27. The OpenTracing API supports the method `log`. You can log an event with a name and an object. Add a log to the span with a message that contains the value of the name.
 
 ```
 const sayHello = async (req, res) => {
@@ -357,7 +357,7 @@ const sayHello = async (req, res) => {
 }
 ```
 
-. The OpenTracing API supports the method `setTag`. You can tag the span with a key and any value. Add a tag that contains the response, in normal use cases you would not log the entire response and instead key values that are useful for later searching for spans. Remember to call the `span.finish()` when you are done instrumenting the span.
+28. The OpenTracing API supports the method `setTag`. You can tag the span with a key and any value. Add a tag that contains the response, in normal use cases you would not log the entire response and instead key values that are useful for later searching for spans. Remember to call the `span.finish()` when you are done instrumenting the span.
 
 ```
 const sayHello = async (req, res) => {
@@ -371,7 +371,7 @@ const sayHello = async (req, res) => {
 }
 ```
 
-. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
+29. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
 ```
 docker-compose build
@@ -379,7 +379,7 @@ docker-compose up
 ```
 
 
-. Call the API endpoint.
+30. Call the API endpoint.
 
 ```
 curl http://localhost:8080/sayHello/Carlos
@@ -387,24 +387,24 @@ Hello Carlos!
 ```
 
 
-. Open the Jaeger UI using the web browser
+31. Open the Jaeger UI using the web browser
 
 ```
 open http://localhost:16686/jaeger
 ```
 
-. Select the Service `service-a` from the drop-down options and click `Find Traces`
+32. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
 ![2-spans](../../images/nodejs-service-a-2-spans.jpg)
 
 
 Notice in the result items table, for the trace item that the trace indicates that there are a total of two spans `2 Spans` and that service-a contains two spans `service-a (2)`
 
-. Click the trace, expand the spans `say-hello`, and then expand the `Tags` and `Logs` sections.
+33. Click the trace, expand the spans `say-hello`, and then expand the `Tags` and `Logs` sections.
 
 ![span-details](../../images/nodejs-service-a-span-details.jpg)
 
-+
+
 Notice:
 * in the Tags section the tag is located with key `name` and the string value `Hello Carlos!`.
 * in the Logs section the log event with the name `name` and the message `this is a log message for name Carlos`
@@ -413,7 +413,7 @@ Notice:
 
 The HTTP handler usually calls other functions to perform the business logic, when calling another function within the same service you can create a child span.
 
-. The `sayHello` handler calls the function `formatGreeting` to process the input `name`. Pass the current span as an additional parammeter `formatGreeting(name, span)`
+34. The `sayHello` handler calls the function `formatGreeting` to process the input `name`. Pass the current span as an additional parammeter `formatGreeting(name, span)`
 
 ```
 const sayHello = async (req, res) => {
@@ -427,7 +427,7 @@ const sayHello = async (req, res) => {
 }
 ```
 
-. In the function `formatGreeting` create a new span using `tracer.startSpan`.
+35. In the function `formatGreeting` create a new span using `tracer.startSpan`.
 Use the span from the HTTP handler as `parent` span, name the span `format-greeting`. Remember to finish the span before returning with `span.finish()`.
 
 ```
@@ -440,7 +440,7 @@ function formatGreeting(name, parent) {
 }
 ```
 
-. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
+36. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
 ```
 docker-compose build
@@ -448,7 +448,7 @@ docker-compose up
 ```
 
 
-. Call the API endpoint.
+37. Call the API endpoint.
 
 ```
 curl http://localhost:8080/sayHello/Carlos
@@ -456,19 +456,19 @@ Hello Carlos!
 ```
 
 
-. Open the Jaeger UI using the web browser
+38. Open the Jaeger UI using the web browser
 
 ```
 open http://localhost:16686/jaeger
 ```
 
-. Select the Service `service-a` from the drop-down options and click `Find Traces`
+39. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
 ![3-spans](../../images/nodejs-service-a-3-spans.jpg)
 
 Notice that the trace now contains three spans.
 
-. Click the trace, expand the spans `say-hello` and `format-greeting`, and then expand the `Logs` sections.
+40. Click the trace, expand the spans `say-hello` and `format-greeting`, and then expand the `Logs` sections.
 
 ![span-form](../../images/nodejs-service-a-span-formatter.jpg)
 
@@ -482,7 +482,7 @@ In the previous example, we instrumented a single service `service-a`, and creat
 
 For the following example, we are going to use a remote service `service-b` to format the message, and returning the formatted greeting message to the HTTP client.
 
-. In the file `service-a/hello.js` locate the handler function `sayHello` and replace the function call `formatGreeting(name, span)` with `formatGreetingRemote(name, span)`.
+41. In the file `service-a/hello.js` locate the handler function `sayHello` and replace the function call `formatGreeting(name, span)` with `formatGreetingRemote(name, span)`.
 
 ```
 const sayHello = async (req, res) => {
@@ -496,7 +496,7 @@ const sayHello = async (req, res) => {
 }
 ```
 
-. In the function `formatGreetingRemote` use the function `tracer.inject` to extract the span context and inject them into the `headers` of the HTTP request when calling the remote service `service-b` endpoint `/formatGreeting`.
+42. In the function `formatGreetingRemote` use the function `tracer.inject` to extract the span context and inject them into the `headers` of the HTTP request when calling the remote service `service-b` endpoint `/formatGreeting`.
 
 ```
 const bent = require('bent')
@@ -513,18 +513,18 @@ const formatGreetingRemote = async (name, span) => {
 }
 ```
 
-. The service `service-b` is already instrumented to trace every HTTP request using the same procedure <<tracing-every-http-request, Trace every HTTP request>> that we did for service `service-a`.
+43. The service `service-b` is already instrumented to trace every HTTP request using the same procedure <<tracing-every-http-request, Trace every HTTP request>> that we did for service `service-a`.
 
-. Locate the file `service-b/formatter.js` and add.
+44. Locate the file `service-b/formatter.js` and add.
 
-. Import at the top of the file `service-b/formatter.js` the `opentracing` module, and get the global tracer
+45. Import at the top of the file `service-b/formatter.js` the `opentracing` module, and get the global tracer
 
 ```
 const opentracing = require('opentracing')
 const tracer = opentracing.globalTracer()
 ```
 
-. Located the HTTP handler function `formatGreeting` in the file `service-b/formatter.js`
+46. Located the HTTP handler function `formatGreeting` in the file `service-b/formatter.js`
 
 ```
 function formatGreeting(req, res) {
@@ -534,7 +534,7 @@ function formatGreeting(req, res) {
 }
 ```
 
-. Create a new child span using the parent span located in the `req` object as context.
+47. Create a new child span using the parent span located in the `req` object as context.
 This will allow the trace to have an additional child span. Use the function `tracer.startSpan` and name the span `format-greeting`.
 
 ```
@@ -546,7 +546,7 @@ function formatGreeting(req, res) {
 }
 ```
 
-. Add a log event `format` to the new span using the method `span.log`. Remember to call the `span.finish()` when you are done instrumenting the span.
+48. Add a log event `format` to the new span using the method `span.log`. Remember to call the `span.finish()` when you are done instrumenting the span.
 
 ```
 function formatGreeting(req, res) {
@@ -560,7 +560,7 @@ function formatGreeting(req, res) {
 ```
 
 
-. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
+49. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
 ```
 docker-compose build
@@ -568,7 +568,7 @@ docker-compose up
 ```
 
 
-. Call the API endpoint.
+50. Call the API endpoint.
 
 ```
 curl http://localhost:8080/sayHello/Carlos
@@ -576,19 +576,19 @@ Hello Carlos!
 ```
 
 
-. Open the Jaeger UI using the web browser
+51. Open the Jaeger UI using the web browser
 
 ```
 open http://localhost:16686/jaeger
 ```
 
-. Select the Service `service-a` from the drop-down options and click `Find Traces`
+52. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
 ![b-trace](../../images/nodejs-services-b-trace.jpg)
 
 Notice that the trace contains a total of four spans `4 Spans` two for `service-a(2)` and two for `service-b(2)`
 
-. Click the trace to drill down to get more details.
+53. Click the trace to drill down to get more details.
 
 ![b-spans](../../images/nodejs-services-b-spans.jpg)
 
@@ -596,7 +596,7 @@ Notice in the top section, the summary which includes the `Trace Start`, `Durati
 
 Notice the bottom section on how the total duration of 19ms is broken down per span, and at which time each span started and ended. You can see that the time spent in `service-b` was 4ms, meaning that for this single HTTP request `service-a` spent 15ms and `service-b` spent 4ms.
 
-. Expand the `Logs` sections for both spans `say-hello` from `service-a` and  `format-greeting` from `service-b`.
+54. Expand the `Logs` sections for both spans `say-hello` from `service-a` and  `format-greeting` from `service-b`.
 
 ![b-logs](../../images/nodejs-services-b-logs.jpg)
 
@@ -619,7 +619,7 @@ Baggage items enable powerful functionality given a full-stack OpenTracing integ
 
 Use this feature thoughtfully and with care. Every key and value is copied into every local and remote child of the associated Span, and that can add up to a lot of network and CPU overhead.
 
-. Locate the HTTP handler `sayHello` in the file `service-a/hello.js`. Use the method `span.setBaggageItem('my-baggage', name)` before the function call `formatGreetingRemote(name, span)` to set the baggage with key `my-baggage` to the value of the `name` parameter.
+55. Locate the HTTP handler `sayHello` in the file `service-a/hello.js`. Use the method `span.setBaggageItem('my-baggage', name)` before the function call `formatGreetingRemote(name, span)` to set the baggage with key `my-baggage` to the value of the `name` parameter.
 
 ```
 const sayHello = async (req, res) => {
@@ -634,7 +634,7 @@ const sayHello = async (req, res) => {
 }
 ```
 
-. Locate the HTTP handler `formatGreeting` in the file `service-b/formatter.js`. Use the method `span.getBaggageItem('my-baggage')` to get the value of the name parameter at `service-a`. For convenience log the value using `span.log` to see the value in the Jaeger UI.
+56. Locate the HTTP handler `formatGreeting` in the file `service-b/formatter.js`. Use the method `span.getBaggageItem('my-baggage')` to get the value of the name parameter at `service-a`. For convenience log the value using `span.log` to see the value in the Jaeger UI.
 
 ```
 function formatGreeting(req, res) {
@@ -649,27 +649,27 @@ function formatGreeting(req, res) {
 }
 ```
 
-. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
+57. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
 ```
 docker-compose build
 docker-compose up
 ```
 
-. Call the same API endpoint, but now is instrumented with tracing
+58. Call the same API endpoint, but now is instrumented with tracing
 
 ```
 curl http://localhost:8080/sayHello/Carlos
 Hello Carlos!
 ```
 
-. Open the Jaeger UI using the web browser
+59. Open the Jaeger UI using the web browser
 
 ```
 open http://localhost:16686/jaeger
 ```
 
-. Select the Service `service-a` from the drop-down options and click `Find Traces`. Expand the section `Logs` for the spans `say-hello` and `format-greeting`
+60. Select the Service `service-a` from the drop-down options and click `Find Traces`. Expand the section `Logs` for the spans `say-hello` and `format-greeting`
 
 ![b-baggage](../../images/nodejs-service-b-baggage.jpg)
 
@@ -682,7 +682,7 @@ If you have a specific trace id you can search for it by putting the trace id on
 
 You can also use a tag to search for example searching traces that have a specific HTTP status code, or one of the custom tags we added to a span.
 
-. To search for traces using HTTP method `GET` and status code `200`, enter `http.status_code=200  http.method=GET` on the `Tags` field in the search form, and then click `Find Traces`.
+61. To search for traces using HTTP method `GET` and status code `200`, enter `http.status_code=200  http.method=GET` on the `Tags` field in the search form, and then click `Find Traces`.
 
 ![ui-search](../../images/jaeger-ui-search.png)
 
@@ -691,7 +691,7 @@ You can also use a tag to search for example searching traces that have a specif
 
 The Jaeger UI has a view for service dependencies, it shows a visual Directed acyclic graph (DAG).
 
-Click the tab `Dependencies`, then click the `DAG` tab.
+62. Click the tab `Dependencies`, then click the `DAG` tab.
 
 ![ui-dep1](../../images/jaeger-ui-dependencies-dag-1.jpg)
 
