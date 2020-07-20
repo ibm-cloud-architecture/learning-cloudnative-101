@@ -190,9 +190,9 @@ spec:
             - containerPort: 8081
 
 ```
-+
+
 In the yaml deployment manifest there are few items to point out:
-+
+
 * **Ports**
 ** The port for the container is specified in the service and the container in the deployment, for example `service-a` with port `8080` and `service-b` with port `8081`
 * **Environment Variables**
@@ -201,8 +201,7 @@ In the yaml deployment manifest there are few items to point out:
 
 
 . Verify services are deployed and running:
-+
-[source, bash]
+
 ```
 oc get all -l app=service-a -n default
 oc get all -l app=service-b -n default
@@ -220,15 +219,13 @@ deployment.apps/service-b   1/1     1            1           19m
 ```
 
 . Expose the service `service-a` with a route
-+
-[source, bash]
+
 ```
 oc create route edge  --service=service-a -n default
 ```
 
 . Get the hostname for the route:
-+
-[source, bash]
+
 ```
 oc get route service-a -n default
 NAME        HOST/PORT                            PATH   SERVICES    PORT   TERMINATION   WILDCARD
@@ -238,21 +235,22 @@ service-a   service-a-default.apps-crc.testing          service-a   http   edge 
 ## Find Traces
 
 . Use curl or open browser with the endpoint URL using the HOST/PORT of the route
-+
-[source, bash]
+
 ```
 curl -k https://service-a-default.apps-crc.testing/sayHello/Carlos
 Hello from service-b Carlos!
 ```
-+
+
 From the result you can see that `service-a` called `service-b` and replied back.
 
 . In the Jaeger UI select service-a and click **Find Traces**
-+
-image::ocp-jaeger-traces.png[]
+
+![jaeger-trace](../../images/ocp-jaeger-traces.png)
+
 
 . Click on one of the traces and expand the spans in the trace
-+
-image::ocp-jaeger-spans.png[]
+
+![jaeger-span](../../images/ocp-jaeger-spans.png)
+
 
 Check one of the labs xref:lab-jaeger-nodejs.adoc[Lab Jaeger - Node.js] or xref:lab-jaeger-java.adoc[Lab Jaeger - Java] for a more in depth lab for Opentracing with Jaeger.
