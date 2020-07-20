@@ -202,11 +202,11 @@ open http://localhost:16686/jaeger
 
 8. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
-![find-trace](../images/nodejs-service-a-find-trace.jpg)
+![find-trace](../../images/nodejs-service-a-find-trace.jpg)
 
 9. Click on one of the traces, then expand the trace's `Tags` and `Logs`. You should see information about the HTTP request such as `http.method` set to `GET` and `http.status_code` set to `200`. The Logs section has two log events; one with `request_received` and the final log `request_end`. The timestamps for each of the log events give you how much time the request took to be processed by your service business logic. In this example, it took `4ms`.
 
-![trace-details](./images/nodejs-service-a-trace-details.jpg)
+![trace-details](../../images/nodejs-service-a-trace-details.jpg)
 
 10. Force an error in the service by calling the `/error` endpoint.
 
@@ -218,11 +218,11 @@ some error (ノ ゜Д゜)ノ ︵ ┻━┻
 
 11. Click `Find Traces` now it should show a trace mark with `Error` in red.
 
-![node-service](./images/nodejs-service-a-error.jpg)
+![node-service](../../images/nodejs-service-a-error.jpg)
 
 12. Click on the trace with the `Error`, then expand the trace's `Tags` and `Logs`. You should see information about the trace such as `error` set to `true` and `http.status_code` set to `500`. The Logs section has an additional log event with `message = Internal Server Error`. Expand the log event.
 
-![service-error](./images/nodejs-service-a-error-details.jpg)
+![service-error](../../images/nodejs-service-a-error-details.jpg)
 
 ## Finding slow HTTP requests
 
@@ -251,7 +251,7 @@ open http://localhost:16686/jaeger
 
 16. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
-![serv-slow](./images/nodejs-service-a-slow.jpg)
+![serv-slow](../../images/nodejs-service-a-slow.jpg)
 
 In the picture above, you can see a timeline graph with each trace represented with a circle. In this case, we have 15 traces in the result set when we clicked `Find Traces`.
 Some traces are taking approximately 100ms and others are taking approximately 2ms.
@@ -260,7 +260,7 @@ When troubleshooting, we are interested first in the slowest requests. You can c
 
 17. Select the trace that took the longest time (103ms). Expand all the information for the single-span operation `/sayHello` including tags and logs.
 
-![slow-details](./images/nodejs-service-a-slow-details.jpg)
+![slow-details](../../images/nodejs-service-a-slow-details.jpg)
 
 18. The handler has a sleep step in the function `sayHello` that delays the response every 3rd request. Open the file `service-a/hello.js` and located the culprit code.
 
@@ -273,24 +273,21 @@ setTimeout(async () => {
 ```
 
 . Remove the `setTimeout` function and replace it with the two functions `formatGreeting` and `res.send`.
-+
-[source, javascript]
+
 ```
 const response = await formatGreeting(name);
 res.send(response)
 ```
 
 . Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
-+
-[source, bash]
+
 ```
 docker-compose build
 docker-compose up
 ```
 
 . Run again the following code to call the API multiple times or open the URL endpoint http://localhost:8080/sayHello/Carlos on the web browser and click refresh multiple time.
-+
-[source, bash]
+
 ```
 i=0;
 while [ $i -lt 15 ];
@@ -299,15 +296,14 @@ done;
 ```
 
 . Open the Jaeger UI using the web browser.
-+
-[source, bash]
+
 ```
 open http://localhost:16686/jaeger
 ```
 
 . Select the Service `service-a` from the drop-down options and click `Find Traces`.
 
-![node-service](./images/nodejs-service-a-fast.jpg)
+![node-service](../../images/nodejs-service-a-fast.jpg)
 
 You can see now that all HTTP requests are fast and the problem is fixed.
 
@@ -321,16 +317,14 @@ As demonstrated in this exercise, you can increase the observability of your app
 In the previous example, we were able to identify the endpoint `/sayHello` as one of interest in our service. Let's see how can we add tracing instrumentation to the function that is handling this endpoint.
 
 . Import at the top of the file `service-a/hello.js` the `opentracing` module, and get the global tracer
-+
-[source, javascript]
+
 ```
 const opentracing = require('opentracing')
 const tracer = opentracing.globalTracer()
 ```
 
 . Open the file `service-a/hello.js` and locate the function `sayHello`
-+
-[source, javascript]
+
 ```
 const sayHello = async (req, res) => {
   const name = req.params.name
@@ -341,8 +335,7 @@ const sayHello = async (req, res) => {
 
 . Create a new child span using the parent span located in the `req` object as context.
 This will allow the trace to have an additional child span. Use the function `tracer.startSpan` and name the span `say-hello`.
-+
-[source, javascript]
+
 ```
 const sayHello = async (req, res) => {
   const span = tracer.startSpan('say-hello', { childOf: req.span })
@@ -353,8 +346,7 @@ const sayHello = async (req, res) => {
 ```
 
 . The OpenTracing API supports the method `log`. You can log an event with a name and an object. Add a log to the span with a message that contains the value of the name.
-+
-[source, javascript]
+
 ```
 const sayHello = async (req, res) => {
   const span = tracer.startSpan('say-hello', { childOf: req.span })
@@ -366,8 +358,7 @@ const sayHello = async (req, res) => {
 ```
 
 . The OpenTracing API supports the method `setTag`. You can tag the span with a key and any value. Add a tag that contains the response, in normal use cases you would not log the entire response and instead key values that are useful for later searching for spans. Remember to call the `span.finish()` when you are done instrumenting the span.
-+
-[source, javascript]
+
 ```
 const sayHello = async (req, res) => {
   const span = tracer.startSpan('say-hello', { childOf: req.span })
@@ -381,8 +372,7 @@ const sayHello = async (req, res) => {
 ```
 
 . Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
-+
-[source, bash]
+
 ```
 docker-compose build
 docker-compose up
@@ -390,8 +380,7 @@ docker-compose up
 
 
 . Call the API endpoint.
-+
-[source, bash]
+
 ```
 curl http://localhost:8080/sayHello/Carlos
 Hello Carlos!
@@ -399,22 +388,21 @@ Hello Carlos!
 
 
 . Open the Jaeger UI using the web browser
-+
-[source, bash]
+
 ```
 open http://localhost:16686/jaeger
 ```
 
 . Select the Service `service-a` from the drop-down options and click `Find Traces`
 
-![2-spans](./images/nodejs-service-a-2-spans.jpg)
+![2-spans](../../images/nodejs-service-a-2-spans.jpg)
 
-+
+
 Notice in the result items table, for the trace item that the trace indicates that there are a total of two spans `2 Spans` and that service-a contains two spans `service-a (2)`
 
 . Click the trace, expand the spans `say-hello`, and then expand the `Tags` and `Logs` sections.
 
-![span-details](./images/nodejs-service-a-span-details.jpg)
+![span-details](../../images/nodejs-service-a-span-details.jpg)
 
 +
 Notice:
@@ -476,13 +464,13 @@ open http://localhost:16686/jaeger
 
 . Select the Service `service-a` from the drop-down options and click `Find Traces`
 
-![3-spans](./images/nodejs-service-a-3-spans.jpg)
+![3-spans](../../images/nodejs-service-a-3-spans.jpg)
 
 Notice that the trace now contains three spans.
 
 . Click the trace, expand the spans `say-hello` and `format-greeting`, and then expand the `Logs` sections.
 
-![span-form](./images/nodejs-service-a-span-formatter.jpg)
+![span-form](../../images/nodejs-service-a-span-formatter.jpg)
 
 Notice the cascading effect between the three spans, the span `format-greeting` contains the message `formatting message locally for name Carlos` that we instrumented.
 
@@ -589,37 +577,36 @@ Hello Carlos!
 
 
 . Open the Jaeger UI using the web browser
-+
-[source, bash]
+
 ```
 open http://localhost:16686/jaeger
 ```
 
 . Select the Service `service-a` from the drop-down options and click `Find Traces`
 
-![b-trace](./images/nodejs-services-b-trace.jpg)
+![b-trace](../../images/nodejs-services-b-trace.jpg)
 
 Notice that the trace contains a total of four spans `4 Spans` two for `service-a(2)` and two for `service-b(2)`
 
 . Click the trace to drill down to get more details.
 
-![b-spans](./images/nodejs-services-b-spans.jpg)
+![b-spans](../../images/nodejs-services-b-spans.jpg)
 
 Notice in the top section, the summary which includes the `Trace Start`, `Duration: 19ms`, `Services: 2`, `Depth: 4` and `Total Spans: 4`.
-+
+
 Notice the bottom section on how the total duration of 19ms is broken down per span, and at which time each span started and ended. You can see that the time spent in `service-b` was 4ms, meaning that for this single HTTP request `service-a` spent 15ms and `service-b` spent 4ms.
 
 . Expand the `Logs` sections for both spans `say-hello` from `service-a` and  `format-greeting` from `service-b`.
 
-![b-logs](./images/nodejs-services-b-logs.jpg)
+![b-logs](../../images/nodejs-services-b-logs.jpg)
 
-+
+
 Notice on the right side, each span has a summary each with the associated `Service`, `Duration`, and `Start Time`. The `Start Time` of a span marks the end time from the previous span.
-+
+
 Notice the time for the first log message `this is a log message for name Carlos` in `service-a` is of 1ms, this means this log event happened 1ms after the trace started.
-+
+
 Notice the time for the second log message `formatting message remotely for name Carlos` in `service-b` is of 12ms, this means this log event happened 12ms after the trace started in `service-a`.
-+
+
 It is very useful to see the log events we instrumented in our endpoint handlers across services in this manner because it provides full observability of the lifecycle of the HTTP request across multiple services.
 
 ## Baggage propagation
@@ -677,15 +664,14 @@ Hello Carlos!
 ```
 
 . Open the Jaeger UI using the web browser
-+
-[source, bash]
+
 ```
 open http://localhost:16686/jaeger
 ```
 
 . Select the Service `service-a` from the drop-down options and click `Find Traces`. Expand the section `Logs` for the spans `say-hello` and `format-greeting`
 
-![b-baggage](./images/nodejs-service-b-baggage.jpg)
+![b-baggage](../../images/nodejs-service-b-baggage.jpg)
 
 Notice that the baggage is set in the `service-a` with the value `Carlos` this baggage is propagated to all spans local or remote. In the `server-b` span you can see the baggage value `Carlos` is propagated.
 
@@ -698,7 +684,7 @@ You can also use a tag to search for example searching traces that have a specif
 
 . To search for traces using HTTP method `GET` and status code `200`, enter `http.status_code=200  http.method=GET` on the `Tags` field in the search form, and then click `Find Traces`.
 
-![ui-search](./images/jaeger-ui-search.png)
+![ui-search](../../images/jaeger-ui-search.png)
 
 ## Dependency graph
 
@@ -707,10 +693,10 @@ The Jaeger UI has a view for service dependencies, it shows a visual Directed ac
 
 Click the tab `Dependencies`, then click the `DAG` tab.
 
-![ui-dep1](./images/jaeger-ui-dependencies-dag-1.jpg)
+![ui-dep1](../../images/jaeger-ui-dependencies-dag-1.jpg)
 
 Notice that the graph shows the direction with an arrow flowing from `service-a` to `service-b`. It also shows the number of traces between the services.
 
 This is is a simple example and there is not much value for a small set of services, but when a large number of services each with multiple endpoints then the graph becomes more interesting like the following example:
 
-![ui-depp](./images/jaeger-ui-dependencies-dag-2.jpg)
+![ui-depp](../../images/jaeger-ui-dependencies-dag-2.jpg)

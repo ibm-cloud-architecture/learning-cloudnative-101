@@ -15,14 +15,12 @@ title: Lab 2 - Java
 
 . Clone the git repository
 
-[source, bash]
 ---
 git clone https://github.com/ibm-cloud-architecture/learning-distributed-tracing-101.git
 ---
 
 . Change to the lab directory
 
-[source, bash]
 ```
 cd lab-jaeger-java/solution
 ```
@@ -37,7 +35,6 @@ In case that stopping docker-compose doesn't work with `Ctrl-C` you can stop usi
 
 . Change directory to the lab:
 
-[source, bash]
 ```
 cd lab-jaeger-java
 ```
@@ -45,7 +42,6 @@ cd lab-jaeger-java
 
 . Test the service without tracing enable
 
-[source, bash]
 ```
 docker-compose build
 docker-compose up
@@ -53,20 +49,16 @@ docker-compose up
 
 . Try the service
 
-[source, bash]
 ```
 curl http://localhost:8080/sayHello/Carlos
 Hello Carlos!
 ```
-
-
 
 ## Add client libraries
 
 . Add the tracing client library for the java `service-a`, edit the file `service-a/pom.xml` and add the dependencies for `opentracing-api`, `opentracing-spring-cloud-starter`, and `jaeger-client`
 The `pom.xml` section should look like the following:
 
-[source, xml]
 ```
 <dependency>
     <groupId>io.opentracing</groupId>
@@ -87,12 +79,10 @@ The `pom.xml` section should look like the following:
 </dependency>
 ```
 
-[# tracing-every-http-request]
 ## Tracing every HTTP request
 
 . Add A Bean to initialized the Tracer in the main Class in the file `src/main/java/com/example/servicea/DemoApplication.java`
 
-[source, java]
 ```
 @Bean
 public io.opentracing.Tracer initTracer() {
@@ -103,7 +93,6 @@ public io.opentracing.Tracer initTracer() {
 ```
 
 . Add the imports for jaegertracing in the file `src/main/java/com/example/servicea/DemoApplication.java`
-[source, java]
 ```
 import io.jaegertracing.Configuration;
 import io.jaegertracing.Configuration.ReporterConfiguration;
@@ -135,11 +124,11 @@ open http://localhost:16686/jaeger
 
 . Select the Service `service-a` from the drop-down options and click `Find Traces`
 
-image::java-service-a-find-trace.png[]
+![find-trace](../../images/java-service-a-find-trace.png)
 
 . Click on one of the traces, then expand the trace's `Tags` and `Logs`. You should see information about the HTTP request such as `http.method` set to `GET` and `http.status_code` set to `200`. The Logs section has two logs one with `preHandle` and the final log `afterCompletion` this gives you how much time the request took to be processed by your service business logic. In this example, it took `8ms`.
 
-image::nodejs-service-a-trace-details.jpg[]
+![trace-details](../../images/nodejs-service-a-trace-details.jpg)
 
 . Force an error in the service by calling the `/error` endpoint.
 
@@ -152,11 +141,11 @@ HTTP/1.1 500
 
 . Click `Find Traces` now it should show a trace with the error endpoint.
 
-image::java-service-a-error.png[]
+![java-error](../../images/java-service-a-error.png)
 
 . Click on the trace with the `/error`, then expand the trace's `Tags` and `Logs`. You should see information about the trace such as the `http.status_code` set to `500`.
 
-image::java-service-a-error-details.png[]
+![error-details](../../images/java-service-a-error-details.png)
 
 ## Finding slow HTTP requests
 
@@ -169,10 +158,8 @@ In the `service-a` we have the API endpoint `/sayHello`, we used this endpoint i
 docker-compose up
 ```
 
-
 . Run  the following code to call the API multiple times or open the URL endpoint \http://localhost:8080/sayHello/Carlos on the web browser and click refresh multiple time.
 
-[source, bash]
 ```
 i=0;
 while [ $i -lt 15 ];
@@ -182,15 +169,13 @@ done;
 
 . Open the Jaeger UI using the web browser
 
-[source, bash]
 ```
 open http://localhost:16686/jaeger
 ```
 
 . Select the Service `service-a` from the drop-down options and click `Find Traces`
 
-image::java-service-a-slow.png[]
-
+![slow-serv](../../images/java-service-a-slow.png)
 
 In the picture above, you can see a timeline graph with each trace represented with a circle, in this case, we have 15 traces in the result set when we clicked `Find Traces`.
 Some traces are taking approximately 100ms and others are taking approximately 2ms.
@@ -199,12 +184,10 @@ When troubleshooting we are interested first on the slowest requests, you can cl
 
 . Select the trace that took the longest time 103ms, expand all the information for the single-span operation `/sayHello` including tags and logs.
 
-image::java-service-a-slow-details.png[]
-
+![slow-details](../../images/java-service-a-slow-details.png)
 
 . The handler has a sleep step in the method `sayHello` that delays the response every 3rd request. Open the file `src/main/java/com/example/servicea/HelloController.java` and locate the culprit code.
 
-[source, java]
 ```
 // simulate a slow request every 3 requests
 try {
@@ -221,7 +204,6 @@ try {
 
 . Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
-[source, bash]
 ```
 docker-compose build
 docker-compose up
@@ -229,7 +211,6 @@ docker-compose up
 
 . Run again the following code to call the API multiple times or open the URL endpoint http://localhost:8080/sayHello/Carlos on the web browser and click refresh multiple time.
 
-[source, bash]
 ```
 i=0;
 while [ $i -lt 15 ];
@@ -239,15 +220,13 @@ done;
 
 . Open the Jaeger UI using the web browser
 
-[source, bash]
 ```
 open http://localhost:16686/jaeger
 ```
 
 . Select the Service `service-a` from the drop-down options and click `Find Traces`
 
-image::java-service-a-fast.png[]
-
+![serv-fast](../../images/java-service-a-fast.png)
 
 You can see now that all HTTP requests are fast and the problem is fixed
 
@@ -260,7 +239,6 @@ In the previous example, we were able to identify the endpoint `/sayHello` as on
 
 . Add the following imports at the top of the file `HelloController.java`
 
-[source, java]
 ```
 import io.opentracing.Scope;
 import io.opentracing.Span;
@@ -269,7 +247,6 @@ import io.opentracing.Tracer;
 
 . In the class `HelloController` add the following Autowire to have access to the global tracer
 
-[source, java]
 ```
 @Autowired
     private Tracer tracer;
@@ -277,7 +254,6 @@ import io.opentracing.Tracer;
 
 . Locate the method `sayHello` and wrap the code in a try with a scope, this will create a new child span.
 
-[source, java]
 ```
 public String sayHello(@PathVariable String name) {
     try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
@@ -289,7 +265,6 @@ public String sayHello(@PathVariable String name) {
 
 . Get a reference to the new child span `say-hello-handler` using the method `scope.span()`
 
-[source, java]
 ```
 public String sayHello(@PathVariable String name) {
     try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
@@ -302,7 +277,6 @@ public String sayHello(@PathVariable String name) {
 
 . The OpenTracing API supports the method `log` you can log an event with a name and an object. Add a log to the span with a message that contains the value of the name.
 
-[source, java]
 ```
 public String sayHello(@PathVariable String name) {
     try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
@@ -321,7 +295,6 @@ public String sayHello(@PathVariable String name) {
 
 . The OpenTracing API supports the method `setTag` you can tag the span with a key and any value. Add a tag that contains the response, in normal use cases you would not log the entire response and instead key values that are useful for later searching for spans. Since we are using `true` in `.startActive(true)` there is no need to call explicit `span.finish()`. 
 
-[source, java]
 ```
 public String sayHello(@PathVariable String name) {
     try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
@@ -341,7 +314,6 @@ public String sayHello(@PathVariable String name) {
 
 . Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
-[source, bash]
 ```
 docker-compose build
 docker-compose up
@@ -350,7 +322,6 @@ docker-compose up
 
 . Call the API endpoint.
 
-[source, bash]
 ```
 curl http://localhost:8080/sayHello/Carlos
 Hello Carlos!
@@ -366,15 +337,13 @@ open http://localhost:16686/jaeger
 
 . Select the Service `service-a` from the drop-down options and click `Find Traces`
 
-image::java-service-a-2-spans.png[]
-
+![2-spans](../../images/java-service-a-2-spans.png)
 
 Notice in the result items table, for the trace item that the trace indicates that there are a total of two spans `2 Spans` and that service-a contains two spans `service-a (2)`
 
 . Click the trace, expand the spans `say-hello`, and then expand the `Tags` and `Logs` sections.
 
-image::java-service-a-span-details.png[]
-
+![span-details](../../images/java-service-a-span-details.png)
 
 Notice in the Tags section the tag is located with key `name` and the string value `Hello Carlos!`.
 Notice in the Logs section the log event with the name `name` and the message `this is a log message for name Carlos`
@@ -385,7 +354,6 @@ The HTTP handler usually calls other functions to perform the business logic, wh
 
 . The `sayHello` handler calls the function `formatGreeting` to process the input `name`. In the method `formatGreeting` create a new span using `tracer.buildSpan` and name the span `format-greeting`. 
 
-[source, java]
 ```
 private String formatGreeting(String name) {
     try (Scope scope = tracer.buildSpan("format-greeting").startActive(true)) {
@@ -399,7 +367,6 @@ private String formatGreeting(String name) {
 
 . Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
-[source, bash]
 ```
 docker-compose build
 docker-compose up
@@ -408,7 +375,6 @@ docker-compose up
 
 . Call the API endpoint.
 
-[source, bash]
 ```
 curl http://localhost:8080/sayHello/Carlos
 Hello Carlos!
@@ -417,22 +383,19 @@ Hello Carlos!
 
 . Open the Jaeger UI using the web browser
 
-[source, bash]
 ```
 open http://localhost:16686/jaeger
 ```
 
 . Select the Service `service-a` from the drop-down options and click `Find Traces`
 
-image::java-service-a-3-spans.png[]
-
+![3-spans](../../images/java-service-a-3-spans.png)
 
 Notice that the trace now contains three spans.
 
 . Click the trace, expand the spans `say-hello` and `format-greeting`, and then expand the `Logs` sections.
 
-image::java-service-a-span-formatter.png[]
-
+![span-format](../../images/java-service-a-span-formatter.png)
 
 Notice the cascading effect between the three spans, the span `format-greeting` contains the message `formatting message locally for name Carlos` that we instrumented.
 
@@ -446,7 +409,6 @@ For the following example, we are going to use a remote service `service-b` to f
 
 . In the file `HelloController.java` locate the handler function `sayHello` and replace the function call `formatGreeting(name)` with `formatGreetingRemote(name)`.
 
-[source, java]
 ```
 public String sayHello(@PathVariable String name) {
     try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
@@ -464,7 +426,6 @@ public String sayHello(@PathVariable String name) {
 
 . In the method `formatGreetingRemote` the HTTP request is automatically instrumented, and the tracing headers inserted when calling the remote service `service-b` endpoint `/formatGreeting`.
 
-[source, java]
 ```
 private String formatGreetingRemote(String name) {
     String serviceName = System.getenv("SERVICE_FORMATTER");
@@ -484,7 +445,6 @@ private String formatGreetingRemote(String name) {
 
 . Import at the top of the file `src/main/java/com/example/serviceb/FormatController.java` the `opentracing` libraries.
 
-[source, java]
 ```
 import io.opentracing.Scope;
 import io.opentracing.Span;
@@ -493,7 +453,6 @@ import io.opentracing.Tracer;
 
 . In the class `FormatController` add the following Autowire to have access to the global tracer
 
-[source, java]
 ```
 @Autowired
     private Tracer tracer;
@@ -501,7 +460,6 @@ import io.opentracing.Tracer;
 
 . Located the HTTP handler function `formatGreeting` in the file `FormatController.java`
 
-[source, java]
 ```
 public String formatGreeting(@RequestParam String name) {
     String response = "Hello, from service-b " + name + "!";
@@ -512,7 +470,6 @@ public String formatGreeting(@RequestParam String name) {
 . Create a new child span using the parent span located in the `req` object as context.
 This will allow the trace to have an additional child span. Use the function `tracer.startSpan` and name the span `format-greeting`.
 
-[source, java]
 ```
 public String formatGreeting(@RequestParam String name) {
     try (Scope scope = tracer.buildSpan("format-greeting").startActive(true)) {
@@ -525,7 +482,6 @@ public String formatGreeting(@RequestParam String name) {
 
 . Add a log event to the new span using the method `span.log`.
 
-[source, java]
 ```
 public String formatGreeting(@RequestParam String name) {
     try (Scope scope = tracer.buildSpan("format-greeting").startActive(true)) {
@@ -540,7 +496,6 @@ public String formatGreeting(@RequestParam String name) {
 
 . Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
-[source, bash]
 ```
 docker-compose build
 docker-compose up
@@ -549,7 +504,6 @@ docker-compose up
 
 . Call the API endpoint.
 
-[source, bash]
 ```
 curl http://localhost:8080/sayHello/Carlos
 Hello Carlos!
@@ -565,15 +519,13 @@ open http://localhost:16686/jaeger
 
 . Select the Service `service-a` from the drop-down options and click `Find Traces`
 
-image::java-services-b-trace.png[]
-
+![b-trace](../../images/java-services-b-trace.png)
 
 Notice that the trace contains a total of four spans `5 Spans` two for `service-a(3)` and two for `service-b(2)`
 
 . Click the trace to drill down to get more details.
 
-image::java-services-b-spans.png[]
-
+![b-spans](../../images/java-services-b-spans.png)
 
 Notice in the top section, the summary which includes the `Trace Start`, `Duration: 16ms`, `Services: 2`, `Depth: 5` and `Total Spans: 5`.
 
@@ -581,8 +533,7 @@ Notice the bottom section on how the total duration of 16ms is broken down per s
 
 . Expand the `Logs` sections for both spans `say-hello` from `service-a` and  `format-greeting` from `service-b`.
 
-image::java-services-b-logs.png[]
-
+![b-logs](../../images/java-services-b-logs.png)
 
 Notice on the right side, each span has a summary each with the associated `Service`, `Duration`, and `Start Time`. The `Start Time` of a span marks the end time from the previous span.
 
@@ -605,7 +556,6 @@ Use this feature thoughtfully and with care. Every key and value is copied into 
 . Locate the HTTP handler `sayHello` in the file `HelloController.java`. Use the method `span.setBaggageItem('my-baggage', name)` before the method call `formatGreetingRemote(name)` to set the baggage with key `my-baggage` to the value of the `name` parameter.
 
 
-[source, java]
 ```
 public String sayHello(@PathVariable String name) {
     try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
@@ -624,7 +574,6 @@ public String sayHello(@PathVariable String name) {
 
 . Locate the HTTP handler `formatGreeting` in the file `FormatController.java`. Use the method `span.getBaggageItem('my-baggage')` to get the value of the name parameter at `service-a`. For convenience log the value using `span.log` to see the value in the Jaeger UI.
 
-[source, java]
 ```
 public String formatGreeting(@RequestParam String name) {
     try (Scope scope = tracer.buildSpan("format-greeting").startActive(true)) {
@@ -640,7 +589,6 @@ public String formatGreeting(@RequestParam String name) {
 
 . Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
-[source, bash]
 ```
 docker-compose build
 docker-compose up
@@ -648,7 +596,6 @@ docker-compose up
 
 . Call the same API endpoint, but now is instrumented with tracing
 
-[source, bash]
 ```
 curl http://localhost:8080/sayHello/Carlos
 Hello Carlos!
@@ -656,15 +603,13 @@ Hello Carlos!
 
 . Open the Jaeger UI using the web browser
 
-[source, bash]
 ```
 open http://localhost:16686/jaeger
 ```
 
 . Select the Service `service-a` from the drop-down options and click `Find Traces`. Expand the section `Logs` for the spans `say-hello` and `format-greeting`
 
-image::java-service-b-baggage.png[]
-
+![b-baggage](../../images/java-service-b-baggage.png)
 
 Notice that the baggage is set in the `service-a` with the value `Carlos` this baggage is propagated to all spans local or remote. In the `server-b` span you can see the baggage value `Carlos` is propagated.
 
@@ -677,21 +622,19 @@ You can also use a tag to search for example searching traces that have a specif
 
 . To search for traces using HTTP method `GET` and status code `200`, enter `http.status_code=200  http.method=GET` on the `Tags` field in the search form, and then click `Find Traces`.
 
-image::jaeger-ui-search.png[]
-
+![ui-search](../../images/jaeger-ui-search.png)
 
 ## Dependency graph
-
 
 The Jaeger UI has a view for service dependencies, it shows a visual Directed acyclic graph (DAG).
 
 Click the tab `Dependencies`, then click the `DAG` tab.
 
-image::jaeger-ui-dependencies-dag-1.jpg[]
+![ui-dep](../../images/jaeger-ui-dependencies-dag-1.jpg)
 
 Notice that the graph shows the direction with an arrow flowing from `service-a` to `service-b`. It also shows the number of traces between the services.
 
 This is is a simple example and there is not much value for a small set of services, but when a large number of services each with multiple endpoints then the graph becomes more interesting like the following example:
 
-image::jaeger-ui-dependencies-dag-2.jpg[]
+![ui-dep-2](../../images/jaeger-ui-dependencies-dag-2.jpg)
 
