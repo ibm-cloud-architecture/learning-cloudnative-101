@@ -94,9 +94,7 @@ Another type of relationship is the `FollowsFrom` and is used in special cases w
 In order to trace across process boundaries in distributed systems, services need to be able to continue the trace injected by the client that sent each request. OpenTracing allows this to happen by providing inject and extract methods that encode a span's context into a carrier.
 The `inject` method allows for the `SpanContext` to be passed on to a carrier. For example, passing the trace information into the client's request so that the server you send it to can continue the trace. The `extract` method does the exact opposite. It extracts the `SpanContext` from the carrier. For example, if there was an active request on the client side, the developer must extract the `SpanContext` using the `io.opentracing.Tracer.extract` method.
 
-
-image::Extract.png[Trace Propagation]
-
+![Trace Propagation](./images/Extract.png)
 
 NOTE: Content extracted from http://opentracing.io
 
@@ -121,5 +119,10 @@ NOTE: Content extracted from http://opentracing.io
 | Topics                            | Description         | Link        |
 | --------------------------------| ------------------  |:----------- |
 | NodeJS | Implementing Distributed Tracing in NodeJS | [NodeJS](./activities/lab1) |
-| Creating APIs | Creating REST APIs using API Connect. | [Creating APIs](./activities/creatingAPIs) |
-| Importing an API | Import an existing OpenAPI 2.0 definition. | [Importing APIs](./activities/importingAPIs) |
+| Java | Creating REST APIs using API Connect. | [Creating APIs](./activities/lab2) |
+| Open Liberty | Import an existing OpenAPI 2.0 definition. | [Importing APIs](./activities/lab3) |
+| Jaeger in OpenShift & Kubernetes | Import an existing OpenAPI 2.0 definition. | [Importing APIs](./activities/lab4) |
+| Jaeger with Istio - NodeJS | Import an existing OpenAPI 2.0 definition. | [Importing APIs](./activities/lab5) |
+| Jaeger with Istio - Java | Import an existing OpenAPI 2.0 definition. | [Importing APIs](./activities/lab6) |
+| Jaeger with Istio - Open Liberty | Import an existing OpenAPI 2.0 definition. | [Importing APIs](./activities/lab7) |
+
