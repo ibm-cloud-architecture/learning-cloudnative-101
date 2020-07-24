@@ -31,7 +31,7 @@
     - title: Containers
       path: /lectures/containers/
     - title: K8s Overview
-      path: /lectures/kubernetes/
+      path: /lectures/kube-overview/
     - title: K8s Core Concepts
       path: /lectures/kube-core-concepts/
     - title: K8s Configuration
