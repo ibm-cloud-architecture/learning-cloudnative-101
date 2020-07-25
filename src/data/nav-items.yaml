@@ -11,9 +11,9 @@
 - title: Concepts
   pages:
     - title: Cloud Native
-      path: /concepts/cloud-native-overview/
+      path: /concepts/cloud-native/
     - title: Cloud Native App Dev
-      path: /concepts/cloud-native-overview/
+      path: /concepts/cloud-native-app-dev/
     - title: Containers
       path: /concepts/containers/
     - title: Kubernetes
@@ -21,9 +21,9 @@
     - title: DevOps Best Practices
       path: /concepts/devops/
     - title: Continuous Integration (CI)
-      path: /concepts/continuous-integration/
+      path: /concepts/ci/
     - title: Continuous Deployment (CD)
-      path: /concepts/continuous-deployment/
+      path: /concepts/cd/
 - title: Lectures
   pages:
     - title: Cloud Native
