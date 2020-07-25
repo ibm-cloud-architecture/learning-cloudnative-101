@@ -11,63 +11,63 @@
 - title: Concepts
   pages:
     - title: Cloud Native
-      path: /cloud-native-overview/read/
+      path: /concepts/cloud-native/
     - title: Cloud Native App Dev
-      path: /cloud-native-overview/appDev/
+      path: /concepts/cloud-native-app-dev/
     - title: Containers
-      path: /containers/read/
+      path: /concepts/containers/
     - title: Kubernetes
-      path: /kubernetes/read/
+      path: /concepts/kubernetes/
     - title: DevOps Best Practices
-      path: /devops/
+      path: /concepts/devops/
     - title: Continuous Integration (CI)
-      path: /continuous-integration/read/
+      path: /concepts/ci/
     - title: Continuous Deployment (CD)
-      path: /continuous-deployment/read/
+      path: /concepts/cd/
 - title: Lectures
   pages:
     - title: Cloud Native
-      path: /cloud-native-overview/
+      path: /lectures/cloud-native/
     - title: Containers
-      path: /containers/
+      path: /lectures/containers/
     - title: K8s Overview
-      path: /kubernetes/
+      path: /lectures/kube-overview/
     - title: K8s Core Concepts
-      path: /kubernetes/core-concepts/
+      path: /lectures/kube-core-concepts/
     - title: K8s Configuration
-      path: /kubernetes/configuration/
+      path: /lectures/kube-configuration/
     - title: K8s Multi-Container Pods
-      path: /kubernetes/multi-container-pods/
+      path: /lectures/kube-multi-container-pods/
     - title: K8s Observability
-      path: /kubernetes/observability/
+      path: /lectures/kube-observability/
     - title: K8s Pod Design
-      path: /kubernetes/pod-design/
+      path: /lectures/kube-pod-design/
     - title: K8s Services & Networking
-      path: /kubernetes/services-networking/
+      path: /lectures/kube-services-networking/
     - title: K8s State Persistence
-      path: /kubernetes/state-persistence/
+      path: /lectures/kube-state-persistence/
     - title: K8s Troubleshoot
-      path: /kubernetes/troubleshooting/
+      path: /lectures/kube-troubleshooting/
     - title: Continuous Integration (CI)
-      path: /continuous-integration/
+      path: /lectures/continuous-integration/
     - title: Continuous Deployment (CD)
-      path: /continuous-deployment/
+      path: /lectures/continuous-deployment/
 - title: Electives
   pages:
     - title: Migrate Cloud Foundry to K8s
-      path: /cf-to-k8s/
+      path: /electives/cf-to-k8s/
     - title: API Connect
-      path: /api-connect/
+      path: /electives/api-connect/
     - title: Cloud Data Services
-      path: /data-services/
+      path: /electives/data-services/
     - title: Event-Driven Architecture
-      path: /eda/
+      path: /electives/eda/
     - title: Monitoring
-      path: /monitoring/sysdig/
+      path: /electives/monitoring/sysdig/
     - title: Logging
-      path: /logging/logdna/
+      path: /electives/logging/logdna/
     - title: Distributed Tracing
-      path: /dist-trace/
+      path: /electives/dist-trace/
 - title: Projects
   pages:
     - title: OpenShift CICD
