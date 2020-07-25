@@ -6,60 +6,66 @@ title: Lab 1 - Node.js
 
 1. Clone the git repository
 
-```
-git clone https://github.com/ibm-cloud-architecture/learning-distributed-tracing-101.git
-```
+  ```
+  git clone https://github.com/ibm-cloud-architecture/learning-distributed-tracing-101.git
+  ```
 
 2. Change to the lab directory
 
-```
-cd lab-jaeger-nodejs
-```
-+
-NOTE: The solution to the lab is located in the directory `lab-jaeger-nodejs/solution`
-+
-NOTE: docker-compose is already configured to run Jaeger
-+
-NOTE: In case that stopping docker-compose doesn't work with `Ctrl-C`, you can stop it using `docker-compose stop`
+  ```
+  cd lab-jaeger-nodejs
+  ```
 
+  <InlineNotification>
+    **Lorem ipsum:** dolor sit amet, [consectetur adipiscing](/components/InlineNotification) elit. Curabitur ac odio arcu. Vestibulum egestas eleifend porttitor. Quisque malesuada pulvinar pellentesque. Nunc dictum odio eu enim venenatis fringilla. Nunc finibus enim dui, a tempus quam commodo vitae. Donec non eros gravida dolor porta suscipit non vel quam
+  </InlineNotification>
+
+<InlineNotification>
+  The solution to the lab is located here: [Solution](href:/lab-jaeger-nodejs/solution)).
+</InlineNotification>
+
+<InlineNotification>
+`docker-compose` is already configured to run `Jaeger`
+
+In case that stopping docker-compose doesn't work with `Ctrl-C`, you can stop it using `docker-compose stop`
+</InlineNotification>
 
 ## Test your environment
 
 1. Change directory to the lab
 
-```
-cd lab-jaeger-nodejs
-```
-
+  ```
+  cd lab-jaeger-nodejs
+  ```
 
 2. Test the service without tracing enable
 
-```
-docker-compose build
-docker-compose up
-```
+  ```
+  docker-compose build
+  docker-compose up
+  ```
 
 3. Try the service
 
-```
-curl http://localhost:8080/sayHello/Carlos
-Hello Carlos!
-```
+  ```
+  curl http://localhost:8080/sayHello/Carlos
+  Hello Carlos!
+  ```
 
 ## Add client libraries
 
 1. Add the tracing client library for the node.js `service-a`, edit the file `service-a/package.json` and add the dependency for `jaeger-client`
 The json section should look like the following:
 
-```
-{
-"dependencies": {
-    "express": "^4.17.1",
-    "jaeger-client": "^3.15.0",
-    "bent": "^6.0.5"
+  ```
+  {
+  "dependencies": {
+      "express": "^4.17.1",
+      "jaeger-client": "^3.15.0",
+      "bent": "^6.0.5"
+    }
   }
-}
-```
+  ```
 
 ## Tracing every HTTP request
 
