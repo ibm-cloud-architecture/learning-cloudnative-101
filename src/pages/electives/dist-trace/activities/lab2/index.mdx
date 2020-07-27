@@ -150,7 +150,7 @@ In the `service-a` we have the API endpoint `/sayHello`, we used this endpoint i
     docker-compose up
     ```
 
-2. Run  the following code to call the API multiple times or open the URL endpoint \http://localhost:8080/sayHello/Carlos on the web browser and click refresh multiple time.
+2. Run  the following code to call the API multiple times or open the URL endpoint `http://localhost:8080/sayHello/Carlos` on the web browser and click refresh multiple time.
 
     ```
     i=0;
@@ -201,7 +201,7 @@ When troubleshooting we are interested first on the slowest requests, you can cl
     docker-compose up
     ```
 
-9. Run again the following code to call the API multiple times or open the URL endpoint http://localhost:8080/sayHello/Carlos on the web browser and click refresh multiple time.
+9. Run again the following code to call the API multiple times or open the URL endpoint `http://localhost:8080/sayHello/Carlos` on the web browser and click refresh multiple time.
 
     ```
     i=0;
@@ -429,7 +429,7 @@ For the following example, we are going to use a remote service `service-b` to f
     }
     ```
 
-3. The service `service-b` is already instrumented to trace every HTTP request using the same procedure <<tracing-every-http-request, Trace every HTTP request>> that we did for service `service-a`.
+3. The service `service-b` is already instrumented to trace every HTTP request using the same procedure `<<tracing-every-http-request, Trace every HTTP request>>` that we did for service `service-a`.
 
 4. Import at the top of the file `src/main/java/com/example/serviceb/FormatController.java` the `opentracing` libraries.
 
