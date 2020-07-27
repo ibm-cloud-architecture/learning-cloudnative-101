@@ -6,15 +6,15 @@ title: Using Jaeger in OpenShift/Kubernetes
 
 1. Clone the git repository
 
-```
-git clone https://github.com/ibm-cloud-architecture/learning-distributed-tracing-101.git
-```
+  ```
+  git clone https://github.com/ibm-cloud-architecture/learning-distributed-tracing-101.git
+  ```
 
 2. Change to the lab directory
 
-```
-cd learning-distrubing-tracing-101/lab-jaeger-ocp
-```
+  ```
+  cd learning-distrubing-tracing-101/lab-jaeger-ocp
+  ```
 
 ## Understanding Jaeger
 
@@ -36,14 +36,14 @@ Create a Custom Resource for Jaeger
 3. Verify Jaeger Operator installed
 4. From the command line, create a Jaeger instance in the `default` namespace
 
-```
-kubectl apply -f - <<EOF
-apiVersion: jaegertracing.io/v1
-kind: Jaeger
-metadata:
-  name: my-jaeger
-EOF
-```
+  ```
+  kubectl apply -f - <<EOF
+  apiVersion: jaegertracing.io/v1
+  kind: Jaeger
+  metadata:
+    name: my-jaeger
+  EOF
+  ```
 
 ## (OpenShift 4) Creating an instance of Jaeger
 
@@ -62,23 +62,23 @@ Create a Custom Resource for Jaeger
 
 1. Verify the Jaeger services in the `default` namespace
 
-```
-oc get services -n default | grep jaeger
-my-jaeger-agent                ClusterIP      None             <none>      5775/UDP,5778/TCP,6831/UDP,6832/UDP      7m
-my-jaeger-collector            ClusterIP      172.21.191.135   <none>      9411/TCP,14250/TCP,14267/TCP,14268/TCP   7m
-my-jaeger-collector-headless   ClusterIP      None             <none>      9411/TCP,14250/TCP,14267/TCP,14268/TCP   7m
-my-jaeger-query                ClusterIP      172.21.89.78     <none>      443/TCP                                  7m
-```
+  ```
+  oc get services -n default | grep jaeger
+  my-jaeger-agent                ClusterIP      None             <none>      5775/UDP,5778/TCP,6831/UDP,6832/UDP      7m
+  my-jaeger-collector            ClusterIP      172.21.191.135   <none>      9411/TCP,14250/TCP,14267/TCP,14268/TCP   7m
+  my-jaeger-collector-headless   ClusterIP      None             <none>      9411/TCP,14250/TCP,14267/TCP,14268/TCP   7m
+  my-jaeger-query                ClusterIP      172.21.89.78     <none>      443/TCP                                  7m
+  ```
 
 NOTE: Take a look at the `my-jaeger-collector` on port `14268/TCP` this is the service to be used by our services to send the Jaeger traces containing the spans, you will configure this in the kubernetes deployment yaml manifest.
 
 2. Find the route to the Jaeger UI
 
-```
-oc get route my-jaeger        
-NAME        HOST/PORT                            PATH   SERVICES          PORT    TERMINATION   WILDCARD
-my-jaeger   my-jaeger-default.apps-crc.testing          my-jaeger-query   <all>   reencrypt     None
-```
+  ```
+  oc get route my-jaeger        
+  NAME        HOST/PORT                            PATH   SERVICES          PORT    TERMINATION   WILDCARD
+  my-jaeger   my-jaeger-default.apps-crc.testing          my-jaeger-query   <all>   reencrypt     None
+  ```
 
 3. Open the Jaeger UI in the browser using value HOST/PORT https://my-jaeger-default.apps-crc.testing
 
@@ -90,9 +90,9 @@ Use the file `jaeger-nodejs.yaml` for Node.js or the file `jaeger-java.yaml` for
 
 Here is an example using Node.js services and deployments:
 
-```
-oc apply -f jaeger-nodejs.yaml -n default
-```
+  ```
+  oc apply -f jaeger-nodejs.yaml -n default
+  ```
 Let's look at the file content on how the services are defined to be deploy into OpenShift cluster:
 
 ```
