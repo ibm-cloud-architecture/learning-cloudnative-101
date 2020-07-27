@@ -18,10 +18,10 @@ title: Using Jaeger in Service Mesh(Istio) with NodeJS
 
 ## Understanding Jaeger, Service Mesh, Kiali
 
-* Read the OpenShift Documentation for:
-** https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_arch/ossm-jaeger.html[Understanding Jaeger]
-** https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_arch/understanding-ossm.html[Understanding Service Mesh]
-** https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_arch/ossm-kiali.html[Understanding Kiali]
+Read the OpenShift Documentation for:
+  * [Understanding Jaeger](https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_arch/ossm-jaeger.html)
+  * [Understanding Service Mesh](https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_arch/understanding-ossm.html)
+  * [Understanding Kiali](https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_arch/ossm-kiali.html)
 
 ## Installing Service Mesh (Istio) Operator
 
@@ -30,10 +30,10 @@ The following operators and tools are installed and configured as part of the Se
 * Jaeger operator 
 * Prometheus, Grafana, and Kiali
 
-With OpenShift 4, you can use the https://cloud.redhat.com/openshift/install/crc/installer-provisioned[CodeReady Containers] to set up a local development cluster 
+With OpenShift 4, you can use the [CodeReady Containers](https://cloud.redhat.com/openshift/install/crc/installer-provisioned) to set up a local development cluster 
 
-* https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_install/preparing-ossm-installation.html[Preparing to install Red Hat OpenShift Service Mesh]
-* https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_install/installing-ossm.html[Installing Red Hat OpenShift Service Mesh]
+* [Preparing to install Red Hat OpenShift Service Mesh](https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_install/preparing-ossm-installation.html)
+* [Installing Red Hat OpenShift Service Mesh](https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_install/installing-ossm.html)
 
 ## Verify Service Mesh installation
 
@@ -114,10 +114,10 @@ kiali                  kiali-istio-system.apps-crc.testing                      
 prometheus             prometheus-istio-system.apps-crc.testing                    prometheus             <all>   reencrypt     None
 ```
 
-* Open the different UIs in the browser using the route's values for HOST/PORT
-** Jaeger: https://jaeger-istio-system.apps-crc.testing
-** Grafana: https://grafana-istio-system.apps-crc.testing
-** Kiali: https://kiali-istio-system.apps-crc.testing
+Open the different UIs in the browser using the route's values for HOST/PORT
+  * Jaeger: https://jaeger-istio-system.apps-crc.testing
+  * Grafana: https://grafana-istio-system.apps-crc.testing
+  * Kiali: https://kiali-istio-system.apps-crc.testing
 
 ## Deploy the Application
 
@@ -227,16 +227,17 @@ spec:
 
 In the yaml deployment manifest there are few items to point out:
 
-* **Ports**
-** The port for the container is specified in the service and the container in the deployment, for example, `service-a` with port `8080` and `service-b` with port `8081`
-* **Environment Variables**
-** The variable `JAEGER_ENDPOINT` is specified to indicate to the Jaeger client library to send the traces using HTTP to the jaeger collector service `http://jaeger-collector.istio-system.svc:14268/api/traces` that is deployed on the namespace `istio-system`. 
-** The variable `SERVICE_FORMATTER` used by `service-a` to indicate the hostname of `service-b` that will be used to format the hello message.
-* Istio has certain https://istio.io/docs/setup/additional-setup/requirements/[specific requirements], the ones we used in our yaml manifest are the following
-** *Named service ports* 
-*** The service port name starts with `http`
-** **Deployment with app and version labels**
-*** THe Pod template should have the following labels defined `app` and `version`
+**Ports**
+  * The port for the container is specified in the service and the container in the deployment, for example, `service-a` with port `8080` and `service-b` with port `8081`
+
+**Environment Variables**
+  * The variable `JAEGER_ENDPOINT` is specified to indicate to the Jaeger client library to send the traces using HTTP to the jaeger collector service `http://jaeger-collector.istio-system.svc:14268/api/traces` that is deployed on the namespace `istio-system`. 
+  * The variable `SERVICE_FORMATTER` used by `service-a` to indicate the hostname of `service-b` that will be used to format the hello message.
+  * Istio has certain [specific requirements](https://istio.io/docs/setup/additional-setup/requirements/), the ones we used in our yaml manifest are the following
+    * **Named service ports** 
+      * The service port name starts with `http`
+    * **Deployment with app and version labels**
+      * THe Pod template should have the following labels defined `app` and `version`
 
 
 2. The Node.js code was modified for both services to handle Istio zipkin/B3 header propagation, the incomming HTTP request and the outgoing HTTP request now has B3 headers instead of jaeger headers. A different encoder was use to extract and inject the headers to be compatible with Istio. The source code is available in their respective directories `service-a` and `service-b`, here is a snippet of the code changes in `app.js`
@@ -345,7 +346,7 @@ You can see 8 Spans in a single trace starting from the `istio-ingressgateway` e
 
 ![istio-span](../../images/istio-nodejs-jaeger-spans.png)
 
-Check one of the labs xref:lab-jaeger-nodejs.adoc[Lab Jaeger - Node.js] or xref:lab-jaeger-java.adoc[Lab Jaeger - Java] for a more in-depth lab for Opentracing with Jaeger.
+Check one of the labs [Lab Jaeger - Node.js](./lab1) or [Lab Jaeger - Java](./lab2) for a more in-depth lab for Opentracing with Jaeger.
 
 9. In the Kiali UI select Graph to see a topology view of the services, you can enable traffic animation under Display to see the flow of HTTP requests
 
