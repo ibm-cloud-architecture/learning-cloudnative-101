@@ -19,38 +19,46 @@ title: Open Liberty
 
 2. Change to the lab directory
 
-```
-cd lab-jaeger-ol
-```
+    ```
+    cd lab-jaeger-ol
+    ```
 
-The solution to the lab is located in the directory `lab-jaeger-ol/solution`
+<InlineNotification>
 
-docker-compose is already configured to run Jaeger
+**NOTE:** The solution to the lab is located [here](href:/lab-jaeger-ol/solution).
 
-In case that stopping docker-compose doesn't work with `Ctrl-C` you can stop using `docker-compose stop`
+</InlineNotification>
+
+<InlineNotification>
+
+**NOTE:** `docker-compose` is already configured to run `Jaeger`.
+
+In case that stopping docker-compose doesn't work with `Ctrl-C`, you can stop it using `docker-compose stop`
+
+</InlineNotification>
 
 ## Test your environment
 
 1. Change directory to the lab:
 
-```
-cd lab-jaeger-ol
-```
+    ```
+    cd lab-jaeger-ol
+    ```
 
 
 2. Test the service without tracing enable
 
-```
-docker-compose build
-docker-compose up
-```
+    ```
+    docker-compose build
+    docker-compose up
+    ```
 
 3. Try the service
 
-```
-curl http://localhost:9080/sayHello/Carlos
-Hello Carlos!
-```
+    ```
+    curl http://localhost:9080/sayHello/Carlos
+    Hello Carlos!
+    ```
 
 4. End the service
 
@@ -59,65 +67,63 @@ Use `Ctrl-C` on the window where you started `docker-compose` or use `docker-com
 
 ## Add client libraries
 
-1. Add the tracing client library for the java `service-a`, editing the file `service-a/pom.xml` and adding the dependency for `jaeger-client`.
+1. Add the tracing client library for the java `service-a`, editing the file `service-a/pom.xml` and adding the dependency for `jaeger-client`. The `pom.xml` section should look like the following:
 
-The `pom.xml` section should look like the following:
-
-```
-<dependency>
-    <groupId>io.jaegertracing</groupId>
-    <artifactId>jaeger-client</artifactId>
-    <version>0.34.0</version>
-</dependency>
-```
+    ```
+    <dependency>
+        <groupId>io.jaegertracing</groupId>
+        <artifactId>jaeger-client</artifactId>
+        <version>0.34.0</version>
+    </dependency>
+    ```
 
 ## Tracing every HTTP request
 
 1. Inspect the following environment variables already added to the `services->service-a->environment` and `services->service-b->environment` blocks of the Docker Composer file `docker-compose.yaml`:
 
-```
-JAEGER_REPORTER_LOG_SPANS: "true"
-JAEGER_SAMPLER_TYPE: const
-JAEGER_SAMPLER_PARAM: 1
-```
+    ```
+    JAEGER_REPORTER_LOG_SPANS: "true"
+    JAEGER_SAMPLER_TYPE: const
+    JAEGER_SAMPLER_PARAM: 1
+    ```
 
 2. Add the `<feature>mpOpenTracing-1.3</feature>` element to the `<featureManager>` block of the Open Liberty server configuration file `service-a/src/main/liberty/config/server.xml`. The `<featureManager>` element should look exactly like this:
 
-```
-    <featureManager>
-        <feature>microProfile-3.2</feature>
-        <feature>mpOpenTracing-1.3</feature>
-    </featureManager>
-```
+    ```
+        <featureManager>
+            <feature>microProfile-3.2</feature>
+            <feature>mpOpenTracing-1.3</feature>
+        </featureManager>
+    ```
 
 3. Modify the `<webApplication>` element of the Open Liberty server configuration file `service-a/src/main/liberty/config/server.xml` to instruct Open Liberty to use the OpenTracing dependencies included in the application WAR file. The `<webApplication>` element should look exactly like this:
 
-```
-   <webApplication location="service-a.war" contextRoot="/" >
-        <classloader apiTypeVisibility="+third-party" />
-    </webApplication>
-```
+    ```
+    <webApplication location="service-a.war" contextRoot="/" >
+            <classloader apiTypeVisibility="+third-party" />
+        </webApplication>
+    ```
 
 
 4. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
-```
-docker-compose build
-docker-compose up
-```
+    ```
+    docker-compose build
+    docker-compose up
+    ```
 
 5. Call the same API endpoint, but now is instrumented with tracing
 
-```
-curl http://localhost:9080/sayHello/Carlos
-Hello Carlos!
-```
+    ```
+    curl http://localhost:9080/sayHello/Carlos
+    Hello Carlos!
+    ```
 
 6. Open the Jaeger UI using the web browser
 
-```
-open http://localhost:16686/jaeger
-```
+    ```
+    open http://localhost:16686/jaeger
+    ```
 
 7. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
@@ -129,10 +135,10 @@ open http://localhost:16686/jaeger
 
 9. Force an error in the service by calling the `/error` endpoint.
 
-```
-curl http://localhost:9080/error -I -s | head -n 1
-HTTP/1.1 500 Internal Server Error
-```
+    ```
+    curl http://localhost:9080/error -I -s | head -n 1
+    HTTP/1.1 500 Internal Server Error
+    ```
 
 
 10. Click `Find Traces` now it should show a trace with the error endpoint.
@@ -150,32 +156,32 @@ In the `service-a` we have the API endpoint `/sayHello`, we used this endpoint i
 
 1. Stop docker-compose with `Ctrl+C` and start it again.
 
-```
-docker-compose up
-```
+    ```
+    docker-compose up
+    ```
 
 2. Run the following code to call the API multiple times or open the URL endpoint \http://localhost:9080/sayHello/Carlos on the web browser and click refresh multiple times.
 
-```
-for i in {1..20}
-do 
-  curl http://localhost:9080/sayHello/Carlos -I -s | head -n 1
-  sleep 1
-done
-```
+    ```
+    for i in {1..20}
+    do 
+    curl http://localhost:9080/sayHello/Carlos -I -s | head -n 1
+    sleep 1
+    done
+    ```
 
 3. Open the Jaeger UI using the web browser
 
-```
-open http://localhost:16686/jaeger
-```
+    ```
+    open http://localhost:16686/jaeger
+    ```
 
 4. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
 ![slow-a](../../images/ol-service-a-slow.png)
 
 In the picture above, you can see a timeline graph with each trace represented with a circle, in this case, we have 20 traces in the result set when we clicked `Find Traces`.
-Note that the span names are defined as `<HTTP method>:<@Path value of endpoint’s class>/<@Path value of endpoint’s method>`, which is defined in the property `mp.opentracing.server.operation-name-provider` of the `liberty-maven-plugin` plugin. The other alternatives are listed in the https://github.com/eclipse/microprofile-opentracing/blob/master/spec/src/main/asciidoc/microprofile-opentracing.asciidoc#server-span-name[Eclipse MicroProfile OpenTracing specification].
+Note that the span names are defined as `<HTTP method>:<@Path value of endpoint’s class>/<@Path value of endpoint’s method>`, which is defined in the property `mp.opentracing.server.operation-name-provider` of the `liberty-maven-plugin` plugin. The other alternatives are listed in the [Eclipse MicroProfile OpenTracing specification](https://github.com/eclipse/microprofile-opentracing/blob/master/spec/src/main/asciidoc/microprofile-opentracing.asciidoc#server-span-name).
 Some traces are taking approximately 100ms and others are taking approximately 2ms.
 You can see the pattern that only every 3rd request the response is slow.
 When troubleshooting we are interested first on the slowest requests, you can click on one of the traces on the graph, or you can sort in the table by `Longest First`.
@@ -186,42 +192,42 @@ When troubleshooting we are interested first on the slowest requests, you can cl
 
 6. The handler has a sleep step in the method `sayHello` that delays the response every 3rd request. Open the file `src/main/java/com/example/servicea/HelloController.java` and locate the culprit code.
 
-```
-// simulate a slow request every 3 requests
-try {
-    if (counter++ % 3 == 0) {
-        Thread.sleep(100);
+    ```
+    // simulate a slow request every 3 requests
+    try {
+        if (counter++ % 3 == 0) {
+            Thread.sleep(100);
+        }
+    } catch (InterruptedException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
     }
-} catch (InterruptedException e) {
-    // TODO Auto-generated catch block
-    e.printStackTrace();
-}
-```
+    ```
 
 7. Remove the `try/catch` block and save the file `HelloController.java`.
 
 8. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
-```
-docker-compose build
-docker-compose up
-```
+    ```
+    docker-compose build
+    docker-compose up
+    ```
 
 9. Run again the following code to call the API multiple times or open the URL endpoint \http://localhost:9080/sayHello/Carlos on the web browser and click refresh multiple times.
 
-```
-for i in {1..20}
-do 
-  curl http://localhost:9080/sayHello/Carlos -I -s | head -n 1
-  sleep 1
-done
-```
+    ```
+    for i in {1..20}
+    do 
+    curl http://localhost:9080/sayHello/Carlos -I -s | head -n 1
+    sleep 1
+    done
+    ```
 
 10. Open the Jaeger UI using the web browser
 
-```
-open http://localhost:16686/jaeger
-```
+    ```
+    open http://localhost:16686/jaeger
+    ```
 
 11. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
@@ -237,105 +243,105 @@ In the previous example, we were able to identify the endpoint `/sayHello` as on
 
 1. Add the following imports at the top of the file `HelloController.java`
 
-```
-import java.util.LinkedHashMap;
-import java.util.Map;
+    ```
+    import java.util.LinkedHashMap;
+    import java.util.Map;
 
-import javax.inject.Inject;
+    import javax.inject.Inject;
 
-import io.opentracing.Scope;
-import io.opentracing.Span;
-import io.opentracing.Tracer;
-```
+    import io.opentracing.Scope;
+    import io.opentracing.Span;
+    import io.opentracing.Tracer;
+    ```
 
 2. In the class `HelloController` add the following Autowire to have access to the global tracer
 
-```
-    @Inject
-    private Tracer tracer;
-```
+    ```
+        @Inject
+        private Tracer tracer;
+    ```
 
 3. Locate the method `sayHello` and wrap the code in a try with a scope, this will create a new child span.
 
-```
-public String sayHello(@PathParam("name") String name) {
-    try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
-        String response = formatGreeting(name);
-        return response;
+    ```
+    public String sayHello(@PathParam("name") String name) {
+        try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
+            String response = formatGreeting(name);
+            return response;
+        }
     }
-}
-```
+    ```
 
 4. Get a reference to the new child span `say-hello-handler` using the method `scope.span()`
 
-```
-public String sayHello(@PathParam("name") String name) {
-    try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
-        Span span = scope.span();
-        String response = formatGreeting(name);
-        return response;
+    ```
+    public String sayHello(@PathParam("name") String name) {
+        try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
+            Span span = scope.span();
+            String response = formatGreeting(name);
+            return response;
+        }
     }
-}
-```
+    ```
 
 5. The OpenTracing API supports the method `log` you can log an event with a name and an object. Add a log to the span with a message that contains the value of the name.
 
-```
-public String sayHello(@PathParam("name") String name) {
-    try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
-        Span span = scope.span();
-        Map<String, String> fields = new LinkedHashMap<>();
-        fields.put("event", name);
-        fields.put("message", "this is a log message for name " + name);
-        span.log(fields);
-        // you can also log a string instead of a map, key=event value=<stringvalue>
-        // span.log("this is a log message for name " + name);
-        String response = formatGreeting(name);
-        return response;
+    ```
+    public String sayHello(@PathParam("name") String name) {
+        try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
+            Span span = scope.span();
+            Map<String, String> fields = new LinkedHashMap<>();
+            fields.put("event", name);
+            fields.put("message", "this is a log message for name " + name);
+            span.log(fields);
+            // you can also log a string instead of a map, key=event value=<stringvalue>
+            // span.log("this is a log message for name " + name);
+            String response = formatGreeting(name);
+            return response;
+        }
     }
-}
-```
+    ```
 
 6. The OpenTracing API supports the method `setTag` you can tag the span with a key and any value. Add a tag that contains the response, in normal use cases you would not log the entire response and instead key values that are useful for later searching for spans. Since we are initiating the scope within a `try` statement there is no need to call explicit `span.finish()`. 
 
-```
-public String sayHello(@PathParam("name") String name) {
-    try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
-        Span span = scope.span();
-        Map<String, String> fields = new LinkedHashMap<>();
-        fields.put("event", name);
-        fields.put("message", "this is a log message for name " + name);
-        span.log(fields);
-        // you can also log a string instead of a map, key=event value=<stringvalue>
-        // span.log("this is a log message for name " + name);
-        String response = formatGreeting(name);
-        span.setTag("response", response);
-        return response;
+    ```
+    public String sayHello(@PathParam("name") String name) {
+        try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
+            Span span = scope.span();
+            Map<String, String> fields = new LinkedHashMap<>();
+            fields.put("event", name);
+            fields.put("message", "this is a log message for name " + name);
+            span.log(fields);
+            // you can also log a string instead of a map, key=event value=<stringvalue>
+            // span.log("this is a log message for name " + name);
+            String response = formatGreeting(name);
+            span.setTag("response", response);
+            return response;
+        }
     }
-}
-```
+    ```
 
 7. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
-```
-docker-compose build
-docker-compose up
-```
+    ```
+    docker-compose build
+    docker-compose up
+    ```
 
 
 8. Call the API endpoint.
 
-```
-curl http://localhost:9080/sayHello/Carlos
-Hello Carlos!
-```
+    ```
+    curl http://localhost:9080/sayHello/Carlos
+    Hello Carlos!
+    ```
 
 
 9. Open the Jaeger UI using the web browser
 
-```
-open http://localhost:16686/jaeger
-```
+    ```
+    open http://localhost:16686/jaeger
+    ```
 
 10. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
@@ -356,36 +362,36 @@ The HTTP handler usually calls other functions to perform the business logic, wh
 
 1. The `sayHello` handler calls the function `formatGreeting` to process the input `name`. In the method `formatGreeting` create a new span using `tracer.buildSpan` and name the span `format-greeting`. 
 
-```
-private String formatGreeting(String name) {
-    try (Scope scope = tracer.buildSpan("format-greeting").startActive(true)) {
-        Span span = scope.span();
-        span.log("formatting message locally for name " + name);
-        String response = "Hello " + name + "!";
-        return response;
+    ```
+    private String formatGreeting(String name) {
+        try (Scope scope = tracer.buildSpan("format-greeting").startActive(true)) {
+            Span span = scope.span();
+            span.log("formatting message locally for name " + name);
+            String response = "Hello " + name + "!";
+            return response;
+        }
     }
-}
-```
+    ```
 
 2. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
-```
-docker-compose build
-docker-compose up
-```
+    ```
+    docker-compose build
+    docker-compose up
+    ```
 
 3. Call the API endpoint.
 
-```
-curl http://localhost:9080/sayHello/Carlos
-Hello Carlos!
-```
+    ```
+    curl http://localhost:9080/sayHello/Carlos
+    Hello Carlos!
+    ```
 
 4. Open the Jaeger UI using the web browser
 
-```
-open http://localhost:16686/jaeger
-```
+    ```
+    open http://localhost:16686/jaeger
+    ```
 
 5. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
@@ -409,121 +415,121 @@ For the following example, we are going to use a remote service `service-b` to f
 
 1. In the file `HelloController.java` locate the handler function `sayHello` and replace the function call `formatGreeting(name)` with `formatGreetingRemote(name)`.
 
-```
-public String sayHello(@PathParam("name") String name) {
-    try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
-        Span span = scope.span();
-        Map<String, String> fields = new LinkedHashMap<>();
-        fields.put("event", name);
-        fields.put("message", "this is a log message for name " + name);
-        span.log(fields);
-        String response = formatGreetingRemote(name);
-        span.setTag("response", response);
-        return response;
+    ```
+    public String sayHello(@PathParam("name") String name) {
+        try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
+            Span span = scope.span();
+            Map<String, String> fields = new LinkedHashMap<>();
+            fields.put("event", name);
+            fields.put("message", "this is a log message for name " + name);
+            span.log(fields);
+            String response = formatGreetingRemote(name);
+            span.setTag("response", response);
+            return response;
+        }
     }
-}
-```
+    ```
 
 2. In the method `formatGreetingRemote` the HTTP request is automatically instrumented, and the tracing headers inserted when calling the remote service `service-b` endpoint `/formatGreeting`.
 
-```
-private String formatGreetingRemote(String name) {
-    String serviceName = System.getenv("SERVICE_FORMATTER");
-    if (serviceName == null) {
-        serviceName = "localhost";
+    ```
+    private String formatGreetingRemote(String name) {
+        String serviceName = System.getenv("SERVICE_FORMATTER");
+        if (serviceName == null) {
+            serviceName = "localhost";
+        }
+        String urlPath = "http://" + serviceName + ":9081/formatGreeting";
+        URI uri = UriBuilder //
+                .fromPath(urlPath)
+                .queryParam("name", name).build();
+        Client client = ClientBuilder.newClient();
+        String responseStr = null;
+        try {
+            Response response = client.target(uri.toASCIIString()).request().get();
+            responseStr = response.readEntity(String.class);
+        } finally {
+            client.close();
+        }
+        return responseStr;
     }
-    String urlPath = "http://" + serviceName + ":9081/formatGreeting";
-    URI uri = UriBuilder //
-            .fromPath(urlPath)
-            .queryParam("name", name).build();
-    Client client = ClientBuilder.newClient();
-    String responseStr = null;
-    try {
-        Response response = client.target(uri.toASCIIString()).request().get();
-        responseStr = response.readEntity(String.class);
-    } finally {
-        client.close();
-    }
-    return responseStr;
-}
-```
+    ```
 
 3. The service `service-b` is already instrumented to trace every HTTP request using the same procedure <<tracing-every-http-request, Trace every HTTP request>> that we did for service `service-a`.
 
 4. Import at the top of the file `service-b/src/main/java/com/example/serviceb/FormatController.java` the OpenTracing libraries.
 
-```
-import javax.inject.Inject;
+    ```
+    import javax.inject.Inject;
 
-import io.opentracing.Scope;
-import io.opentracing.Span;
-import io.opentracing.Tracer;
-```
+    import io.opentracing.Scope;
+    import io.opentracing.Span;
+    import io.opentracing.Tracer;
+    ```
 
 5. In the class `FormatController` add the following Autowire to have access to the global tracer
 
-```
-    @Inject
-    private Tracer tracer;
-```
+    ```
+        @Inject
+        private Tracer tracer;
+    ```
 
 6. Located the HTTP handler function `formatGreeting` in the file `FormatController.java`
 
-```
-public String formatGreeting(@QueryParam("name") String name) {
-    String response = "Hello, from service-b " + name + "!";
-    return response;
-}
-```
+    ```
+    public String formatGreeting(@QueryParam("name") String name) {
+        String response = "Hello, from service-b " + name + "!";
+        return response;
+    }
+    ```
 
 7. Create a new child span using the parent span located in the `req` object as context.
 This will allow the trace to have an additional child span. Use the function `tracer.startSpan` and name the span `format-greeting`.
 
-```
-public String formatGreeting(@QueryParam("name") String name) {
-    try (Scope scope = tracer.buildSpan("format-greeting").startActive(true)) {
-        Span span = scope.span();
-        String response = "Hello, from service-b " + name + "!";
-        return response;
+    ```
+    public String formatGreeting(@QueryParam("name") String name) {
+        try (Scope scope = tracer.buildSpan("format-greeting").startActive(true)) {
+            Span span = scope.span();
+            String response = "Hello, from service-b " + name + "!";
+            return response;
+        }
     }
-}
-```
+    ```
 
 8. Add a log event to the new span using the method `span.log`.
 
-```
-public String formatGreeting(@QueryParam("name") String name) {
-    try (Scope scope = tracer.buildSpan("format-greeting").startActive(true)) {
-        Span span = scope.span();
-        span.log("formatting message remotely for name " + name);
-        String response = "Hello, from service-b " + name + "!";
-        return response;
+    ```
+    public String formatGreeting(@QueryParam("name") String name) {
+        try (Scope scope = tracer.buildSpan("format-greeting").startActive(true)) {
+            Span span = scope.span();
+            span.log("formatting message remotely for name " + name);
+            String response = "Hello, from service-b " + name + "!";
+            return response;
+        }
     }
-}
-```
+    ```
 
 
 9. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
-```
-docker-compose build
-docker-compose up
-```
+    ```
+    docker-compose build
+    docker-compose up
+    ```
 
 
 10. Call the API endpoint.
 
-```
-curl http://localhost:9080/sayHello/Carlos
-Hello Carlos!
-```
+    ```
+    curl http://localhost:9080/sayHello/Carlos
+    Hello Carlos!
+    ```
 
 
 11. Open the Jaeger UI using the web browser
 
-```
-open http://localhost:16686/jaeger
-```
+    ```
+    open http://localhost:16686/jaeger
+    ```
 
 12. Select the Service `service-a` from the drop-down options and click `Find Traces`
 
@@ -565,56 +571,56 @@ Use this feature thoughtfully and with care. Every key and value is copied into 
 
 1. Locate the HTTP handler `sayHello` in the file `HelloController.java`. Use the method `span.setBaggageItem('my-baggage', name)` before the method call `formatGreetingRemote(name)` to set the baggage with key `my-baggage` to the value of the `name` parameter.
 
-```
-public String sayHello(@PathParam("name") String name) {
-    try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
-        Span span = scope.span();
-        Map<String, String> fields = new LinkedHashMap<>();
-        fields.put("event", name);
-        fields.put("message", "this is a log message for name " + name);
-        span.log(fields);
-        span.setBaggageItem("my-baggage", name);
-        String response = formatGreetingRemote(name);
-        span.setTag("response", response);
-        return response;
+    ```
+    public String sayHello(@PathParam("name") String name) {
+        try (Scope scope = tracer.buildSpan("say-hello-handler").startActive(true)) {
+            Span span = scope.span();
+            Map<String, String> fields = new LinkedHashMap<>();
+            fields.put("event", name);
+            fields.put("message", "this is a log message for name " + name);
+            span.log(fields);
+            span.setBaggageItem("my-baggage", name);
+            String response = formatGreetingRemote(name);
+            span.setTag("response", response);
+            return response;
+        }
     }
-}
-```
+    ```
 
 2. Locate the HTTP handler `formatGreeting` in the file `FormatController.java`. Use the method `span.getBaggageItem('my-baggage')` to get the value of the name parameter at `service-a`. For convenience log the value using `span.log` to see the value in the Jaeger UI.
 
-```
-public String formatGreeting(@QueryParam("name") String name) {
-    try (Scope scope = tracer.buildSpan("format-greeting").startActive(true)) {
-        Span span = scope.span();
-        span.log("formatting message remotely for name " + name);
-        String response = "Hello, from service-b " + name + "!";
-        String myBaggage = span.getBaggageItem("my-baggage");
-        span.log("this is baggage " + myBaggage);
-        return response;
+    ```
+    public String formatGreeting(@QueryParam("name") String name) {
+        try (Scope scope = tracer.buildSpan("format-greeting").startActive(true)) {
+            Span span = scope.span();
+            span.log("formatting message remotely for name " + name);
+            String response = "Hello, from service-b " + name + "!";
+            String myBaggage = span.getBaggageItem("my-baggage");
+            span.log("this is baggage " + myBaggage);
+            return response;
+        }
     }
-}
-```
+    ```
 
 3. Build and run the service. If docker-compose is already running in the terminal enter `Ctrl+C` to exit and stop the containers.
 
-```
-docker-compose build
-docker-compose up
-```
+    ```
+    docker-compose build
+    docker-compose up
+    ```
 
 4. Call the same API endpoint, but now is instrumented with tracing
 
-```
-curl http://localhost:9080/sayHello/Carlos
-Hello Carlos!
-```
+    ```
+    curl http://localhost:9080/sayHello/Carlos
+    Hello Carlos!
+    ```
 
 5. Open the Jaeger UI using the web browser
 
-```
-open http://localhost:16686/jaeger
-```
+    ```
+    open http://localhost:16686/jaeger
+    ```
 
 6. Select the Service `service-a` from the drop-down options and click `Find Traces`. Expand the section `Logs` for the spans `say-hello` and `format-greeting`
 
@@ -651,4 +657,4 @@ This is is a simple example and there is not much value for a small set of servi
 
 ## Eclipse MicroProfile annotations
 
-The https://projects.eclipse.org/projects/technology.microprofile[Eclipse MicroProfile] project is designed to simplify the creation of microservices and it https://github.com/eclipse/microprofile-opentracing/blob/master/spec/src/main/asciidoc/microprofile-opentracing.asciidoc[defines annotations] that are specific for further customizing traces generated with OpenTracing libraries.
+The [Eclipse MicroProfile](https://projects.eclipse.org/projects/technology.microprofile) project is designed to simplify the creation of microservices and it [defines annotations](https://github.com/eclipse/microprofile-opentracing/blob/master/spec/src/main/asciidoc/microprofile-opentracing.asciidoc) that are specific for further customizing traces generated with OpenTracing libraries.
