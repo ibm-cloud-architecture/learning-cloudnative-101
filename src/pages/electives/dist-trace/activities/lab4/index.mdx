@@ -18,14 +18,14 @@ title: Using Jaeger in OpenShift/Kubernetes
 
 ## Understanding Jaeger
 
-* Read the OpenShift Documentation https://docs.openshift.com/container-platform/4.1/service_mesh/service_mesh_arch/ossm-jaeger.html[Understanding Jaeger]
+* Read the OpenShift Documentation [Understanding Jaeger](https://docs.openshift.com/container-platform/4.1/service_mesh/service_mesh_arch/ossm-jaeger.html)
 
 ## Installing the Jaeger operator
 
-* OpenShift 3
-** Install from OperatorHub.io https://operatorhub.io/operator/jaeger
-* OpenShift 4, You can use the CodeReady Containers for local development cluster https://cloud.redhat.com/openshift/install/crc/installer-provisioned
-** https://docs.openshift.com/container-platform/4.1/service_mesh/service_mesh_install/installing-ossm.html#ossm-operator-install-jaeger_installing-ossm[Installing the Jaeger Operator on OpenShift 4]
+OpenShift 3
+  * Install from OperatorHub.io [Jaeger Operator](https://operatorhub.io/operator/jaeger)
+OpenShift 4, You can use the CodeReady Containers for local development cluster [Code Ready Containers](https://cloud.redhat.com/openshift/install/crc/installer-provisioned)
+  * [Installing the Jaeger Operator on OpenShift 4](https://docs.openshift.com/container-platform/4.1/service_mesh/service_mesh_install/installing-ossm.html#ossm-operator-install-jaeger_installing-ossm)
 
 ## (OpenShift 3) Creating an instance of Jaeger
 
@@ -80,7 +80,7 @@ NOTE: Take a look at the `my-jaeger-collector` on port `14268/TCP` this is the s
   my-jaeger   my-jaeger-default.apps-crc.testing          my-jaeger-query   <all>   reencrypt     None
   ```
 
-3. Open the Jaeger UI in the browser using value HOST/PORT https://my-jaeger-default.apps-crc.testing
+3. Open the Jaeger UI in the browser using value HOST/PORT - https://my-jaeger-default.apps-crc.testing
 
 ## Deploy the Application
 
@@ -185,11 +185,12 @@ spec:
 
 In the yaml deployment manifest there are few items to point out:
 
-* **Ports**
-** The port for the container is specified in the service and the container in the deployment, for example `service-a` with port `8080` and `service-b` with port `8081`
-* **Environment Variables**
-** The variable `JAEGER_ENDPOINT` is specified to indicate to the Jaeger client library to send the traces using http to the jaeger collector service `http://my-jaeger-collector:14268/api/traces` that is deployed on the same namespace `default` as the services. You could also opt for using a side card and use UDP to send traces to an agent side card and this will foward the traces to the jaeger collector for more info see the jaeger operator documentation on how to enable this with an annotation.  
-** The variable `SERVICE_FORMATTER` used by `service-a` to indicate the hostname of `service-b` that will use to format the hello message.
+**Ports**
+  * The port for the container is specified in the service and the container in the deployment, for example `service-a` with port `8080` and `service-b` with port `8081`.
+
+**Environment Variables**
+  * The variable `JAEGER_ENDPOINT` is specified to indicate to the Jaeger client library to send the traces using http to the jaeger collector service `http://my-jaeger-collector:14268/api/traces` that is deployed on the same namespace `default` as the services. You could also opt for using a side card and use UDP to send traces to an agent side card and this will foward the traces to the jaeger collector for more info see the jaeger operator documentation on how to enable this with an annotation.  
+  * The variable `SERVICE_FORMATTER` used by `service-a` to indicate the hostname of `service-b` that will use to format the hello message.
 
 
 2. Verify services are deployed and running:
@@ -245,4 +246,4 @@ From the result you can see that `service-a` called `service-b` and replied back
 ![jaeger-span](../../images/ocp-jaeger-spans.png)
 
 
-Check one of the labs xref:lab-jaeger-nodejs.adoc[Lab Jaeger - Node.js] or xref:lab-jaeger-java.adoc[Lab Jaeger - Java] for a more in depth lab for Opentracing with Jaeger.
+Check one of the labs [Lab Jaeger - Node.js](./lab1) or [Lab Jaeger - Java](./lab2) for a more in depth lab for Opentracing with Jaeger.
