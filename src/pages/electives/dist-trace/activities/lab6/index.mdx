@@ -6,22 +6,22 @@ title: Using Jaeger in Service Mesh(Istio) with Java
 
 1. Clone the git repository
 
-```
-git clone https://github.com/ibm-cloud-architecture/learning-distributed-tracing-101.git
-```
+  ```
+  git clone https://github.com/ibm-cloud-architecture/learning-distributed-tracing-101.git
+  ```
 
 2. Change to the lab directory for **Java**
 
-```
-cd learning-distributed-tracing-101.git/lab-jaeger-istio-java
-```
+  ```
+  cd learning-distributed-tracing-101.git/lab-jaeger-istio-java
+  ```
 
 ## Understanding Jaeger, Service Mesh, Kiali
 
 * Read the OpenShift Documentation for:
-** https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_arch/ossm-jaeger.html[Understanding Jaeger]
-** https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_arch/understanding-ossm.html[Understanding Service Mesh]
-** https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_arch/ossm-kiali.html[Understanding Kiali]
+** [Understanding Jaeger](https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_arch/ossm-jaeger.html)
+** [Understanding Service Mesh](https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_arch/understanding-ossm.html)
+** [Understanding Kiali](https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_arch/ossm-kiali.html)
 
 ## Installing Service Mesh (Istio) Operator
 
@@ -39,9 +39,9 @@ With OpenShift 4, you can use the https://cloud.redhat.com/openshift/install/crc
 
 3. Verify that istio components are installed in the namespace `istio-system`
 
-```
-oc get pods -n istio-system
-```
+  ```
+  oc get pods -n istio-system
+  ```
 
 Verify the output:
 
@@ -63,9 +63,9 @@ prometheus-685bdbdc45-rljkq             2/2     Running   0          5m23s
 
 4. Verify services in the namespace `istio-system`
 
-```
-oc get services -n istio-system
-```
+  ```
+  oc get services -n istio-system
+  ```
 
 Verify the output:
 
@@ -91,17 +91,17 @@ zipkin                      ClusterIP   172.30.62.142    <none>        9411/TCP 
 
 5. Verify that the ServiceMeshMemberRoll includes the target namespace for example `default` as one of the `MEMBERS`
 
-```
-oc get ServiceMeshMemberRoll -n istio-system
-NAME      MEMBERS
-default   [default bookinfo]
-```
+  ```
+  oc get ServiceMeshMemberRoll -n istio-system
+  NAME      MEMBERS
+  default   [default bookinfo]
+  ```
 
 6. Verify routes in to the different UI dashboards for Jaeger, Grafana, and Kiali
 
-```
-oc get route -n istio-system
-```
+  ```
+  oc get route -n istio-system
+  ```
 
 Verify the output, make sure `jaeger-query` is using `edge` for tls termination, if not you can use `oc edit service jaeger-query -n istio-system` and change it.
 
@@ -127,13 +127,12 @@ Use the file `istio-java.yaml` for Java
 
 Here is an example:
 
-```
-oc apply -f istio-java.yaml -n default
-```
+  ```
+  oc apply -f istio-java.yaml -n default
+  ```
 Let's look at the file content on how the services are defined to be deployed into OpenShift cluster:
 
 ```
----
 ---
 apiVersion: v1
 kind: Service
@@ -247,37 +246,37 @@ In the yaml deployment manifest there are few items to point out:
 
 2. The `pom.xml` for each service contains the dependency for Zipkin to handle the B3 headers that Istio Envoy proxy forwards, this way allowing for end to end propagation. The source code is available in their respective directories `service-a` and `service-b`, the dependencies related to opentracing in the file `pom.xml` for the service looks like this:
 
-```
-<dependency>
-  <groupId>io.opentracing</groupId>
-  <artifactId>opentracing-api</artifactId>
-  <version>0.33.0</version>
-</dependency>
+  ```
+  <dependency>
+    <groupId>io.opentracing</groupId>
+    <artifactId>opentracing-api</artifactId>
+    <version>0.33.0</version>
+  </dependency>
 
-<dependency>
-  <groupId>io.opentracing.contrib</groupId>
-  <artifactId>opentracing-spring-cloud-starter</artifactId>
-  <version>0.3.7</version>
-</dependency>
+  <dependency>
+    <groupId>io.opentracing.contrib</groupId>
+    <artifactId>opentracing-spring-cloud-starter</artifactId>
+    <version>0.3.7</version>
+  </dependency>
 
-<dependency>
-  <groupId>io.jaegertracing</groupId>
-  <artifactId>jaeger-client</artifactId>
-  <version>1.0.0</version>
-</dependency>
+  <dependency>
+    <groupId>io.jaegertracing</groupId>
+    <artifactId>jaeger-client</artifactId>
+    <version>1.0.0</version>
+  </dependency>
 
-<dependency>
-  <groupId>io.jaegertracing</groupId>
-  <artifactId>jaeger-zipkin</artifactId>
-  <version>1.0.0</version>
-</dependency>
-```
+  <dependency>
+    <groupId>io.jaegertracing</groupId>
+    <artifactId>jaeger-zipkin</artifactId>
+    <version>1.0.0</version>
+  </dependency>
+  ```
 
 3. Deploy the Istio Gateway and VirtualService
 
-```
-oc apply -f gateway.yaml -n default
-```
+  ```
+  oc apply -f gateway.yaml -n default
+  ```
 
 Here is the content of `gateway.yaml`
 
@@ -319,43 +318,43 @@ spec:
 
 4. Verify services are deployed and running:
 
-```
-oc get all -l app=service-a -n default
-oc get all -l app=service-b -n default
-NAME                             READY     STATUS    RESTARTS   AGE
-pod/service-a-74cd5c6496-nvllm   2/2       Running   0          6m7s
-pod/service-b-674f96464b-hbmg7   2/2       Running   0          6m44s
+  ```
+  oc get all -l app=service-a -n default
+  oc get all -l app=service-b -n default
+  NAME                             READY     STATUS    RESTARTS   AGE
+  pod/service-a-74cd5c6496-nvllm   2/2       Running   0          6m7s
+  pod/service-b-674f96464b-hbmg7   2/2       Running   0          6m44s
 
-NAME                TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
-service/service-a   ClusterIP   172.30.44.43   <none>        8080/TCP   6m7s
-service/service-b   ClusterIP   172.30.115.93   <none>        8081/TCP   6m45s
+  NAME                TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+  service/service-a   ClusterIP   172.30.44.43   <none>        8080/TCP   6m7s
+  service/service-b   ClusterIP   172.30.115.93   <none>        8081/TCP   6m45s
 
-NAME                        READY     UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/service-a   1/1       1            1           6m7s
-deployment.apps/service-b   1/1       1            1           6m44s
-```
+  NAME                        READY     UP-TO-DATE   AVAILABLE   AGE
+  deployment.apps/service-a   1/1       1            1           6m7s
+  deployment.apps/service-b   1/1       1            1           6m44s
+  ```
 
 Notice that under the `READY` column for pods, it shows that there are two (2/2) containers running, one of them is the istio side card proxy.
 
 5. Get the hostname for the Istio ingress gateway
 
-```
-oc get route -n istio-system istio-ingressgateway 
-NAME                   HOST/PORT                                            PATH   SERVICES               PORT   TERMINATION   WILDCARD
-istio-ingressgateway   istio-ingressgateway-istio-system.apps-crc.testing          istio-ingressgateway   8080                 None
-```
+  ```
+  oc get route -n istio-system istio-ingressgateway 
+  NAME                   HOST/PORT                                            PATH   SERVICES               PORT   TERMINATION   WILDCARD
+  istio-ingressgateway   istio-ingressgateway-istio-system.apps-crc.testing          istio-ingressgateway   8080                 None
+  ```
 
 6. Use curl or open a browser with the endpoint URL using the HOST/PORT of the route
 
-```
-curl http://istio-ingressgateway-istio-system.apps-crc.testing/sayHello/Carlos
-```
+  ```
+  curl http://istio-ingressgateway-istio-system.apps-crc.testing/sayHello/Carlos
+  ```
 
 Notice in the output that the message was formatted by service-b
 
-```
-Hello, from service-b Carlos!
-```
+  ```
+  Hello, from service-b Carlos!
+  ```
 
 From the result, you can see that `service-a` calls `service-b` and replies back.
 

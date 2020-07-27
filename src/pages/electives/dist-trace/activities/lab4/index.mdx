@@ -194,44 +194,44 @@ In the yaml deployment manifest there are few items to point out:
 
 2. Verify services are deployed and running:
 
-```
-oc get all -l app=service-a -n default
-oc get all -l app=service-b -n default
-NAME                             READY   STATUS    RESTARTS   AGE
-pod/service-a-785975554d-5cql2   1/1     Running   0          19m
-pod/service-b-674b748766-t7464   1/1     Running   0          19m
+  ```
+  oc get all -l app=service-a -n default
+  oc get all -l app=service-b -n default
+  NAME                             READY   STATUS    RESTARTS   AGE
+  pod/service-a-785975554d-5cql2   1/1     Running   0          19m
+  pod/service-b-674b748766-t7464   1/1     Running   0          19m
 
-NAME                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
-service/service-a   ClusterIP   172.30.182.142   <none>        8080/TCP   20m
-service/service-b   ClusterIP   172.30.108.212   <none>        8081/TCP   19m
+  NAME                TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)    AGE
+  service/service-a   ClusterIP   172.30.182.142   <none>        8080/TCP   20m
+  service/service-b   ClusterIP   172.30.108.212   <none>        8081/TCP   19m
 
-NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
-deployment.apps/service-a   1/1     1            1           19m
-deployment.apps/service-b   1/1     1            1           19m
-```
+  NAME                        READY   UP-TO-DATE   AVAILABLE   AGE
+  deployment.apps/service-a   1/1     1            1           19m
+  deployment.apps/service-b   1/1     1            1           19m
+  ```
 
 3. Expose the service `service-a` with a route
 
-```
-oc create route edge  --service=service-a -n default
-```
+  ```
+  oc create route edge  --service=service-a -n default
+  ```
 
 4. Get the hostname for the route:
 
-```
-oc get route service-a -n default
-NAME        HOST/PORT                            PATH   SERVICES    PORT   TERMINATION   WILDCARD
-service-a   service-a-default.apps-crc.testing          service-a   http   edge          None
-```
+  ```
+  oc get route service-a -n default
+  NAME        HOST/PORT                            PATH   SERVICES    PORT   TERMINATION   WILDCARD
+  service-a   service-a-default.apps-crc.testing          service-a   http   edge          None
+  ```
 
 ## Find Traces
 
 1. Use curl or open browser with the endpoint URL using the HOST/PORT of the route
 
-```
-curl -k https://service-a-default.apps-crc.testing/sayHello/Carlos
-Hello from service-b Carlos!
-```
+  ```
+  curl -k https://service-a-default.apps-crc.testing/sayHello/Carlos
+  Hello from service-b Carlos!
+  ```
 
 From the result you can see that `service-a` called `service-b` and replied back.
 
