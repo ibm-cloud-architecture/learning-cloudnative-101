@@ -2,15 +2,6 @@
 title: Prerequisites
 description: Required software and skiils before starting this material.
 ---
-<AnchorLinks small>
-  <AnchorLink>Required skills</AnchorLink>
-  <AnchorLink>Create accounts</AnchorLink>
-  <AnchorLink>Cloud Native VM</AnchorLink>
-  <AnchorLink>Run System Check Script</AnchorLink>
-  <AnchorLink>Install CLIs and tools</AnchorLink>
-  <AnchorLink>Environment Setup</AnchorLink>
-  <AnchorLink>Reading Material</AnchorLink>
-</AnchorLinks>
 
 ## Required skills
 
@@ -22,6 +13,90 @@ This activites contained here require you to be proficient in working from the c
 - Edit environment variables ($PATH)
 
 Here is a course for learning (or brushing up) on working from the linux command line [Linux Command Line Basics](https://www.udacity.com/course/linux-command-line-basics--ud595)
+
+
+## Workstation Setup
+<Tabs>
+<Tab label="Openshift (MacOS/Linux)">
+
+## Create accounts
+
+You'll need these accounts to use the Developer Tools environment.
+
+- [GitHub account](http://github.com) (public, not enterprise): Create one if you do not have one aleady. If you have not logged in for a while, make sure your login is working.
+
+- [IBM Cloud Account](https://cloud.ibm.com): Create one if needed, make sure you can log in. 
+
+- [Katacoda Account](https://www.katacoda.com/): The account is free and easy to create.
+
+- [RedHat Account](https://www.redhat.com/en): Needed for CodeReady Containers.
+
+## Run System Check Script
+
+Run the following command in your terminal to check which tools need to be installed.
+
+Using `wget`:
+
+```
+wget -O - https://cloudnative101.dev/scripts/setup/system-check.sh | sh
+```
+
+Using `curl`:
+
+```
+curl -s https://cloudnative101.dev/scripts/setup/system-check.sh | sh
+```
+
+After the script is run, make sure to install any missing tools.
+
+## Install CLIs and tools
+
+The following is a list of desktop tools required to help with installation and development.
+
+- [Git Client](https://git-scm.com/): Needs to be installed in your development operating system, it comes as standard for Mac OS
+
+- [IBM Cloud CLI](https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started): Required for management of IBM Cloud Account and management of your managed IBM Kubernetes and Red Hat OpenShift clusters
+    - Don't install just the [IBM Cloud CLI](https://cloud.ibm.com/docs/cli?topic=cloud-cli-install-ibmcloud-cli), install the [IBM Cloud CLI and Developer Tools](https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started#step1-install-idt)
+    ```
+    curl -sL https://ibm.biz/idt-installer | bash
+    ```
+
+<InlineNotification>
+
+** Note: ** If you log in to the web UI using SSO, you'll need to [create an API key](https://cloud.ibm.com/docs/iam?topic=iam-federated_id) for logging into the CLI. 
+    You can also use this API key for [installing the Developer Tools environment](/admin/installation-ibm-cloud).
+
+</InlineNotification>
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop): Required for building and running docker images.
+    - Installed and running on your local machine
+
+- [Tekton CLI](https://github.com/tektoncd/cli): Used to help control Tekton
+ pipelines from the command line.
+    ```
+        brew tap tektoncd/tools
+        brew install tektoncd/tools/tektoncd-cli
+    ```
+
+- [Visual Studio Code](https://code.visualstudio.com/download): A popular code editor
+    - You will be required to edit some files, having a good quality editor is always best practice
+    - Enabling [launching VSCode from a terminal](https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line)
+
+- [JDK 11](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html): _Optional_ installed on your local machine
+    - Used for SpringBoot content
+
+- [OpenShift CodeReady Containers (CRC)](https://code-ready.github.io/crc/#installing-codeready-containers_gsg)
+
+<InlineNotification kind="warning">
+
+**Warning:** Make sure you have Cisco VPN turned off when using CRC.
+
+</InlineNotification>
+
+
+</Tab>
+
+<Tab label="Openshift (Windows)">
 
 ## Create accounts
 
@@ -40,6 +115,65 @@ You'll need these accounts to use the Developer Tools environment.
 Use the [Cloud Native VM](https://github.com/csantanapr/vagrant-cloud-native#install) it comes pre-installed with kubernetes and all cloud native CLIs.
 
 Is highly recommended for Windows users to use this VM.
+
+## Install CLIs and tools
+
+The following is a list of desktop tools required to help with installation and development.
+
+- [Git Client](https://git-scm.com/): Needs to be installed in your development operating system, it comes as standard for Mac OS
+
+- [IBM Cloud CLI](https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started): Required for management of IBM Cloud Account and management of your managed IBM Kubernetes and Red Hat OpenShift clusters
+    - Don't install just the [IBM Cloud CLI](https://cloud.ibm.com/docs/cli?topic=cloud-cli-install-ibmcloud-cli), install the [IBM Cloud CLI and Developer Tools](https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started#step1-install-idt)
+    ```
+    curl -sL https://ibm.biz/idt-installer | bash
+    ```
+
+<InlineNotification>
+
+** Note: ** If you log in to the web UI using SSO, you'll need to [create an API key](https://cloud.ibm.com/docs/iam?topic=iam-federated_id) for logging into the CLI. 
+    You can also use this API key for [installing the Developer Tools environment](/admin/installation-ibm-cloud).
+
+</InlineNotification>
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop): Required for building and running docker images.
+    - Installed and running on your local machine
+
+- [Tekton CLI](https://github.com/tektoncd/cli): Used to help control Tekton
+ pipelines from the command line.
+    ```
+        brew tap tektoncd/tools
+        brew install tektoncd/tools/tektoncd-cli
+    ```
+
+- [Visual Studio Code](https://code.visualstudio.com/download): A popular code editor
+    - You will be required to edit some files, having a good quality editor is always best practice
+    - Enabling [launching VSCode from a terminal](https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line)
+
+- [JDK 11](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html): _Optional_ installed on your local machine
+    - Used for SpringBoot content
+
+- [OpenShift CodeReady Containers (CRC)](https://code-ready.github.io/crc/#installing-codeready-containers_gsg)
+
+<InlineNotification kind="warning">
+
+**Warning:** Make sure you have Cisco VPN turned off when using CRC.
+
+</InlineNotification>
+
+</Tab>
+
+<Tab label="Kubernetes (MacOS/Linux)">
+
+## Create accounts
+
+You'll need these accounts to use the Developer Tools environment.
+
+- [GitHub account](http://github.com) (public, not enterprise): Create one if you do not have one aleady. If you have not logged in for a while, make sure your login is working.
+
+- [IBM Cloud Account](https://cloud.ibm.com): Create one if needed, make sure you can log in. 
+
+- [Katacoda Account](https://www.katacoda.com/): The account is free and easy to create.
+
 
 ## Run System Check Script
 
@@ -101,11 +235,78 @@ The following is a list of desktop tools required to help with installation and 
 
 </InlineNotification>
 
-- [OpenShift CodeReady Containers (CRC)](https://code-ready.github.io/crc/#installing-codeready-containers_gsg)
+</Tab>
+
+<Tab label="Kubernetes (Windows)">
+
+## Create accounts
+
+You'll need these accounts to use the Developer Tools environment.
+
+- [GitHub account](http://github.com) (public, not enterprise): Create one if you do not have one aleady. If you have not logged in for a while, make sure your login is working.
+
+- [IBM Cloud Account](https://cloud.ibm.com): Create one if needed, make sure you can log in. 
+
+- [Katacoda Account](https://www.katacoda.com/): The account is free and easy to create.
+
+
+## Cloud Native VM
+
+Use the [Cloud Native VM](https://github.com/csantanapr/vagrant-cloud-native#install) it comes pre-installed with kubernetes and all cloud native CLIs.
+
+Is highly recommended for Windows users to use this VM.
+
+## Install CLIs and tools
+
+The following is a list of desktop tools required to help with installation and development.
+
+- [Git Client](https://git-scm.com/): Needs to be installed in your development operating system, it comes as standard for Mac OS
+
+- [IBM Cloud CLI](https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started): Required for management of IBM Cloud Account and management of your managed IBM Kubernetes and Red Hat OpenShift clusters
+    - Don't install just the [IBM Cloud CLI](https://cloud.ibm.com/docs/cli?topic=cloud-cli-install-ibmcloud-cli), install the [IBM Cloud CLI and Developer Tools](https://cloud.ibm.com/docs/cli?topic=cloud-cli-getting-started#step1-install-idt)
+    ```
+    curl -sL https://ibm.biz/idt-installer | bash
+    ```
+
+<InlineNotification>
+
+** Note: ** If you log in to the web UI using SSO, you'll need to [create an API key](https://cloud.ibm.com/docs/iam?topic=iam-federated_id) for logging into the CLI. 
+    You can also use this API key for [installing the Developer Tools environment](/admin/installation-ibm-cloud).
+
+</InlineNotification>
+
+- [Docker Desktop](https://www.docker.com/products/docker-desktop): Required for building and running docker images.
+    - Installed and running on your local machine
+
+- [Tekton CLI](https://github.com/tektoncd/cli): Used to help control Tekton
+ pipelines from the command line.
+    ```
+        brew tap tektoncd/tools
+        brew install tektoncd/tools/tektoncd-cli
+    ```
+
+- [Visual Studio Code](https://code.visualstudio.com/download): A popular code editor
+    - You will be required to edit some files, having a good quality editor is always best practice
+    - Enabling [launching VSCode from a terminal](https://code.visualstudio.com/docs/setup/mac#_launching-from-the-command-line)
+
+- [JDK 11](https://www.oracle.com/technetwork/java/javase/downloads/jdk11-downloads-5066655.html): _Optional_ installed on your local machine
+    - Used for SpringBoot content
+
+- [Minikube](https://kubernetes.io/docs/tasks/tools/install-minikube/): Follow the instructions for your Operating System.
+
+<InlineNotification kind="warning">
+
+**Warning:** Make sure you have Cisco VPN turned off when using minikube.
+
+</InlineNotification>
+
+</Tab>
+
+</Tabs>
 
 
 
-### Environment Setup 
+## Environment Setup 
 <Tabs>
 
 <Tab label="MiniKube">
@@ -191,6 +392,5 @@ Make sure CRC is installed. Check out the [CRC Page](https://access.redhat.com/d
 </Tabs>
 
 
-## Reading Material
-
-Watch the video and read the overview on this page [Overview](https://pages.github.ibm.com/CASE/cloudnative-bootcamp/cloud-native-overview)
+## Next Steps
+Once Setup is complete, you can now begin reading our about [Cloud Native](../concepts/cloud-native) by clicking the link, or the `Next` button below.
