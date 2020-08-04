@@ -54,20 +54,20 @@
       path: /lectures/continuous-deployment/
 - title: Electives
   pages:
-    - title: Migrate Cloud Foundry to K8s
-      path: /electives/cf-to-k8s/
     - title: API Connect
       path: /electives/api-connect/
     - title: Cloud Data Services
       path: /electives/data-services/
-    - title: Event-Driven Architecture
-      path: /electives/eda/
-    - title: Monitoring
-      path: /electives/monitoring/sysdig/
-    - title: Logging
-      path: /electives/logging/logdna/
     - title: Distributed Tracing
       path: /electives/dist-trace/
+    - title: Event-Driven Architecture
+      path: /electives/eda/
+    - title: Logging
+      path: /electives/logging/logdna/
+    - title: Migrate Cloud Foundry to K8s
+      path: /electives/cf-to-k8s/
+    - title: Monitoring
+      path: /electives/monitoring/sysdig/
 - title: Projects
   pages:
     - title: OpenShift CICD
