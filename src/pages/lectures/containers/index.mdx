@@ -25,7 +25,8 @@ For example, Docker created standard way to create images for Linux Containers.
 | List Docker Images	| ` docker images` |
 | Login into registry 	| `docker login` |
 | Build an image 	| ` docker build <image_name>:<tag> . `   |
-| Inspect the image 	| ` docker inspect <image_name>:<tag>`   |
+| Inspect a docker object 	| ` docker inspect <name/id>`   |
+| Inspect a docker image 	| ` docker inspect image <name/id>`   |
 | Pull an image 	| ` docker pull <image_name>:<tag>`   |
 | Push an Image 	| ` docker push <image_name>:<tag>`  |	
 | Remove a container  	| ` docker rm <container-name/container-id>` |
@@ -34,78 +35,156 @@ For example, Docker created standard way to create images for Linux Containers.
 ## Docker Walkthroughs
 
 <Accordion>
-  <AccordionItem title="Running a Hello World Container">
-      Content Section
+  <AccordionItem title="Verify Docker Installation">
+    <ol>
+      <li>
+        Check the Docker Version
+        <code>
+          docker version
+        </code>
+      </li> 
+      <li>
+        Run the `hello-world` container         
+        <code>
+          docker run hello-world 
+        </code>
+        <InlineNotification>
+          Notice: If it is not already on your machine, it will be downloaded automatically.
+        </InlineNotification>
+      </li> 
+      <li>
+        Check the output:
+        <blockquote>
+        Hello from Docker! <br></br>
+        This message shows that your installation appears to be working correctly!....
+        </blockquote>
+      </li> 
+    </ol>
+  </AccordionItem>
+  <AccordionItem title="Running a Basic Container">  
+  <ol>
+    <li>
+      Start and nginx container and name it `nginx`.
+      <code>
+        docker run --rm --name nginx -p 8080:8080 bitnami/nginx 
+      </code>
+    </li>
+    <li>
+      Check to see if the container is running
+      <code>
+        docker ps
+      </code>
+    </li>
+    <li>
+      Bash into the running nginx container
+      <code>
+        docker exec -it nginx bash
+      </code>
+    </li>
+    <li>
+      Bash into the running nginx container
+      <code>
+        docker exec -it nginx bash
+      </code>
+    </li>
+    <li>
+      Bash into the running nginx container
+      <code>
+        docker exec -it nginx bash
+      </code>
+    </li>
+  </ol>
   </AccordionItem>
   <AccordionItem title="Building and Running a Docker Image">
+    <ol>
+      <li>
+       Next, Create a Dockerfile
+      <ul>  
+      <li>
+        First add the base image we want to use.        
+      <code>
+        echo "FROM bitnami/nginx" > Dockerfile
+      </code>
+      </li>
+      <li> 
+        Next add the `index.html`
+      <code> 
+        echo "COPY assets/index.html /app/index.html" >> Dockerfile
+      </code>
+      </li>
+      </ul> 
+      </li>
+      <li>
+        Build the Docker Image
+        <code>
+          docker build -t webserver:1.0 .
+        </code>
+      </li>
+      <li>
+        Run the new image
+        <code>
+          docker run --rm -p 8000:8080 webserver:1.0
+        </code>
+      </li>
+    </ol>
+  </AccordionItem>
+  <AccordionItem title="Pushing to a Container Registry">  
+    <ol>
+      <li>
+        Login to Docker Hub         
+        <code>
+          echo $PASSWORD | docker login -u <USERNAME>  --password-stdin 
+        </code>
+      </li>
+      <li>
+        Tag the docker image with docker hub username 
+        <code>
+          docker tag webserver:1.0 $DOCKERHUB_USER/webserver:1.0
+        </code>
+      </li>
+      <li>
+        Run the new image
+        <code>
+          docker run --rm -p 8000:8080 webserver:1.0
+        </code>
+      </li>
+    </ol>
+  </AccordionItem>
+  <AccordionItem title="Adding Environment Variables for your Container.">  
     <ol>
       <li>
         Create a Docker file          
         <code>
           echo "FROM bitnami/nginx" > Dockerfile
-          echo "COPY assets/index.html /app/index.html" >> Dockerfile 
+          echo "COPY assets/index.html /app/index.html" >> Dockerfile  
         </code>
-      </li>
-      <li>
-        Ordered list level 1
-        <ol nested>
-          <li>
-            Ordered list level 2
-          </li>
-          <li>
-            Ordered list level 2
-          </li>
-          <li>
-            Ordered list level 2
-          </li>
-        </ol>
-      </li>
-      <li>
-        Ordered list level 1
       </li>
     </ol>
   </AccordionItem>
-  <AccordionItem title="Pushing to a Container Registry">  
-
+    <AccordionItem title="Running a Container with a Mounted Volume">  
+    <ol>
+      <li>
+        Choose the image you want to run.         
+        <code>
+          echo "FROM bitnami/nginx" > Dockerfile
+          echo "COPY assets/index.html /app/index.html" >> Dockerfile  
+        </code>
+      </li>
+      <li>
+        Build the Docker Image
+        <code>
+          docker build -t webserver:1.0 .
+        </code>
+      </li>
+      <li>
+        Run the new image
+        <code>
+          docker run --rm -p 8000:8080 webserver:1.0
+        </code>
+      </li>
+    </ol>
   </AccordionItem>
 </Accordion>
-
-Reference during live demo
-```
-docker --version
-docker version
-docker run hello-world
-docker run --name nginx bitnami/nginx
-docker ps
-docker ps -a
-docker exec -it nginx bash
-docker stop nginx
-docker start nginx
-docker stop nginx
-docker rm nginx
-docker run --name nginx bitnami/nginx
-docker kill nginx
-docker run --rm --name nginx -p 8080:8080 bitnami/nginx
-curl http://localhost:8080
-docker run --rm --name nginx -e USERNAME=Carlos -e PASSWORD=IlikeYAML -e LOG_LEVEL=ERROR -p 8080:8080 bitnami/nginx
-docker exec -it nginx sh -c "env | grep 'USERNAME\|PASSWORD\|LOG_LEVEL'"
-mkdir -p assets; echo "Welcome to the Cloud Native BootCamp" > assets/index.html
-docker run --rm --name nginx -p 8080:8080 -v $PWD/assets:/app bitnami/nginx
-docker exec -it nginx sh -c "cat /app/index.html"
-curl http://localhost:8080
-docker inspect nginx
-echo "FROM bitnami/nginx" > Dockerfile
-echo "COPY assets/index.html /app/index.html" >> Dockerfile
-docker build -t webserver:1.0 .
-docker run --rm -p 8000:8080 webserver:1.0
-curl http://localhost:8000
-DOCKERHUB_USER=csantanapr
-docker tag webserver:1.0 $DOCKERHUB_USER/webserver:1.0
-docker push $DOCKERHUB_USER/webserver:1.0
-docker pull $DOCKERHUB_USER/webserver:1.0
-docker run --rm -p 8000:8080 $DOCKERHUB_USER/webserver:1.0
-curl http://localhost:8000
-```
 
 
 ## Activities
