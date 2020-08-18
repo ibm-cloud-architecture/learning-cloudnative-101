@@ -30,10 +30,10 @@ The following operators and tools are installed and configured as part of the Se
 * Jaeger operator 
 * Prometheus, Grafana, and Kiali
 
-With OpenShift 4, you can use the [CodeReady Containers](https://cloud.redhat.com/openshift/install/crc/installer-provisioned) to set up a local development cluster 
+With OpenShift 4, you can use the [CodeReady Containers](https://cloud.redhat.com/openshift/install/crc/installer-provisioned) to set up a local development cluster, follow the instructions in both of the articles below:
 
-* [Preparing to install Red Hat OpenShift Service Mesh](https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_install/preparing-ossm-installation.html)
-* [Installing Red Hat OpenShift Service Mesh](https://docs.openshift.com/container-platform/4.2/service_mesh/service_mesh_install/installing-ossm.html)
+* [Preparing to install Red Hat OpenShift Service Mesh](https://docs.openshift.com/container-platform/4.5/service_mesh/service_mesh_install/preparing-ossm-installation.html)
+* [Installing Red Hat OpenShift Service Mesh](https://docs.openshift.com/container-platform/4.5/service_mesh/service_mesh_install/installing-ossm.html)
 
 ## Verify Service Mesh installation
 
@@ -93,9 +93,10 @@ zipkin                      ClusterIP   172.30.62.142    <none>        9411/TCP 
 
   ```
   oc get ServiceMeshMemberRoll -n istio-system
-  NAME      MEMBERS
-  default   [default bookinfo]
   ```
+  SHoudl 
+    NAME      MEMBERS
+  default   [default bookinfo]
 
 4. Verify routes in to the different UI dashboards for Jaeger, Grafana, and Kiali
 
@@ -133,7 +134,6 @@ Here is an example:
 Let's look at the file contents on how the services are defined to be deployed into OpenShift cluster:
 
 ```
----
 apiVersion: v1
 kind: Service
 metadata:

@@ -1,3 +1,7 @@
+ul.a {
+    list-style-type: circle;
+}
+
 div[class*='page-header'] {
     --height: 6rem;
 }
