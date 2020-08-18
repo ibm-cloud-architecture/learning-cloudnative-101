@@ -34,7 +34,29 @@ For example, Docker created standard way to create images for Linux Containers.
 
 ## Running Docker on Kubernetes
 
-
+<ol>
+  <li>
+    Make sure you are logged in to your Kubernetes cluster through a terminal or IBM Cloud Shell.
+  </li>
+  
+  <li>
+    Next, we need to apply the yaml file for the Docker in Docker pod.
+    <code>
+      kubectl apply -f https://raw.githubusercontent.com/ibm-cloud-architecture/learning-cloudnative-101/master/static/yamls/containers/dind.yaml
+    </code>
+  </li>
+  
+  <li>
+    Then, we need to bash into the running pod.
+    <code>
+      kubectl exec -it dind bash
+    </code>
+  </li>
+  
+  <li>
+    Finally check to make sure you can run docker commands, such as <strong><em>docker version</em></strong>
+  </li>
+</ol>
 
 ## Docker Lecture Walkthroughs
 
@@ -136,21 +158,33 @@ For example, Docker created standard way to create images for Linux Containers.
   <AccordionItem title="Pushing to a Container Registry">  
     <ol>
       <li>
-        Login to Docker Hub         
+        Login to Docker Hub using YOUR created username and password.        
         <code>
-        echo $PASSWORD | docker login -u USERNAME  --password-stdin 
+        docker login -u USERNAME  -p PASSWORD
         </code>
       </li>
       <li>
         Tag the docker image with docker hub username 
         <code>
-          docker tag webserver:1.0 $DOCKERHUB_USER/webserver:1.0
+          docker tag webserver:1.0 USERNAME/webserver:1.0
+        </code>
+      </li>
+       <li>
+        Push the image to the registry
+        <code>
+          docker push USERNAME/webserver:1.0
         </code>
       </li>
       <li>
         Run the new image
         <code>
-          docker run --rm -p 8000:8080 webserver:1.0
+          docker run --rm -p 8000:8080 USERNAME/webserver:1.0
+        </code>
+      </li>
+      <li>
+        You can also pull down other images from other users.
+        <code>
+          docker pull USERNAME/webserver:1.0
         </code>
       </li>
     </ol>
@@ -174,22 +208,9 @@ For example, Docker created standard way to create images for Linux Containers.
     <AccordionItem title="Running a Container with a Mounted Volume">  
       <ol>
         <li>
-          Choose the image you want to run.         
+          Run the image with a volume attached.
           <code>
-            echo "FROM bitnami/nginx" > Dockerfile
-            echo "COPY assets/index.html /app/index.html" >> Dockerfile  
-          </code>
-        </li>
-        <li>
-          Build the Docker Image
-          <code>
-            docker build -t webserver:1.0 .
-          </code>
-        </li>
-        <li>
-          Run the new image
-          <code>
-            docker run --rm -p 8000:8080 webserver:1.0
+            docker run --rm --name nginx -p 8080:8080 -v $PWD/assets:/app bitnami/nginx
           </code>
         </li>
       </ol>
