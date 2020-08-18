@@ -32,7 +32,11 @@ For example, Docker created standard way to create images for Linux Containers.
 | Remove a container  	| ` docker rm <container-name/container-id>` |
 
 
-## Docker Walkthroughs
+## Running Docker on Kubernetes
+
+
+
+## Docker Lecture Walkthroughs
 
 <Accordion>
   <AccordionItem title="Verify Docker Installation">
@@ -62,68 +66,63 @@ For example, Docker created standard way to create images for Linux Containers.
     </ol>
   </AccordionItem>
   <AccordionItem title="Running a Basic Container">  
-  <ol>
-    <li>
-      Start and nginx container and name it `nginx`.
-      <code>
-        docker run --rm --name nginx -p 8080:8080 bitnami/nginx 
-      </code>
-    </li>
-    <li>
-      Check to see if the container is running
-      <code>
-        docker ps
-      </code>
-    </li>
-    <li>
-      Bash into the running nginx container
-      <code>
-        docker exec -it nginx bash
-      </code>
-    </li>
-    <li>
-      Bash into the running nginx container
-      <code>
-        docker exec -it nginx bash
-      </code>
-    </li>
-    <li>
-      Bash into the running nginx container
-      <code>
-        docker exec -it nginx bash
-      </code>
-    </li>
-  </ol>
+    <ol>
+      <li>
+        Start and nginx container and name it `nginx`.
+        <code>
+          docker run --rm -d --name nginx -p 8080:8080 bitnami/nginx 
+        </code>
+      </li>
+      <li>
+        Check to see if the container is running
+        <code>
+          docker ps
+        </code>
+      </li>
+      <li>
+        Bash into the running nginx container
+        <code>
+          docker exec -it nginx bash
+        </code>
+      </li>
+      <li>
+        Accessing the running nginx container
+        <code>
+          curl http://localhost:8080
+        </code>
+      </li>
+      <li>
+        Stopping the nginx container
+        <code>
+          docker stop nginx
+        </code>
+      </li>
+    </ol>
   </AccordionItem>
   <AccordionItem title="Building and Running a Docker Image">
     <ol>
       <li>
-       Next, Create a Dockerfile
-      <ul>  
-      <li>
-        First add the base image we want to use.        
-      <code>
-        echo "FROM bitnami/nginx" > Dockerfile
-      </code>
-      </li>
-      <li> 
-        Next add the `index.html`
-      <code> 
-        echo "COPY assets/index.html /app/index.html" >> Dockerfile
-      </code>
-      </li>
-      </ul> 
+       Let's start by creating a directory named <strong><em>assets</em></strong> and add an <strong><em>index.html</em></strong> file to it. <br></br>     
+          <code>
+            mkdir -p assets; echo "Welcome to the Cloud Native BootCamp" > assets/index.html; cd assets
+          </code>
       </li>
       <li>
-        Build the Docker Image
+        Build the Docker Image and name it <strong><em>webserver</em></strong> with a tag of <strong><em>1.0</em></strong>.
         <code>
           docker build -t webserver:1.0 .
         </code>
       </li>
       <li>
-        Run the new image
+        Run the new image in a container.
         <code>
-          docker run --rm -p 8000:8080 webserver:1.0
+          docker run --rm -d -p 8000:8080 webserver:1.0
+        </code>
+      </li>
+      <li>
+        Access the new container
+        <code>
+          curl https://localhost:8000
         </code>
       </li>
     </ol>
@@ -133,7 +132,7 @@ For example, Docker created standard way to create images for Linux Containers.
       <li>
         Login to Docker Hub         
         <code>
-          echo $PASSWORD | docker login -u <USERNAME>  --password-stdin 
+        echo $PASSWORD | docker login -u USERNAME  --password-stdin 
         </code>
       </li>
       <li>
@@ -155,34 +154,39 @@ For example, Docker created standard way to create images for Linux Containers.
       <li>
         Create a Docker file          
         <code>
-          echo "FROM bitnami/nginx" > Dockerfile
-          echo "COPY assets/index.html /app/index.html" >> Dockerfile  
+          docker run --rm --name nginx -e USERNAME=Carlos -e PASSWORD=IlikeYAML -e LOG_LEVEL=ERROR -p 8080:8080 bitnami/nginx
+        </code>
+      </li>
+      <li>
+        Create a Docker file          
+        <code>
+          docker exec -it nginx sh -c "env | grep 'USERNAME\|PASSWORD\|LOG_LEVEL'"
         </code>
       </li>
     </ol>
   </AccordionItem>
     <AccordionItem title="Running a Container with a Mounted Volume">  
-    <ol>
-      <li>
-        Choose the image you want to run.         
-        <code>
-          echo "FROM bitnami/nginx" > Dockerfile
-          echo "COPY assets/index.html /app/index.html" >> Dockerfile  
-        </code>
-      </li>
-      <li>
-        Build the Docker Image
-        <code>
-          docker build -t webserver:1.0 .
-        </code>
-      </li>
-      <li>
-        Run the new image
-        <code>
-          docker run --rm -p 8000:8080 webserver:1.0
-        </code>
-      </li>
-    </ol>
+      <ol>
+        <li>
+          Choose the image you want to run.         
+          <code>
+            echo "FROM bitnami/nginx" > Dockerfile
+            echo "COPY assets/index.html /app/index.html" >> Dockerfile  
+          </code>
+        </li>
+        <li>
+          Build the Docker Image
+          <code>
+            docker build -t webserver:1.0 .
+          </code>
+        </li>
+        <li>
+          Run the new image
+          <code>
+            docker run --rm -p 8000:8080 webserver:1.0
+          </code>
+        </li>
+      </ol>
   </AccordionItem>
 </Accordion>
 
