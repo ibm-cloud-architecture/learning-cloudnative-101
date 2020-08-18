@@ -108,7 +108,13 @@ For example, Docker created standard way to create images for Linux Containers.
           </code>
       </li>
       <li>
-        Build the Docker Image and name it <strong><em>webserver</em></strong> with a tag of <strong><em>1.0</em></strong>.
+        Download the sample <strong><em>Dockerfile</em></strong> into the <strong><em>assets</em></strong> directory.
+          <code>
+           wget https://raw.githubusercontent.com/ibm-cloud-architecture/learning-cloudnative-101/master/static/yamls/containers/Dockerfile
+          </code>
+      </li>
+      <li>
+        Build the docker image and name it <strong><em>webserver</em></strong> with a tag of <strong><em>1.0</em></strong>.
         <code>
           docker build -t webserver:1.0 .
         </code>
@@ -122,7 +128,7 @@ For example, Docker created standard way to create images for Linux Containers.
       <li>
         Access the new container
         <code>
-          curl https://localhost:8000
+          curl http://localhost:8000
         </code>
       </li>
     </ol>

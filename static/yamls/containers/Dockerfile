@@ -1,3 +1,3 @@
 FROM bitnami/nginx
 
-COPY assets/index.html /app/index.html
+COPY index.html /app/index.html
