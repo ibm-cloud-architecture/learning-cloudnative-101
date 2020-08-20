@@ -26,7 +26,10 @@ description: Solutions for Kubernetes Labs
 
 <AccordionItem title="Pod Configuration">
 
-    
+    kubectl create sa yoda-svc
+
+------------------------
+
     apiVersion: v1
     kind: ConfigMap
     metadata:
@@ -74,8 +77,8 @@ description: Solutions for Kubernetes Labs
             cpu: "500m"
       volumes:
       - name: config-volume
-          configMap:
-            name: yoda-service-config
+        configMap:
+          name: yoda-service-config
     
 </AccordionItem>
 
