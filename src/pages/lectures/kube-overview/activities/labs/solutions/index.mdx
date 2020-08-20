@@ -131,12 +131,12 @@ description: Solutions for Kubernetes Labs
     apiVersion: v1
     kind: Pod
     metadata:
-    name: busybox
+      name: busybox
     spec:
-    containers:
-    - name: myapp-container
-      image: radial/busyboxplus:curl
-      command: ['sh', '-c', 'while true; do sleep 3600; done']
+      containers:
+        - name: myapp-container
+          image: radial/busyboxplus:curl
+          command: ['sh', '-c', 'while true; do sleep 3600; done']
 
    Check it with
    
@@ -268,7 +268,7 @@ description: Solutions for Kubernetes Labs
     spec:
         type: NodePort
         selector:
-            app: jedi
+          app: jedi
         ports:
         - protocol: TCP
             port: 80
@@ -279,15 +279,15 @@ description: Solutions for Kubernetes Labs
     apiVersion: v1
     kind: Service
     metadata:
-    name: yoda-svc
+      name: yoda-svc
     spec:
-    type: ClusterIP
-    selector:
+      type: ClusterIP
+      selector:
         app: yoda
-    ports:
-    - protocol: TCP
-        port: 80
-        targetPort: 8080
+      ports:
+      - protocol: TCP
+          port: 80
+          targetPort: 8080
 
 </AccordionItem>
 
