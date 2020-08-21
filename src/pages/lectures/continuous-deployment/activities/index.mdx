@@ -277,7 +277,7 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     ```bash
     export NODE_EXTERNAL_IP="$(kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type=="ExternalIP")].address}')"
     export ARGOCD_NODEPORT="$(kubectl get svc example-argocd-server -n $ARGOCD_NAMESPACE -o jsonpath='{.spec.ports[0].nodePort}')"
-    export ARGOCD_URL="https://$EXTERNAL_IP:$ARGOCD_NODEPORT"
+    export ARGOCD_URL="https://$NODE_EXTERNAL_IP:$ARGOCD_NODEPORT"
     echo ARGOCD_URL=$ARGOCD_URL
     ```
 
