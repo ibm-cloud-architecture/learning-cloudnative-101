@@ -285,7 +285,7 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     ```bash
     kubectl edit -n argocd deployment example-argocd-server
     ```
-    Then create an ingress to expose the argocd service, in the following example replace `159.122.178.148` with worker node external public IP.
+    Then create an ingress to expose the argocd service, in the following example replace `x.x.x.x` with worker node external public IP.
     ```yaml
     apiVersion: extensions/v1beta1
     kind: Ingress
@@ -294,7 +294,7 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
       namespace: argocd
     spec:
       rules:
-      - host: argocd.159.122.178.148.nip.io
+      - host: argocd.x.x.x.x.nip.io
         http:
           paths:
           - path: /
