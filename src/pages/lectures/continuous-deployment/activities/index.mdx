@@ -281,6 +281,29 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     echo ARGOCD_URL=$ARGOCD_URL
     ```
 
+- If you can't access the NodePort from your computer and only http/80 then edit the argocd-server and add the flag `--insecure`
+    ```bash
+    kubectl edit -n argocd deployment example-argocd-server
+    ```
+    Then create an ingress to expose the argocd service, in the following example replace `159.122.178.148` with worker node external public IP.
+    ```yaml
+    apiVersion: extensions/v1beta1
+    kind: Ingress
+    metadata:
+    name: argocd-server-ingress-http
+    namespace: argocd
+    annotations:
+    spec:
+    rules:
+    - host: argocd.159.122.178.148.nip.io
+        http:
+        paths:
+        - path: /
+          backend:
+            serviceName: example-argocd-server
+            servicePort: http
+    ```
+
 ## Deploying the app
 
 - Login into the UI.
