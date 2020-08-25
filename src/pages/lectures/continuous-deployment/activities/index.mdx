@@ -290,18 +290,17 @@ Check the [Environment Setup](../prerequisites/#environment-setup) page for your
     apiVersion: extensions/v1beta1
     kind: Ingress
     metadata:
-    name: argocd-server-ingress-http
-    namespace: argocd
-    annotations:
+      name: argocd-server-ingress-http
+      namespace: argocd
     spec:
-    rules:
-    - host: argocd.159.122.178.148.nip.io
+      rules:
+      - host: argocd.159.122.178.148.nip.io
         http:
-        paths:
-        - path: /
-          backend:
-            serviceName: example-argocd-server
-            servicePort: http
+          paths:
+          - path: /
+            backend:
+              serviceName: example-argocd-server
+              servicePort: http
     ```
 
 ## Deploying the app
