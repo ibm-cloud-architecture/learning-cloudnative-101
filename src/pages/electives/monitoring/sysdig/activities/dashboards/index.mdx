@@ -39,8 +39,10 @@ while true; do sleep 1; curl http://localhost:8081/status/200 -si | head -1 ; do
 ```
 
 ## Create Dashboard "Kubernetes Service Golden Signals" 
-- Select Dashboards -> Default Dashboards -> Services -> Kubernetes Service Golden Signals
-- On the top right menu select "Copy Dashboard", name the new dashboard "Kubernetes Service Golden Signals - My Web Service"
+- Select Dashboards -> Default Templates -> Kubernetes Service Golden Signals
+- On the top right menu select "Create Custom Dashboard"
+- Name the new dashboard `Kubernetes Service Golden Signals - My Web Service`
+- Click Create and Open
 - Click Edit Scope
 - Select `kubernetes.namespace.name` `in` `production`
 - Click Save
@@ -49,8 +51,9 @@ while true; do sleep 1; curl http://localhost:8081/status/200 -si | head -1 ; do
 ![golden-dashboard](./images/golden-signals.png)
 
 ## Create Dashboard "Kubernetes Pod Overview" 
-- Select Dashboards -> Default Dashboards -> Kubernetes -> Kubernetes Pod Overview
-- On the top right menu select "Copy Dashboard", name the new dashboard "Kubernetes Pod Overview - My Web Service"
+- Select Dashboards -> Default Templates -> Kubernetes -> Kubernetes Pod Overview
+- On the top right menu select "Copy Dashboard"
+- Name the new dashboard `Kubernetes Pod Overview - My Web Service`
 - Click Edit Scope
 - Select `kubernetes.namespace.name` `in` `staging` `production`
 - Click Save
@@ -60,7 +63,8 @@ while true; do sleep 1; curl http://localhost:8081/status/200 -si | head -1 ; do
 
 ## Sharing Dashboard
 - Select one of your Dashboards
-- Click the top right menu select "Share" 
+- Click the top right menu select "Dashboard Settings"
+- Enable Public Dashboard
 - You can share just with your team or as public url
 
 ![share-dashboard](./images/share-dashboard.png)
