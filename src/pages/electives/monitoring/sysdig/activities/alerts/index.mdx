@@ -5,7 +5,7 @@ description: Lab to show how to work with alerts
 
 
 ### Prerequisite
-- Configure Dashboards following the lab [here](/monitoring/sysdig/#activities)
+- Configure Dashboards following the lab [here](/electives/monitoring/sysdig/#activities)
 
 
 ## Create Email Notification Channel
@@ -34,16 +34,14 @@ description: Lab to show how to work with alerts
 ## Create Alert for HTTP errors
 - Open Sysdig
 - Select Alerts
-- On the top right search box type `HTTP`
-- Select `[Kubernetes] Service generating HTTP errors`
 
 ![find-alert-http-errors](./images/find-alert-http-errors.png)
 
-- Click COPY
-- Select defaults settings, click Copy and Open, click Save
-- Click to open the new copy Alert `[Kubernetes] Service generating HTTP errors (1)`
-- Rename it to `[Production][My Web Service] HTTP errors`
+- Click Add Alert
+- Select Metric
+- Name it `[Production][My Web Service] HTTP errors`
 - Change to High
+- Select metric `Average` of `net.http.error.count`
 - Edit Scope
     - `kubernetes.namespace.name` in `production`
     - `kubernetes.service.name` in `my-web-app`
