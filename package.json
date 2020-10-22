@@ -10,22 +10,22 @@
     "serve": "gatsby serve"
   },
   "dependencies": {
-    "@mdx-js/mdx": "^1.6.18",
-    "@mdx-js/react": "^1.6.18",
-    "gatsby": "^2.24.72",
-    "gatsby-plugin-google-analytics": "^2.3.17",
-    "gatsby-plugin-mdx": "^1.2.46",
-    "gatsby-plugin-sharp": "^2.6.39",
-    "gatsby-remark-images": "^3.3.33",
+    "@mdx-js/mdx": "^1.6.19",
+    "@mdx-js/react": "^1.6.19",
+    "gatsby": "^2.24.85",
+    "gatsby-plugin-google-analytics": "^2.3.19",
+    "gatsby-plugin-mdx": "^1.2.51",
+    "gatsby-plugin-sharp": "^2.6.43",
+    "gatsby-remark-images": "^3.3.39",
     "gatsby-remark-images-modal": "0.0.4",
     "gatsby-remark-images-zoom": "^1.1.0",
-    "gatsby-source-filesystem": "^2.3.34",
-    "gatsby-theme-carbon": "^1.26.13",
-    "gatsby-transformer-json": "^2.4.14",
-    "gatsby-transformer-remark": "^2.8.38",
+    "gatsby-source-filesystem": "^2.3.35",
+    "gatsby-theme-carbon": "^1.27.0",
+    "gatsby-transformer-json": "^2.4.15",
+    "gatsby-transformer-remark": "^2.8.46",
     "lodash": "latest",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1"
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0"
   },
   "devDependencies": {
     "gh-pages": "^2.2.0"
