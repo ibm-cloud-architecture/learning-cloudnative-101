@@ -1,6 +1,6 @@
 # This workflow deploys the https://cloudnative101.dev/ site.
 
-name: SiteDeploy
+name: TestBuild
 on:
   pull_request:
     branches: [ master ]
