@@ -1,6 +1,6 @@
 # This workflow deploys the https://cloudnative101.dev/ site.
 
-name: Site Build & Test
+name: Site Test Build & Deploy
 on:
   push:
     branches: [ master ]
@@ -13,21 +13,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js 
+    - name: Checkout Code
+      uses: actions/checkout@v2
+    - name: Setup Node.js 
       uses: actions/setup-node@v1
       with:
         node-version: '12.x'
-    - run: npm install
-    - run: git submodule update --remote --merge --recursive
-    - run: npm run build --if-present
-    -
-        name: Deploy to GitHub Pages
-        if: success()
-        uses: crazy-max/ghaction-github-pages@v2
-        with:
-          target_branch: gh-pages
-          build_dir: public
-          fqdn: cloudnative101.dev
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Install Dependencies
+      run: npm install
+    - name: Update Submodules
+      run: git submodule update --remote --merge --recursive
+    - name: Build Test
+      run: npm run build --if-present
+    - name: Deploy to GitHub Pages
+      if: success()
+      uses: crazy-max/ghaction-github-pages@v2
+      with:
+        target_branch: gh-pages
+        build_dir: public
+        fqdn: cloudnative101.dev
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
