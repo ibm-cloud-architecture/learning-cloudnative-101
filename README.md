@@ -6,7 +6,7 @@ IBM Cloud Native Bootcamp
 <p align="left">
     <a href="https://github.com/ibm-cloud-architecture/learning-cloudnative-101/blob/master/LICENSE">
     <img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="The Cloud Native Bootcamp is released under the Apache-2.0 license" />
-    <a href="https://travis-ci.org/github/ibm-cloud-architecture/learning-cloudnative-101"><img src="https://travis-ci.org/ibm-cloud-architecture/learning-cloudnative-101.svg?branch=master" alt="Travis"></a>
+    <a href="https://github.com/ibm-cloud-architecture/learning-cloudnative-101/workflows/buildTest.yml/badge.svg"><img src="https://github.com/ibm-cloud-architecture/learning-cloudnative-101/workflows/buildTest.yml/badge.svg" alt="GithubAction"></a>
   </a>
 </p>
 
