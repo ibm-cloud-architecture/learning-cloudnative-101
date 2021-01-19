@@ -76,3 +76,5 @@ yarn-error.log
 .classpath
 .settings
 .project
+.vscode/settings.json
+.vscode/tasks.json
