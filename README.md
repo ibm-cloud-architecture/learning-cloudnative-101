@@ -1,7 +1,5 @@
 
-<h1 align="center">
-IBM Cloud Native Bootcamp
-</h1>
+<h1 align="center">IBM Cloud Native Bootcamp </h1>
 
 <p align="left">
     <a href="https://github.com/ibm-cloud-architecture/learning-cloudnative-101/blob/master/LICENSE">
@@ -16,14 +14,13 @@ This course is designed to enable developers with the latest tools and technique
 
 The course materials can be viewed at- [https://cloudnative101.dev/](https://cloudnative101.dev/)
 
-
-```
+```bash
 git clone
 ```
 
 ### Install dependencies
 
-```
+```bash
 npm install
 ```
 
@@ -31,7 +28,7 @@ npm install
 
 After forking the repository, you can run your changes locally using the following:
 
-```
+```bash
 npm run dev
 ```
 
