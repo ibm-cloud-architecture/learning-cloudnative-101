@@ -23,13 +23,13 @@ Continuous Integration, Delivery, and Deployment are important devOps practices 
 
 Continuous Integration is the first step to deliver high quality and efficient software. It is all about making sure that the software is working all the time and it is deployable at all times.
 
-![ci](./images/ci.png)
+![ci](./images/ci.jpg)
 
 It initially begins with the **development**. Developers implement the new features or changes to the existing ones in small, tested batches and commit this code to a **Source Code Management (SCM)** system such as Github, SVN, bitbucket etc. The next step will be the **build**. This is done by the CI server like Tekton, Jenkins, Travis CI, Circle CI etc. The CI server is linked up with the GitHub repository to trigger the build either using web hook or by polling the repository for changes. When it gets the access to the latest code changes in the SCM system, it executes the build script generating new deployment artifacts. In case of build failures, it generates feedback and send the information to the corresponding members. Once this is completed, developers **package** the build using Docker, Cloud Foundry etc. The builds along with their runtimes are packaged as immutable images. These images are later used for deployment in the further stages.
 
 Let us go through these steps in detail.
 
-![ci process](./images/ci_process.png)
+![ci process](./images/ci_process.jpg)
 
 **Development**
 
