@@ -7,15 +7,15 @@ const links = [
     href: 'https://cloud.ibm.com/',
   },
   {
-    title: 'IBM Garage',
-    href: 'https://www.ibm.com/garage/',
+    title: 'IBM Garage Method',
+    href: 'https://www.ibm.com/garage/method',
   },
   {
     title: 'Attend Bootcamp remotely',
     href: 'https://cloud.ibm.com/catalog/services/consult-with-ibm-garage',
   },
   {
-    title: 'OpenShift',
+    title: 'Red Hat OpenShift',
     href: 'https://learn.openshift.com/',
   },
   {

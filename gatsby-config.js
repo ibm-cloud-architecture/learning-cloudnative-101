@@ -1,7 +1,7 @@
 module.exports = {
   siteMetadata: {
-    title: 'IBM Cloud Native Bootcamp',
-    description: 'IBM Cloud Native Bootcamp',
+    title: 'Cloud Native Bootcamp',
+    description: 'Cloud Native Bootcamp',
     keywords: 'ibm,garage,cloud-native,bootcamp,cloud-native-101,cloudnative,native,101,cloud,cp4apps,kubernetes,containers,ci,cd,cicd,tekton,argocd,learning',
   },
   pathPrefix: "/",
