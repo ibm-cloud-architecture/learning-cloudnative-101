@@ -19,16 +19,16 @@ const FirstRightText = () => (
   </p>
 );
 
-const SecondLeftText = () => <p>Garage</p>;
+const SecondLeftText = () => <p>Cloud Adoption</p>;
 
 const SecondRightText = () => (
   <p>
-    IBM Garage™ is a bold, comprehensive approach to innovation and transformation that brings designers and developers together with your business and IT stakeholders to quickly create and scale new ideas that can dramatically impact your business.
+    Hands-on demonstration and learning environment to experience the value of the Cloud.
     <a
       className={calloutLink}
-      href="https://www.ibm.com/garage"
+      href="https://cloudnativetoolkit.dev"
     >
-      IBM Garage →
+      Cloud-Native Toolkit →
     </a>
   </p>
 );

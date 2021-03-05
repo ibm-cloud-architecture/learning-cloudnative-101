@@ -1,6 +1,6 @@
 
 <h1 align="center">
-IBM Cloud Native Bootcamp
+Cloud Native Bootcamp
 </h1>
 
 <p align="left">
