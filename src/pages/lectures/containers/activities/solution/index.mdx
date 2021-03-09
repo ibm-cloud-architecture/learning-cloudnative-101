@@ -14,13 +14,13 @@ This is the solution to challenge [Docker lab](../)
 7. docker ps
 8. docker inspect greeting
 9. docker logs greeting
-10. docker login
-11. docker tag greeting:v1.0.0 <repository_name>/greeting:v1.0.0
-12. docker push <repository_name>/greeting:v1.0.0
+10. docker login quay.io
+11. docker tag greeting:v1.0.0 quay.io/<repository_name>/greeting:v1.0.0
+12. docker push quay.io/<repository_name>/greeting:v1.0.0
 13. docker stop greeting
 14. docker rm greeting
 15. docker rmi <image_id>
-16. docker pull <repository_name>/greeting:v1.0.0
+16. docker pull quay.io/<repository_name>/greeting:v1.0.0
 17. docker build -f Dockerfile.multistage -t greeting:v2.0.0 .
 18. docker run -p 9080:9080 -d --name greeting_multistage greeting:v2.0.0
 19. docker ps
