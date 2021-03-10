@@ -26,7 +26,7 @@ In this lab, you will learn about how to use docker and how to run applications 
 
 ## Prerequisites
 
-- Create a [DockerHub account](https://hub.docker.com/). This account is needed to push images to docker registry. Also create a repository following the instructions [here](https://docs.docker.com/docker-hub/repos/).
+- Create a [Quay account](https://quay.io/). This account is needed to push images to a container registry. Follow the [tutorial](https://quay.io/tutorial/) to get familiar with interacting with Quay
 - You need to install [Docker](https://www.docker.com/) in your environment. Follow the instructions [here](https://docs.docker.com/docker-for-mac/install/) to install it on Mac and [here](https://docs.docker.com/docker-for-windows/install/) to install it on Windows.
 
 ## Working with docker
@@ -317,17 +317,17 @@ You will see something like below.
 
 **Container Image Registry**
 
-Container Image Registry is a place where you can store the container images. They can be public or private registries. They can be hosted by third party as well. In this lab, we are using DockerHub.
+Container Image Registry is a place where you can store the container images. They can be public or private registries. They can be hosted by third party as well. In this lab, we are using Quay.
 
 ### Pushing an image to a Registry
 
-Let us now push the image to docker hub registry. Before pushing the image to the registry, one needs to login.
+Let us now push the image to the Quay registry. Before pushing the image to the registry, one needs to login.
 
-7. Login to Docker Hub using your credentials.
+7. Login to Quay using your credentials.
 
 Once logged in we need to take the image for the registry.
 
-8. Tag your image for the image registry. Using the `same name and tag from before`. (*NOTE: the command has both the source tag and repository destination tag in it.*)
+8. Tag your image for the image registry using the `same name and tag from before`. Be sure to include the host name of the target image registry in the destination tag (e.g. quay.io). *NOTE: the tag command has both the source tag and repository destination tag in it.*
 
 9. Now push the image to the registry. This allows you to share images to a registry.
 
@@ -335,7 +335,7 @@ If everything goes fine, you will see something like below.
 
 ```bash
 $ <command>
-The push refers to repository [docker.io/<repository_name>/greeting]
+The push refers to repository [quay.io/<repository_name>/greeting]
 2e4d09cd03a2: Pushed
 d862b7819235: Pushed
 a9212239031e: Pushed
