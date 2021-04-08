@@ -1,0 +1,10 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: cloudnativesampleapp-route
+spec:
+  port:
+    targetPort: http
+  to:
+    kind: Service
+    name: cloudnativesampleapp-service

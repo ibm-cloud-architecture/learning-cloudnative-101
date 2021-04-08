@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dind
+  labels:
+    app: dind
+spec:
+  volumes:
+    - name: dind-storage
+      emptyDir: {}
+    - name: workspace
+      emptyDir: {}
+  containers:
+    - name: dind
+      image: csantanapr/docker:dind
+      imagePullPolicy: Always
+      securityContext:
+        privileged: true
+      volumeMounts:
+        - name: dind-storage
+          mountPath: /var/lib/docker
+        - name: workspace
+          mountPath: /root/workspace
