@@ -11,52 +11,62 @@ For example, Docker created standard way to create images for Linux Containers.
 
 ## Resources
 
-<MiniCard title="Container Basics Presentation" href="/slides/02-Containers-Basics.pdf">
-</MiniCard>
+<MiniCard
+  title="Container Basics Presentation"
+  href="/slides/02-Containers-Basics.pdf"
+></MiniCard>
 
 ## Basic Docker Commands
 
-| Action   	| Command   |
-|-------	|------------	|
-| Get Docker version   | ` docker version ` |
-| Run `hello-world` Container  	| ` docker run hello-world ` |
-| List Running Containers  	| ```docker ps``` |
-| Stop a container 	| `docker stop <container-name/container-id>`   |
-| List Docker Images	| ` docker images` |
-| Login into registry 	| `docker login` |
-| Build an image 	| ` docker build -t <image_name>:<tag> . `   |
-| Inspect a docker object 	| ` docker inspect <name/id>`   |
-| Inspect a docker image 	| ` docker inspect image <name/id>`   |
-| Pull an image 	| ` docker pull <image_name>:<tag>`   |
-| Push an Image 	| ` docker push <image_name>:<tag>`  |	
-| Remove a container  	| ` docker rm <container-name/container-id>` |
-
+| Action                      | Command                                     |
+| --------------------------- | ------------------------------------------- |
+| Get Docker version          | `docker version`                            |
+| Run `hello-world` Container | `docker run hello-world`                    |
+| List Running Containers     | `docker ps`                                 |
+| Stop a container            | `docker stop <container-name/container-id>` |
+| List Docker Images          | ` docker images`                            |
+| Login into registry         | `docker login`                              |
+| Build an image              | `docker build -t <image_name>:<tag> .`      |
+| Inspect a docker object     | ` docker inspect <name/id>`                 |
+| Inspect a docker image      | ` docker inspect image <name/id>`           |
+| Pull an image               | ` docker pull <image_name>:<tag>`           |
+| Push an Image               | ` docker push <image_name>:<tag>`           |
+| Remove a container          | ` docker rm <container-name/container-id>`  |
 
 ## Running Docker on Kubernetes
 
 <ol>
   <li>
-    Make sure you are logged in to your Kubernetes cluster through a terminal or IBM Cloud Shell.
+    Make sure you are logged in to your Kubernetes cluster through a terminal or
+    IBM Cloud Shell.
   </li>
-  
+
+
+{" "}
+
+<li>
+  Next, we need to apply the yaml file for the Docker in Docker pod.
+  <code>
+    kubectl apply -f
+    https://raw.githubusercontent.com/ibm-cloud-architecture/learning-cloudnative-101/master/static/yamls/containers/dind.yaml
+  </code>
+</li>
+
+{" "}
+
+<li>
+  Then, we need to bash into the running pod.
+  <code>kubectl exec -it dind bash</code>
+</li>
+
   <li>
-    Next, we need to apply the yaml file for the Docker in Docker pod.
-    <code>
-      kubectl apply -f https://raw.githubusercontent.com/ibm-cloud-architecture/learning-cloudnative-101/master/static/yamls/containers/dind.yaml
-    </code>
-  </li>
-  
-  <li>
-    Then, we need to bash into the running pod.
-    <code>
-      kubectl exec -it dind bash
-    </code>
-  </li>
-  
-  <li>
-    Finally check to make sure you can run docker commands, such as <strong><em>docker version</em></strong>
+    Finally check to make sure you can run docker commands, such as{" "}
+    <strong>
+      <em>docker version</em>
+    </strong>
   </li>
 </ol>
+
 
 ## Docker Lecture Walkthroughs
 
@@ -65,170 +75,168 @@ For example, Docker created standard way to create images for Linux Containers.
     <ol>
       <li>
         Check the Docker Version
-        <code>
-          docker version
-        </code>
-      </li> 
+        <code>docker version</code>
+      </li>
       <li>
-        Run the `hello-world` container         
-        <code>
-          docker run hello-world 
-        </code>
+        Run the `hello-world` container
+        <code>docker run hello-world</code>
         <InlineNotification>
-          Notice: If it is not already on your machine, it will be downloaded automatically.
+          Notice: If it is not already on your machine, it will be downloaded
+          automatically.
         </InlineNotification>
-      </li> 
+      </li>
       <li>
         Check the output:
         <blockquote>
-        Hello from Docker! <br></br>
-        This message shows that your installation appears to be working correctly!....
+          Hello from Docker! <br></br>
+          This message shows that your installation appears to be working
+          correctly!....
         </blockquote>
-      </li> 
+      </li>
     </ol>
   </AccordionItem>
-  <AccordionItem title="Running a Basic Container">  
+  <AccordionItem title="Running a Basic Container">
     <ol>
       <li>
         Start and nginx container and name it `nginx`.
-        <code>
-          docker run --rm -d --name nginx -p 8080:8080 bitnami/nginx 
-        </code>
+        <code>docker run --rm -d --name nginx -p 8080:8080 bitnami/nginx</code>
       </li>
       <li>
         Check to see if the container is running
-        <code>
-          docker ps
-        </code>
+        <code>docker ps</code>
       </li>
       <li>
         Bash into the running nginx container
-        <code>
-          docker exec -it nginx bash
-        </code>
+        <code>docker exec -it nginx bash</code>
       </li>
       <li>
         Accessing the running nginx container
-        <code>
-          curl http://localhost:8080
-        </code>
+        <code>curl http://localhost:8080</code>
       </li>
       <li>
         Stopping the nginx container
-        <code>
-          docker stop nginx
-        </code>
+        <code>docker stop nginx</code>
       </li>
     </ol>
   </AccordionItem>
   <AccordionItem title="Building and Running a Docker Image">
     <ol>
       <li>
-       Let's start by creating a directory named <strong><em>assets</em></strong> and add an <strong><em>index.html</em></strong> file to it. <br></br>     
-          <code>
-            mkdir -p assets; echo "Welcome to the Cloud Native BootCamp" > assets/index.html; cd assets
-          </code>
-      </li>
-      <li>
-        Download the sample <strong><em>Dockerfile</em></strong> into the <strong><em>assets</em></strong> directory.
-          <code>
-           wget https://raw.githubusercontent.com/ibm-cloud-architecture/learning-cloudnative-101/master/static/yamls/containers/Dockerfile
-          </code>
-      </li>
-      <li>
-        Build the docker image and name it <strong><em>webserver</em></strong> with a tag of <strong><em>1.0</em></strong>.
+        Let's start by creating a directory named{" "}
+        <strong>
+          <em>assets</em>
+        </strong>{" "}
+        and add an{" "}
+        <strong>
+          <em>index.html</em>
+        </strong>{" "}
+        file to it. <br></br>
         <code>
-          docker build -t webserver:1.0 .
+          mkdir -p assets; echo "Welcome to the Cloud Native BootCamp" >
+          assets/index.html; cd assets
         </code>
+      </li>
+      <li>
+        Download the sample{" "}
+        <strong>
+          <em>Dockerfile</em>
+        </strong>{" "}
+        into the{" "}
+        <strong>
+          <em>assets</em>
+        </strong>{" "}
+        directory.
+        <code>
+          wget
+          https://raw.githubusercontent.com/ibm-cloud-architecture/learning-cloudnative-101/master/static/yamls/containers/Dockerfile
+        </code>
+      </li>
+      <li>
+        Build the docker image and name it{" "}
+        <strong>
+          <em>webserver</em>
+        </strong>{" "}
+        with a tag of{" "}
+        <strong>
+          <em>1.0</em>
+        </strong>
+        .<code>docker build -t webserver:1.0 .</code>
       </li>
       <li>
         Run the new image in a container.
-        <code>
-          docker run --rm -d -p 8000:8080 webserver:1.0
-        </code>
+        <code>docker run --rm -d -p 8000:8080 webserver:1.0</code>
       </li>
       <li>
         Access the new container
-        <code>
-          curl http://localhost:8000
-        </code>
+        <code>curl http://localhost:8000</code>
       </li>
     </ol>
   </AccordionItem>
-  <AccordionItem title="Pushing to a Container Registry">  
+  <AccordionItem title="Pushing to a Container Registry">
     <ol>
       <li>
-        Login to Docker Hub using YOUR created username and password.        
-        <code>
-        docker login -u USERNAME  -p PASSWORD
-        </code>
+        Login to Docker Hub using YOUR created username and password.
+        <code>docker login -u USERNAME -p PASSWORD</code>
       </li>
       <li>
-        Tag the docker image with docker hub username 
-        <code>
-          docker tag webserver:1.0 USERNAME/webserver:1.0
-        </code>
+        Tag the docker image with docker hub username
+        <code>docker tag webserver:1.0 USERNAME/webserver:1.0</code>
       </li>
-       <li>
+      <li>
         Push the image to the registry
-        <code>
-          docker push USERNAME/webserver:1.0
-        </code>
+        <code>docker push USERNAME/webserver:1.0</code>
       </li>
       <li>
         Run the new image
-        <code>
-          docker run --rm -p 8000:8080 USERNAME/webserver:1.0
-        </code>
+        <code>docker run --rm -p 8000:8080 USERNAME/webserver:1.0</code>
       </li>
       <li>
         You can also pull down other images from other users.
-        <code>
-          docker pull USERNAME/webserver:1.0
-        </code>
+        <code>docker pull USERNAME/webserver:1.0</code>
       </li>
     </ol>
   </AccordionItem>
-  <AccordionItem title="Adding Environment Variables for your Container.">  
+  <AccordionItem title="Adding Environment Variables for your Container.">
     <ol>
       <li>
-        Create a Docker file          
+        Create a Docker file
         <code>
-          docker run --rm --name nginx -e USERNAME=Carlos -e PASSWORD=IlikeYAML -e LOG_LEVEL=ERROR -p 8080:8080 bitnami/nginx
+          docker run --rm --name nginx -e USERNAME=Carlos -e PASSWORD=IlikeYAML
+          -e LOG_LEVEL=ERROR -p 8080:8080 bitnami/nginx
         </code>
       </li>
       <li>
-        Create a Docker file          
+        Create a Docker file
         <code>
-          docker exec -it nginx sh -c "env | grep 'USERNAME\|PASSWORD\|LOG_LEVEL'"
+          docker exec -it nginx sh -c "env | grep
+          'USERNAME\|PASSWORD\|LOG_LEVEL'"
         </code>
       </li>
     </ol>
   </AccordionItem>
-    <AccordionItem title="Running a Container with a Mounted Volume">  
-      <ol>
-        <li>
-          Run the image with a volume attached.
-          <code>
-            docker run --rm --name nginx -p 8080:8080 -v $PWD/assets:/app bitnami/nginx
-          </code>
-        </li>
-      </ol>
+  <AccordionItem title="Running a Container with a Mounted Volume">
+    <ol>
+      <li>
+        Run the image with a volume attached.
+        <code>
+          docker run --rm --name nginx -p 8080:8080 -v $PWD/assets:/app
+          bitnami/nginx
+        </code>
+      </li>
+    </ol>
   </AccordionItem>
 </Accordion>
 
-
 ## Activities
 
-| Task                            | Description         | Link        | Time    |
-| --------------------------------| ------------------  |:----------- |---------|
-| *** Walkthroughs ***                         |         |         |     |
-| What is a Container? | A look under the the covers at what is a Linux Container? | <a href="https://www.katacoda.com/courses/container-runtimes/what-is-a-container" target="_blank">Understand Containers</a> | 10 min |
-| What is an Image? | A look under the the covers at what is a Linux Container Image? | <a href="https://www.katacoda.com/courses/container-runtimes/what-is-a-container-image" target="_blank">Container Images</a> | 10 min |
-| Docker Basics | Set of walkthroughs that cover docker basics | <a href="https://www.katacoda.com/courses/docker" target="_blank">Docker Basics</a> | 10 min |
-| *** Try It Yourself ***                         |         |         |     |
-| IBM Container Registry | Build and Deploy Run using IBM Container Registry  | [IBM Container Registry](./activities/ibmcloud-cr) | 30 min |
-| Docker Lab | Running a Sample Application on Docker | [Docker Lab](./activities/) | 30 min |
-
+| Task                    | Description                                                     | Link                                                                                                                         | Time   |
+| ----------------------- | --------------------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------- | ------ |
+| **_ Walkthroughs _**    |                                                                 |                                                                                                                              |        |
+| What is a Container?    | A look under the the covers at what is a Linux Container?       | <a href="https://www.katacoda.com/courses/container-runtimes/what-is-a-container" target="_blank">Understand Containers</a>  | 10 min |
+| What is an Image?       | A look under the the covers at what is a Linux Container Image? | <a href="https://www.katacoda.com/courses/container-runtimes/what-is-a-container-image" target="_blank">Container Images</a> | 10 min |
+| Docker Basics           | Set of walkthroughs that cover docker basics                    | <a href="https://www.katacoda.com/courses/docker" target="_blank">Docker Basics</a>                                          | 10 min |
+| **_ Try It Yourself _** |                                                                 |                                                                                                                              |        |
+| IBM Container Registry  | Build and Deploy Run using IBM Container Registry               | [IBM Container Registry](./activities/ibmcloud-cr)                                                                           | 30 min |
+| Docker Lab              | Running a Sample Application on Docker                          | [Docker Lab](./activities/)                                                                                                  | 30 min |
 
 Once you have completed these tasks, you should have a base understanding of containers and how to use Docker.
