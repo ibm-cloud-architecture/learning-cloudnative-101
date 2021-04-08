@@ -9,20 +9,20 @@ description: Lab introducting docker concepts
   <AnchorLink>Working with docker</AnchorLink>
   <AnchorLink>Get the sample application</AnchorLink>
   <AnchorLink>Run the application on Docker</AnchorLink>
-    <AnchorLinks small>
-      <AnchorLink>Build the docker image</AnchorLink>
-      <AnchorLink>Run the docker container</AnchorLink>
-      <AnchorLink>Access the application</AnchorLink>
-      <AnchorLink>Pushing an image to a Registry</AnchorLink>
-      <AnchorLink>Clean Up</AnchorLink>
-      <AnchorLink>Pulling an image from the registry</AnchorLink>
-    </AnchorLinks>
+  <AnchorLinks small>
+    <AnchorLink>Build the docker image</AnchorLink>
+    <AnchorLink>Run the docker container</AnchorLink>
+    <AnchorLink>Access the application</AnchorLink>
+    <AnchorLink>Pushing an image to a Registry</AnchorLink>
+    <AnchorLink>Clean Up</AnchorLink>
+    <AnchorLink>Pulling an image from the registry</AnchorLink>
+  </AnchorLinks>
   <AnchorLink>Conclusion</AnchorLink>
 </AnchorLinks>
 
 ## Introduction
 
-In this lab, you will learn about how to use docker and how to run applications using docker.
+In this lab, you will learn about how to use docker and how to run applications using docker. This lab will not explicitly give you the commands to progress through these exercises, but will show you a similar expected output. It's your goal to develop the commands (shown as <command> at each step) to finish the lab.
 
 ## Prerequisites
 
@@ -31,7 +31,7 @@ In this lab, you will learn about how to use docker and how to run applications 
 
 ## Working with docker
 
-Before proceeding, make sure docker is properly installed on your system. 
+Before proceeding, make sure docker is properly installed on your system.
 
 1. Please verify your Docker by looking up the version.
 
@@ -44,7 +44,7 @@ Docker version 19.03.0-beta3, build c55e026
 
 ** Running a hello-world container **
 
-Let us start with a `hello-world` container. 
+Let us start with a `hello-world` container.
 
 2. run a `hello-world` container.
 
@@ -145,14 +145,13 @@ The advantage of using the multi-stage builds approach is that the resulting ima
 
 By using the multi-stage builds approach when it makes sense to use it, you will end up with much lighter and easier to maintain images, which can save you space on your Docker Registry. Also, having tinier images usually means less resource consumption on your worker nodes, which can result cost-savings.
 
-
 Once, you have the docker file ready, the next step is to build it. The `build` command allows you to build a docker image which you can later run as a container.
 
 1. Build the docker file with the `image_name` of `greeting` and give it a `image_tag` of `v1.0.0` and build it using the current context.
 
 You will see something like below:
 
-``` bash
+```bash
 $ <command>
 Sending build context to Docker daemon  22.17MB
 Step 1/6 : FROM maven:3.3-jdk-8 as builder
@@ -327,7 +326,7 @@ Let us now push the image to the Quay registry. Before pushing the image to the 
 
 Once logged in we need to take the image for the registry.
 
-8. Tag your image for the image registry using the `same name and tag from before`. Be sure to include the host name of the target image registry in the destination tag (e.g. quay.io). *NOTE: the tag command has both the source tag and repository destination tag in it.*
+8. Tag your image for the image registry using the `same name and tag from before`. Be sure to include the host name of the target image registry in the destination tag (e.g. quay.io). _NOTE: the tag command has both the source tag and repository destination tag in it._
 
 9. Now push the image to the registry. This allows you to share images to a registry.
 
@@ -357,13 +356,13 @@ Once the push is successful, your image will be residing in the registry.
 
 11. Remove the container.
 
-12. Remove the image. (*NOTE: You will need the image_id to remove it.*)
+12. Remove the image. (_NOTE: You will need the image_id to remove it._)
 
 ### Pulling an image from the registry
 
 Sometimes, you may need the images that are residing on your registry. Or you may want to use some public images out there. Then, we need to pull the image from the registry.
 
-13. Pull the image `greeting` from the registry, 
+13. Pull the image `greeting` from the registry,
 
 If it successfully got pulled, we will see something like below.
 
