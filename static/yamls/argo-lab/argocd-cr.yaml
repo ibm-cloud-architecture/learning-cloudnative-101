@@ -1,4 +1,4 @@
-kind: ArgoCD
+kind: argoproj.io/v1alpha1
 metadata:
   name: argocd
   namespace: argocd
