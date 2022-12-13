@@ -9,7 +9,7 @@
     "lint": "standard *.js --fix"
   },
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "prom-client": "^11.5.3",
     "prometheus-gc-stats": "^0.6.2"
   },
