@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysql-lightblue-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      name: pod-mysql
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: "moberlin8/mysql-catalog:1.1"
+          imagePullPolicy: Always
+          livenessProbe:
+            tcpSocket:
+              port: 3306
+            initialDelaySeconds: 20
+            periodSeconds: 60
+          env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: "Pass4Admin123"
+          - name: MYSQL_USER
+            value: "dbuser"
+          - name: MYSQL_PASSWORD
+            value: "Pass4dbUs3R"
+          - name: MYSQL_DATABASE
+            value: "inventorydb"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-lightblue-service
+  labels:
+    app: mysql
+spec:
+  type: NodePort
+  selector:
+    app: mysql
+  ports:
+   - protocol: TCP
+     port: 3306
+     nodePort: 30006

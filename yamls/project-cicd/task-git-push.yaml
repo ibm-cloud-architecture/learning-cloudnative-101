@@ -1,0 +1,57 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: git-push
+spec:
+  inputs:
+    params:
+      - name: TOOL_IMAGE
+        default: docker.io/csantanapr/helm-kubectl-curl-git-jq-yq
+  steps:
+    - name: setup-imageid
+      image: $(inputs.params.TOOL_IMAGE)
+      command: ["/bin/bash"]
+      args:
+        - -c
+        - |
+          set -e
+          pwd
+          echo "NEW_IMAGE_ID=docker.io/ibm-cloud-architecture/cloudnative_sample_app:latest" >> /workspace/env-config
+    - name: git-push
+      image: $(inputs.params.TOOL_IMAGE)
+      env:
+        - name: GIT_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: git-infra-secret
+              key: username
+              optional: true
+        - name: GIT_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: git-infra-secret
+              key: token
+              optional: true
+      command: ["/bin/bash"]
+      args:
+        - -c
+        - |
+          set -eu
+          echo Load environment variables from previous steps
+          source /workspace/env-config
+          git config --global user.email "csantanapr@apache.org"
+          git config --global user.name "Carlos Santana"
+          git clone --branch master --depth 1 https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/ibm-cloud-architecture/cloudnative_sample_app_deploy repo
+          cd repo/yamls
+          ls -l
+          echo old value:
+          cat deployment.yaml | yq r - 'spec.template.spec.containers[0].image'
+          echo replacing with new value:
+          echo $NEW_IMAGE_ID
+          yq w --inplace deployment.yaml 'spec.template.spec.containers[0].image' "$NEW_IMAGE_ID"
+          echo verifying new value
+          yq r deployment.yaml 'spec.template.spec.containers[0].image'
+          git status
+          git add .
+          git commit -m "deployment updated by tekton pipeline running on $(hostname)"
+          git push

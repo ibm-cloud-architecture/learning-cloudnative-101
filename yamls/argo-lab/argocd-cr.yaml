@@ -1,0 +1,8 @@
+kind: argoproj.io/v1alpha1
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  server:
+    route:
+      enabled: true
